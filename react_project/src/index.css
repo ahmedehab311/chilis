@@ -1,12 +1,17 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Baskervville+SC&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Beiruti:wght@200..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Baskervville+SC&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Beiruti:wght@200..900&display=swap");
 
 * {
-  font-family: "Open Sans", "Baskervville", "Beiruti", sans-serif;
+  font-family: "Open Sans", "Baskervville", "Beiruti";
   margin: 0;
   padding: 0;
-
+  color: #fff;
+}
+body {
+  font-size: 1.6rem;
+  line-height: 1.7;
+  /* color: var(--black-color); */
 }
 
 .border {
@@ -46,17 +51,7 @@
 
 html {
   scroll-behavior: smooth;
-}
-
-html {
   font-size: 10px;
-}
-
-body {
-  font-size: 1.6rem;
-  /* line-height: 1.7; */
-  font-family: 'Poppins', sans-serif;
-  color: var(--black-color);
 }
 
 ul {
@@ -64,8 +59,7 @@ ul {
 }
 
 a {
-  text-decoration: none;
-  /* color: var(--black-color); */
+  text-decoration: none !important;
 }
 
 button {
@@ -93,39 +87,15 @@ input {
   transition: none !important;
 }
 
-.swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
-
-  /* Center slide text vertically */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 /* box */
 .css-sgbe1q-MuiPaper-root-MuiCard-root {
   background-color: #000 !important;
-  color: #fff !important;
+  /* color: #fff !important; */
 }
 
 .inputFooter {
   background-color: transparent;
   border: 1px solid #fff;
-
 }
 
 /* footer box3 */
@@ -134,16 +104,29 @@ input {
   font-size: 20px;
   margin-right: 6px;
 }
+/* media  */
 
-@media (max-width: 700px) {
-  .css-1f7bs8i {
+@media (max-width: 900px) {
+  .css-1059fn5 {
     flex-direction: column;
+    padding: 20px !important;
   }
 }
 
-
-/* media  */
 /* main  */
+.css-96ndr9-MuiTypography-root {
+  color: #000 !important;
+}
+.css-1go87uj-MuiTypography-root {
+  color: #000 !important;
+}
+
+.borderMain {
+  background-color: #ff0000;
+  width: 52px;
+  height: 3px;
+}
+
 @media (max-width: 900px) {
   .css-1dzpn6f-MuiContainer-root {
     flex-direction: column;
@@ -152,11 +135,13 @@ input {
 
   .css-96ndr9-MuiTypography-root {
     margin-top: 5px !important;
-
   }
 
   .css-r12aa3-MuiContainer-root {
     align-items: center;
     justify-content: center;
+  }
+  .borderMain {
+    display: none;
   }
 }

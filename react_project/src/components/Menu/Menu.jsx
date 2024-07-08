@@ -1,24 +1,35 @@
-import { Stack, Container, Typography } from "@mui/material";
+import {  Typography } from "@mui/material";
+// import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Box from "./Card";
+// import Category from "./Category";
 
-import Box from "./box";
 function Menu() {
   return (
-    <Container >
-      <Stack>
-        <Typography
-          sx={{ textAlign: "center", fontSize: "33px", fontWeight: "bold" }}
+      <div id="menu">
+    <Box sx={{ ".css-1oqqzyl-MuiContainer-root": { p: "100px" } }}>
+      <h1 style>ahmed</h1>
+    <Typography
+          sx={{
+            textAlign: "center",
+            fontSize: "33px",
+            fontWeight: "bold",
+            color: "#fff",
+            my: 2,
+          }}
         >
           MENU
         </Typography>
-        <Stack>
-
-          <Box />
-        </Stack>
+        {/* <Router>
+      <Routes>
+        <Route path="/" element={<Box />} />
+        <Route path="/category" element={<Category />} />
+      </Routes>
+    </Router> */}
         {/* <Stack>
           <img src="" alt="logo" />
         </Stack> */}
-      </Stack>
-    </Container>
+    </Box>
+      </div>
   );
 }
 

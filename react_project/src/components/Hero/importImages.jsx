@@ -1,5 +1,5 @@
-import img1 from "./images/feature-left.jpg"
-import img2 from "./images/feature-right.jpg"
+import img1 from "./images/1.jpg"
+import img2 from "./images/2.jpg"
 import img3 from "./images/game-01.jpg"
 import img4 from "./images/popular-05.jpg"
 

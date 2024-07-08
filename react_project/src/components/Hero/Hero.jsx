@@ -1,32 +1,71 @@
-import "./Slider/Slider.css";
-import "swiper/css";
-
-import "swiper/css/pagination";
-import { img1, img2, img3 } from "./importImages";
+import logo from "./images/logooo.jpg";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import { Pagination } from "swiper/modules";
 import { Navigation } from "swiper/modules";
-import { Box, Stack, Container } from "@mui/material";
+import { Box, Stack } from "@mui/material";
+import "swiper/css";
+import "swiper/css/navigation";
+import "./Slider/Slider.css";
+import { images } from "./imagesArray";
+
 function Hero() {
   return (
-    <Container sx={{ display: "flex", mt: 2.5, alignItems: "center" }}>
-      <Swiper
-        loop={true}
-        pagination={{
-          dynamicBullets: true,
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          // mt: 2.5,
+          alignItems: "center",
+          position: "relative",
         }}
-        modules={[Navigation]}
-        // modules={[Pagination]}
-        className="mySwiper"
+        className="hero"
       >
-        <SwiperSlide>
-          <img src={img1} width={50} alt="" />
-        </SwiperSlide>
-        <SwiperSlide>
-          <img src={img3} width={50} alt="" />
-        </SwiperSlide>
-      </Swiper>
-    </Container>
+        <Stack>
+          <img src={logo} className="logoImg" alt="logo" />
+        </Stack>
+
+        <Swiper
+          slidesPerView={1}
+          // spaceBetween={10}
+          pagination={{
+            clickable: true,
+          }}
+          loop={true}
+          navigation={true}
+          modules={[Navigation]}
+          className="mySwiper"
+        >
+          {/* <SwiperSlide>
+            <img
+              className="img-fluid"
+              src={img1}
+              style={{
+                width: "fitContent",
+                height: "500px",
+                marginTop: "100px",
+              }}
+              alt=""
+            />
+          </SwiperSlide> */}
+
+          {images.map((item) => {
+            return (
+              <SwiperSlide key={item.id}>
+                <img
+                  className="img-fluid"
+                  src={item.img}
+                  style={{
+                    width: "fitContent",
+                    height: "500px",
+                    marginTop: "100px",
+                  }}
+                  alt=""
+                />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </Box>
+    </>
   );
 }
 
