@@ -22,7 +22,7 @@ function Main() {
             className="text"
             sx={{ fontSize: "20px", mb: 2, textTransform: "capitalize" }}
           >
-            <div style={{ marginBottom: 4 }}>
+            <div style={{ marginBottom: 4, color: "#000" }}>
               chilis <span style={{ color: "red" }}>Egypt</span>
             </div>
             for getting real transparent

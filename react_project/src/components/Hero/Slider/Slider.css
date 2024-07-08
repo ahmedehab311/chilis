@@ -25,7 +25,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .swiper-slide img {
@@ -34,63 +33,3 @@
   height: 500px;
   object-fit: cover;
 }
-
-.swiper-button-prev,
-.swiper-button-next {
-  top: var(--swiper-navigation-top-offset, 60%) !important;
-  color: #e72323 !important;
-  font-weight: bold !important;
-  font-size: 45px !important;
-}
-
-/* slider media  */
-@media (min-width: 1300px) {
-  .swiper-button-prev {
-    left: 300px !important;
-  }
-
-  .swiper-button-next {
-    right: 300px !important;
-  }
-}
-@media (min-width: 1000px) {
-  .swiper-button-prev {
-    left: 200px !important;
-  }
-
-  .swiper-button-next {
-    right: 200px !important;
-  }
-}
-
-@media (max-width: 999px) {
-  .swiper-button-prev {
-    left: 50px !important;
-  }
-
-  .swiper-button-next {
-    right: 50px !important;
-  }
-}
-
-@media (min-width: 600px) and (max-width: 1050px) {
-  .css-zcu8g2-MuiTypography-root {
-    font-size: 1.5rem !important;
-  }
-
-  .css-1vd1bga-MuiTypography-root {
-    font-size: 0.9rem !important;
-  }
-
-  .css-157xisp-MuiTypography-root {
-    font-size: 1.5rem !important;
-  }
-}
-
-@media (max-width: 600px) {
-  .css-zcu8g2-MuiTypography-root {
-    font-size: 1rem !important;
-  }
-}
-
-

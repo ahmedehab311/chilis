@@ -4,14 +4,13 @@
 
 * {
   font-family: "Open Sans", "Baskervville", "Beiruti";
-  margin: 0;
+  margin: 0 ;
   padding: 0;
   color: #fff;
 }
 body {
   font-size: 1.6rem;
   line-height: 1.7;
-  /* color: var(--black-color); */
 }
 
 .border {
@@ -90,7 +89,7 @@ input {
 /* box */
 .css-sgbe1q-MuiPaper-root-MuiCard-root {
   background-color: #000 !important;
-  /* color: #fff !important; */
+  color: #fff !important;
 }
 
 .inputFooter {
@@ -98,6 +97,10 @@ input {
   border: 1px solid #fff;
 }
 
+/* footer box2 */
+.midBox{
+
+}
 /* footer box3 */
 .css-821wyw-MuiSvgIcon-root {
   color: #fff !important;
@@ -116,6 +119,8 @@ input {
 /* main  */
 .css-96ndr9-MuiTypography-root {
   color: #000 !important;
+  font-size: 33px !important;
+  font-weight: bold !important;
 }
 .css-1go87uj-MuiTypography-root {
   color: #000 !important;

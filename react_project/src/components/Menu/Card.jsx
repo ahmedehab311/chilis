@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Typography, Box } from "@mui/material";
+import { Typography, Box,Stack } from "@mui/material";
 import Card from "@mui/material/Card";
 import "./card.css";
 import { itemes } from "./itemes.js";
@@ -28,7 +28,20 @@ function Boxx() {
   };
 
   return (
-    <Container className="box">
+    <Box className="box" >
+   <Stack>
+   <Typography
+          sx={{
+            textAlign: "center !important",
+            fontSize: "33px",
+            fontWeight: "bold",
+            // color: "#fff",
+            my: 2,
+          }}
+        >
+          MENU
+        </Typography>
+   </Stack>
       {showCards ? (
         <Swiper
           slidesPerView={1}
@@ -37,6 +50,7 @@ function Boxx() {
           navigation={true}
           modules={[Navigation]}
           className="mySwiper"
+          sx={{p:2}}
           breakpoints={{
             0: {
               slidesPerView: 1,
@@ -134,7 +148,7 @@ function Boxx() {
           </Box>
         </Box>
       )}
-    </Container>
+    </Box>
   );
 }
 

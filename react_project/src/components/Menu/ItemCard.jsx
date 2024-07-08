@@ -92,24 +92,38 @@ function ItemCard() {
           </Card>
         ))}
       </Box>
+      
+      
+      
+      
+      
+      
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="item-dialog-title"
         aria-describedby="item-dialog-description"
         maxWidth="md"
-        fullWidth
+        
+        // fullWidth
+        sx={{color:"#000",background:"#000"}}
       >
         <DialogTitle id="item-dialog-title">{selectedItem?.title}</DialogTitle>
-        <DialogContent>
-          <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+        <DialogActions sx={{fontSize:"22px"}}>
+          <Button onClick={handleClose} color="primary">
+            X
+          </Button>
+        </DialogActions>
+        <DialogContent sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+          <Box >
             <img
               src={selectedItem?.img}
               alt={selectedItem?.title}
-              width="300px"
+              width={300}
+              height={400}
             />
           </Box>
-          <DialogContentText id="item-dialog-description">
+          <DialogContentText id="item-dialog-description" sx={{mx:3}}>
             <Typography variant="body1" sx={{ mb: 2 }}>
               {selectedItem?.description}
             </Typography>
@@ -143,11 +157,7 @@ function ItemCard() {
             />
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
+  
       </Dialog>
 
     </div>
