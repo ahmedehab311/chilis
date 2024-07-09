@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Typography, Box,Stack } from "@mui/material";
+import { Typography, Box, Stack, CardMedia } from "@mui/material";
 import Card from "@mui/material/Card";
 import "./card.css";
 import { itemes } from "./itemes.js";
@@ -28,20 +28,21 @@ function Boxx() {
   };
 
   return (
-    <Box className="box" >
-   <Stack>
-   <Typography
+    <Box className="box">
+      <Stack>
+        <Typography
           sx={{
             textAlign: "center !important",
             fontSize: "33px",
             fontWeight: "bold",
             // color: "#fff",
             my: 2,
+
           }}
         >
           MENU
         </Typography>
-   </Stack>
+      </Stack>
       {showCards ? (
         <Swiper
           slidesPerView={1}
@@ -50,7 +51,6 @@ function Boxx() {
           navigation={true}
           modules={[Navigation]}
           className="mySwiper"
-          sx={{p:2}}
           breakpoints={{
             0: {
               slidesPerView: 1,
@@ -62,6 +62,9 @@ function Boxx() {
               slidesPerView: 3,
             },
             1200: {
+              slidesPerView: 3,
+            },
+            1300: {
               slidesPerView: 4,
             },
           }}
@@ -69,10 +72,12 @@ function Boxx() {
           {itemes.map((item) => (
             <SwiperSlide key={item.id}>
               <Card
+                className="card"
                 onClick={() => handleCardClick(item)}
                 sx={{
                   maxWidth: 230,
-                  p: 1,
+                  py: 3,
+                  px: 6,
                   border: "2px solid #fff",
                   background: "#000",
                   borderRadius: "20px",
@@ -86,21 +91,23 @@ function Boxx() {
                     textAlign: "center",
                     mb: 2,
                     textTransform: "uppercase",
-                    fontSize: "2.5rem",
+                    fontSize: "2.8rem",
+                    fontWeight: "bold",
+                    color: "#c0b56e",
                   }}
                 >
                   {item.title}
                 </Typography>
-                <img
-                  src={item.img}
-                  width="50px"
-                  style={{ display: "flex", margin: "0 auto" }}
-                  alt=""
+                <CardMedia
+                  component="img"
+                  // height="194"
+                  image={item.img}
+                  alt="Paella dish"
                 />
-                <Typography variant="h4" sx={{ fontSize: "20px", my: 1 }}>
+                <Typography variant="h4" sx={{ fontSize: "20px", my: 1, color: "#fff"  }}>
                   {item.title2}
                 </Typography>
-                <Typography sx={{ fontSize: "18px", fontFamily: "Beiruti" }}>
+                <Typography sx={{ fontSize: "18px", fontFamily: "Beiruti", color: "#fff"  }}>
                   {item.category}
                 </Typography>
                 <Typography
@@ -127,7 +134,7 @@ function Boxx() {
         <Box sx={{ mt: 4 }}>
           <Typography
             variant="h4"
-            sx={{ textAlign: "center", mb: 2, textTransform: "uppercase" }}
+            sx={{ textAlign: "center", mb: 2, textTransform: "uppercase", color: "#fff" }}
           >
             {selectedItem.title}
           </Typography>

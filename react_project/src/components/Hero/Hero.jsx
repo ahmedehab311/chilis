@@ -1,16 +1,18 @@
 import logo from "./images/logooo.jpg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import { Box, Stack } from "@mui/material";
+import { Box, Container, Stack } from "@mui/material";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./Slider/Slider.css";
 import { images } from "./imagesArray";
 
+import Slider from "react-slick";
+
 function Hero() {
   return (
     <>
-      <Box
+      <Stack
         sx={{
           display: "flex",
           // mt: 2.5,
@@ -34,37 +36,26 @@ function Hero() {
           modules={[Navigation]}
           className="mySwiper"
         >
-          {/* <SwiperSlide>
-            <img
-              className="img-fluid"
-              src={img1}
-              style={{
-                width: "fitContent",
-                height: "500px",
-                marginTop: "100px",
-              }}
-              alt=""
-            />
-          </SwiperSlide> */}
-
           {images.map((item) => {
             return (
-              <SwiperSlide key={item.id}>
-                <img
-                  className="img-fluid"
-                  src={item.img}
-                  style={{
-                    width: "fitContent",
-                    height: "500px",
-                    marginTop: "100px",
-                  }}
-                  alt=""
-                />
-              </SwiperSlide>
+              <Container key={item.id}>
+                <SwiperSlide>
+                  <img
+                    className="img-fluid"
+                    src={item.img}
+                    style={{
+                      width: "400px",
+                      height: "500px",
+                      marginTop: "100px",
+                    }}
+                    alt=""
+                  />
+                </SwiperSlide>
+              </Container>
             );
           })}
         </Swiper>
-      </Box>
+      </Stack>
     </>
   );
 }
