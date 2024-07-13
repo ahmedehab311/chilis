@@ -59,6 +59,7 @@ ul {
 
 a {
   text-decoration: none !important;
+  color: #000;
 }
 
 button {
@@ -98,8 +99,8 @@ input {
 }
 
 /* footer box2 */
-.midBox{
-
+.css-k008qs{
+  flex-direction: column;
 }
 /* footer box3 */
 .css-821wyw-MuiSvgIcon-root {
@@ -131,9 +132,11 @@ input {
   width: 52px;
   height: 3px;
 }
-
+.imgMain{
+  width: 500px !important;
+}
 @media (max-width: 900px) {
-  .css-1dzpn6f-MuiContainer-root {
+  .MuiContainer-root {
     flex-direction: column;
     text-align: center;
   }

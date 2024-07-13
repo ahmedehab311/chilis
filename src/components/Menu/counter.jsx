@@ -1,15 +1,14 @@
 import { IconButton, Stack } from "@mui/material";
 import { useState } from "react";
-// import Button from "@mui/material/Button";
 function Counter() {
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(1);
 
   const handleClick1 = () => {
     setCounter(counter + 1);
   };
 
   const handleClick2 = () => {
-    if (counter > 0) {
+    if (counter > 1) {
       setCounter(counter - 1);
     }
   };
@@ -20,7 +19,7 @@ function Counter() {
       alignItems={"center"}
       sx={{
         background: "green",
-        borderRadius: "40%",
+        borderRadius: "10%",
         width: "80px",
         justifyContent: "center",
         marginRight: "10px",
@@ -32,10 +31,12 @@ function Counter() {
           style={{
             fontSize: "14px",
             color: "white",
+            borderRight: "0px",
+            borderRadius: "0px 50% 50% 0px",
           }}
-          onClick={handleClick1}
+          onClick={handleClick2}
         >
-          +
+          -
         </button>
       </IconButton>
       <Stack
@@ -52,10 +53,13 @@ function Counter() {
             fontSize: "14px",
             marginLeft: "5px",
             color: "white",
+            borderLeft: "0px",
+            borderRadius: "0px 50% 50% 0px",
+        
           }}
-          onClick={handleClick2}
+          onClick={handleClick1}
         >
-          -
+          +
         </button>
       </IconButton>
     </Stack>

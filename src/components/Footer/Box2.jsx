@@ -14,13 +14,14 @@ function box2() {
             my:2
           }}
         >
-          <Box sx={{ display: "flex" }}>
-            <Stack>
+         
+            <Stack sx={{ display: "flex" }}>
               <PinDropIcon fontSize="15px" />
+              <Stack>Location</Stack>
             </Stack>
-            <Stack>Location</Stack>
+          
             <input type="text" className="inputFooter" />
-          </Box>
+       
         </Stack>
       </Box>
     </>

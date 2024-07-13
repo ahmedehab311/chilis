@@ -34,8 +34,7 @@
 .css-78trlr-MuiButtonBase-root-MuiIconButton-root {
   color: #fff !important;
 }
-.css-1160xiw-MuiPaper-root-MuiDrawer-paper 
-{
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper {
   background-color: #000 !important;
   width: 25% !important;
 }
@@ -44,12 +43,20 @@
 }
 .css-1160xiw-MuiPaper-root-MuiDrawer-paper a {
   color: #fff !important;
-  padding: 15px !important;
+  padding: 6px !important;
+  font-size: 20px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 @media (max-width: 690px) {
   .headerMenu li a {
     font-size: 13px;
     font-weight: 400;
+  }
+  .css-1160xiw-MuiPaper-root-MuiDrawer-paper {
+    background-color: #000 !important;
+    width: 50% !important;
   }
 }
 

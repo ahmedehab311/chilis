@@ -8,7 +8,7 @@ function Box3() {
         <EmailOutlinedIcon fontSize='20px' margin />
       </Stack>
       <Stack>
-        <Typography sx={{ fontSize: "18px" }}>AhmedEhab.47aa@gmail.com</Typography>
+        <Typography sx={{ fontSize: "12px", width:"100%" }}>AhmedEhab.47aa@gmail.com</Typography>
       </Stack>
 
     </Box>

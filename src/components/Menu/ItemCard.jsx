@@ -2,18 +2,7 @@ import { Box, Card, Stack, Typography } from "@mui/material";
 import { itemes } from "./items2.js";
 import { useState } from "react";
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  TextField,
-  Radio,
-} from "@mui/material";
+ Dialog, DialogTitle,DialogContent,DialogContentText,FormControl, RadioGroup, FormControlLabel, TextField,Radio,} from "@mui/material";
 import Counter from "./counter.jsx";
 
 function ItemCard() {
@@ -62,12 +51,14 @@ function ItemCard() {
             >
               {item.title}
             </Typography>
-            <img
+       <img
               src={item.img}
               width="50px"
               style={{ display: "flex", margin: "0 auto" }}
               alt=""
+              
             />
+
             <Typography variant="h4" sx={{ fontSize: "20px", my: 1 }}>
               {item.title2}
             </Typography>
@@ -86,7 +77,6 @@ function ItemCard() {
                 alignItems: "center",
                 justifyContent: "space-around",
               }}
-              // #c0b56e
             >
               <Typography sx={{ color: "#777" }}>{item.price}</Typography>
               <Typography sx={{ color: "#777" }}>{item.price2}</Typography>
@@ -101,9 +91,8 @@ function ItemCard() {
         aria-labelledby="item-dialog-title"
         aria-describedby="item-dialog-description"
         maxWidth="md"
-        sx={{border:"2px solid yallow"}}
+        sx={{ border: "2px solid yallow" }}
       >
-      
         <DialogContent
           sx={{ display: "flex", justifyContent: "center", mb: 2 }}
         >
@@ -113,6 +102,7 @@ function ItemCard() {
               alt={selectedItem?.title}
               width={300}
               height={200}
+              className="imgDialog"
             />
           </Box>
 
@@ -122,21 +112,21 @@ function ItemCard() {
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <DialogTitle id="item-dialog-title" >
+              <DialogTitle id="item-dialog-title">
                 {selectedItem?.title}
               </DialogTitle>
               <Stack direction={"row"} alignItems={"center"}>
                 <Counter />
-                <span style={{ color: "#000", fontSize: "12px" }}>
-                  620 EGP
-                </span>
+                <span style={{ color: "#000", fontSize: "12px" }}>620 EGP</span>
               </Stack>
             </Stack>
             <div className="borderItem"></div>
             <Typography variant="body1" sx={{ mb: 2, color: "#000" }}>
               {selectedItem?.description}
             </Typography>
-            <FormControl component="fieldset">
+           
+           <Stack>
+           <FormControl component="fieldset">
               <Typography variant="h6" sx={{ color: "#000" }}>
                 any spical Request?
               </Typography>
@@ -144,39 +134,47 @@ function ItemCard() {
 
             <TextField
               multiline
-              rows={4}
+              rows={2}
               variant="outlined"
               fullWidth
-              sx={{ mt: 2 }}
+              sx={{ mt: 0, mb: 1 }}
             />
-            <Typography variant="h6" sx={{ color: "#000" }}>
+     <Stack>
+     <Typography variant="h6" sx={{ color: "#000",textAlign:"left" }}> 
+     {/* عايزين نعمل الميديا الصغيرة في الmargin */}
+     {/*الصورة في الdiolg */}
               Option
             </Typography>
-            <Typography variant="h6" sx={{ color: "#000" , textTransform:"capitalize"}}>
+            <Typography
+              variant="h6"
+              sx={{ color: "#000", textTransform: "capitalize", textAlign:"left"}}
+            >
               add one
             </Typography>
             <RadioGroup sx={{ display: "flex " }}>
-             <Stack direction={"row"}> 
-             <FormControlLabel
-                sx={{ color: "#000" }}
-                value="chicken"
-                control={<Radio sx={{ color: "#000" }} />}
-                label="Chicken 510 EGP"
-              />
-              <FormControlLabel
-                value="beef"
-                control={<Radio sx={{ color: "#000" }} />}
-                label="Beef 650 EGP"
-                sx={{ color: "#000" }}
-              />
-              <FormControlLabel
-                value="combo"
-                control={<Radio sx={{ color: "#000" }} />}
-                label="Combo 610 EGP"
-                sx={{ color: "#000" }}
-              />
-             </Stack>
+              <Stack direction={"row"}>
+                <FormControlLabel
+                  sx={{ color: "#000" }}
+                  value="chicken"
+                  control={<Radio sx={{ color: "#000" }} />}
+                  label="Chicken 510 EGP"
+                />
+                <FormControlLabel
+                  value="beef"
+                  control={<Radio sx={{ color: "#000" }} />}
+                  label="Beef 650 EGP"
+                  sx={{ color: "#000" }}
+                />
+                <FormControlLabel
+                  value="combo"
+                  control={<Radio sx={{ color: "#000" }} />}
+                  label="Combo 610 EGP"
+                  sx={{ color: "#000" }}
+                />
+              </Stack>
             </RadioGroup>
+     </Stack>
+           </Stack>
           </DialogContentText>
         </DialogContent>
       </Dialog>

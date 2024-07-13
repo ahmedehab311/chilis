@@ -1,5 +1,16 @@
 .hero {
   background: url(../images/test2.jpg) 50% / cover no-repeat;
+  /* position: relative; */
+}
+.img-fluid {
+  width: 387px !important;
+  /* height: 229px !important; */
+}
+@media (max-width: 700px) {
+  .img-fluid {
+    width: 200px !important;
+    height: 200px !important;
+  }
 }
 .logoImg {
   display: block;
@@ -8,6 +19,13 @@
   height: 100px;
   top: 4%;
   left: 5px;
+}
+
+@media (max-width: 700px) {
+  .logoImg {
+    width: 67px;
+    height: 39px;
+  }
 }
 /* slider style */
 .swiper {
@@ -27,9 +45,14 @@
   align-items: center;
 }
 
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 500px;
-  object-fit: cover;
+.sli {
+  /* max-width: 700px; */
+  width: 60%;
+}
+
+@media (min-width: 100px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    top: 64% !important;
+  }
 }

@@ -5,7 +5,7 @@ function Main() {
   return (
     <div id="about">
       <Container
-        sx={{ display: "flex", alignItems: "center", flexGrow: 1, mt: 4 }}
+        sx={{ display: "flex", alignItems: "center",  mt: 4, ml:0 }}
       >
         <Box sx={{ flexGrow: 1 }}>
           <img
@@ -13,7 +13,7 @@ function Main() {
             width="500px"
             height="400px"
             alt="img"
-            className="img"
+            className="imgMain"
           />
         </Box>
         <Box sx={{ ml: 2 }}>

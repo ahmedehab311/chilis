@@ -1,5 +1,9 @@
 import img from "../Hero/images/2.jpg";
-// import img2 from "./images/2.jpg";
+import img2 from "../Hero/images/2.jpg";
+import img3 from "../Hero/images/popular-02.jpg";
+import img4 from "../Hero/images/popular-03.jpg";
+// import img5 from "../Hero/images/popular-05.jpg";
+
 export const itemes = [
   {
     id: 1,
@@ -15,7 +19,7 @@ export const itemes = [
   {
     id: 2,
     title: "sandawatch",
-    img: img,
+    img: img2,
     title2: "classi",
     category: "برجر",
     description:
@@ -26,7 +30,7 @@ export const itemes = [
   {
     id: 3,
     title: "fajitas",
-    img: img,
+    img: img3,
     title2: "burger",
     category: "مشروم",
     description:
@@ -37,7 +41,7 @@ export const itemes = [
   {
     id: 4,
     title: "steack",
-    img: img,
+    img: img4,
     title2: "classic",
     category: "كلاسيك",
     description:
@@ -47,7 +51,7 @@ export const itemes = [
   },
   {
     id: 4,
-    title: "steack",
+    title: "steack23",
     img: img,
     title2: "classic",
     category: "كلاسيك",
@@ -56,26 +60,5 @@ export const itemes = [
     price: "gunmale 6748 EGP",
     price2: "house made ratfch 564 EGP",
   },
-  {
-    id: 4,
-    title: "steack",
-    img: img,
-    title2: "classic",
-    category: "كلاسيك",
-    description:
-      "This impressive paella is a perfect party dish and a fun meal to cook together with your guests . Add 586 cup of frozen peas along with the   mussels, if you like.",
-    price: "gunmale 6748 EGP",
-    price2: "house made ratfch 564 EGP",
-  },
-  {
-    id: 4,
-    title: "steack",
-    img: img,
-    title2: "classic",
-    category: "كلاسيك",
-    description:
-      "This impressive paella is a perfect party dish and a fun meal to cook together with your guests . Add 586 cup of frozen peas along with the   mussels, if you like.",
-    price: "gunmale 6748 EGP",
-    price2: "house made ratfch 564 EGP",
-  },
+
 ];

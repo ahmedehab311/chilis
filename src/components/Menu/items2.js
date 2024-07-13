@@ -1,10 +1,14 @@
-import img from "../Hero/images/2.jpg";
-// import img2 from "./images/2.jpg";
+import img from "../Hero/images/game-01.jpg";
+import imgDiolg from "../Hero/images/1.jpg";
+import img2 from "../Hero/images/game-02.jpg"
+import img3 from "../Hero/images/game-03.jpg";
+// import img4 from "../Hero/images/popular-01.jpg";
 export const itemes = [
   {
     id: 1,
     title: "appetizers",
     img: img,
+    imgDiolg: imgDiolg,
     title2: "chips",
     category: "شيبسي وصلصة",
     description:
@@ -15,7 +19,7 @@ export const itemes = [
   {
     id: 2,
     title: "sandawatch",
-    img: img,
+    img: img2,
     title2: "classi",
     category: "برجر",
     description:
@@ -26,7 +30,7 @@ export const itemes = [
   {
     id: 3,
     title: "fajitas",
-    img: img,
+    img: img3,
     title2: "burger",
     category: "مشروم",
     description:
@@ -37,7 +41,7 @@ export const itemes = [
   {
     id: 4,
     title: "steack",
-    img: img,
+    img: img3,
     title2: "classic",
     category: "كلاسيك",
     description:
