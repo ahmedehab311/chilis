@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Drawer, IconButton, Link, Stack, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import HeaderBigMedia from "./HeaderBigMedia";
-
+import { Link as RouterLink } from "react-router-dom";
 function Header() {
   const [state, setState] = useState({
     top: false,
@@ -47,7 +47,7 @@ function Header() {
               borderRadius: "50%",
               p: "10px",
               "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.7)", // Darken the background on hover
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
               },
             }}
           >
@@ -78,6 +78,9 @@ function Header() {
         </Link>
         <Link href="#footer" onClick={closeDrawer}>
           contact us
+        </Link>
+        <Link component={RouterLink} to="/login" onClick={closeDrawer}>
+          Login
         </Link>
       </Drawer>
     </Stack>

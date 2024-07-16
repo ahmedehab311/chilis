@@ -8,19 +8,20 @@ function box2() {
         <Stack
         className="midBox"
           sx={{
-            display: "flex",
+            // display: "flex",
             color: "#fff",
             fontSize: "20px",
             my:2
           }}
         >
-          <Box sx={{ display: "flex" }}>
-            <Stack>
-              <PinDropIcon fontSize="15px" />
+         
+            <Stack sx={{ display: "flex" }} direction={"row"}>
+              <PinDropIcon fontSize="30px" />
+              <Stack>Location</Stack>
             </Stack>
-            <Stack>Location</Stack>
+          
             <input type="text" className="inputFooter" />
-          </Box>
+       
         </Stack>
       </Box>
     </>
