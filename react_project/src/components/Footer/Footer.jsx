@@ -1,8 +1,9 @@
-import { Stack, Box } from "@mui/material";
-import { Box1, Box2, Box3 } from "./index.jsx";
+import { Stack, Box, Typography } from "@mui/material";
+import {ContactUs,Location,Email}from "./index.jsx";
 function Footer() {
   return (
     <div id="footer">
+      <Stack>
       <Box
         sx={{
           display: "flex",
@@ -16,15 +17,22 @@ function Footer() {
         gap={2}
       >
         <Stack>
-          <Box1 />
+          <ContactUs />
         </Stack>
         <Stack>
-          <Box2 />
+          <Location />
+
         </Stack>
         <Stack>
-          <Box3 />
+          <Email />
         </Stack>
+       
       </Box>
+      <Typography sx={{color:"#fff",background:"#e72323", fontWight:"600",fontSize:"16px", textAlign:"center", textTransform:"uppercase", pb:2}}>
+all rights reserved to chils egypt
+        </Typography>
+      </Stack>
+      
     </div>
   );
 }

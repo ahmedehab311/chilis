@@ -1,6 +1,6 @@
 import { Box, Stack } from "@mui/material";
 import WifiCalling3Icon from "@mui/icons-material/WifiCalling3";
-function box1() {
+function ContactUs() {
   return (
     <Box
       sx={{
@@ -19,4 +19,4 @@ function box1() {
   );
 }
 
-export default box1;
+export default ContactUs;

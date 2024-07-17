@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 // src/components/SignUpForm.js
 import { useForm } from "react-hook-form";
@@ -6,8 +7,48 @@ import { Box, Button, TextField, Typography, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import signUpSchema from "../../vaildations/signUpSchema";
 import useCheckEmailAvailability from "../../hooks/useCheckEmailAvailability";
+import { useState } from "react";
 
-const Register = ({ onSubmit }) => {
+
+const Register = (props) => {
+
+  
+  //  Register api
+  const [first_name, setFirst_name] = useState();
+  const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
+  const [phone, setPhone] = useState();
+
+  const APIURL = "/register?first_name=mohamed&email=&password=123456&phone=01000596888";
+  const BASE_URL = "https://myres.me/chilis/";
+
+
+  const RegisterUser = async (credentials) => {
+    const response = await fetch(`${BASE_URL}${APIURL}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(credentials),
+    });
+    return await response.json();
+  };
+
+
+
+ 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    const response = await RegisterUser({
+      first_name,
+      email,
+      password,
+      phone,
+    });
+    console.log(response.token);
+    props.setToken(response.token);
+  };
+
+
+
   const {
     register,
     handleSubmit,
@@ -44,14 +85,14 @@ const Register = ({ onSubmit }) => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "100vh", 
+        minHeight: "100vh",
         backgroundColor: "#f5f5f5",
         padding: "20px",
       }}
     >
       <Box
         component="form"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleRegister}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -147,3 +188,4 @@ const Register = ({ onSubmit }) => {
 };
 
 export default Register;
+// old code

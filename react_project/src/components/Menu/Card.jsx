@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import {
   Dialog,
@@ -37,7 +36,7 @@ function Boxx() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [openDialog, setOpenDialog] = useState(false);  
+  const [openDialog, setOpenDialog] = useState(false); 
   const [selectedItemIndex, setSelectedItemIndex] = useState(null);
 
   const APIURL = "https://myres.me/chilis/api/menu/2/1";
@@ -67,16 +66,16 @@ function Boxx() {
   const handleBackClick = () => {
     setShowCards(true);
     setSelectedItem(null);
-    setOpenDialog(false); 
+    setOpenDialog(false); // إغلاق الـ Dialog عند الرجوع للقائمة الرئيسية
   };
 
   const handleItemClick = (item) => {
     setSelectedItem(item);
-    setOpenDialog(true); 
+    setOpenDialog(true); // فتح الـ Dialog عند الضغط على عنصر
   };
 
   const handleCloseDialog = () => {
-    setOpenDialog(false);
+    setOpenDialog(false); // إغلاق الـ Dialog عند الضغط على زر "Back to Menu" داخل الـ Dialog نفسه
   };
 
   return (
@@ -231,7 +230,7 @@ function Boxx() {
               ))}
           </Grid>
           <Dialog
-            open={openDialog}
+            open={openDialog} // استخدام حالة الـ Dialog الجديدة
             onClose={handleCloseDialog}
             aria-labelledby="item-dialog-title"
             aria-describedby="item-dialog-description"

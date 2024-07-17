@@ -3,32 +3,35 @@
 import { Box, Button, TextField, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import { Link, Link as RouterLink } from "react-router-dom";
-import { toast } from "react-toastify";
+
+const LoginUser = async (credentials) => {
+  const response = await fetch("https://api", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(credentials),
+  });
+  return await response.json();
+};
 
 
-// eslint-disable-next-line react/prop-types
 const LoginPage = ({setToken}) => {
-  const APIURL = "/login?phone=01000596888&password=123456";
-  const BASE_URL = "https://myres.me/chilis/";
-  
+ 
   const [email, setEmail] = useState();
   const [password, setPassword] = useState("");
 
-
-
-  const LoginUser = async (credentials) => {
-    const response = await fetch(`${BASE_URL}${APIURL}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
-    });
-    return await response.json();
-  };
-
- 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+    let result = true;
+    if (email === '' ||email === null) {
+      result=false
+      toast.warning("Please enter a valid email")
+
+    }
+    if (password === '' ||password === null) {
+      result=false
+      toast.warning("Please enter a valid email")
+
+    }
     const response = await LoginUser({
       email,
       password,
@@ -80,8 +83,7 @@ const LoginPage = ({setToken}) => {
             variant="outlined"
             fullWidth
             required
-            onChange={e => setEmail(e.target.value) }
-            value={email}
+            onChange={e => setUserName(e.target.value) }
             InputProps={{ style: { fontSize: "1.6rem", fontWeight: "bold" } }}
             InputLabelProps={{ fontSize: "1.6rem", fontWeight: "bold" }}
           />
@@ -92,7 +94,6 @@ const LoginPage = ({setToken}) => {
             fullWidth
             required
             onChange={e => setPassword(e.target.value) }
-            value={password}
             InputProps={{ style: { fontSize: "1.6rem", fontWeight: "bold" } }}
             InputLabelProps={{ fontSize: "1.6rem", fontWeight: "bold" }}
           />
