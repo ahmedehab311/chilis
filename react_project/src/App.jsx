@@ -7,7 +7,6 @@ import Profile from "./components/header/pages/profile";
 import { useState, useEffect } from "react";
 import { ToastContainer } from 'react-toastify';
 import Header from './components/header/Header';  
-import Card from "./components/Menu/Card"
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = ["/login", "/register", "/forgot-password", "/profile"];
