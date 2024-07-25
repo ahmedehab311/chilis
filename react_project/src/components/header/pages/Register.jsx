@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 // src/components/SignUpForm.js
+// src/components/SignUpForm.js
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography, Link } from "@mui/material";
@@ -8,46 +9,39 @@ import { Link as RouterLink } from "react-router-dom";
 import signUpSchema from "../../vaildations/signUpSchema";
 import useCheckEmailAvailability from "../../hooks/useCheckEmailAvailability";
 import { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-
-const Register = (props) => {
-
-  
-  //  Register api
+const Register = ({ setToken }) => {
   const [first_name, setFirst_name] = useState();
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
 
-  const APIURL = "/register?first_name=mohamed&email=&password=123456&phone=01000596888";
-  const BASE_URL = "https://myres.me/chilis/";
+  const BASE_URL = "https://myres.me/chilis/api";
 
-
-  const RegisterUser = async (credentials) => {
-    const response = await fetch(`${BASE_URL}${APIURL}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(credentials),
-    });
-    return await response.json();
-  };
-
-
-
- 
-  const handleRegister = async (e) => {
+  const registerUser = async (e) => {
     e.preventDefault();
-    const response = await RegisterUser({
-      first_name,
-      email,
-      password,
-      phone,
-    });
-    console.log(response.token);
-    props.setToken(response.token);
+
+    const APIURL = `/register?first_name=${first_name}&email=${email}&password=${password}&phone=${phone}`;
+
+    try {
+      const response = await axios.post(`${BASE_URL}${APIURL}`);
+
+      console.log("Response:", response.data);
+      if (response.data.response) {
+        const token = response.data.data.user.token;
+        
+        setToken(token);
+        toast.success("Register successful!");
+      } else {
+        throw new Error("Register failed");
+      }
+    } catch (error) {
+      toast.error("The email or phone has already been taken.");
+      console.error("Error registering: ", error);
+    }
   };
-
-
 
   const {
     register,
@@ -92,7 +86,7 @@ const Register = (props) => {
     >
       <Box
         component="form"
-        onSubmit={handleRegister}
+        onSubmit={registerUser}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -113,37 +107,21 @@ const Register = (props) => {
           variant="outlined"
           fullWidth
           required
+          onChange={(e) => setFirst_name(e.target.value)}
         />
-        <TextField
-          label="Last Name"
-          {...register("lastName")}
-          error={!!errors.lastName}
-          helperText={errors.lastName?.message}
-          variant="outlined"
-          fullWidth
-          required
-        />
+
         <TextField
           label="Email Address"
           {...register("email")}
           onBlur={emailOnBlurHandler}
-          error={!!errors.email || emailAvailabilityStatus === "notAvailable"}
-          helperText={
-            errors.email?.message ||
-            (emailAvailabilityStatus === "checking"
-              ? "We're currently checking the availability of this email address. Please wait a moment."
-              : emailAvailabilityStatus === "failed"
-              ? "Error from the server"
-              : emailAvailabilityStatus === "notAvailable"
-              ? "Email is already in use."
-              : emailAvailabilityStatus === "available"
-              ? "This email is available for use"
-              : "")
-          }
+          // error={!!errors.email}
+          // helperText={errors.email?.message}
+          // error={!!errors.email || emailAvailabilityStatus === "notAvailable"}
+          // helperText={errors.email?.message || (emailAvailabilityStatus === "notAvailable" && "Email already in use")}
           variant="outlined"
           fullWidth
           required
-          disabled={emailAvailabilityStatus === "checking"}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           label="Password"
@@ -154,16 +132,18 @@ const Register = (props) => {
           variant="outlined"
           fullWidth
           required
+          onChange={(e) => setPassword(e.target.value)}
         />
         <TextField
-          label="Confirm Password"
-          type="password"
-          {...register("confirmPassword")}
-          error={!!errors.confirmPassword}
-          helperText={errors.confirmPassword?.message}
+          label="Phone"
+          type="text"
+          {...register("phone")}
+          error={!!errors.phone}
+          helperText={errors.phone?.message}
           variant="outlined"
           fullWidth
           required
+          onChange={(e) => setPhone(e.target.value)}
         />
         <Button
           type="submit"
@@ -188,4 +168,5 @@ const Register = (props) => {
 };
 
 export default Register;
+
 // old code

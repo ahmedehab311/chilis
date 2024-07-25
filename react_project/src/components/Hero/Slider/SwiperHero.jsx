@@ -1,35 +1,32 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import "swiper/css";
 import "swiper/css/navigation";
 import "../Slider/Slider.css";
-import { images } from "../imagesArray";
+import backGroundRed from "../images/Group 2.png";
+
+
 function SwiperHero() {
   return (
     <Box className="sli">
-     <Swiper
-      // slidesPerView={1}
-      // spaceBetween={10}
-      pagination={{
-        clickable: true,
-      }}
-      loop={true}
-      navigation={true}
-      modules={[Navigation]}
-      className="mySwiper"
-    >
-      {images.map((item) => {
-        return (
-          <Container key={item.id}>
-            <SwiperSlide>
-              <img className="img-fluid" src={item.img} alt="" />
-            </SwiperSlide>
-          </Container>
-        );
-      })}
-    </Swiper>
- </Box>
+      <Swiper
+        className="swiper-hero"
+        pagination={{ clickable: true }}
+        loop={true}
+        navigation={true}
+        modules={[Navigation]}
+      >
+        {["aa", "aaa"].map((item, index) => (
+          <SwiperSlide key={index}>
+            <div className="image-container">
+              <img src={backGroundRed} alt="" className="image image1" />
+             
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </Box>
   );
 }
 

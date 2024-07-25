@@ -1,11 +1,11 @@
-import logo from "./images/logooo.jpg";
+import logo from "./images/logo.png";
 import {Stack } from "@mui/material";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./Slider/Slider.css";
 import "./Slider/Slider.css";
 import SwiperHero from "./Slider/SwiperHero";
-
+import "./hero.css"
 function Hero() {
   return (
     <>

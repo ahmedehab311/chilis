@@ -15,7 +15,7 @@
   color: #fff;
   font-size: 20px;
   font-weight: 500;
-  font-family: "Open Sans";
+  font-family: "cairo";
 }
 .headerMenu li {
   margin: 25px;
@@ -25,7 +25,7 @@
   color: #fff;
   font-size: 20px;
   font-weight: 500;
-  font-family: "Open Sans";
+  font-family: "cairo";
 }
 
 .css-i4bv87-MuiSvgIcon-root {
@@ -50,8 +50,7 @@
   justify-content: center;
 }
 .css-1160xiw-MuiPaper-root-MuiDrawer-paper a:not(:last-child) {
-    
-      border-bottom: 1px solid #333;
+  border-bottom: 1px solid #333;
 }
 @media (max-width: 690px) {
   .headerMenu li a {
@@ -65,9 +64,48 @@
 }
 
 /* icon button */
-.css-atxwc0-MuiSvgIcon-root {
+/* .css-atxwc0-MuiSvgIcon-root {
   color: #fff;
 }
 .css-1m716pe-MuiSvgIcon-root {
   color: #fff;
+} */
+.headerMenu {
+  display: flex;
+  align-items: center;
+}
+
+.headerMenu .login-link {
+  margin-left: auto;
+  font-size: 16px;
+  color: #fff;
+}
+
+.headerMenu .login-link:hover {
+  text-decoration: underline;
+}
+/* burger icon */
+.css-1wt6jp7-MuiSvgIcon-root {
+  z-index: 10;
+}
+.css-ze299u-MuiButtonBase-root-MuiIconButton-root:hover {
+  background-color: transparent !important;
+}
+.css-1wt6jp7-MuiSvgIcon-root:hover{
+  background-color: transparent !important;
+  
+}
+.css-ze299u-MuiButtonBase-root-MuiIconButton-root{
+  background-color: transparent !important;
+
+}
+/* backGround for burger icon  */
+@media (max-width: 1000px) {
+  .css-1uiy4ox-MuiStack-root {
+    background-color: transparent !important;
+  }
+}
+/* icon login */
+.css-ze299u-MuiButtonBase-root-MuiIconButton-root {
+  padding: 5px !important;
 }

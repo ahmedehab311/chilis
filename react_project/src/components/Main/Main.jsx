@@ -1,12 +1,11 @@
 import { Box, Container, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import img from "./main.jpg";
+import "./Main.css";
 function Main() {
   return (
     <div id="about">
-      <Container
-        sx={{ display: "flex", alignItems: "center",  mt: 4, ml:0 }}
-      >
+      <Container sx={{ display: "flex", alignItems: "center", mt: 4, ml: 0 }}>
         <Box sx={{ flexGrow: 1 }}>
           <img
             src={img}
@@ -20,10 +19,24 @@ function Main() {
           <Typography
             variant="h2"
             className="text"
-            sx={{ fontSize: "20px", mb: 2, textTransform: "capitalize" }}
+            sx={{
+              mb: 2,
+              textTransform: "capitalize",
+              fontFamily: "cairo",
+              fontSize: "40px",
+              fontWeight: "bold",
+            }}
           >
-            <div style={{ marginBottom: 4, color: "#000" }}>
-              chilis <span style={{ color: "red" }}>Egypt</span>
+            <div
+              style={{
+                my: 4,
+                color: "#000",
+                margin: "5px 0 5px 0 ",
+                fontFamily: "cairo",
+              }}
+            >
+              chilis{" "}
+              <span style={{ color: "red", fontFamily: "cairo" }}>Egypt</span>
             </div>
             for getting real transparent
           </Typography>
@@ -41,7 +54,9 @@ function Main() {
             discover our food
           </Typography>
           <div className="borderMain"></div>
-          <Typography sx={{ mt: 3, mb: 2, fontSize: "15px" }}>
+          <Typography
+            sx={{ mt: 3, mb: 2, fontSize: "15px", fontFamily: "uniform" }}
+          >
             Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ut,
             tempore vel, deserunt accusantium eligendi rerum iusto cum dolorum
             nihil neque cumque aperiam blanditiis? Nam odio, minus debitis ea
@@ -59,6 +74,7 @@ function Main() {
           >
             read more
           </Button>
+          {/* <Stack> */}
         </Box>
       </Container>
     </div>
