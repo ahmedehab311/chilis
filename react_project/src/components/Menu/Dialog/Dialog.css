@@ -47,7 +47,10 @@
     align-items: center !important;
   }
   .css-1xhj18k{
-    flex-direction: column;
+    flex-direction: column !important;
+  }
+  .AddToCardBtn {
+    justify-content: center !important;
   }
 }
 .css-12rl710-MuiPaper-root-MuiDialog-paper {

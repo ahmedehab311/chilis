@@ -23,7 +23,7 @@ function Hero() {
           <img src={logo} className="logoImg" alt="logo" />
         </Stack>
 
-        <SwiperHero />
+        <SwiperHero className="swiper-hero"/>
       </Stack>
     </>
   );

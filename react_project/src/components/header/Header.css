@@ -1,5 +1,4 @@
 .headerMenu {
-  /* display: flex; */
   align-items: center;
   justify-content: space-around;
   padding: 10px 10px;
@@ -66,12 +65,6 @@
 }
 
 /* icon button */
-/* .css-atxwc0-MuiSvgIcon-root {
-  color: #fff;
-}
-.css-1m716pe-MuiSvgIcon-root {
-  color: #fff;
-} */
 .headerMenu {
   display: flex;
   align-items: center;
@@ -90,8 +83,12 @@
 .css-1wt6jp7-MuiSvgIcon-root,.css-n75onm {
   z-index: 10;
 }
-.css-ze299u-MuiButtonBase-root-MuiIconButton-root:hover {
+.css-1gmef3o:hover{
   background-color: transparent !important;
+}
+.css-1gmef3o{
+  background-color: transparent !important;
+
 }
 .css-1wt6jp7-MuiSvgIcon-root:hover{
   background-color: transparent !important;

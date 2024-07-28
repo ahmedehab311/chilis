@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Drawer, IconButton, Link, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link as RouterLink } from "react-router-dom";
@@ -42,7 +43,7 @@ function SmallMediaQuery({ closeDrawer, toggleDrawer, state, handleLogout, token
             <Link href="#footer" onClick={closeDrawer}>
               Location
             </Link>
-            <Link href="#" onClick={closeDrawer}>
+            <Link component={RouterLink} to="/order-online" onClick={closeDrawer}>
               Order Online
             </Link>
             <Link href="#footer" onClick={closeDrawer}>

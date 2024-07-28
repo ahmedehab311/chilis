@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
-import { Hero, Main, Menu, Footer, LoginPage, MainLayout, ForgetPass, Register } from "./components/header/index";
-import Error from "./components/header/pages/Error";
-import Profile from "./components/header/pages/profile"; 
 import { useState, useEffect } from "react";
-import { ToastContainer } from 'react-toastify';
-import Header from './components/header/Header';  
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import { Main, Menu, Footer, LoginPage, MainLayout, ForgetPass, Register,Error,Profile,OrderOnline } from "./components/header/index";
+import { ToastContainer } from "react-toastify";
+import Header from "./components/header/Header";
+
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = ["/login", "/register", "/forgot-password", "/profile"];
@@ -28,19 +27,24 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
             index
             element={
               <>
-
                 <Main />
                 <Menu />
-                {/* <Card/> */}
                 <Footer />
               </>
             }
           />
         </Route>
-        <Route path="/login" element={<LoginPage setToken={setToken} setUserData={setUserData} />} />
+        <Route
+          path="/login"
+          element={<LoginPage setToken={setToken} setUserData={setUserData} />}
+        />
         <Route path="/register" element={<Register setToken={setToken} />} />
-        <Route path="/forgot-password" element={<ForgetPass setToken={setToken} />} />
+        <Route
+          path="/forgot-password"
+          element={<ForgetPass setToken={setToken} />}
+        />
         <Route path="/profile" element={<Profile userData={userData} />} />
+        <Route path="/order-online" element={<OrderOnline />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>
@@ -55,7 +59,6 @@ function App() {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
-      // Optionally fetch user data from API if needed
     }
   }, []);
 
@@ -63,7 +66,12 @@ function App() {
     <>
       <ToastContainer />
       <Router>
-        <AppContent token={token} setToken={setToken} userData={userData} setUserData={setUserData} />
+        <AppContent
+          token={token}
+          setToken={setToken}
+          userData={userData}
+          setUserData={setUserData}
+        />
       </Router>
     </>
   );

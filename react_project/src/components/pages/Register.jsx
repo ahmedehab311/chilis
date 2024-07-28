@@ -1,24 +1,18 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-// src/components/SignUpForm.js
-// src/components/SignUpForm.js
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-import signUpSchema from "../../vaildations/signUpSchema";
-import useCheckEmailAvailability from "../../hooks/useCheckEmailAvailability";
-import { useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
-
+import {useCheckEmailAvailability,signUpSchema} from "../header/index"
+import { BASE_URL } from "../Menu";
 const Register = ({ setToken }) => {
   const [first_name, setFirst_name] = useState();
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
-
-  const BASE_URL = "https://myres.me/chilis/api";
 
   const registerUser = async (e) => {
     e.preventDefault();

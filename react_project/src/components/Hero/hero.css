@@ -2,9 +2,6 @@
   color: #e2211c !important;
   font-weight: bold !important;
 }
-.css-11600oe-MuiStack-root {
-  /* padding: 50px; */
-}
 .swiper-hero .swiper-button-prev {
   color: #e2211c !important;
   font-weight: bold !important;
@@ -39,17 +36,11 @@
     left:250px !important
   } 
 }
-/* .swiper-hero .swiper-button-next, .swiper-hero .swiper-button-prev{
-  width: 350px !important;
-  height: 350px !important;
-} */
 .swiper-button-prev:after, .swiper-button-next:after{
   font-size: 55px !important;
 }
 .image1 {
   width: 100%;
-  /* height: 100%  !important; */
-  /* position: relative; */
   height: 81vh;
   margin-top: -28px;
 }
@@ -60,12 +51,10 @@
   object-fit: cover;
   object-fit: contain;
   margin-bottom: 5px;
-  /* height: 100vh; */
 }
 
 
 .image-container {
-  /* position: relative; */
   width: 100%;
   height: 100%;
 }
