@@ -26,6 +26,8 @@
     .imgMain {
       width: 400px !important;
       width: 100% !important;
+      margin-left: 0;
+      height: 300px;
     }
   }
   @media (max-width: 900px) {

@@ -1,13 +1,15 @@
 .box {
     background: url(../../Hero/images/test2.jpg) 50% / cover no-repeat !important;
-    /* background: url(../Hero/images/bigBackground.png) 50% / cover no-repeat !important; */
     margin-top: 10px;
     max-width: 100% !important;
     color: #fff !important;
     padding: 8px;
     display: inline !important;
   }
-  
+  .css-nhhtsc{
+    max-width: 228px !important;
+    padding: 11px 15px !important;
+  }
 .swiper-button-next,
 .swiper-button-prev {
   color: white;

@@ -34,14 +34,14 @@
 .css-78trlr-MuiButtonBase-root-MuiIconButton-root {
   color: #fff !important;
 }
-.css-1160xiw-MuiPaper-root-MuiDrawer-paper {
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper, .css-1ab2xsx{
   background-color: #000 !important;
   width: 25% !important;
 }
-.css-1160xiw-MuiPaper-root-MuiDrawer-paper {
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper,.css-1ab2xsx {
   padding: 15px !important;
 }
-.css-1160xiw-MuiPaper-root-MuiDrawer-paper a {
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper a,.css-1ab2xsx a {
   color: #fff !important;
   padding: 12px !important;
   font-size: 20px !important;
@@ -49,7 +49,8 @@
   align-items: center;
   justify-content: center;
 }
-.css-1160xiw-MuiPaper-root-MuiDrawer-paper a:not(:last-child) {
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper a:not(:last-child) ,
+.css-1ab2xsx a:not(:last-child) {
   border-bottom: 1px solid #333;
 }
 @media (max-width: 690px) {
@@ -57,7 +58,8 @@
     font-size: 13px;
     font-weight: 400;
   }
-  .css-1160xiw-MuiPaper-root-MuiDrawer-paper {
+  .css-1160xiw-MuiPaper-root-MuiDrawer-paper,
+  .css-1ab2xsx {
     background-color: #000 !important;
     width: 50% !important;
   }
@@ -85,7 +87,7 @@
   text-decoration: underline;
 }
 /* burger icon */
-.css-1wt6jp7-MuiSvgIcon-root {
+.css-1wt6jp7-MuiSvgIcon-root,.css-n75onm {
   z-index: 10;
 }
 .css-ze299u-MuiButtonBase-root-MuiIconButton-root:hover {
@@ -99,9 +101,10 @@
   background-color: transparent !important;
 
 }
+
 /* backGround for burger icon  */
 @media (max-width: 1000px) {
-  .css-1uiy4ox-MuiStack-root {
+  .css-1uiy4ox-MuiStack-root,.css-1qin6wc {
     background-color: transparent !important;
   }
 }
