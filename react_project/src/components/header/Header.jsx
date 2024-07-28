@@ -82,7 +82,7 @@ function Header({ token, handleLogout }) {
                     onClick={handleMenu}
                     sx={{ color: "#fff", position: "absolute", right: "10px" }}
                   >
-                    <AccountCircle />
+                    <AccountCircle sx={{fontSize:"28px"}}/>
                   </IconButton>
                   <Menu
                     id="menu-appbar"

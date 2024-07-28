@@ -46,7 +46,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
           <Swiper
             className="swiper-menu"
             slidesPerView={1}
-            spaceBetween={0.5}
+            // spaceBetween={0.5}
             pagination={{ clickable: true }}
             loop={true}
             navigation={true}
@@ -55,7 +55,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
               0: { slidesPerView: 1 },
               600: { slidesPerView: 2 },
               900: { slidesPerView: 3 },
-              1300: { slidesPerView: 3 },
+              1300: { slidesPerView: 4 },
             }}
           >
             {Array.isArray(menuItems) &&
