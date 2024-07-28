@@ -69,7 +69,7 @@ function Header({ token, handleLogout }) {
               <Link href="#menu">Menu</Link>
               <Link href="#about">About Us</Link>
               <Link href="#footer">Location</Link>
-              <Link >Order Online</Link>
+              <Link  component={RouterLink} to="/order-online">Order Online</Link>
               <Link href="#footer">Contact Us</Link>
               {token ? (
                 <>

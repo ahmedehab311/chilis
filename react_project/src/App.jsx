@@ -8,8 +8,8 @@ import Header from "./components/header/Header";
 
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
-  const excludedPaths = ["/login", "/register", "/forgot-password", "/profile"];
-
+  const excludedPaths = ["/login", "/register", "/forgot-password", "/profile", "/order-online"];
+  
   const handleLogout = () => {
     setToken(null);
     localStorage.removeItem("token");
@@ -45,6 +45,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
         />
         <Route path="/profile" element={<Profile userData={userData} />} />
         <Route path="/order-online" element={<OrderOnline />} />
+        
         <Route path="*" element={<Error />} />
       </Routes>
     </>
