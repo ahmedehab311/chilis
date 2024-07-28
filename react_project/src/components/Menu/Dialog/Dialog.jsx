@@ -41,13 +41,15 @@ function DialogItem({
         }}
       >
         <Box>
-          <img
+        <Stack>
+        <img
             src={tempSelectedItemImage}
             alt={tempSelectedItemName}
             width={300}
             height={200}
             className="imgDialog"
           />
+        </Stack>
         </Box>
         <DialogContentText id="item-dialog-description" sx={{ mx: 3 }}>
           <Stack

@@ -1,6 +1,7 @@
 .imgDialog {
   width: 200px;
   height: 180px;
+  margin: 8px 0 8px 0;
 }
 .css-wjndpe-MuiButtonBase-root-MuiIconButton-root {
   margin: 0 !important;
@@ -15,7 +16,7 @@
   justify-content: flex-end !important;
 }
 @media (max-width: 600px) {
-  .css-1jv2z0n-MuiStack-root {
+  .css-1jv2z0n-MuiStack-root,.css-lih5v3 {
     flex-direction: column !important;
   }
   .css-hg8pyb-MuiTypography-root {
@@ -37,7 +38,16 @@
   }
   .css-180hdwu-MuiFormControl-root-MuiTextField-root {
     display: flex;
+    /* justify-self: center; */
     align-items: center;
+  }
+  .css-0 {
+    display: flex !important;
+    justify-content: center !important; 
+    align-items: center !important;
+  }
+  .css-1xhj18k{
+    flex-direction: column;
   }
 }
 .css-12rl710-MuiPaper-root-MuiDialog-paper {

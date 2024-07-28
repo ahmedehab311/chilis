@@ -18,9 +18,9 @@
 .swiper-menu  .swiper-slide img {
   display: block;
   height: 280px;
-  object-fit: cover;
+  object-fit: scale-down;
   margin-bottom: 5px;
-  height: 404px ;
+  /* height: 40npm 4px ; */
 }
 
 .swiper-button-prev,

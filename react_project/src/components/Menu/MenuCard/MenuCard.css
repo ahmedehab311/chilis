@@ -28,8 +28,14 @@
   padding-right: 15px !important;
   padding-left: 15px !important;
 }
-.css-p6dri1{
-  font-size: 2rem;
+/* .css-p6dri1{
+  font-size: 1.6rem !important;
+} */
+.css-g2ee9{
+  margin: -50px 0px 16px;
+}
+.swiper-button-next, .swiper-button-prev{
+
 }
 @media (max-width: 600px) {
   .swiper-button-next,
@@ -40,6 +46,7 @@
     height: 20px;
   }
 }
+
 
 @media (min-width: 600px) {
   .swiper-button-next,
@@ -52,7 +59,7 @@
 @media (min-width: 900px) {
   .swiper-button-next,
   .swiper-button-prev {
-    width: 40px;
+    width:0 !important;
     height: 40px;
   }
 }

@@ -46,7 +46,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
           <Swiper
             className="swiper-menu"
             slidesPerView={1}
-            // spaceBetween={0.5}
+            spaceBetween={0.5}
             pagination={{ clickable: true }}
             loop={true}
             navigation={true}
@@ -81,7 +81,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
                         textAlign: "center",
                         mb: 2,
                         textTransform: "uppercase",
-                        fontSize: " 2.4rem",
+                        fontSize: " 1.8rem",
                         fontWeight: "bold",
                         color: "#c0b56e",
                         fontFamily: "cairo",
