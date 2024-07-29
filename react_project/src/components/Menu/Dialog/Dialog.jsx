@@ -23,6 +23,12 @@ function DialogItem({
   tempSelectedItemName,
   tempSelectedItemPrice,
   tempSelectedItemDescription,
+  extra,
+  PriceExtra,
+  extra2,
+  PriceExtra2,
+  extra3,
+  PriceExtra3,
 }) {
   return (
     <Dialog
@@ -41,15 +47,15 @@ function DialogItem({
         }}
       >
         <Box>
-        <Stack>
-        <img
-            src={tempSelectedItemImage}
-            alt={tempSelectedItemName}
-            width={300}
-            height={200}
-            className="imgDialog"
-          />
-        </Stack>
+          <Stack>
+            <img
+              src={tempSelectedItemImage}
+              alt={tempSelectedItemName}
+              width={300}
+              height={200}
+              className="imgDialog"
+            />
+          </Stack>
         </Box>
         <DialogContentText id="item-dialog-description" sx={{ mx: 3 }}>
           <Stack
@@ -64,7 +70,9 @@ function DialogItem({
               \
               <CounterDiaolgButton />
               <span style={{ color: "#000", fontSize: "12px" }}>
-                {tempSelectedItemPrice}
+                {tempSelectedItemPrice
+                  ? `${tempSelectedItemPrice} EGP`
+                  : "Price not available"}
               </span>
             </Stack>
           </Stack>
@@ -103,7 +111,7 @@ function DialogItem({
                   textAlign: "left",
                 }}
               >
-                Add on
+             {`${extra}`}
               </Typography>
               <RadioGroup sx={{ display: "flex " }}>
                 <Stack direction={"row"}>
@@ -111,19 +119,19 @@ function DialogItem({
                     sx={{ color: "#000" }}
                     value="chicken"
                     control={<Radio sx={{ color: "#000" }} />}
-                    label="Chicken 510 EGP"
+                    label={`${extra} ${PriceExtra} EGP`}
                   />
                   <FormControlLabel
                     sx={{ color: "#000" }}
                     value="beef"
                     control={<Radio sx={{ color: "#000" }} />}
-                    label="Beef 650 EGP"
+                    label={`${extra2} ${PriceExtra2} EGP`}
                   />
                   <FormControlLabel
                     sx={{ color: "#000" }}
                     value="combo"
                     control={<Radio sx={{ color: "#000" }} />}
-                    label="Combo 610 EGP"
+                    label={`${extra3} ${PriceExtra3} EGP`}
                   />
                 </Stack>
               </RadioGroup>
