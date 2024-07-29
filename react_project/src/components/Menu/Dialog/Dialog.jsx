@@ -115,12 +115,7 @@ function DialogItem({
               </Typography>
               <RadioGroup sx={{ display: "flex " }}>
                 <Stack direction={"row"}>
-                  <FormControlLabel
-                    sx={{ color: "#000" }}
-                    value="chicken"
-                    control={<Radio sx={{ color: "#000" }} />}
-                    label={`${extra} ${PriceExtra} EGP`}
-                  />
+                 
                   <FormControlLabel
                     sx={{ color: "#000" }}
                     value="beef"

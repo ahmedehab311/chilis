@@ -4,7 +4,7 @@ function OrderButton({ handleItemClick }) {
   return (
     <IconButton
       // eslint-disable-next-line no-undef
-      onClick={() => handleItemClick(item)}
+      onClick={() => handleItemClick}
       sx={{ mt: "auto", width: "100%", textAlign: "center" }}
     >
       <Button variant="contained" color="error">
