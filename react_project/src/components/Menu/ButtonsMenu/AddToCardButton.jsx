@@ -1,13 +1,26 @@
-import { Button, IconButton } from "@mui/material"
+import { Button, IconButton, Stack } from "@mui/material";
 
 function AddToCardButton() {
   return (
-    <IconButton sx={{ mt: "auto", width: "100%", textAlign: "center" }} className="AddToCardBtn">
-    <Button variant="contained" color="error">
-      Add to card
-    </Button>
-  </IconButton>
-  )
+    <Stack
+      // sx={{
+      //   mt: "auto",
+      //   width: "100%",
+      //   textAlign: "center",
+      //   '&:active': {
+      //     backgroundColor: 'transparent', // Disable active background color change
+      //   },
+      //   '&:focus': {
+      //     backgroundColor: 'inherit', // Disable focus background color change
+      //   },
+      // }}
+      className="AddToCardBtn"
+    >
+      <Button variant="contained" color="error">
+        Add to card
+      </Button>
+    </Stack>
+  );
 }
 
-export default AddToCardButton
+export default AddToCardButton;
