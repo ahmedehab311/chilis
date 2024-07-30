@@ -6,17 +6,16 @@
 .css-wjndpe-MuiButtonBase-root-MuiIconButton-root {
   margin: 0 !important;
 }
-.css-wjndpe-MuiButtonBase-root-MuiIconButton-root {
-  /* justify-content: flex-end !important; */
-}
 .css-wjndpe-MuiButtonBase-root-MuiIconButton-root:hover {
   background-color: transparent !important;
 }
 .AddToCardBtn {
-  justify-content: flex-end !important;
+  /* display: flex; */
+  align-items: end !important;
 }
 @media (max-width: 600px) {
-  .css-1jv2z0n-MuiStack-root,.css-lih5v3 {
+  .css-1jv2z0n-MuiStack-root,
+  .css-lih5v3 {
     flex-direction: column !important;
   }
   .css-hg8pyb-MuiTypography-root {
@@ -43,10 +42,10 @@
   }
   .css-0 {
     display: flex !important;
-    justify-content: center !important; 
+    justify-content: center !important;
     align-items: center !important;
   }
-  .css-1xhj18k{
+  .css-1xhj18k {
     flex-direction: column !important;
   }
   .AddToCardBtn {
@@ -84,7 +83,7 @@
 
 .css-l9gw3y-MuiFormControlLabel-root .MuiFormControlLabel-label {
   color: #000 !important;
-  font-size: 9px !important;
+  font-size: 11px !important;
 }
 .css-1hbvpl3-MuiSvgIcon-root {
   color: #000 !important;
@@ -97,4 +96,8 @@
 .css-uld4ju-MuiTypography-root,
 .css-966de2-MuiTypography-root {
   color: #fff;
+}
+/* items extra */
+.css-dmmspl-MuiFormGroup-root{
+  flex-direction: row !important;
 }

@@ -1,24 +1,24 @@
-import { Button, IconButton, Stack } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 
-function AddToCardButton() {
+function AddToCardButton({onAddToCart}) {
+  const handleClick = () => {
+    const itemDetails = {
+      name: 'wings trio Original',
+      price: '265 EGP',
+      extras: [
+        { name: 'Honey Chipotle', price: '265 EGP' },
+      ]
+    };
+  
+    console.log('handleClick called');
+    onAddToCart(itemDetails); 
+  };
+
   return (
-    <Stack
-      // sx={{
-      //   mt: "auto",
-      //   width: "100%",
-      //   textAlign: "center",
-      //   '&:active': {
-      //     backgroundColor: 'transparent', // Disable active background color change
-      //   },
-      //   '&:focus': {
-      //     backgroundColor: 'inherit', // Disable focus background color change
-      //   },
-      // }}
-      className="AddToCardBtn"
-    >
-      <Button variant="contained" color="error">
-        Add to card
-      </Button>
+    <Stack className="AddToCardBtn">
+   <Button onClick={handleClick} variant="contained" color="error">
+      Add to Cart
+    </Button>
     </Stack>
   );
 }

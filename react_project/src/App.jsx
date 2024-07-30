@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from "react-route
 import { Main, Menu, Footer, LoginPage, MainLayout, ForgetPass, Register,Error,Profile,OrderOnline } from "./components/header/index";
 import { ToastContainer } from "react-toastify";
 import Header from "./components/header/Header";
-
+import { CartProvider } from "./components/hooks/CardContext";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = ["/login", "/register", "/forgot-password", "/profile", "/order-online"];
@@ -65,6 +65,7 @@ function App() {
 
   return (
     <>
+    <CartProvider>
       <ToastContainer />
       <Router>
         <AppContent
@@ -74,6 +75,7 @@ function App() {
           setUserData={setUserData}
         />
       </Router>
+      </CartProvider>
     </>
   );
 }
