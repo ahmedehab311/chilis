@@ -27,8 +27,8 @@ function DialogItem({
   itemDetails,
   price,
   dataExtra,
-  BASE_URL
-  // handleAddToCart
+  BASE_URL,
+  handleAddToCart
 }) {
 
 
@@ -39,7 +39,7 @@ function DialogItem({
     aria-labelledby="item-dialog-title"
     aria-describedby="item-dialog-description"
     maxWidth="lg"
-    sx={{border:"2px solid #c0b56e"}}
+    sx={{ border: "2px solid #c0b56e" }}
   >
     {itemDetails && (
       <DialogContent
@@ -70,7 +70,7 @@ function DialogItem({
             <Stack direction={"row"} alignItems={"center"}>
               <CounterDiaolgButton />
               <span style={{ color: "#000", fontSize: "12px" }}>
-                {price}EGP
+                {price} EGP
               </span>
             </Stack>
           </Stack>
@@ -82,10 +82,10 @@ function DialogItem({
           {dataExtra && dataExtra.length > 0 && (
             <FormControl component="fieldset">
               <Typography variant="h6" sx={{ color: "#000" }}>
-            option
+                Option
               </Typography>
               <Typography variant="h6" sx={{ color: "#000" }}>
-            Add one
+                Add on
               </Typography>
               <RadioGroup>
                 {dataExtra.map((extra, index) => (
@@ -94,17 +94,14 @@ function DialogItem({
                     sx={{ color: "#000" }}
                     value={extra.description_en}
                     control={<Radio sx={{ color: "#000" }} />}
-                    label={extra.description_en}
+                    label={`${extra.description_en} - ${extra.price_en} EGP`}
                   />
                 ))}
               </RadioGroup>
             </FormControl>
           )}
-      
+          <AddToCardButton onAddToCart={handleAddToCart} />
         </DialogContentText>
-     
-             <AddToCardButton onClick={handleAddToCart} />
-     
       </DialogContent>
     )}
   </Dialog>
