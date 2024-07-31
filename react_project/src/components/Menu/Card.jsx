@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Box, Stack } from "@mui/material";
 import "swiper/css";
@@ -15,6 +17,7 @@ import {
   API_PRICE,
 } from "./index";
 import axios from "axios";
+import OrderOnline from "./order/OrderOnline/OrderOnline";
 function CardContent() {
   const [showCards, setShowCards] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -26,11 +29,12 @@ function CardContent() {
   const [tempSelectedItemDescription, setTempSelectedItemDescription] =
     useState(null);
   const [tempSelectedItemPrice, setTempSelectedItemPrice] = useState(null);
+  const [showOrderNow, setShowOrderNow] = useState(false);
+  const [orderDetails, setOrderDetails] = useState(null);
 
   const [price, setPrice] = useState(null);
   const [itemDetails, setItemDetails] = useState(null);
   const [dataExtra, setDataExtra] = useState([]);
-
 
   useEffect(() => {
     const fetchDataAsync = async () => {
@@ -58,19 +62,34 @@ function CardContent() {
   };
 
   const handleItemClick = async (item) => {
-        try {
-          const response = await axios.get(
-            `https://myres.me/chilis/api/item/${item.id}/1`
-          );
-          setItemDetails(response.data);
-          setPrice(response.data.info[0].price.price);
-          setDataExtra(response.data.item_extras[0]?.data || []);
-          setOpenDialog(true);
-        } catch (error) {
-          console.error("Error fetching item details: ", error);
-        }
-      };
-
+    try {
+      const response = await axios.get(
+        `https://myres.me/chilis/api/item/${item.id}/1`
+      );
+      setItemDetails(response.data);
+      setPrice(response.data.info[0].price.price);
+      setDataExtra(response.data.item_extras[0]?.data || []);
+      setOpenDialog(true);
+    } catch (error) {
+      console.error("Error fetching item details: ", error);
+    }
+  };
+  const handleAddToCart = () => {
+    if (itemDetails) {
+      onAddToCart({
+        name_en: itemDetails.name_en,
+        price: price,
+        extras: dataExtra,
+      });
+      setOrderDetails({
+        name: itemDetails.name_en,
+        price: price,
+        extras: dataExtra,
+      });
+      setShowOrderNow(true);
+      setOpenDialog(false);
+    }
+  };
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
@@ -100,8 +119,6 @@ function CardContent() {
             tempSelectedItemName={tempSelectedItemName}
             tempSelectedItemDescription={tempSelectedItemDescription}
             tempSelectedItemPrice={tempSelectedItemPrice}
-            // extra={extra}
-            // PriceExtra={PriceExtra}
             itemDetails={itemDetails}
             price={price}
             dataExtra={dataExtra}
@@ -112,13 +129,15 @@ function CardContent() {
       <Stack className="stackContainer">
         <img src={imgLogo} className="logoImgMenu" alt="logomenu" />
       </Stack>
+      {showOrderNow && orderDetails && (
+        <OrderOnline orderDetails={orderDetails} />
+      )}
     </Box>
   );
 }
 
 export default CardContent;
-//  
-
+//
 
 // import { useState, useEffect } from "react";
 // import {
@@ -151,6 +170,7 @@ export default CardContent;
 // import "./sliderMenu.css";
 // import "./Dialog/Dialog.css";
 // import AddToCardButton from "./ButtonsMenu/AddToCardButton";
+// import OrderOnline from "./order/OrderOnline/OrderOnline"; // استيراد OrderOnline
 
 // const APIURL = "https://myres.me/chilis/api/menu/2/1";
 // const BASE_URL = "https://myres.me/chilis/";
@@ -164,6 +184,8 @@ export default CardContent;
 //   const [price, setPrice] = useState(null);
 //   const [itemDetails, setItemDetails] = useState(null);
 //   const [dataExtra, setDataExtra] = useState([]);
+//   const [showOrderNow, setShowOrderNow] = useState(false);
+//   const [orderDetails, setOrderDetails] = useState(null);
 
 //   useEffect(() => {
 //     const fetchData = async () => {
@@ -215,7 +237,13 @@ export default CardContent;
 //         price: price,
 //         extras: dataExtra,
 //       });
-//       setOpenDialog(false); // Close dialog after adding to cart
+//       setOrderDetails({ // تحديث معلومات الطلب
+//         name: itemDetails.name_en,
+//         price: price,
+//         extras: dataExtra,
+//       });
+//       setShowOrderNow(true); // عرض مكون orderNow
+//       setOpenDialog(false); // غلق Dialog
 //     }
 //   };
 
@@ -372,28 +400,24 @@ export default CardContent;
 //                       {item.price}
 //                     </Typography>
 //                     <IconButton onClick={() => handleItemClick(item)}>
-//                       <Button variant="contained" color="error">
-//                         ORDER
-//                       </Button>
+//                       <AddToCardButton />
 //                     </IconButton>
 //                   </Card>
 //                 </Grid>
 //               ))}
 //           </Grid>
-
 //           <Dialog
 //             open={openDialog}
 //             onClose={handleCloseDialog}
 //             aria-labelledby="item-dialog-title"
 //             aria-describedby="item-dialog-description"
-//             maxWidth="lg"
-//             sx={{ border: "2px solid #c0b56e" }}
 //           >
 //             {itemDetails && (
 //               <DialogContent
 //                 sx={{
 //                   display: "flex",
-//                   justifyContent: "center",
+//                   flexDirection: "column",
+//                   alignItems: "center",
 //                   mb: 2,
 //                 }}
 //               >
@@ -453,7 +477,6 @@ export default CardContent;
 //               </DialogContent>
 //             )}
 //           </Dialog>
-//           {/* <Diolg/> */}
 //           <Box sx={{ textAlign: "center", mt: 4 }}>
 //             <Button
 //               variant="contained"
@@ -465,6 +488,8 @@ export default CardContent;
 //           </Box>
 //         </Box>
 //       )}
+//       {/* استخدام OrderOnline لعرض ملخص الطلب */}
+//       {showOrderNow && orderDetails && <OrderOnline orderDetails={orderDetails} />}
 //     </Box>
 //   );
 // }

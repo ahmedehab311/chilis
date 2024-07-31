@@ -1,16 +1,103 @@
-import { useState } from "react";
-import { IconButton, Stack } from "@mui/material";
-function Counter() {
-  const [counter, setCounter] = useState(1);
+// import { useState, useEffect } from "react";
+// import { Stack } from "@mui/material";
+
+// function Counter({ basePrice, onChange }) {
+//   const [counter, setCounter] = useState(1);
+
+//   const handleClick1 = () => {
+//     setCounter(prevCounter => {
+//       const newCounter = prevCounter * 2;
+//       return newCounter;
+//     });
+//   };
+
+//   const handleClick2 = () => {
+//     setCounter(prevCounter => {
+//       const newCounter = Math.max(1, prevCounter / 2);
+//       return newCounter;
+//     });
+//   };
+
+//   useEffect(() => {
+//     // Calculate and pass the total price based on counter and basePrice
+//     const totalPrice = counter * basePrice;
+//     onChange(totalPrice);
+//   }, [counter, basePrice, onChange]);
+
+//   return (
+//     <Stack
+//       direction={"row"}
+//       alignItems={"center"}
+//       sx={{
+//         background: "green",
+//         borderRadius: "10%",
+//         width: "80px",
+//         justifyContent: "space-evenly",
+//         marginRight: "10px",
+//         height: "20px",
+//       }}
+//     >
+//       <button
+//         style={{
+//           fontSize: "18px",
+//           color: "white",
+//           borderRight: "0px",
+//           borderRadius: "0px 50% 50% 0px",
+//         }}
+//         onClick={handleClick2}
+//       >
+//         -
+//       </button>
+//       <Stack
+//         sx={{
+//           color: counter === 0 ? "gray" : "white",
+//           fontSize: "12px",
+//         }}
+//       >
+//         {counter}
+//       </Stack>
+//       <button
+//         style={{
+//           fontSize: "18px",
+//           marginLeft: "5px",
+//           color: "white",
+//           borderLeft: "0px",
+//           borderRadius: "0px 50% 50% 0px",
+//         }}
+//         onClick={handleClick1}
+//       >
+//         +
+//       </button>
+//     </Stack>
+//   );
+// }
+
+// export default Counter;
+import { useState, useEffect } from "react";
+import { Stack } from "@mui/material";
+
+function Counter({ basePrice, onChange }) {
+  // استرجاع القيمة من localStorage أو تعيين القيمة الافتراضية 1
+  const [counter, setCounter] = useState(() => {
+    const savedCounter = localStorage.getItem('counter');
+    return savedCounter ? parseInt(savedCounter, 10) : 1;
+  });
+
+  useEffect(() => {
+    // حساب السعر الإجمالي بناءً على العدد وسعر الأساس
+    const totalPrice = counter * basePrice;
+    onChange(totalPrice);
+
+    // تخزين القيمة في localStorage
+    localStorage.setItem('counter', counter);
+  }, [counter, basePrice, onChange]);
 
   const handleClick1 = () => {
-    setCounter(counter + 1);
+    setCounter(prevCounter => prevCounter + 1); // زيادة بمقدار 1
   };
 
   const handleClick2 = () => {
-    if (counter > 1) {
-      setCounter(counter - 1);
-    }
+    setCounter(prevCounter => Math.max(1, prevCounter - 1)); // تقليل بمقدار 1 مع التأكد من أن العدد لا يقل عن 1
   };
 
   return (
@@ -21,24 +108,22 @@ function Counter() {
         background: "green",
         borderRadius: "10%",
         width: "80px",
-        justifyContent: "center",
+        justifyContent: "space-evenly",
         marginRight: "10px",
         height: "20px",
       }}
     >
-      <IconButton>
-        <button
-          style={{
-            fontSize: "18px",
-            color: "white",
-            borderRight: "0px",
-            borderRadius: "0px 50% 50% 0px",
-          }}
-          onClick={handleClick2}
-        >
-          -
-        </button>
-      </IconButton>
+      <button
+        style={{
+          fontSize: "18px",
+          color: "white",
+          borderRight: "0px",
+          borderRadius: "0px 50% 50% 0px",
+        }}
+        onClick={handleClick2}
+      >
+        -
+      </button>
       <Stack
         sx={{
           color: counter === 0 ? "gray" : "white",
@@ -47,20 +132,18 @@ function Counter() {
       >
         {counter}
       </Stack>
-      <IconButton>
-        <button
-          style={{
-            fontSize: "18px",
-            marginLeft: "5px",
-            color: "white",
-            borderLeft: "0px",
-            borderRadius: "0px 50% 50% 0px",
-          }}
-          onClick={handleClick1}
-        >
-          +
-        </button>
-      </IconButton>
+      <button
+        style={{
+          fontSize: "18px",
+          marginLeft: "5px",
+          color: "white",
+          borderLeft: "0px",
+          borderRadius: "0px 50% 50% 0px",
+        }}
+        onClick={handleClick1}
+      >
+        +
+      </button>
     </Stack>
   );
 }
