@@ -2,7 +2,7 @@
 import { Drawer, IconButton, Link, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link as RouterLink } from "react-router-dom";
-
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 function SmallMediaQuery({ closeDrawer, toggleDrawer, state, handleLogout, token }) {
   const isSmallScreen = useMediaQuery("(max-width:1000px)");
 
@@ -43,11 +43,12 @@ function SmallMediaQuery({ closeDrawer, toggleDrawer, state, handleLogout, token
             <Link href="#footer" onClick={closeDrawer}>
               Location
             </Link>
-            <Link component={RouterLink} to="/order-online" onClick={closeDrawer}>
-              Order Online
-            </Link>
+       
             <Link href="#footer" onClick={closeDrawer}>
               Contact Us
+            </Link>
+            <Link component={RouterLink} to="/order-online" onClick={closeDrawer}>
+         <ShoppingCartOutlinedIcon/>
             </Link>
             {token ? (
               <>

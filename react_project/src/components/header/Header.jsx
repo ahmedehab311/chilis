@@ -15,6 +15,7 @@ import { Link as RouterLink } from "react-router-dom";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import Hero from "../Hero/Hero";
 import SmallMediaQuary from "./SmallMediaQuary";
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 function Header({ token, handleLogout }) {
   const [drawerState, setDrawerState] = useState({
     top: false,
@@ -69,8 +70,8 @@ function Header({ token, handleLogout }) {
               <Link href="#menu">Menu</Link>
               <Link href="#about">About Us</Link>
               <Link href="#footer">Location</Link>
-              <Link  component={RouterLink} to="/order-online">Order Online</Link>
               <Link href="#footer">Contact Us</Link>
+              <Link  component={RouterLink} to="/order-online"><ShoppingCartOutlinedIcon/></Link>
               {token ? (
                 <>
                   <IconButton
