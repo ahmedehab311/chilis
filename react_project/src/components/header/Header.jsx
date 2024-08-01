@@ -71,7 +71,7 @@ function Header({ token, handleLogout }) {
               <Link href="#about">About Us</Link>
               <Link href="#footer">Location</Link>
               <Link href="#footer">Contact Us</Link>
-              <Link  component={RouterLink} to="/order-online"><ShoppingCartOutlinedIcon/></Link>
+              <Link  component={RouterLink} to="/order-online"><ShoppingCartOutlinedIcon sx={{fontSize:"3rem",mb:"-.8rem"}}/></Link>
               {token ? (
                 <>
                   <IconButton

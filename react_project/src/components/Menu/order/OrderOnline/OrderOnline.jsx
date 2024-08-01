@@ -10,7 +10,7 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { API_ARIA, API_CITIES } from "../../apis&fetchData/ApiLinks";
+// import { API_ARIA, API_CITIES } from "../../apis&fetchData/ApiLinks";
 import CheckOut from "./checkOut/checkOut";
 function OrderOnline() {
   const [cartItems, setCartItems] = useState([]);
@@ -19,7 +19,9 @@ function OrderOnline() {
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingAreas, setLoadingAreas] = useState(false);
-
+  const API_CITIES = "https://myres.me/chilis/api/cities";
+  const API_ARIA = (cityId) =>
+    `https://myres.me/chilis/api/areas/?city=${cityId}`;
   useEffect(() => {
     // الحصول على العناصر المخزنة في السلة من localStorage عند تحميل المكون
     const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -76,15 +78,15 @@ function OrderOnline() {
   const totalToPay = subtotal + deliveryFee;
 
   // diolg
-
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedArea, setSelectedArea] = useState("");
   useEffect(() => {
-    // Fetch cities from API_CITIES
     const fetchCities = async () => {
       setLoadingCities(true);
       try {
         const response = await fetch(API_CITIES);
         const data = await response.json();
-        setCities(data); // Update this based on the structure of your API response
+        setCities(data.data.cities);
       } catch (error) {
         console.error("Error fetching cities:", error);
       } finally {
@@ -96,22 +98,23 @@ function OrderOnline() {
   }, []);
 
   useEffect(() => {
-    // Fetch areas from API_ARIA
-    const fetchAreas = async () => {
-      setLoadingAreas(true);
-      try {
-        const response = await fetch(API_ARIA);
-        const data = await response.json();
-        setAreas(data); // Update this based on the structure of your API response
-      } catch (error) {
-        console.error("Error fetching areas:", error);
-      } finally {
-        setLoadingAreas(false);
-      }
-    };
+    if (selectedCity) {
+      const fetchAreas = async () => {
+        setLoadingAreas(true);
+        try {
+          const response = await fetch(API_ARIA(selectedCity));
+          const data = await response.json();
+          setAreas(data.data.areas);
+        } catch (error) {
+          console.error("Error fetching areas:", error);
+        } finally {
+          setLoadingAreas(false);
+        }
+      };
 
-    fetchAreas();
-  }, []);
+      fetchAreas();
+    }
+  }, [selectedCity]);
   const [open, setOpen] = useState(false);
   const [addressData, setAddressData] = useState([]);
   const [currentAddress, setCurrentAddress] = useState({
@@ -224,7 +227,17 @@ function OrderOnline() {
   return (
     <Stack
       // className={"address"}
-      sx={{ display: "flex" }}
+      sx={{
+        display: "flex",
+        ml: "2rem",
+        "@media (max-width: 1000px)": {
+          // Adjust based on your needs
+          flexDirection:"column !important"
+        },
+        "@media (max-width: 480px)": {
+          ml: "0.5rem",
+        },
+      }}
       direction={"row"}
       alignItems={"center"}
     >

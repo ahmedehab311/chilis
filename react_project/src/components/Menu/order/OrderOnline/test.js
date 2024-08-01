@@ -111,24 +111,25 @@ const [open, setOpen] = useState(false);
     const [selectedArea, setSelectedArea] = useState('');
   
     useEffect(() => {
-      if (selectedCity) {
-        const fetchAreas = async () => {
-          setLoadingAreas(true);
+        const fetchCities = async () => {
+          setLoadingCities(true);
           try {
-            const response = await axios.get(API_ARIA(selectedCity));
-            const data = response.data;
-            console.log()
-            setAreas(data.data.areas);
+            const response = await fetch(API_CITIES);
+            const data = await response.json();
+            // Map cities to get only name_en
+            setCities(data.data.cities.map(city => ({
+              id: city.id,
+              name: city.name_en
+            })));
           } catch (error) {
-            console.error("Error fetching areas:", error);
+            console.error("Error fetching cities:", error);
           } finally {
-            setLoadingAreas(false);
+            setLoadingCities(false);
           }
         };
-  
-        fetchAreas();
-      }
-    }, [selectedCity])
+    
+        fetchCities();
+      }, []);
   
   
 useEffect(() => {

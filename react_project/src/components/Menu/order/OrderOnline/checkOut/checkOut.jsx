@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Box,
   Stack,
@@ -10,7 +11,10 @@ import {
 import "../OrderOnline.css";
 import imgLogo from "../../../../Hero/images/logo.png";
 import Counter from "../../../ButtonsMenu/CounterDiaolgButton";
-function checkOut({
+import { API_TAX } from "../../../apis&fetchData/ApiLinks";
+import { useEffect, useState } from "react";
+import axios from "axios";
+function CheckOut({
   totalToPay,
   handleRemoveItem,
   cartItems,
@@ -19,6 +23,26 @@ function checkOut({
   totalPrices,
   handleCounterChange,
 }) {
+  const [tax, setTax] = useState(null);
+  useEffect(() => {
+    // Fetch tax data when the component mounts
+    const fetchTax = async () => {
+      try {
+        const response = await axios.get(API_TAX);
+        const taxValue = response.data.data.settings.tax;
+        setTax(taxValue);
+        console.log(response.data.data.settings.tax);
+      } catch (error) {
+        console.error("Error fetching tax data:", error);
+      }
+    };
+
+    fetchTax();
+  }, []);
+
+  const taxAmount = (subtotal * tax) / 100;
+  const totalWithTax = subtotal + deliveryFee + taxAmount;
+
   return (
     <Container
       sx={{
@@ -32,6 +56,11 @@ function checkOut({
         border: "1px solid #dee2e6!important",
         borderRadius: ".25rem !important",
         boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
+         "@media (max-width: 1000px)": {
+          // Adjust based on your needs
+          margin: "0 auto ",
+          mt:"2rem"
+        },
       }}
     >
       <Box
@@ -94,9 +123,12 @@ function checkOut({
                           right: "-11px",
                           top: "-13px",
                           cursor: "pointer",
-                          fontSize: "15px",
-                          fontWeight: 500,
+                          fontSize: "1.8rem",
+                          fontWeight: "bold",
                           fontFamily: "cairo",
+                          "&:hover": {
+                            color: "#e31616!important",
+                          },
                         }}
                       >
                         X
@@ -115,7 +147,7 @@ function checkOut({
                       <Typography
                         sx={{
                           color: "#17a2b8!important",
-                          fontSize: "13px",
+                          fontSize: "2rem",
                           fontWeight: 400,
                           fontFamily: "cairo",
                         }}
@@ -150,7 +182,7 @@ function checkOut({
                       <Typography
                         sx={{
                           color: "#424242 !important",
-                          fontSize: "15px",
+                          fontSize: "1.4rem",
                           fontWeight: 500,
                         }}
                       >
@@ -159,7 +191,7 @@ function checkOut({
                       <Typography
                         sx={{
                           color: "#6c757d!important",
-                          fontSize: "15px",
+                          fontSize: "1.4rem",
                           fontWeight: 500,
                         }}
                       >
@@ -251,11 +283,26 @@ function checkOut({
           alignItems={"center"}
         >
           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            {/* Tax ({tax} %): */}
+          </Typography>
+          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            {/* {taxAmount.toFixed(2)} EGP */}
+          </Typography>
+        </Stack>
+        <Stack
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          direction={"row"}
+          alignItems={"center"}
+        >
+          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
             Total:
           </Typography>
           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
             {" "}
-            {totalToPay} EGP
+            {totalWithTax.toFixed(2)} EGP
           </Typography>
         </Stack>
         <Stack className="stackBtn" sx={{ p: 2 }}>
@@ -273,4 +320,4 @@ function checkOut({
   );
 }
 
-export default checkOut;
+export default CheckOut;
