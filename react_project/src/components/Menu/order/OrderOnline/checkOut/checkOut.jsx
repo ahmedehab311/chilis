@@ -22,6 +22,7 @@ function CheckOut({
   deliveryFee,
   totalPrices,
   handleCounterChange,
+  user // إضافة معلومات المستخدم هنا إذا لزم الأمر
 }) {
   const [tax, setTax] = useState(null);
   useEffect(() => {
@@ -321,3 +322,243 @@ function CheckOut({
 }
 
 export default CheckOut;
+/* eslint-disable react/prop-types */
+// import {
+//   Box,
+//   Stack,
+//   TextField,
+//   Typography,
+//   Card,
+//   Container,
+//   Button,
+// } from "@mui/material";
+// import "../OrderOnline.css";
+// import imgLogo from "../../../../Hero/images/logo.png";
+// import Counter from "../../../ButtonsMenu/CounterDiaolgButton";
+// import { API_TAX } from "../../../apis&fetchData/ApiLinks";
+// import { useEffect, useState } from "react";
+// import axios from "axios";
+
+// function CheckOut({
+//   totalToPay,
+//   handleRemoveItem,
+//   cartItems,
+//   subtotal,
+//   deliveryFee,
+//   totalPrices,
+//   handleCounterChange,
+// }) {
+//   const [tax, setTax] = useState(null);
+
+//   useEffect(() => {
+//     // Fetch tax data when the component mounts
+//     const fetchTax = async () => {
+//       try {
+//         const response = await axios.get(API_TAX);
+//         const taxValue = response.data.data.settings.tax;
+//         setTax(taxValue);
+//         console.log(response.data.data.settings.tax);
+//       } catch (error) {
+//         console.error("Error fetching tax data:", error);
+//       }
+//     };
+
+//     fetchTax();
+//   }, []);
+
+//   const taxAmount = (subtotal * tax) / 100;
+//   const totalWithTax = subtotal + deliveryFee + taxAmount;
+
+//   return (
+//     <Container
+//       sx={{
+//         maxWidth: "600px !important",
+//         background: "#fff !important",
+//         position: "sticky",
+//         margin: "0 auto",
+//         mr: "50px",
+//         mt: "15px",
+//         p: "0px !important",
+//         border: "1px solid #dee2e6!important",
+//         borderRadius: ".25rem !important",
+//         boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
+//         "@media (max-width: 1000px)": {
+//           margin: "0 auto ",
+//           mt: "2rem",
+//         },
+//       }}
+//     >
+//       <Box
+//         className="headerOrderOnline"
+//         direction={"row"}
+//         alignItems={"center"}
+//         sx={{ p: 1, borderBottom: "1px solid #999" }}
+//       >
+//         <img
+//           className="imgOrder"
+//           alt="Image"
+//           width="150px"
+//           height="150px"
+//           src={imgLogo}
+//         />
+//         <Typography
+//           sx={{
+//             fontSize: "18px",
+//             fontWeight: 700,
+//             ml: 2,
+//             fontFamily: "cairo",
+//           }}
+//         >
+//           chilis
+//         </Typography>
+//       </Box>
+
+//       <Container sx={{ margin: "0 auto" }}>
+//         <Box
+//           className="orderNow"
+//           sx={{
+//             borderRadius: "8px",
+//           }}
+//         >
+//           {cartItems.length === 0
+//             ? null
+//             : cartItems.map((item, index) => (
+//                 <Card key={index} sx={{ p: 2, mb: 3 }}>
+//                   <Stack sx={{ position: "relative" }}>
+//                     <Stack
+//                       sx={{ display: "flex" }}
+//                       direction={"row"}
+//                       alignItems={"center"}
+//                     >
+//                       <Typography
+//                         sx={{
+//                           color: "#000",
+//                           fontSize: "15px",
+//                           fontWeight: 500,
+//                           fontFamily: "cairo",
+//                         }}
+//                       >
+//                         {item.name}
+//                       </Typography>
+//                       <Typography
+//                         onClick={() => handleRemoveItem(index)}
+//                         sx={{
+//                           color: "red",
+//                           position: "absolute",
+//                           right: "-11px",
+//                           top: "-13px",
+//                           cursor: "pointer",
+//                           fontSize: "1.8rem",
+//                           fontWeight: "bold",
+//                           fontFamily: "cairo",
+//                           "&:hover": {
+//                             color: "#e31616!important",
+//                           },
+//                         }}
+//                       >
+//                         X
+//                       </Typography>
+//                     </Stack>
+
+//                     <Stack
+//                       sx={{
+//                         display: "flex",
+//                         justifyContent: "space-between",
+//                         m: "10px 0 10px 0",
+//                       }}
+//                       direction={"row"}
+//                       alignItems={"center"}
+//                     >
+//                       <Typography
+//                         sx={{
+//                           color: "#17a2b8!important",
+//                           fontSize: "2rem",
+//                           fontWeight: 400,
+//                           fontFamily: "cairo",
+//                         }}
+//                       >
+//                         {item.name}
+//                       </Typography>
+//                       <Typography
+//                         sx={{
+//                           color: "#17a2b8!important",
+//                           fontSize: "15px",
+//                           fontWeight: 500,
+//                           fontFamily: "cairo",
+//                         }}
+//                       >
+//                         {item.price} EGP
+//                       </Typography>
+//                       <Counter
+//                         basePrice={item.price}
+//                         onChange={(newTotalPrice) =>
+//                           handleCounterChange(index, newTotalPrice)
+//                         }
+//                       />
+//                     </Stack>
+//                     <Stack
+//                       sx={{
+//                         display: "flex",
+//                         justifyContent: "space-between",
+//                       }}
+//                       direction={"row"}
+//                       alignItems={"center"}
+//                     >
+//                       <Typography
+//                         sx={{
+//                           color: "#424242 !important",
+//                           fontSize: "1.4rem",
+//                           fontWeight: 500,
+//                         }}
+//                       >
+//                         Regular
+//                       </Typography>
+//                       <Typography
+//                         sx={{
+//                           color: "#6c757d!important",
+//                           fontSize: "1.4rem",
+//                           fontWeight: 500,
+//                         }}
+//                       >
+//                         {totalPrices[index] || item.price} EGP
+//                       </Typography>
+//                     </Stack>
+//                     <TextField
+//                       placeholder="Enter any special request note"
+//                       sx={{
+//                         transition: "1s...",
+//                       }}
+//                     />
+//                   </Stack>
+//                 </Card>
+//               ))}
+
+//           {/* Display selected address */}
+//           {selectedAddress && (
+//             <Card sx={{ p: 2, mt: 3 }}>
+//               <Typography variant="h6" sx={{ mb: 2 }}>
+//                 Delivery Address
+//               </Typography>
+//               <Typography>
+//                 {selectedAddress.deliveryCity}, {selectedAddress.deliveryArea}, {selectedAddress.street}, Building: {selectedAddress.building}, Floor: {selectedAddress.floor}, Apt: {selectedAddress.apt}
+//                 <br />
+//                 Instructions: {selectedAddress.deliveryInstructions}
+//               </Typography>
+//             </Card>
+//           )}
+
+//           <Stack
+//             direction={"row"}
+//             justifyContent="space-between"
+//             sx={{ mt: 2, p: 2 }}
+//           >
+//             <Typography>Total:</Typography>
+//             <Typography>{totalToPay} EGP</Typography>
+//           </Stack>
+//         </Box>
+//       </Container>
+//     </Container>
+//   );
+// }
+
+// export default CheckOut;

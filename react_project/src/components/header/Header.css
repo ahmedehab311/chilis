@@ -10,12 +10,12 @@
   justify-content: space-around;
   padding: 10px 10px;
 }
-.headerMenuflex li a {
+/* .headerMenuflex li a {
   color: #fff;
   font-size: 20px;
   font-weight: 500;
   font-family: "cairo";
-}
+} */
 .headerMenu li {
   margin: 25px;
 }
@@ -51,6 +51,15 @@
 .css-1160xiw-MuiPaper-root-MuiDrawer-paper a:not(:last-child) ,
 .css-1ab2xsx a:not(:last-child) {
   border-bottom: 1px solid #333;
+}
+.header-empty-cart {
+  display: flex;
+  justify-content: center; /* Center align items when cart is empty */
+}
+
+.header-with-cart {
+  display: flex;
+  justify-content: space-between; /* Regular layout when cart is not empty */
 }
 @media (max-width: 690px) {
   .headerMenu li a {
