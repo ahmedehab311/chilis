@@ -84,14 +84,14 @@ function Counter({ basePrice, onChange }) {
     return savedCounter ? parseInt(savedCounter, 10) : 1;
   });
 
-  useEffect(() => {
-    const totalPrice = counter * basePrice;
-    if (onChange && typeof onChange === 'function') {
-      onChange(totalPrice);
-    }
-    localStorage.setItem('counter', counter);
-  }, [counter, basePrice, onChange]);
-  
+useEffect(() => {
+  const totalPrice = counter * basePrice;
+  if (onChange && typeof onChange === 'function') {
+    onChange(totalPrice);
+  }
+  localStorage.setItem('counter', counter);
+}, [counter, basePrice, onChange]);
+
 
   const handleClick1 = () => {
     setCounter(prevCounter => prevCounter + 1); // زيادة بمقدار 1
