@@ -21,14 +21,18 @@ const ChangePassword = () => {
 
   const handleChangePassword = async () => {
     try {
-      const api_token = localStorage.getItem("api_token");
-      const APIURL = `/profile/update/password?new_password=${form.new_password}&api_token=${api_token}`;
-      const response = await axios.post(`${BASE_URL}${APIURL}`, {
-        email: form.email,
-        old_password: form.old_password,
-      });
+      const api_token = localStorage.getItem("token");
+      if (!api_token) {
+        toast.error("API token is missing. Please log in again.");
+        return;
+      }
 
-      if (response.data.response) {
+      const APIURL = `/profile/update/password?email=${form.email}&password=${form.old_password}&new_password=${form.new_password}&api_token=${api_token}`;
+
+      const response = await axios.post(`${BASE_URL}${APIURL}`);
+      console.log(response.data);
+
+      if (response.data && response.data.response) {
         toast.success("Password changed successfully!");
       } else {
         throw new Error("Password change failed");
@@ -91,4 +95,3 @@ const ChangePassword = () => {
 };
 
 export default ChangePassword;
-

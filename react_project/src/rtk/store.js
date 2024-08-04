@@ -8,6 +8,7 @@ const store = configureStore({
     user: userReducer,
     // orderHistory: orderHistoryReducer,
     cart: cartReducer, // Include the cart reducer
+    
   },
 });
 

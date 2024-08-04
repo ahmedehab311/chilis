@@ -1,247 +1,13 @@
 // import { useNavigate } from "react-router-dom";
 // import { Box, Button, TextField, Typography, Stack } from "@mui/material";
 // import axios from "axios";
-// import { useState, useEffect } from "react";
-// import { Link as RouterLink } from "react-router-dom";
-// import { toast } from "react-toastify";
-
-// const LoginPage = ({ setToken }) => {
-//   const [phone, setPhone] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [userData, setUserData] = useState({
-//     userName: "",
-//     email: "",
-//     phone: "",
-//   });
-//   const navigate = useNavigate();
-  
-//   const BASE_URL = "https://myres.me/chilis/api";
-  
-//   const login = async (e) => {
-//     e.preventDefault();
-  
-//     const APIURL = `/login?phone=${phone}&password=${password}&email=${phone}`;
-//     try {
-//       const response = await axios.post(`${BASE_URL}${APIURL}`);
-//       console.log("Response:", response.data); // تحقق من استجابة API
-//       if (response.data.response) {
-//         const token = response.data.data.token;
-//         if (token) {
-//           setToken(token);
-//           localStorage.setItem("token", token);
-  
-//           // تحديث بيانات المستخدم
-//           setUserData(response.data.data.user); // استخدم بيانات المستخدم مباشرةً
-  
-//           toast.success("Login successful!");
-//           // navigate('/profile');
-//           navigate("/");
-//         } else {
-//           throw new Error("Token not found");
-//         }
-//       } else {
-//         throw new Error(response.data.messages || "Login failed");
-//       }
-//     } catch (error) {
-//       const errorMessage = error.response?.data?.messages || "Invalid User Name or Password";
-//       toast.error(errorMessage);
-//       console.error("Error logging in: ", errorMessage);
-//     }
-//   };
-  
-  
-
-//   return (
-//     <Box
-//       sx={{
-//         display: "flex",
-//         flexDirection: "column",
-//         alignItems: "center",
-//         justifyContent: "center",
-//         minHeight: "100vh",
-//         backgroundColor: "#f5f5f5",
-//         padding: "20px",
-//       }}
-//     >
-//       <Stack
-//         direction={{ xs: "column", md: "row" }}
-//         spacing={4}
-//         sx={{ width: "100%", maxWidth: "800px" }}
-//       >
-//         <Box
-//           component="form"
-//           onSubmit={login}
-//           sx={{
-//             display: "flex",
-//             flexDirection: "column",
-//             gap: 2,
-//             backgroundColor: "#fff",
-//             padding: "20px",
-//             borderRadius: "8px",
-//             boxShadow: 1,
-//             flex: 1,
-//           }}
-//         >
-//           <Typography variant="h6" gutterBottom>
-//             Welcome Back
-//           </Typography>
-//           <Typography variant="h6" gutterBottom>
-//             Sign in to continue
-//           </Typography>
-//           <TextField
-//             label="Enter Your Phone"
-//             variant="outlined"
-//             fullWidth
-//             required
-//             onChange={e => setPhone(e.target.value)}
-//             value={phone}
-//           />
-//           <TextField
-//             label="Password"
-//             type="password"
-//             variant="outlined"
-//             fullWidth
-//             required
-//             onChange={e => setPassword(e.target.value)}
-//             value={password}
-//           />
-//           <Button
-//             type="submit"
-//             variant="contained"
-//             color="primary"
-//           >
-//             Login
-//           </Button>
-//           <Typography
-//             variant="body2"
-//             align="center"
-//             sx={{ mt: 1 }}
-//           >
-//             <RouterLink to="/forgot-password">
-//               Forgot Your Password?
-//             </RouterLink>
-//           </Typography>
-//           <Typography
-//             variant="body2"
-//             align="center"
-//             sx={{ mt: 2 }}
-//           >
-//             <RouterLink to="/register">
-//               Don't have an account? Sign up
-//             </RouterLink>
-//           </Typography>
-//         </Box>
-//       </Stack>
-
-//       {/* Display user information if logged in */}
-//       {userData.userName && (
-//         <Box
-//           sx={{
-//             marginTop: 4,
-//             padding: 2,
-//             backgroundColor: "#fff",
-//             borderRadius: "8px",
-//             boxShadow: 1,
-//             width: "100%",
-//             maxWidth: "800px",
-//           }}
-//         >
-//           <Typography variant="h6" gutterBottom>
-//             User Information
-//           </Typography>
-//           <TextField
-//             label="Name"
-//             variant="outlined"
-//             fullWidth
-//             margin="normal"
-//             value={userData.userName}
-//             InputProps={{
-//               readOnly: true,
-//             }}
-//           />
-//           <TextField
-//             label="Email"
-//             variant="outlined"
-//             fullWidth
-//             margin="normal"
-//             value={userData.email}
-//             InputProps={{
-//               readOnly: true,
-//             }}
-//           />
-//           <TextField
-//             label="Phone"
-//             variant="outlined"
-//             fullWidth
-//             margin="normal"
-//             value={userData.phone}
-//             InputProps={{
-//               readOnly: true,
-//             }}
-//           />
-//         </Box>
-//       )}
-//     </Box>
-//   );
-// };
-
-// export default LoginPage;
-// import { useState, useContext } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { TextField, Button } from '@mui/material';
-// import { toast } from 'react-toastify';
-// import { UserContext } from '../hooks/UserContext'; // تأكد من استيراد سياق المستخدم
-
-// const Login = () => {
-//   const [email, setEmail] = useState('');
-//   const [password, setPassword] = useState('');
-//   const { setUser } = useContext(UserContext); // الحصول على الدالة لتحديث حالة المستخدم
-//   const navigate = useNavigate(); // استخدام useNavigate للتنقل بين الصفحات
-
-//   const handleSubmit = async (event) => {
-//     event.preventDefault();
-//     // افترض أن عملية تسجيل الدخول ناجحة، قم بتحديث حالة المستخدم
-//     const userData = { email }; // البيانات التي تم الحصول عليها بعد تسجيل الدخول بنجاح
-//     setUser(userData); // تحديث سياق المستخدم
-//     localStorage.setItem('user', JSON.stringify(userData)); // تخزين بيانات المستخدم في localStorage
-//     toast.success('Logged in successfully!');
-//     navigate('/'); // توجيه المستخدم إلى الصفحة الرئيسية بعد تسجيل الدخول
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <TextField
-//         label="Email"
-//         value={email}
-//         onChange={(e) => setEmail(e.target.value)}
-//         fullWidth
-//         margin="normal"
-//       />
-//       <TextField
-//         label="Password"
-//         type="password"
-//         value={password}
-//         onChange={(e) => setPassword(e.target.value)}
-//         fullWidth
-//         margin="normal"
-//       />
-//       <Button type="submit" variant="contained" color="primary" fullWidth>
-//         Login
-//       </Button>
-//     </form>
-//   );
-// };
-
-// export default Login;
-// src/components/LoginPage.jsx
-// import { useNavigate } from "react-router-dom";
-// import { Box, Button, TextField, Typography, Stack } from "@mui/material";
-// import axios from "axios";
 // import { useState } from "react";
 // import { Link as RouterLink } from "react-router-dom";
 // import { toast } from "react-toastify";
 // import { useDispatch } from "react-redux";
 // import { setUser } from "../../rtk/slices/userSlice"; // Import setUser action
+
+// const BASE_URL = "https://myres.me/chilis/api";
 
 // const LoginPage = ({ setToken }) => {
 //   const [phone, setPhone] = useState("");
@@ -249,24 +15,25 @@
 //   const dispatch = useDispatch();
 //   const navigate = useNavigate();
 
-//   const BASE_URL = "https://myres.me/chilis/api";
-
 //   const login = async (e) => {
 //     e.preventDefault();
 
 //     const APIURL = `/login?phone=${phone}&password=${password}&email=${phone}`;
 //     try {
 //       const response = await axios.post(`${BASE_URL}${APIURL}`);
-//       console.log("Response:", response.data); // تحقق من استجابة API
-//       if (response.data.response) {
+//       console.log("Response Data:", response.data); // Check API response
+      
+//       if (response.data) {
+//         console.log("Response Data:", response.data.data); // Check API response data
 //         const token = response.data.data.token;
 //         if (token) {
+//           // localStorage.clear(); // Clear any existing data
 //           setToken(token);
 //           localStorage.setItem("token", token);
 
-//           // تحديث بيانات المستخدم
+//           // Update user data
 //           const userData = response.data.data.user;
-//           dispatch(setUser(userData)); // تخزين بيانات المستخدم في Redux
+//           dispatch(setUser(userData)); // Store user data in Redux
 
 //           toast.success("Login successful!");
 //           navigate("/");
@@ -427,21 +194,21 @@ const LoginPage = ({ setToken }) => {
       const response = await axios.post(`${BASE_URL}${APIURL}`);
       console.log("Response Data:", response.data); // تحقق من استجابة API
       
-      if (response.data) {
-        console.log("Response Data:", response.data.data); // تحقق من استجابة API
+      if (response.data && response.data.data) {
         const token = response.data.data.token;
-        if (token) {
+        const userData = response.data.data.user;
+  
+        if (token && userData) {
           setToken(token);
           localStorage.setItem("token", token);
+          localStorage.setItem("user", JSON.stringify(userData)); // تخزين بيانات المستخدم
   
-          // تحديث بيانات المستخدم
-          const userData = response.data.data.user;
           dispatch(setUser(userData)); // تخزين بيانات المستخدم في Redux
   
           toast.success("Login successful!");
           navigate("/");
         } else {
-          throw new Error("Token not found");
+          throw new Error("Token or user data not found");
         }
       } else {
         throw new Error(response.data.messages || "Login failed");
@@ -452,6 +219,7 @@ const LoginPage = ({ setToken }) => {
       console.error("Error logging in: ", errorMessage);
     }
   };
+  
   
   return (
     <Box
@@ -484,7 +252,7 @@ const LoginPage = ({ setToken }) => {
             flex: 1,
           }}
         >
-          <Typography variant="h6" gutterBottom>
+          <Typography variant="h6" gutterBottom >
             Welcome Back
           </Typography>
           <Typography variant="h6" gutterBottom>
@@ -520,7 +288,7 @@ const LoginPage = ({ setToken }) => {
             sx={{ mt: 1 }}
           >
             <RouterLink to="/forgot-password">
-              Forgot Your Password?
+              <Typography  variant="h6">Forgot Your Password?</Typography>
             </RouterLink>
           </Typography>
           <Typography
@@ -529,7 +297,8 @@ const LoginPage = ({ setToken }) => {
             sx={{ mt: 2 }}
           >
             <RouterLink to="/register">
-              Don't have an account? Sign up
+            <Typography  variant="h6" sx={{fontFamily:"cairo important"}}>  Don't have an account? Sign up</Typography>
+            
             </RouterLink>
           </Typography>
         </Box>

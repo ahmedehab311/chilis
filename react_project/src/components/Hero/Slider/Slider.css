@@ -30,26 +30,27 @@
 
 @media (max-width: 1200px) {
   .logoImg {
-    width: 120px;
-    height:100px;
+    width: 148px;
+    height: 81px;
     top: 4%;
-    left: 18%;
+    left: 15%;
   }
 }
 @media (max-width: 900px) {
   .logoImg {
-    width: 100px;
-    height:100px;
+    width: 137px;
+    height: 81px;
     top: 4%;
-    left: 11%;
+    left: 8%;
   }
 }
 @media (max-width: 700px) {
   .logoImg {
-    width: 94px;
-    height: 75px;
+    width: 109px;
+    height: 72px;
     top: 2%;
-    left: 1%;
+    left: 2%;
+
   }
 }
 /* slider style */

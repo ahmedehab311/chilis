@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Stack, TextField, Typography, Card, Button, Container, Box } from "@mui/material";
+import { Stack, TextField, Typography, Card, Button, Container, Box, MenuItem, CircularProgress, Select } from "@mui/material";
 import "./OrderOnline.css";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import {
@@ -11,11 +11,12 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 // import { API_ARIA, API_CITIES } from "../../apis&fetchData/ApiLinks";
-import CheckOut from "./checkOut/checkOut";
+import CheckOut from "./checkOut/CheckOut";
 import imgLogo from "../../../Hero/images/logo.png";
 import Counter from "../../ButtonsMenu/CounterDiaolgButton";
 import { API_TAX } from "../../apis&fetchData/ApiLinks";
 import axios from "axios";
+import Address from "../adderess/Address";
 function OrderOnline() {
 
   const [cartItems, setCartItems] = useState([]);
@@ -27,36 +28,6 @@ function OrderOnline() {
   const API_CITIES = "https://myres.me/chilis/api/cities";
   const API_ARIA = (cityId) =>
     `https://myres.me/chilis/api/areas/?city=${cityId}`;
-  // const [orders, setOrders] = useState([]);
-  // const [address, setAddress] = useState({});
-  // const user = useSelector((state) => state.user.user);
-  // const token = localStorage.getItem('token'); // أو يمكنك جلب التوكن من Redux إذا كنت تخزنه هناك
-
-
-  // useEffectt(() => {
-    
-  //   if (token && user) {
-  // console.log(token)
-  //     console.log(user)
-  //     // استدعاء API لجلب الطلبات والعنوان بناءً على التوكن
-  //     axios.get(`/api/orders?userId=${user.id}`, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`
-  //       }
-  //     })
-  //     .then(response => {
-  //       setOrders(response.data.orders);
-  //       setAddress(response.data.address);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching orders:', error);
-  //     });
-  //   }
-  // }, [token, user]);
-
-
-
-
   useEffect(() => {
     // الحصول على العناصر المخزنة في السلة من localStorage عند تحميل المكون
     const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
@@ -115,6 +86,10 @@ function OrderOnline() {
   // diolg
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
+  const [currentAddress, setCurrentAddress] = useState({
+    deliveryCity: "",
+    deliveryArea: "",
+  });
   useEffect(() => {
     const fetchCities = async () => {
       setLoadingCities(true);
@@ -122,6 +97,7 @@ function OrderOnline() {
         const response = await fetch(API_CITIES);
         const data = await response.json();
         setCities(data.data.cities);
+        // console.log(data.data.cities)
       } catch (error) {
         console.error("Error fetching cities:", error);
       } finally {
@@ -150,18 +126,29 @@ function OrderOnline() {
       fetchAreas();
     }
   }, [selectedCity]);
+  const handleCityChange = (event) => {
+    setSelectedCity(event.target.value);
+    setCurrentAddress((prevAddress) => ({
+      ...prevAddress,
+      deliveryCity: event.target.value,
+      deliveryArea: "", // Reset delivery area when city changes
+    }));
+    setAreas([]); // Reset areas when city changes
+  };
+
+  const handleAreaChange = (event) => {
+    setSelectedArea(event.target.value);
+    setCurrentAddress((prevAddress) => ({
+      ...prevAddress,
+      deliveryArea: event.target.value,
+    }));
+  };
+
+
   const [open, setOpen] = useState(false);
   const [addressData, setAddressData] = useState([]);
-  const [currentAddress, setCurrentAddress] = useState({
-    deliveryCity: "",
-    deliveryArea: "",
-    street: "",
-    building: "",
-    floor: "",
-    apt: "",
-    deliveryInstructions: "",
-    label: "",
-  });
+
+  
   const [activeIndex, setActiveIndex] = useState(null);
   const [errors, setErrors] = useState({});
 
@@ -240,11 +227,10 @@ function OrderOnline() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setCurrentAddress((prev) => ({ ...prev, [name]: value }));
-
-    if (value.trim() !== "") {
-      setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
-    }
+    setCurrentAddress((prevAddress) => ({
+      ...prevAddress,
+      [name]: value,
+    }));
   };
 
   const handleBlur = (e) => {
@@ -290,28 +276,27 @@ const handlePlaceOrder = () => {
   // ...
 };
 
-  // const [selectedAddress, setSelectedAddress] = useState(null);
 
 // existing useEffects and functions...
-const [tax, setTax] = useState(null);
+// const [tax, setTax] = useState(null);
 
-const taxAmount = (subtotal * tax) / 100;
-const totalWithTax = subtotal + deliveryFee + taxAmount;
-useEffect(() => {
-  // Fetch tax data when the component mounts
-  const fetchTax = async () => {
-    try {
-      const response = await axios.get(API_TAX);
-      const taxValue = response.data.data.settings.tax;
-      setTax(taxValue);
-      console.log(response.data.data.settings.tax);
-    } catch (error) {
-      console.error("Error fetching tax data:", error);
-    }
-  };
+// const taxAmount = (subtotal * tax) / 100;
+// const totalWithTax = subtotal + deliveryFee + taxAmount;
+// useEffect(() => {
+//   // Fetch tax data when the component mounts
+//   const fetchTax = async () => {
+//     try {
+//       const response = await axios.get(API_TAX);
+//       const taxValue = response.data.data.settings.tax;
+//       setTax(taxValue);
+//       console.log(response.data.data.settings.tax);
+//     } catch (error) {
+//       console.error("Error fetching tax data:", error);
+//     }
+//   };
 
-  fetchTax();
-}, []);
+//   fetchTax();
+// }, []);
 
 
 
@@ -332,7 +317,7 @@ useEffect(() => {
       direction={"row"}
       alignItems={"center"}
     >
-      <Stack>
+      {/* <Stack>
         <Stack>
           <Typography
             sx={{
@@ -459,32 +444,64 @@ useEffect(() => {
             <DialogContent>
               <Stack spacing={2}>
                 <Stack>
-                  <Typography>Delivery City:</Typography>
-                  <TextField
-                    name="deliveryCity"
-                    value={currentAddress.deliveryCity}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    fullWidth
-                    variant="outlined"
-                    required
-                    error={!!errors.deliveryCity}
-                    helperText={errors.deliveryCity}
-                  />
-                </Stack>
-                <Stack>
-                  <Typography>Delivery Area:</Typography>
-                  <TextField
-                    name="deliveryArea"
-                    value={currentAddress.deliveryArea}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    fullWidth
-                    variant="outlined"
-                    required
-                    error={!!errors.deliveryArea}
-                    helperText={errors.deliveryArea}
-                  />
+                <Typography>Delivery City:</Typography>
+        <Select
+          name="deliveryCity"
+          value={currentAddress.deliveryCity}
+          onChange={handleCityChange}
+          onBlur={handleInputChange}
+          fullWidth
+          variant="outlined"
+          required
+          error={!!errors.deliveryCity}
+        >
+          {loadingCities ? (
+            <MenuItem value="" disabled>
+              <CircularProgress size={24} />
+            </MenuItem>
+          ) : (
+            cities.map((city) => (
+              <MenuItem key={city.id} value={city.id}>
+                {city.name}
+              </MenuItem>
+            ))
+          )}
+        </Select>
+        {errors.deliveryCity && (
+          <Typography variant="caption" color="error">
+            {errors.deliveryCity}
+          </Typography>
+        )}
+
+        <Typography>Delivery Area:</Typography>
+        <Select
+          name="deliveryArea"
+          value={currentAddress.deliveryArea}
+          onChange={handleAreaChange}
+          onBlur={handleInputChange}
+          fullWidth
+          variant="outlined"
+          required
+          error={!!errors.deliveryArea}
+          disabled={!selectedCity || loadingAreas}
+        >
+          {loadingAreas ? (
+            <MenuItem value="" disabled>
+              <CircularProgress size={24} />
+            </MenuItem>
+          ) : (
+            areas.map((area) => (
+              <MenuItem key={area.id} value={area.id}>
+                {area.name}
+              </MenuItem>
+            ))
+          )}
+        </Select>
+        {errors.deliveryArea && (
+          <Typography variant="caption" color="error">
+            {errors.deliveryArea}
+          </Typography>
+        )}
                 </Stack>
                 <Stack direction="row" spacing={1}>
                   <Stack direction={"row"} alignItems={"center"}>
@@ -609,281 +626,23 @@ useEffect(() => {
             </DialogActions>
           </Dialog>
         </Stack>
-      </Stack>
+      </Stack> */}
+<Address
+  handlePlaceOrder={handlePlaceOrder}
+  handleCardClick={handleCardClick}
+  handleSelectLabel={handleSelectLabel}
+/>
+      <CheckOut
+        totalToPay={totalToPay}
+        handleRemoveItem={handleRemoveItem}
+        cartItems={cartItems}
+        subtotal={subtotal}
+        deliveryFee={deliveryFee}
+        totalPrices={totalPrices}
+        handleCounterChange={handleCounterChange}
+        selectedAddress={selectedAddress} // Pass selected address to CheckOut
+      />
 
-      <Container
-      sx={{
-        maxWidth: "600px !important",
-        background: "#fff !important",
-        position: "sticky",
-        margin: "0 auto",
-        mr: "50px",
-        mt: "15px",
-        p: "0px !important",
-        border: "1px solid #dee2e6!important",
-        borderRadius: ".25rem !important",
-        boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
-         "@media (max-width: 1000px)": {
-          // Adjust based on your needs
-          margin: "0 auto ",
-          mt:"2rem"
-        },
-      }}
-    >
-      <Box
-        className="headerOrderOnline"
-        direction={"row"}
-        alignItems={"center"}
-        sx={{ p: 1, borderBottom: "1px solid #999" }}
-      >
-        <img
-          className="imgOrder"
-          alt="Image"
-          width="150px"
-          height="150px"
-          src={imgLogo}
-        />
-        <Typography
-          sx={{
-            fontSize: "18px",
-            fontWeight: 700,
-            ml: 2,
-            fontFamily: "cairo",
-          }}
-        >
-          chilis
-        </Typography>
-      </Box>
-
-      <Container sx={{ margin: "0 auto" }}>
-        <Box
-          className="orderNow"
-          sx={{
-            borderRadius: "8px",
-          }}
-        >
-          {cartItems.length === 0
-            ? null
-            : cartItems.map((item, index) => (
-                <Card key={index} sx={{ p: 2, mb: 3 }}>
-                  <Stack sx={{ position: "relative" }}>
-                    <Stack
-                      sx={{ display: "flex" }}
-                      direction={"row"}
-                      alignItems={"center"}
-                    >
-                      <Typography
-                        sx={{
-                          color: "#000",
-                          fontSize: "15px",
-                          fontWeight: 500,
-                          fontFamily: "cairo",
-                        }}
-                      >
-                        {item.name}
-                      </Typography>
-                      <Typography
-                        onClick={() => handleRemoveItem(index)}
-                        sx={{
-                          color: "red",
-                          position: "absolute",
-                          right: "-11px",
-                          top: "-13px",
-                          cursor: "pointer",
-                          fontSize: "1.8rem",
-                          fontWeight: "bold",
-                          fontFamily: "cairo",
-                          "&:hover": {
-                            color: "#e31616!important",
-                          },
-                        }}
-                      >
-                        X
-                      </Typography>
-                    </Stack>
-
-                    <Stack
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        m: "10px 0 10px 0",
-                      }}
-                      direction={"row"}
-                      alignItems={"center"}
-                    >
-                      <Typography
-                        sx={{
-                          color: "#17a2b8!important",
-                          fontSize: "2rem",
-                          fontWeight: 400,
-                          fontFamily: "cairo",
-                        }}
-                      >
-                        {item.name}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: "#17a2b8!important",
-                          fontSize: "15px",
-                          fontWeight: 500,
-                          fontFamily: "cairo",
-                        }}
-                      >
-                        {item.price} EGP
-                      </Typography>
-                      <Counter
-                        basePrice={item.price}
-                        onChange={(newTotalPrice) =>
-                          handleCounterChange(index, newTotalPrice)
-                        }
-                      />
-                    </Stack>
-                    <Stack
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                      direction={"row"}
-                      alignItems={"center"}
-                    >
-                      <Typography
-                        sx={{
-                          color: "#424242 !important",
-                          fontSize: "1.4rem",
-                          fontWeight: 500,
-                        }}
-                      >
-                        Regular
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: "#6c757d!important",
-                          fontSize: "1.4rem",
-                          fontWeight: 500,
-                        }}
-                      >
-                        {totalPrices[index] || item.price} EGP
-                      </Typography>
-                    </Stack>
-                    <TextField
-                      placeholder="Enter any special request note"
-                      sx={{
-                        transition: "1s",
-                        "& input::placeholder": {
-                          color: "gray",
-                          fontSize: "13px",
-                          textAlign: "center",
-                        },
-                      }}
-                    />
-                  </Stack>
-                </Card>
-              ))}
-        </Box>
-      </Container>
-
-      <Stack className="middleOrder" sx={{ p: 2 }}>
-        <TextField
-          className="formControl"
-          id="outlined-basic"
-          placeholder="Any notes? please enter it here."
-          fullWidth
-          multiline
-          minRows={5}
-          sx={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            transition: ".5s",
-            "& input::placeholder": {
-              color: "red",
-              fontSize: "22px",
-              textAlign: "center",
-            },
-          }}
-        />
-      </Stack>
-
-      <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
-        <Stack
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            Subtotal:
-          </Typography>{" "}
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {subtotal} EGP
-          </Typography>
-        </Stack>
-        <Stack
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Typography
-            sx={{
-              fontSize: "15px",
-              fontWeight: "bold",
-              my: 2,
-            }}
-          >
-            Delivery Fee:{" "}
-          </Typography>{" "}
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {deliveryFee} EGP
-          </Typography>
-        </Stack>
-        <Stack
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {/* Tax ({tax} %): */}
-          </Typography>
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {/* {taxAmount.toFixed(2)} EGP */}
-          </Typography>
-        </Stack>
-        <Stack
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            Total:
-          </Typography>
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {" "}
-            {totalWithTax.toFixed(2)} EGP
-          </Typography>
-        </Stack>
-        <Stack className="stackBtn" sx={{ p: 2 }}>
-          <Button
-            color="error"
-            variant="contained"
-            className="placeOrderBtn"
-            disabled={cartItems.length === 0}
-          >
-            PLACE ORDER
-          </Button>
-        </Stack>
-      </Stack>
-    </Container>
     </Stack>
   );
 }

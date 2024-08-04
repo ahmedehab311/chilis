@@ -2,27 +2,28 @@
 // import { Stack } from "@mui/material";
 
 // function Counter({ basePrice, onChange }) {
-//   const [counter, setCounter] = useState(1);
+//   // استرجاع القيمة من localStorage أو تعيين القيمة الافتراضية 1
+//   const [counter, setCounter] = useState(() => {
+//     const savedCounter = localStorage.getItem('counter');
+//     return savedCounter ? parseInt(savedCounter, 10) : 1;
+//   });
+
+//   useEffect(() => {
+//     // حساب السعر الإجمالي بناءً على العدد وسعر الأساس
+//     const totalPrice = counter * basePrice;
+//     onChange(totalPrice);
+
+//     // تخزين القيمة في localStorage
+//     localStorage.setItem('counter', counter);
+//   }, [counter, basePrice, onChange]);
 
 //   const handleClick1 = () => {
-//     setCounter(prevCounter => {
-//       const newCounter = prevCounter * 2;
-//       return newCounter;
-//     });
+//     setCounter(prevCounter => prevCounter + 1); // زيادة بمقدار 1
 //   };
 
 //   const handleClick2 = () => {
-//     setCounter(prevCounter => {
-//       const newCounter = Math.max(1, prevCounter / 2);
-//       return newCounter;
-//     });
+//     setCounter(prevCounter => Math.max(1, prevCounter - 1)); // تقليل بمقدار 1 مع التأكد من أن العدد لا يقل عن 1
 //   };
-
-//   useEffect(() => {
-//     // Calculate and pass the total price based on counter and basePrice
-//     const totalPrice = counter * basePrice;
-//     onChange(totalPrice);
-//   }, [counter, basePrice, onChange]);
 
 //   return (
 //     <Stack
@@ -84,13 +85,13 @@ function Counter({ basePrice, onChange }) {
   });
 
   useEffect(() => {
-    // حساب السعر الإجمالي بناءً على العدد وسعر الأساس
     const totalPrice = counter * basePrice;
-    onChange(totalPrice);
-
-    // تخزين القيمة في localStorage
+    if (onChange && typeof onChange === 'function') {
+      onChange(totalPrice);
+    }
     localStorage.setItem('counter', counter);
   }, [counter, basePrice, onChange]);
+  
 
   const handleClick1 = () => {
     setCounter(prevCounter => prevCounter + 1); // زيادة بمقدار 1
