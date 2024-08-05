@@ -402,12 +402,12 @@ function CheckOut({
     fetchTax();
   }, []);
 
-  useEffect(() => {
-    const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-    const taxAmount = (subtotal * tax) / 100;
-    setTotalWithTax(subtotal + deliveryFee + taxAmount);
-  }, [cartItems, tax, deliveryFee]);
-
+  // useEffect(() => {
+  //   const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  //   const taxAmount = (subtotal * tax) / 100;
+  //   setTotalWithTax(subtotal + deliveryFee + taxAmount);
+  // }, [cartItems, tax, deliveryFee]);
+// console.log(cartItems)
   return (
     <Container
       sx={{
