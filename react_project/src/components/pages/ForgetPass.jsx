@@ -159,10 +159,10 @@ function ForgetPass() {
     event.preventDefault(); 
     try {
       const api_token = localStorage.getItem("token");
-      if (!api_token) {
-        toast.error("number");
-        return;
-      }
+      // if (!api_token) {
+      //   toast.error("number");
+      //   return;
+      // }
 
       const APIURL = `/forgot-password?phone=${form.email}&api_token=${api_token}`;
 

@@ -1,24 +1,9 @@
 import { useEffect, useState } from "react";
-import { Stack, TextField, Typography, Card, Button, Container, Box, MenuItem, CircularProgress, Select } from "@mui/material";
+import { Stack } from "@mui/material";
 import "./OrderOnline.css";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-// import { API_ARIA, API_CITIES } from "../../apis&fetchData/ApiLinks";
 import CheckOut from "./checkOut/CheckOut";
-import imgLogo from "../../../Hero/images/logo.png";
-import Counter from "../../ButtonsMenu/CounterDiaolgButton";
-import { API_TAX } from "../../apis&fetchData/ApiLinks";
-import axios from "axios";
 import Address from "../adderess/Address";
 function OrderOnline() {
-
   const [cartItems, setCartItems] = useState([]);
   const [totalPrices, setTotalPrices] = useState({});
   const [cities, setCities] = useState([]);
@@ -144,11 +129,9 @@ function OrderOnline() {
     }));
   };
 
-
   const [open, setOpen] = useState(false);
   const [addressData, setAddressData] = useState([]);
 
-  
   const [activeIndex, setActiveIndex] = useState(null);
   const [errors, setErrors] = useState({});
 
@@ -185,23 +168,23 @@ function OrderOnline() {
       "apt",
     ];
     const newErrors = {};
-    
+
     requiredFields.forEach((field) => {
       if (!currentAddress[field]) {
         newErrors[field] = "This field is required";
       }
     });
-    
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     const addressWithUser = {
       ...currentAddress,
       user: user?.name || "Anonymous", // Assuming user has a 'name' field
     };
-    
+
     setAddressData((prev) => [...prev, addressWithUser]);
     setOpen(false);
     setCurrentAddress({
@@ -216,8 +199,7 @@ function OrderOnline() {
     });
     setErrors({});
   };
-  
-  
+
   const handleDeleteAddress = (index) => {
     setAddressData((prev) => prev.filter((_, i) => i !== index));
     if (activeIndex === index) {
@@ -256,49 +238,46 @@ function OrderOnline() {
   };
   const [user, setUser] = useState(null);
 
-useEffect(() => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  if (storedUser) {
-    setUser(storedUser);
-  }
-}, []);
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
 
-// في OrderOnline
-const handlePlaceOrder = () => {
-  const orderData = {
-    items: cartItems,
-    total: totalToPay,
-    user: user, // تضمين معلومات المستخدم هنا
-    address: addressData[activeIndex], // استخدام العنوان النشط
+  // في OrderOnline
+  const handlePlaceOrder = () => {
+    const orderData = {
+      items: cartItems,
+      total: totalToPay,
+      user: user, // تضمين معلومات المستخدم هنا
+      address: addressData[activeIndex], // استخدام العنوان النشط
+    };
+
+    // إرسال orderData إلى الخادم
+    // ...
   };
 
-  // إرسال orderData إلى الخادم
-  // ...
-};
+  // existing useEffects and functions...
+  // const [tax, setTax] = useState(null);
 
+  // const taxAmount = (subtotal * tax) / 100;
+  // const totalWithTax = subtotal + deliveryFee + taxAmount;
+  // useEffect(() => {
+  //   // Fetch tax data when the component mounts
+  //   const fetchTax = async () => {
+  //     try {
+  //       const response = await axios.get(API_TAX);
+  //       const taxValue = response.data.data.settings.tax;
+  //       setTax(taxValue);
+  //       console.log(response.data.data.settings.tax);
+  //     } catch (error) {
+  //       console.error("Error fetching tax data:", error);
+  //     }
+  //   };
 
-// existing useEffects and functions...
-// const [tax, setTax] = useState(null);
-
-// const taxAmount = (subtotal * tax) / 100;
-// const totalWithTax = subtotal + deliveryFee + taxAmount;
-// useEffect(() => {
-//   // Fetch tax data when the component mounts
-//   const fetchTax = async () => {
-//     try {
-//       const response = await axios.get(API_TAX);
-//       const taxValue = response.data.data.settings.tax;
-//       setTax(taxValue);
-//       console.log(response.data.data.settings.tax);
-//     } catch (error) {
-//       console.error("Error fetching tax data:", error);
-//     }
-//   };
-
-//   fetchTax();
-// }, []);
-
-
+  //   fetchTax();
+  // }, []);
 
   return (
     <Stack
@@ -308,7 +287,7 @@ const handlePlaceOrder = () => {
         ml: "2rem",
         "@media (max-width: 1000px)": {
           // Adjust based on your needs
-          flexDirection:"column !important"
+          flexDirection: "column !important",
         },
         "@media (max-width: 480px)": {
           ml: "0.5rem",
@@ -627,11 +606,11 @@ const handlePlaceOrder = () => {
           </Dialog>
         </Stack>
       </Stack> */}
-<Address
-  handlePlaceOrder={handlePlaceOrder}
-  handleCardClick={handleCardClick}
-  handleSelectLabel={handleSelectLabel}
-/>
+      <Address
+        handlePlaceOrder={handlePlaceOrder}
+        handleCardClick={handleCardClick}
+        handleSelectLabel={handleSelectLabel}
+      />
       <CheckOut
         totalToPay={totalToPay}
         handleRemoveItem={handleRemoveItem}
@@ -642,7 +621,6 @@ const handlePlaceOrder = () => {
         handleCounterChange={handleCounterChange}
         selectedAddress={selectedAddress} // Pass selected address to CheckOut
       />
-
     </Stack>
   );
 }
