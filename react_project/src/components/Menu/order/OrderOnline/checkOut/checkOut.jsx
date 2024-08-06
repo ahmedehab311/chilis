@@ -68,7 +68,7 @@ function CheckOut({
         const response = await axios.get(API_TAX);
         const taxValue = response.data.data.settings.tax;
         setTax(taxValue);
-        console.log(response.data.data.settings.tax);
+        // console.log(response.data.data.settings.tax);
       } catch (error) {
         console.error("Error fetching tax data:", error);
       }
@@ -77,12 +77,7 @@ function CheckOut({
     fetchTax();
   }, []);
 
-  // useEffect(() => {
-  //   const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
-  //   const taxAmount = (subtotal * tax) / 100;
-  //   setTotalWithTax(subtotal + deliveryFee + taxAmount);
-  // }, [cartItems, tax, deliveryFee]);
-// console.log(cartItems)
+
   return (
     <Container
       sx={{

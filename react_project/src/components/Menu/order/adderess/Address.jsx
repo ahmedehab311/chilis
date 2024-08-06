@@ -717,7 +717,7 @@
 // }
 
 // export default Address;
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import {
   Stack,
   TextField,
@@ -942,25 +942,44 @@ function Address() {
     }
   };
 
+  // const handleDeleteAddress = async (id) => {
+  //   try {
+  //     const response = await axios.post(API_DELETE_ADDRESS(id));
+  //     console.log("Response Data:", response.data);
+
+  //     const dataResponse = await response.json();
+  //     console.log("response", dataResponse);
+  //     console.log(dataResponse);
+  //     console.log("Response Data:", response.data);
+
+  //     if (dataResponse.success) {
+  //       fetchAddresses();
+  //     } else {
+  //       console.error("Error deleting address:", dataResponse.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting address:", error);
+  //   }
+  // };
+  const [addresses, setAddresses] = useState([]);
   const handleDeleteAddress = async (id) => {
     try {
       const response = await axios.post(API_DELETE_ADDRESS(id));
       console.log("Response Data:", response.data);
-
-      const dataResponse = await response.json();
-      console.log("response", dataResponse);
-      console.log(dataResponse);
-      console.log("Response Data:", response.data);
-
-      if (dataResponse.success) {
-        fetchAddresses();
+  
+      if (response.data) {
+        // Remove the deleted address from the local state
+        setAddresses((prevAddresses) =>
+          prevAddresses.filter((address) => address.id !== id)
+        );
       } else {
-        console.error("Error deleting address:", dataResponse.message);
+        console.error("Error deleting address:", response.data.message);
       }
     } catch (error) {
       console.error("Error deleting address:", error);
     }
   };
+  
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

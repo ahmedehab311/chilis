@@ -23,6 +23,8 @@ import { ToastContainer } from "react-toastify";
 import Header from "./components/header/Header";
 import { CartProvider } from "./components/hooks/CardContext";
 import ChangePasswordFromProfile from "./components/pages/ChangePassFromProfile";
+import { useDispatch } from "react-redux";
+import { setTotalItems } from "./rtk/slices/orderSlice";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = [
@@ -87,6 +89,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
 function App() {
   const [token, setToken] = useState(null);
   const [userData, setUserData] = useState(null);
+  const dispatch = useDispatch() 
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -94,7 +97,12 @@ function App() {
       setToken(storedToken);
     }
   }, []);
-
+ useEffect(() => {
+    const storedTotalItems = parseInt(localStorage.getItem('totalItems'), 10);
+    if (!isNaN(storedTotalItems)) {
+      dispatch(setTotalItems(storedTotalItems));
+    }
+  }, [dispatch]);
   return (
     <>
       <CartProvider>

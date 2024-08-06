@@ -16,9 +16,9 @@ import {
   Stack,
 } from "@mui/material";
 import { CounterDiaolgButton, AddToCardButton } from "../index";
-import { addItemToCart } from "../../../rtk/slices/orderSlice.js"; // import your action
+import { addItemToCart,setTotalItems } from "../../../rtk/slices/orderSlice.js"; // import your action
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 function DialogItem({
   openDialog,
   handleCloseDialog,
@@ -30,47 +30,30 @@ function DialogItem({
   price,
   dataExtra,
   BASE_URL,
-  // handleAddToCart,
-  ...props
 }) {
   
-  console.log("DialogItem Props:", {
-    tempSelectedItemImage,
-    tempSelectedItemName,
-    tempSelectedItemDescription,
-    tempSelectedItemPrice,
-    itemDetails,
-    price,
-    dataExtra,
-    BASE_URL
-  });
-  // const name = itemDetails.name_en || tempSelectedItemName || 'Default Name';
+
   const description = itemDetails?.description || tempSelectedItemDescription || 'Default Description';
   const image = itemDetails?.image || tempSelectedItemImage || 'default-image.jpg';
 const [showOrderNow,setShowOrderNow] = useState(false);
 const [orderDetails,setOrderDetails] = useState(null);
   const dispatch = useDispatch();
 
-// const handleAddToCart = () => {
-//   console.log("ItemDetails:", itemDetails); // Check the value of itemDetails
-//   const itemDetailsToAdd = {
-//     name: itemDetails.name_en || 'Default Name', // Use optional chaining and fallback values
-//     price: price || tempSelectedItemPrice || 0,
-//     // Add other details if needed
-//   };
-//   console.log("Adding to cart:", itemDetailsToAdd); 
-//   dispatch(addItemToCart(itemDetailsToAdd)); 
-//   handleCloseDialog(); 
-// };
 
-const cart = useSelector((state)=> state.cart)
+const totalItems = useSelector((state) => state.cart.totalItems);
+
+
+
 const handleAddToCart = () => {
+  handleCloseDialog()
   const itemDetailsToAdd = {
     name: itemDetails?.name_en || 'Default Name',
     price: price || tempSelectedItemPrice || 0,
-    
-    // Add other details if needed
+    quantity: 1,
   };
+
+  // Update Redux state
+  dispatch(addItemToCart(itemDetailsToAdd));
 
   // Get existing cart from localStorage
   const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -80,18 +63,9 @@ const handleAddToCart = () => {
   
   // Save the updated cart back to localStorage
   localStorage.setItem('cart', JSON.stringify(cart));
-  
-  // Optionally, you can dispatch the action to the Redux store as well
-  dispatch(addItemToCart(itemDetailsToAdd)); 
-
-  setOrderDetails({
-    name: itemDetails?.name_en || 'Default Name',
-    price: price || tempSelectedItemPrice || 0,
-    extras: dataExtra,
-  });
-  setShowOrderNow(true);
-  handleCloseDialog();
 };
+
+
 const [totalPrice, setTotalPrice] = useState(0);
 const  handlePriceChange = (price) => {
   setTotalPrice(price);

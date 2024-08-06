@@ -23,11 +23,13 @@ function OrderOnline() {
   const API_ARIA = (cityId) =>
     `https://myres.me/chilis/api/areas/?city=${cityId}`;
   useEffect(() => {
-    // الحصول على العناصر المخزنة في السلة من localStorage عند تحميل المكون
+    console.log(cartItems)
+    // الحصول على العناصر المخزنة في السلة من 
+    // localStorage عند تحميل المكون
     const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
     setCartItems(storedCartItems);
 
-    // تهيئة الأسعار الإجمالية
+    // تهيئة الأسعار الإجمالية 
     const initialPrices = {};
     storedCartItems.forEach((item, index) => {
       initialPrices[index] = item.price;
@@ -36,7 +38,6 @@ function OrderOnline() {
   }, []);
 
   useEffect(() => {
-    // تحديث الأسعار الإجمالية عند تغيير العناصر في السلة
     const updatedPrices = {};
     cartItems.forEach((item, index) => {
       updatedPrices[index] = totalPrices[index] || item.price;

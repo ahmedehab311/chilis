@@ -289,24 +289,23 @@ import { useNavigate } from "react-router-dom";
 
   return (
 <>
-<Stack direction={"row"} alignItems={"center"}  sx={{display:"flex"}}>
 
-    <Box sx={{
+{/* <Box sx={{
        padding: 2,
         backgroundColor: "#fff",
         borderRadius: "8px",
         boxShadow: 1,
-        // width: "100%",
         maxWidth: "800px",
-        // margin: "auto",
     }}>
     
    <Stack alignItems={"end"}>
-   {/* <img src={img} alt="User" style={{ borderRadius: '50%', width: '100px', height: '100px' }} /> */}
+   <img src={img} alt="User" style={{ borderRadius: '50%', width: '100px', height: '100px' }} />
    <Typography sx={{fontSize:"22px", fontWight:"bold"}}>{user.user_name}</Typography>
    <Typography sx={{fontSize:"18px", fontWight:"bold"}}>{user.email}</Typography>
    </Stack>
-    </Box>
+    </Box> */}
+<Stack direction={"row"} alignItems={"center"}  sx={{display:"flex"}}>
+
 
 
     <Box

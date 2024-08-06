@@ -13,11 +13,15 @@ import {
 } from "@mui/material";
 // import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import Hero from "../Hero/Hero";
 import SmallMediaQuary from "./SmallMediaQuary";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { useLocation } from "react-router-dom";
+
+// import Headerr from "./Headerr"
 function Header({ token, handleLogout }) {
   const [drawerState, setDrawerState] = useState({
     top: false,
@@ -49,8 +53,11 @@ function Header({ token, handleLogout }) {
   };
   const isLargeScreen = useMediaQuery("(min-width:1000px)");
   // const totalCounter = cartItems.reduce((total, item) => total + item.quantity, 0);
+  // const navigate = useNavigate();
+  const totalItems = useSelector((state) => state.cart.totalItems);
   return (
     <Stack className="hero">
+    {/* header only */}
       <Stack sx={{ bgcolor: "#050304", p: 1, position: "relative" }}>
         {useMediaQuery("(min-width:1000px)") && (
           <>
@@ -117,38 +124,18 @@ function Header({ token, handleLogout }) {
                   Contact Us
                 </Typography>
               </Link>
-              {/* {token ? (
-                <Link component={RouterLink} to="/order-online">
-                  <ShoppingCartOutlinedIcon
-                    sx={{ fontSize: "3rem", mb: "-.8rem" }}
-                  />
-                </Link>
-              ) : null} */}
+          
               {token ? (
   <Link component={RouterLink} to="/order-online">
-    <Badge
-      // badgeContent={totalCounter}
-      color="error"
-      sx={{
-        "& .MuiBadge-badge": {
-          backgroundColor: "red", // لون الخلفية
-          color: "white", // لون النص
-          fontSize: "1rem", // حجم النص
-          height: "1.5rem", // حجم الدائرة
-          width: "1.5rem", // حجم الدائرة
-          borderRadius: "50%", // جعلها دائرية
-          top: "0.5rem", // تعديل موضع الدائرة
-          right: "0.5rem", // تعديل موضع الدائرة
-        },
-      }}
-    >
-      <ShoppingCartOutlinedIcon
-        sx={{
-          fontSize: "3rem",
-          mb: "-.8rem",
-        }}
-      />
-    </Badge>
+  <IconButton
+        aria-label="cart"
+        // onClick={() => navigate('/cart')}
+        style={{ marginLeft: 'auto' }}
+      >
+        <Badge badgeContent={totalItems} color="error" invisible={totalItems === 0}>
+          <ShoppingCartOutlinedIcon />
+        </Badge>
+      </IconButton>
   </Link>
 ) : null}
               {token ? (
@@ -226,6 +213,7 @@ function Header({ token, handleLogout }) {
           />
         )}
       </Stack>
+
       <Hero />
     </Stack>
   );

@@ -3,6 +3,7 @@ import { Stack } from "@mui/material";
 import "./OrderOnline.css";
 import CheckOut from "./checkOut/CheckOut";
 import Address from "../adderess/Address";
+// import img from "../"
 function OrderOnline() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrices, setTotalPrices] = useState({});
@@ -281,7 +282,7 @@ function OrderOnline() {
 
   return (
     <Stack
-      // className={"address"}
+      className={"orderOnline"}
       sx={{
         display: "flex",
         ml: "2rem",
