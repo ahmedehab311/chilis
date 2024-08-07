@@ -2,6 +2,13 @@
 import { Grid, Typography, Card, CardMedia } from "@mui/material";
 import { BASE_URL, OrderButton } from "../index";
 const ItemCard = ({ handleItemClick, selectedItem }) => {
+  const truncateText = (text, length) => {
+    if (text.length > length) {
+      return text.slice(0, length) + '... Read More';
+    }
+    return text;
+  };
+  
   return (
     <>
       <Typography
@@ -81,7 +88,8 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                     fontFamily: "uniform !important",
                   }}
                 >
-                  {item.description_en}
+                                  {truncateText(item.description_en, 60)}
+
                 </Typography>
                 <Typography sx={{ fontSize: "18px", color: "#777" }}>
                   {item.price}

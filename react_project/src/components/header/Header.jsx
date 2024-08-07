@@ -129,7 +129,6 @@ function Header({ token, handleLogout }) {
   <Link component={RouterLink} to="/order-online">
   <IconButton
         aria-label="cart"
-        // onClick={() => navigate('/cart')}
         style={{ marginLeft: 'auto' }}
       >
         <Badge badgeContent={totalItems} color="error" invisible={totalItems === 0}>
