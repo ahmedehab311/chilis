@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, TextField, Typography, Link } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { useCheckEmailAvailability, signUpSchema } from "../header/index";
+import { useCheckEmailAvailability, signUpSchema } from "../../header/index";
 
 const BASE_URL = "https://myres.me/chilis/api";
 
@@ -140,7 +140,7 @@ const Register = ({ setToken }) => {
         <Button
           type="submit"
           variant="contained"
-          color="primary"
+          color="error"
           disabled={emailAvailabilityStatus === "checking"}
         >
           Sign Up

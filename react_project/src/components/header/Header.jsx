@@ -176,6 +176,13 @@ function Header({ token, handleLogout }) {
                       Profile
                     </MenuItem>
                     <MenuItem
+                      onClick={handleClose}
+                      component={RouterLink}
+                      to="/My_orders"
+                    >
+                      My ordres
+                    </MenuItem>
+                    <MenuItem
                       onClick={() => {
                         handleLogout();
                         handleClose();
@@ -210,6 +217,7 @@ function Header({ token, handleLogout }) {
             state={drawerState}
             token={token}
             handleLogout={handleLogout}
+            totalItems={totalItems}
           />
         )}
       </Stack>

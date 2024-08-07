@@ -182,20 +182,21 @@ function ForgetPass() {
 
   return (
     <Box
-      sx={{
-        padding: 2,
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        boxShadow: 1,
-        width: "100%",
-        maxWidth: "800px",
-        margin: "auto",
-      }}
-    >
+    sx={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      minHeight: "100vh",
+      backgroundColor: "#f5f5f5",
+      padding: "20px",
+    }}
+  >
+      
       <Typography variant="h6" gutterBottom>
         Forgot Password
-      </Typography>
-      <TextField
+       </Typography>
+     <TextField
         label="Phone"
         variant="outlined"
         fullWidth
@@ -211,6 +212,7 @@ function ForgetPass() {
       >
         Send
       </Button>
+      
     </Box>
   );
 }

@@ -25,6 +25,7 @@ import { CartProvider } from "./components/hooks/CardContext";
 import ChangePasswordFromProfile from "./components/pages/ChangePassFromProfile";
 import { useDispatch } from "react-redux";
 import { setTotalItems } from "./rtk/slices/orderSlice";
+import MyOrders from "./components/Menu/order/MyOrders/MyOrders";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = [
@@ -34,6 +35,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     "/profile",
     "/order-online",
     "/change-password",
+    "/My_orders",
   ];
 
   const handleLogout = () => {
@@ -79,6 +81,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
           element={<ChangePasswordFromProfile />}
         />
         <Route path="/order-online" element={<OrderOnline />} />
+        <Route path="/My_orders" element={<MyOrders />} />
 
         <Route path="*" element={<Error />} />
       </Routes>

@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
-import { Drawer, IconButton, Link, Typography, useMediaQuery } from "@mui/material";
+import { Badge, Drawer, IconButton, Link, Typography, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link as RouterLink } from "react-router-dom";
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
-function SmallMediaQuery({ closeDrawer, toggleDrawer, state, handleLogout, token }) {
+function SmallMediaQuery({ closeDrawer, toggleDrawer, state, handleLogout, token,totalItems }) {
   const isSmallScreen = useMediaQuery("(max-width:1000px)");
   // const [cartItems, setCartItems] = useState([]);
   // const isCartEmpty = cartItems.length === 0;
@@ -79,7 +79,12 @@ function SmallMediaQuery({ closeDrawer, toggleDrawer, state, handleLogout, token
         
             {token && (
               <Link component={RouterLink} to="/order-online" onClick={closeDrawer}>
-                <ShoppingCartOutlinedIcon sx={{ fontSize: "3rem", mb: "-.8rem" }} />
+              {/* <IconButton */}
+   
+        <Badge badgeContent={totalItems} color="error" invisible={totalItems === 0}>
+          <ShoppingCartOutlinedIcon />
+        </Badge>
+      {/* </IconButton> */}
               </Link>
             )}
             {token ? (

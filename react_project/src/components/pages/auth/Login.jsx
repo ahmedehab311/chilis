@@ -144,7 +144,7 @@ import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { setUser } from "../../rtk/slices/userSlice"; // Import setUser action
+import { setUser } from "../../../rtk/slices/userSlice"; // Import setUser action
 
 const BASE_URL = "https://myres.me/chilis/api";
 
@@ -278,7 +278,7 @@ const LoginPage = ({ setToken }) => {
           <Button
             type="submit"
             variant="contained"
-            color="primary"
+            color="error"
           >
             Login
           </Button>

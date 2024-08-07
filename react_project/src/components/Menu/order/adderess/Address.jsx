@@ -717,7 +717,332 @@
 // }
 
 // export default Address;
-import  { useState, useEffect } from "react";
+//               onBlur={handleBlur}
+//               error={!!errors.street}
+//               helperText={errors.street}
+//               fullWidth
+//             />
+//           </Stack>
+//           <Stack>
+//             <Typography>Delivery Instructions</Typography>
+//             <TextField
+//               label="Delivery Instructions"
+//               name="deliveryInstructions"
+//               value={currentAddress.deliveryInstructions}
+//               onChange={handleInputChange}
+//               fullWidth
+//             />
+//           </Stack>
+
+//           <Stack
+//             direction="row"
+//             spacing={1}
+//             mt={2}
+//             sx={{
+//               "@media (max-width: 700px)": {
+//                 flexWrap: "wrap !important",
+//               },
+//             }}
+//           >
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Home")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Home" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Home
+//             </Button>
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Work")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Work" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Work
+//             </Button>
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Other")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Other" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Other
+//             </Button>
+//           </Stack>
+//         </DialogContent>
+
+//         <DialogActions>
+//           <Button onClick={handleClose} color="primary">
+//             Cancel
+//           </Button>
+//           <Button
+//             onClick={handleAddAddress}
+//             color="primary"
+//             variant="contained"
+//           >
+//             Save
+//           </Button>
+//         </DialogActions>
+//       </Dialog>
+//     </Stack>
+//   );
+// }
+
+// export default Address;
+//               onBlur={handleBlur}
+//               error={!!errors.street}
+//               helperText={errors.street}
+//               fullWidth
+//             />
+//           </Stack>
+//           <Stack>
+//             <Typography>Delivery Instructions</Typography>
+//             <TextField
+//               label="Delivery Instructions"
+//               name="deliveryInstructions"
+//               value={currentAddress.deliveryInstructions}
+//               onChange={handleInputChange}
+//               fullWidth
+//             />
+//           </Stack>
+
+//           <Stack
+//             direction="row"
+//             spacing={1}
+//             mt={2}
+//             sx={{
+//               "@media (max-width: 700px)": {
+//                 flexWrap: "wrap !important",
+//               },
+//             }}
+//           >
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Home")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Home" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Home
+//             </Button>
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Work")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Work" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Work
+//             </Button>
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Other")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Other" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Other
+//             </Button>
+//           </Stack>
+//         </DialogContent>
+
+//         <DialogActions>
+//           <Button onClick={handleClose} color="primary">
+//             Cancel
+//           </Button>
+//           <Button
+//             onClick={handleAddAddress}
+//             color="primary"
+//             variant="contained"
+//           >
+//             Save
+//           </Button>
+//         </DialogActions>
+//       </Dialog>
+//     </Stack>
+//   );
+// }
+
+// export default Address;
+//               onBlur={handleBlur}
+//               error={!!errors.street}
+//               helperText={errors.street}
+//               fullWidth
+//             />
+//           </Stack>
+//           <Stack>
+//             <Typography>Delivery Instructions</Typography>
+//             <TextField
+//               label="Delivery Instructions"
+//               name="deliveryInstructions"
+//               value={currentAddress.deliveryInstructions}
+//               onChange={handleInputChange}
+//               fullWidth
+//             />
+//           </Stack>
+
+//           <Stack
+//             direction="row"
+//             spacing={1}
+//             mt={2}
+//             sx={{
+//               "@media (max-width: 700px)": {
+//                 flexWrap: "wrap !important",
+//               },
+//             }}
+//           >
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Home")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Home" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Home
+//             </Button>
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Work")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Work" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Work
+//             </Button>
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Other")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Other" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Other
+//             </Button>
+//           </Stack>
+//         </DialogContent>
+
+//         <DialogActions>
+//           <Button onClick={handleClose} color="primary">
+//             Cancel
+//           </Button>
+//           <Button
+//             onClick={handleAddAddress}
+//             color="primary"
+//             variant="contained"
+//           >
+//             Save
+//           </Button>
+//         </DialogActions>
+//       </Dialog>
+//     </Stack>
+//   );
+// }
+
+// export default Address;
+//               onBlur={handleBlur}
+//               error={!!errors.street}
+//               helperText={errors.street}
+//               fullWidth
+//             />
+//           </Stack>
+//           <Stack>
+//             <Typography>Delivery Instructions</Typography>
+//             <TextField
+//               label="Delivery Instructions"
+//               name="deliveryInstructions"
+//               value={currentAddress.deliveryInstructions}
+//               onChange={handleInputChange}
+//               fullWidth
+//             />
+//           </Stack>
+
+//           <Stack
+//             direction="row"
+//             spacing={1}
+//             mt={2}
+//             sx={{
+//               "@media (max-width: 700px)": {
+//                 flexWrap: "wrap !important",
+//               },
+//             }}
+//           >
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Home")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Home" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Home
+//             </Button>
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Work")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Work" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Work
+//             </Button>
+//             <Button
+//               variant="outlined"
+//               color="primary"
+//               onClick={() => handleSelectLabel("Other")}
+//               sx={{
+//                 border:
+//                   currentAddress.label === "Other" ? "2px solid #d32f2f" : "",
+//               }}
+//             >
+//               Other
+//             </Button>
+//           </Stack>
+//         </DialogContent>
+
+//         <DialogActions>
+//           <Button onClick={handleClose} color="primary">
+//             Cancel
+//           </Button>
+//           <Button
+//             onClick={handleAddAddress}
+//             color="primary"
+//             variant="contained"
+//           >
+//             Save
+//           </Button>
+//         </DialogActions>
+//       </Dialog>
+//     </Stack>
+//   );
+// }
+
+// export default Address;
+
+import { useState, useEffect } from "react";
 import {
   Stack,
   TextField,
@@ -739,6 +1064,7 @@ import axios from "axios";
 
 function Address() {
   const API_CITIES = "https://myres.me/chilis/api/cities";
+  const API_AREAS = "https://myres.me/chilis/api/areas?city=";
   const api_token = localStorage.getItem("token");
   const API_ADDRESS = `https://myres.me/chilis/api//profile/address/?api_token=${api_token}`;
   const API_ADD_ADDRESS = `https://myres.me/chilis/api/profile/address/add`;
@@ -789,9 +1115,7 @@ function Address() {
       const fetchAreas = async () => {
         setLoadingAreas(true);
         try {
-          const response = await fetch(
-            `https://myres.me/chilis/api/areas?city=${selectedCity}`
-          );
+          const response = await fetch(`${API_AREAS}${selectedCity}`);
           const responseData = await response.json();
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -821,41 +1145,9 @@ function Address() {
     }
   }, []);
 
-  useEffect(() => {
-    fetchAddresses();
-  }, []);
-
-  useEffect(() => {
-    if (selectedCity) {
-      const fetchAreas = async () => {
-        setLoadingAreas(true);
-        try {
-          const response = await fetch(
-            `https://myres.me/chilis/api/areas?city=${selectedCity}`
-          );
-          const responseData = await response.json();
-          // console.log("fetch areas",responseData.data.areas)
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-
-          const areaNames = responseData.data.areas.map((area) => ({
-            id: area.id,
-            name: area.area_name_en,
-          }));
-          // console.log("fetch areas",areaNames)
-
-          setAreas(areaNames);
-        } catch (error) {
-          console.error("Error fetching areas:", error);
-        } finally {
-          setLoadingAreas(false);
-        }
-      };
-
-      fetchAreas();
-    }
-  }, [selectedCity]);
+  // useEffect(() => {
+  //   fetchAddresses();
+  // }, []);
 
   const fetchAddresses = async () => {
     try {
@@ -870,8 +1162,8 @@ function Address() {
     }
   };
   const handleSelectLabel = (label) => {
-        setCurrentAddress((prev) => ({ ...prev, label }));
-      }; 
+    setCurrentAddress((prev) => ({ ...prev, label }));
+  };
   const handleAddAddress = async () => {
     // const requiredFields = [
     //   "deliveryCity",
@@ -905,11 +1197,12 @@ function Address() {
       lng: "0",
       api_token: api_token,
     });
-
+    handleClose();
     try {
       const response = await axios.post(
         `https://myres.me/chilis/api/profile/address/add?${queryParams.toString()}`
       );
+      fetchAddresses();
       console.log("Response Data:", response.data);
 
       const dataResponse = await response.json();
@@ -942,35 +1235,20 @@ function Address() {
     }
   };
 
-  // const handleDeleteAddress = async (id) => {
-  //   try {
-  //     const response = await axios.post(API_DELETE_ADDRESS(id));
-  //     console.log("Response Data:", response.data);
-
-  //     const dataResponse = await response.json();
-  //     console.log("response", dataResponse);
-  //     console.log(dataResponse);
-  //     console.log("Response Data:", response.data);
-
-  //     if (dataResponse.success) {
-  //       fetchAddresses();
-  //     } else {
-  //       console.error("Error deleting address:", dataResponse.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting address:", error);
-  //   }
-  // };
-  const [addresses, setAddresses] = useState([]);
+  useEffect(() => {
+    fetchAddresses();
+    handleDeleteAddress();
+  }, []);
   const handleDeleteAddress = async (id) => {
     try {
       const response = await axios.post(API_DELETE_ADDRESS(id));
       console.log("Response Data:", response.data);
-  
-      if (response.data) {
-        // Remove the deleted address from the local state
-        setAddresses((prevAddresses) =>
-          prevAddresses.filter((address) => address.id !== id)
+
+      fetchAddresses();
+      if (response.data.success) {
+        // Update addressData state by filtering out the deleted address
+        setAddressData((prevData) =>
+          prevData.filter((address) => address.id !== id)
         );
       } else {
         console.error("Error deleting address:", response.data.message);
@@ -979,7 +1257,6 @@ function Address() {
       console.error("Error deleting address:", error);
     }
   };
-  
 
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -1022,7 +1299,7 @@ function Address() {
 
   return (
     <Stack spacing={3}>
-      <Typography
+      {/* <Typography
         sx={{
           fontSize: "18px",
           fontWeight: 700,
@@ -1032,7 +1309,9 @@ function Address() {
       >
         add address
       </Typography>
+      */}
       {addressData.length > 0 ? (
+        
         addressData.map((address, index) => (
           <Card
             key={index}
@@ -1042,6 +1321,18 @@ function Address() {
             }}
             onClick={() => setActiveIndex(index)}
           >
+           <Stack>
+        <Typography
+          sx={{
+            fontSize: "18px",
+            fontWeight: 700,
+            textAlign: "left",
+            fontFamily: "cairo",
+          }}
+        >
+          Your Delivery Address List
+        </Typography>
+      </Stack>
             <Stack sx={{ background: "#f8f9fa!important", p: 2 }}>
               <Typography
                 sx={{
@@ -1114,16 +1405,29 @@ function Address() {
           </Card>
         ))
       ) : (
-        <Typography>No addresses found</Typography>
+        <Typography sx={{
+                              fontSize: "1.2rem",
+                    fontWeight: "bold",
+                    lineHeight: "1.2",
+
+        }}>No address found ...</Typography>
       )}
-      <Button
-        variant="contained"
-        color="primary"
-        sx={{ width: "30%", height: "45px" }}
-        onClick={handleClickOpen}
-      >
-        Add a new address
-      </Button>
+      <Stack>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleClickOpen}
+          sx={{
+            backgroundColor: "#d32f2f",
+            "&:hover": {
+              backgroundColor: "#9a0007",
+            },
+          }}
+        >
+          Add New Address
+        </Button>
+      </Stack>
+
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
           <Typography
@@ -1222,50 +1526,50 @@ function Address() {
               value={currentAddress.deliveryInstructions}
               onChange={handleInputChange}
             />
-       <Stack
-            direction="row"
-            spacing={1}
-            mt={2}
-            sx={{
-              "@media (max-width: 700px)": {
-                flexWrap: "wrap !important",
-              },
-            }}
-          >
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleSelectLabel("Home")}
+            <Stack
+              direction="row"
+              spacing={1}
+              mt={2}
               sx={{
-                border:
-                  currentAddress.label === "Home" ? "2px solid #d32f2f" : "",
+                "@media (max-width: 700px)": {
+                  flexWrap: "wrap !important",
+                },
               }}
             >
-              Home
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleSelectLabel("Work")}
-              sx={{
-                border:
-                  currentAddress.label === "Work" ? "2px solid #d32f2f" : "",
-              }}
-            >
-              Work
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={() => handleSelectLabel("Other")}
-              sx={{
-                border:
-                  currentAddress.label === "Other" ? "2px solid #d32f2f" : "",
-              }}
-            >
-              Other
-            </Button>
-          </Stack>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => handleSelectLabel("Home")}
+                sx={{
+                  border:
+                    currentAddress.label === "Home" ? "2px solid #d32f2f" : "",
+                }}
+              >
+                Home
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => handleSelectLabel("Work")}
+                sx={{
+                  border:
+                    currentAddress.label === "Work" ? "2px solid #d32f2f" : "",
+                }}
+              >
+                Work
+              </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() => handleSelectLabel("Other")}
+                sx={{
+                  border:
+                    currentAddress.label === "Other" ? "2px solid #d32f2f" : "",
+                }}
+              >
+                Other
+              </Button>
+            </Stack>
           </Stack>
         </DialogContent>
         <DialogActions>
