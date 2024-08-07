@@ -2,9 +2,22 @@
 import { Grid, Typography, Card, CardMedia } from "@mui/material";
 import { BASE_URL, OrderButton } from "../index";
 const ItemCard = ({ handleItemClick, selectedItem }) => {
+  // const truncateText = (text, length) => {
+  //   if (text.length > length) {
+  //     return text.slice(0, length) + '... Read More';
+  //   }
+  //   return text;
+  // };
   const truncateText = (text, length) => {
     if (text.length > length) {
-      return text.slice(0, length) + '... Read More';
+      return (
+        <>
+          {text.slice(0, length)}
+          <span style={{  cursor: "pointer", textDecoration: "underline" }} >
+           Read More
+          </span>
+        </>
+      );
     }
     return text;
   };

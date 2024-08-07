@@ -57,25 +57,52 @@ function CheckOut({
       alert('Redirecting to credit card payment page...');
     }
   };
-// 
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
 
-  useEffect(() => {
-    // Fetch tax data when the component mounts
-    const fetchTax = async () => {
-      try {
-        const response = await axios.get(API_TAX);
-        const taxValue = response.data.data.settings.tax;
-        setTax(taxValue);
-        // console.log(response.data.data.settings.tax);
-      } catch (error) {
-        console.error("Error fetching tax data:", error);
-      }
-    };
+ 
+  // في قسم useEffect الخاص بالحساب
+// useEffect(() => {
+//   // Fetch tax data when the component mounts
+//   const fetchTax = async () => {
+//     try {
+//       const response = await axios.get(API_TAX);
+//       const taxValue = response.data.data.settings.tax;
+//       setTax(taxValue);
+      
+//       // حساب الإجمالي مع الضريبة
+//       const subtotalWithDelivery = subtotal + deliveryFee;
+//       const calculatedTax = subtotalWithDelivery * (taxValue / 100);
+//       setTotalWithTax(subtotalWithDelivery + calculatedTax);
+      
+//       // console.log(response.data.data.settings.tax);
+//     } catch (error) {
+//       console.error("Error fetching tax data:", error);
+//     }
+//   };
 
-    fetchTax();
-  }, []);
+//   fetchTax();
+// }, [subtotal, deliveryFee]); // التأكد من تحديث totalWithTax عند تغيير subtotal أو deliveryFee
+
+useEffect(() => {
+  // Fetch tax data when the component mounts or when subtotal or deliveryFee change
+  const fetchTax = async () => {
+    try {
+      const response = await axios.get(API_TAX);
+      const taxValue = response.data.data.settings.tax;
+      setTax(taxValue);
+      
+      // حساب الإجمالي مع الضريبة
+      const subtotalWithDelivery = subtotal + deliveryFee;
+      const calculatedTax = subtotalWithDelivery * (taxValue / 100);
+      setTotalWithTax(subtotalWithDelivery + calculatedTax);
+    } catch (error) {
+      console.error("Error fetching tax data:", error);
+    }
+  };
+
+  fetchTax();
+}, [subtotal, deliveryFee]); // تأكد من أن subtotal و deliveryFee يتغيران فقط عند الضرورة
 
 
   return (
@@ -101,7 +128,7 @@ function CheckOut({
         className="headerOrderOnline"
         direction={"row"}
         alignItems={"center"}
-        sx={{ p: 1, borderBottom: "1px solid #999" }}
+        sx={{ p: 1, borderBottom:"2px solid #ececec" }}
       >
         <img
           className="imgOrder"
@@ -122,7 +149,7 @@ function CheckOut({
         </Typography>
       </Box>
 
-      <Container sx={{ margin: "0 auto" }}>
+      <Container sx={{ margin: "0 auto",borderBottom:"2px solid #ececec" }}>
         <Box
           className="orderNow"
           sx={{
@@ -132,7 +159,7 @@ function CheckOut({
           {cartItems.length === 0
             ? null
             : cartItems.map((item, index) => (
-                <Card key={index} sx={{ p: 2, mb: 3 }}>
+                <Card key={index} sx={{ p: 2, my:3 }}>
                   <Stack sx={{ position: "relative" }}>
                     <Stack
                       sx={{ display: "flex" }}
@@ -142,8 +169,8 @@ function CheckOut({
                       <Typography
                         sx={{
                           color: "#000",
-                          fontSize: "15px",
-                          fontWeight: 500,
+                          fontSize: "2.5rem",
+                          fontWeight: "bold",
                           fontFamily: "cairo",
                         }}
                       >
@@ -181,8 +208,8 @@ function CheckOut({
                       <Typography
                         sx={{
                           color: "#17a2b8!important",
-                          fontSize: "2rem",
-                          fontWeight: 400,
+                          fontSize: "1.8rem",
+                          fontWeight: "bold",
                           fontFamily: "cairo",
                         }}
                       >
@@ -191,8 +218,8 @@ function CheckOut({
                       <Typography
                         sx={{
                           color: "#17a2b8!important",
-                          fontSize: "15px",
-                          fontWeight: 500,
+                       fontSize: "1.8rem",
+                          fontWeight: "bold",
                           fontFamily: "cairo",
                         }}
                       >
@@ -249,7 +276,7 @@ function CheckOut({
         </Box>
       </Container>
 
-      <Stack className="middleOrder" sx={{ p: 2 }}>
+      {/* <Stack className="middleOrder" sx={{ p: 2 }}>
         <TextField
           className="formControl"
           id="outlined-basic"
@@ -269,7 +296,65 @@ function CheckOut({
             },
           }}
         />
-      </Stack>
+      </Stack> */}
+      <Stack className="middleOrder" sx={{ p: 2,borderBottom:"2px solid #ececec" }}>
+      <Stack className="middleOrder" sx={{ p: 2 }}>
+  <Stack direction="row" spacing={0} alignItems="center">
+    <TextField
+      id="coupon-code-input"
+      placeholder="Enter coupon code"
+      sx={{
+     
+        flex: 1,
+        "& .MuiInputBase-input": {
+          padding: "13px 10px !important",
+        },
+        "& input::placeholder": {
+          fontSize: "16px",
+        },
+        borderTopRightRadius: 0,
+        borderBottomRightRadius: 0,
+      }}
+    />
+    <Button
+      variant="contained"
+      color="primary"
+      sx={{
+        p:"10px 16px !important",
+        height: '100%',
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
+        backgroundColor: "#1976d2",
+        "&:hover": { backgroundColor: "#115293" },
+      }}
+    >
+      Apply
+    </Button>
+  </Stack>
+  <TextField
+    className="formControl"
+    id="outlined-basic"
+    placeholder="Any notes? please enter it here."
+    fullWidth
+    multiline
+    minRows={5}
+    sx={{
+    
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+      transition: ".5s",
+      "& input::placeholder": {
+        color: "red",
+        fontSize: "22px",
+        textAlign: "center",
+      },
+    }}
+  />
+</Stack>
+
+
+</Stack>
 
       <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
         <Stack

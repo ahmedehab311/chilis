@@ -119,6 +119,76 @@ function Address() {
   const handleSelectLabel = (label) => {
     setCurrentAddress((prev) => ({ ...prev, label }));
   };
+  // const handleAddAddress = async () => {
+  //   const requiredFields = [
+  //     "deliveryCity",
+  //     "deliveryArea",
+  //     "street",
+  //     "building",
+  //     // "floor",
+  //     // "apt",
+  //   ];
+  //   const newErrors = {};
+
+  //   requiredFields.forEach((field) => {
+  //     if (!currentAddress[field]) {
+  //       newErrors[field] = "This field is required";
+  //     }
+  //   });
+
+  //   if (Object.keys(newErrors).length > 0) {
+  //     setErrors(newErrors);
+  //     return;
+  //   }
+
+  //   const queryParams = new URLSearchParams({
+  //     area: currentAddress.deliveryArea,
+  //     street: currentAddress.street,
+  //     building: currentAddress.building,
+  //     floor: currentAddress.floor,
+  //     apt: currentAddress.apt,
+  //     name: currentAddress.label,
+  //     lat: "0",
+  //     lng: "0",
+  //     api_token: api_token,
+  //   });
+  //   handleClose();
+  //   try {
+  //     const response = await axios.post(
+  //       `https://myres.me/chilis/api/profile/address/add?${queryParams.toString()}`
+  //     );
+  //     fetchAddresses();
+  //     console.log("Response Data:", response.data);
+
+  //     const dataResponse = await response.json();
+  //     console.log("response", dataResponse);
+  //     console.log(dataResponse);
+
+  //     if (!response.ok) {
+  //       throw new Error("Network response was not ok");
+  //     }
+  //     if (dataResponse.response  ) {
+  //       setCurrentAddress({
+  //         deliveryCity: "",
+  //         deliveryArea: "",
+  //         street: "",
+  //         building: "",
+  //         floor: "",
+  //         apt: "",
+  //         deliveryInstructions: "",
+  //         label: "",
+  //       });
+  //       handleClose();
+  //       fetchAddresses();
+ 
+  //       setErrors({});
+  //     } else {
+  //       console.error("Error adding address:", dataResponse.message);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding address:", error);
+  //   }
+  // };
   const handleAddAddress = async () => {
     const requiredFields = [
       "deliveryCity",
@@ -129,18 +199,18 @@ function Address() {
       // "apt",
     ];
     const newErrors = {};
-
+  
     requiredFields.forEach((field) => {
       if (!currentAddress[field]) {
         newErrors[field] = "This field is required";
       }
     });
-
+  
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-
+  
     const queryParams = new URLSearchParams({
       area: currentAddress.deliveryArea,
       street: currentAddress.street,
@@ -152,25 +222,24 @@ function Address() {
       lng: "0",
       api_token: api_token,
     });
-    handleClose();
+  
     try {
       const response = await axios.post(
         `https://myres.me/chilis/api/profile/address/add?${queryParams.toString()}`
       );
-      fetchAddresses();
-      console.log("Response Data:", response.data);
-
-      const dataResponse = await response.json();
+  
+      // تحقق من الشكل الفعلي للبيانات المستلمة
+      const dataResponse = response.data;
       console.log("response", dataResponse);
-      console.log(dataResponse);
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      if (dataResponse.success) {
-        handleClose();
-        fetchAddresses();
+  
+      // تحقق من الاستجابة بشكل صحيح
+      if (dataResponse.response) {
+        handleClose(); // أغلق الحوار أولاً
+  
+        // انتظر حتى يتم إغلاق الحوار
+        await new Promise((resolve) => setTimeout(resolve, 500));
+  
+        // ثم قم بتفريغ الحقول
         setCurrentAddress({
           deliveryCity: "",
           deliveryArea: "",
@@ -182,13 +251,17 @@ function Address() {
           label: "",
         });
         setErrors({});
+        
+        // جلب العناوين المحدثة
+        fetchAddresses();
       } else {
-        console.error("Error adding address:", dataResponse.message);
+        console.error("Error adding address:", dataResponse.message || "Unknown error");
       }
     } catch (error) {
       console.error("Error adding address:", error);
     }
   };
+  
 
   useEffect(() => {
     fetchAddresses();
@@ -319,7 +392,8 @@ function Address() {
                 >
                   {address.building}, {address.street},{address.area.area_name_en},
                   {address.city.name_en},Building: {address.building} - Floor:{" "}
-                  {address.floor} Apt: {address.apt}
+                  {address.floor} 
+                  {/* Apt: {address.apt} */}
                   <br />
                   {/* Instructions: {address.deliveryInstructions} */}
                 </Typography>
