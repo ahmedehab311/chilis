@@ -133,7 +133,7 @@ function Header({ token, handleLogout }) {
         style={{ marginLeft: 'auto' }}
       >
   <Badge badgeContent={totalItems} color="error" invisible={totalItems === 0}>
-      <ShoppingCartOutlinedIcon />
+      <ShoppingCartOutlinedIcon sx={{fontSize:"3rem",color:"#fff"}} />
     </Badge>
       </IconButton>
   </Link>

@@ -127,7 +127,6 @@
 //       onChange={handleInputChange}
 //     />
 
-
 //     <Button variant="contained" color="error" onClick={handleForgetPass}>
 //  Send
 //     </Button>
@@ -136,11 +135,11 @@
 // }
 
 // export default ForgetPass;
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, Stack } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
+import { Link, Link as RouterLink } from "react-router-dom";
 function ForgetPass() {
   const BASE_URL = "https://myres.me/chilis/api";
   const [form, setForm] = useState({
@@ -156,7 +155,7 @@ function ForgetPass() {
   };
 
   const handleForgetPass = async (event) => {
-    event.preventDefault(); 
+    event.preventDefault();
     try {
       const api_token = localStorage.getItem("token");
       // if (!api_token) {
@@ -170,7 +169,9 @@ function ForgetPass() {
       console.log(response.data);
 
       if (response.data && response.data.response) {
-        toast.success("Password reset instructions have been sent to your email!");
+        toast.success(
+          "Password reset instructions have been sent to your email!"
+        );
       } else {
         throw new Error("Password reset failed");
       }
@@ -182,37 +183,64 @@ function ForgetPass() {
 
   return (
     <Box
-    sx={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      minHeight: "100vh",
-      backgroundColor: "#f5f5f5",
-      padding: "20px",
-    }}
-  >
-      
-      <Typography variant="h6" gutterBottom>
-        Forgot Password
-       </Typography>
-     <TextField
-        label="Phone"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        name="email"
-        value={form.email}
-        onChange={handleInputChange}
-      />
-      <Button
-        variant="contained"
-        color="error"
-        onClick={handleForgetPass}
+      sx={{
+
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        backgroundColor: "#f5f5f5",
+        padding: "20px",
+      }}
+    >
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={4}
+        sx={{ width: "100%", maxWidth: "800px" }}
       >
-        Send
-      </Button>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            backgroundColor: "#fff",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: 1,
+            flex: 1,
+          }}
+        >
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ fontSize: "1.5rem", fontWeight: "400",textAlign: "center"}}
+          >
+            Forgot Password
+          </Typography>
+          <TextField
+            label="Phone"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            name="email"
+            value={form.email}
+            onChange={handleInputChange}
+          />
+          <Button variant="contained" color="error" onClick={handleForgetPass} sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+            Send
+          </Button>
+          <Link component={RouterLink} to="/login" color={"#000"}>
+              <Typography
+                variant="h6"
+                sx={{ fontSize: "1.5rem", fontWeight: "bold",textAlign: "center"  }}
+              >
+                Already have an account? Sign in
+              </Typography>
+            </Link>
+        </Box>
       
+      </Stack>
     </Box>
   );
 }

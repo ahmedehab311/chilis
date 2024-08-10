@@ -100,6 +100,7 @@ function App() {
       setToken(storedToken);
     }
   }, []);
+
   useEffect(() => {
     const storedTotalItems = localStorage.getItem('totalItems');
     if (storedTotalItems) {

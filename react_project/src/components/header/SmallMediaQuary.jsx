@@ -82,7 +82,7 @@ function SmallMediaQuery({ closeDrawer, toggleDrawer, state, handleLogout, token
               {/* <IconButton */}
    
         <Badge badgeContent={totalItems} color="error" invisible={totalItems === 0}>
-          <ShoppingCartOutlinedIcon />
+          <ShoppingCartOutlinedIcon sx={{fontSize:"3rem",color:"#fff"}} />
         </Badge>
       {/* </IconButton> */}
               </Link>

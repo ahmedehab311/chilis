@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Button, TextField, Typography, Link } from "@mui/material";
+import { Box, Button, TextField, Typography, Link, Stack } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useCheckEmailAvailability, signUpSchema } from "../../header/index";
@@ -81,82 +81,102 @@ const Register = ({ setToken }) => {
         padding: "20px",
       }}
     >
-      <Box
-        component="form"
-        onSubmit={registerUser}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          backgroundColor: "#fff",
-          padding: "20px",
-          borderRadius: "8px",
-          boxShadow: 1,
-          width: "100%",
-          maxWidth: "400px",
-        }}
+      <Stack
+        direction={{ xs: "column", md: "row" }}
+        spacing={4}
+        sx={{ width: "100%", maxWidth: "800px" }}
       >
-        <TextField
-          label="First Name"
-          {...register("firstName")}
-          error={!!errors.firstName}
-          helperText={errors.firstName?.message}
-          variant="outlined"
-          fullWidth
-          required
-          onChange={(e) => setFirst_name(e.target.value)}
-        />
-        <TextField
-          label="Email Address"
-          {...register("email")}
-          onBlur={emailOnBlurHandler}
-          variant="outlined"
-          fullWidth
-          required
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <TextField
-          label="Password"
-          type="password"
-          {...register("password")}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          variant="outlined"
-          fullWidth
-          required
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <TextField
-          label="Phone"
-          type="text"
-          {...register("phone")}
-          error={!!errors.phone}
-          helperText={errors.phone?.message}
-          variant="outlined"
-          fullWidth
-          required
-          onChange={(e) => setPhone(e.target.value)}
-        />
-        <Button
-          type="submit"
-          variant="contained"
-          color="error"
+        <Box
+          component="form"
+          onSubmit={registerUser}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            backgroundColor: "#fff",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: 1,
+            flex: 1,
+          }}
+        >
+          <Typography variant="h6" gutterBottom sx={{ textAlign: "center" }}>
+            Sign Up
+          </Typography>
+          <TextField
+            label="First Name"
+            {...register("firstName")}
+            error={!!errors.firstName}
+            helperText={errors.firstName?.message}
+            variant="outlined"
+            fullWidth
+            requiredx
+            onChange={(e) => setFirst_name(e.target.value)}
+          />
+          <TextField
+            label="Email Address"
+            {...register("email")}
+            onBlur={emailOnBlurHandler}
+            variant="outlined"
+            fullWidth
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            {...register("password")}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            variant="outlined"
+            fullWidth
+            required
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextField
+            label="Phone"
+            type="text"
+            {...register("phone")}
+            error={!!errors.phone}
+            helperText={errors.phone?.message}
+            variant="outlined"
+            fullWidth
+            required
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          {/* <Button
+            variant="h6"
+            color="error"
+            disabled={emailAvailabilityStatus === "checking"}
+            sx={{ fontSize: "1.5rem", fontWeight: "bold" }}
+          >
+            Sign Up
+          </Button> */}
+          <Button
+            type="submit"
           disabled={emailAvailabilityStatus === "checking"}
-        >
-          Sign Up
-        </Button>
-        <Typography
-          variant="body2"
-          align="center"
-          sx={{ mt: 2, fontSize: "18px" }}
-        >
-          <Link component={RouterLink} to="/login" color={"#000"}>
-            <Typography variant="h6" >
-              Already have an account? Sign in
-            </Typography>
-          </Link>
-        </Typography>
-      </Box>
+            variant="contained"
+            color="error"
+            sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+          >
+            Sign Up
+          </Button>
+          <Typography
+            variant="body2"
+            align="center"
+            sx={{ mt: 2, fontSize: "18px" }}
+          >
+            <Link component={RouterLink} to="/login" color={"#000"}>
+              <Typography
+                variant="h6"
+                sx={{ fontSize: "1.5rem", fontWeight: "bold" }}
+              >
+                Already have an account? Sign in
+              </Typography>
+            </Link>
+          </Typography>
+        </Box>
+      </Stack>
     </Box>
   );
 };

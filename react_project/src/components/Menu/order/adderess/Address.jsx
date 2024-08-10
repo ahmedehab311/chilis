@@ -104,7 +104,7 @@ function Address() {
 
   const fetchAddresses = async () => {
     try {
-      const response = await fetch(`  ${API_ADDRESS}`);
+      const response = await fetch(`${API_ADDRESS}`);
       const responseData = await response.json();
       console.log("fetch address", responseData.data.address);
       setAddressData(responseData.data.address);
