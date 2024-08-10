@@ -11,99 +11,108 @@ import {
 import "../OrderOnline.css";
 import imgLogo from "../../../../Hero/images/logo.png";
 import Counter from "../../../ButtonsMenu/CounterDiaolgButton";
-import { API_TAX } from "../../../apis&fetchData/ApiLinks";
+// import { API_TAX } from "../../../apis&fetchData/ApiLinks";
 import { useEffect, useState } from "react";
-import { Dialog, DialogActions, DialogContent, DialogTitle, Radio, RadioGroup, FormControlLabel } from "@mui/material";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+} from "@mui/material";
 import axios from "axios";
 
 function CheckOut({
-  totalToPay,
+  // totalToPay,
   handleRemoveItem,
   cartItems,
   subtotal,
   deliveryFee,
   totalPrices,
   handleCounterChange,
-  user,
-  setTotalItems
+  // user,
+  // setTotalItems,
 }) {
-  // 
+  //
   const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [showCardForm, setShowCardForm] = useState(false);
-  
+
   const handleClickOpen = () => {
     setOpenPaymentDialog(true);
   };
-  
+
   const handleClose = () => {
     setOpenPaymentDialog(false);
   };
-  
+
   const handlePaymentMethodChange = (event) => {
     setPaymentMethod(event.target.value);
-    if (event.target.value === 'card') {
+    if (event.target.value === "card") {
       setShowCardForm(true);
     } else {
       setShowCardForm(false);
     }
   };
-  
+
   const handlePlaceOrder = () => {
     handleClose();
-    if (paymentMethod === 'cash') {
-      alert('Order placed successfully with cash payment!');
-    } else if (paymentMethod === 'card') {
-      alert('Redirecting to credit card payment page...');
+    if (paymentMethod === "cash") {
+      alert("Order placed successfully with cash payment!");
+    } else if (paymentMethod === "card") {
+      alert("Redirecting to credit card payment page...");
     }
   };
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
 
- 
+  const API_TAX = "http://myres.me/chilis/api/settings";
   // في قسم useEffect الخاص بالحساب
-// useEffect(() => {
-//   // Fetch tax data when the component mounts
-//   const fetchTax = async () => {
-//     try {
-//       const response = await axios.get(API_TAX);
-//       const taxValue = response.data.data.settings.tax;
-//       setTax(taxValue);
-      
-//       // حساب الإجمالي مع الضريبة
-//       const subtotalWithDelivery = subtotal + deliveryFee;
-//       const calculatedTax = subtotalWithDelivery * (taxValue / 100);
-//       setTotalWithTax(subtotalWithDelivery + calculatedTax);
-      
-//       // console.log(response.data.data.settings.tax);
-//     } catch (error) {
-//       console.error("Error fetching tax data:", error);
-//     }
-//   };
+  useEffect(() => {
+    // Fetch tax data when the component mounts
+    const fetchTax = async () => {
+      try {
+        const response = await axios.get(API_TAX);
+        const taxValue = response.data.data.settings.tax;
+        setTax(taxValue);
 
-//   fetchTax();
-// }, [subtotal, deliveryFee]); // التأكد من تحديث totalWithTax عند تغيير subtotal أو deliveryFee
+        // حساب الإجمالي مع الضريبة
+        const subtotalWithDelivery = subtotal + deliveryFee;
+        // 100+30
+        const calculatedTax = subtotalWithDelivery * (taxValue / 100);
+        // 130 * 14/100
+        setTotalWithTax(subtotalWithDelivery + calculatedTax);
 
-useEffect(() => {
-  // Fetch tax data when the component mounts or when subtotal or deliveryFee change
-  const fetchTax = async () => {
-    try {
-      const response = await axios.get(API_TAX);
-      const taxValue = response.data.data.settings.tax;
-      setTax(taxValue);
-      
-      // حساب الإجمالي مع الضريبة
-      const subtotalWithDelivery = subtotal + deliveryFee;
-      const calculatedTax = subtotalWithDelivery * (taxValue / 100);
-      setTotalWithTax(subtotalWithDelivery + calculatedTax);
-    } catch (error) {
-      console.error("Error fetching tax data:", error);
-    }
-  };
+        // console.log(response.data.data.settings.tax);
+      } catch (error) {
+        console.error("Error fetching tax data:", error);
+      }
+    };
 
-  fetchTax();
-}, [subtotal, deliveryFee]); // تأكد من أن subtotal و deliveryFee يتغيران فقط عند الضرورة
+    fetchTax();
+  }, [subtotal, deliveryFee, totalWithTax]); // التأكد من تحديث totalWithTax عند تغيير subtotal أو deliveryFee
 
+  // useEffect(() => {
+  //   // Fetch tax data when the component mounts or when subtotal or deliveryFee change
+  //   const fetchTax = async () => {
+  //     try {
+  //       const response = await axios.get(API_TAX);
+  //       const taxValue = response.data.data.settings.tax;
+  //       setTax(taxValue);
+
+  //       // حساب الإجمالي مع الضريبة
+  //       const subtotalWithDelivery = subtotal + deliveryFee;
+  //       const calculatedTax = subtotalWithDelivery * (taxValue / 100);
+  //       setTotalWithTax(subtotalWithDelivery + calculatedTax);
+  //     } catch (error) {
+  //       console.error("Error fetching tax data:", error);
+  //     }
+  //   };
+
+  //   fetchTax();
+  // }, [subtotal, deliveryFee]); // تأكد من أن subtotal و deliveryFee يتغيران فقط عند الضرورة
 
   return (
     <Container
@@ -118,6 +127,8 @@ useEffect(() => {
         border: "1px solid #dee2e6!important",
         borderRadius: ".25rem !important",
         boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
+        maxHeight: "550px",
+        overflowY: "auto",
         "@media (max-width: 1000px)": {
           margin: "0 auto",
           mt: "2rem",
@@ -128,7 +139,10 @@ useEffect(() => {
         className="headerOrderOnline"
         direction={"row"}
         alignItems={"center"}
-        sx={{ p: 1, borderBottom:"2px solid #ececec" }}
+        sx={{
+          p: 1,
+          borderBottom: "2px solid #ececec",
+        }}
       >
         <img
           className="imgOrder"
@@ -149,7 +163,7 @@ useEffect(() => {
         </Typography>
       </Box>
 
-      <Container sx={{ margin: "0 auto",borderBottom:"2px solid #ececec" }}>
+      <Container sx={{ margin: "0 auto", borderBottom: "2px solid #ececec" }}>
         <Box
           className="orderNow"
           sx={{
@@ -159,7 +173,7 @@ useEffect(() => {
           {cartItems.length === 0
             ? null
             : cartItems.map((item, index) => (
-                <Card key={index} sx={{ p: 2, my:3 }}>
+                <Card key={index} sx={{ p: 2, my: 3 }}>
                   <Stack sx={{ position: "relative" }}>
                     <Stack
                       sx={{ display: "flex" }}
@@ -169,7 +183,7 @@ useEffect(() => {
                       <Typography
                         sx={{
                           color: "#000",
-                          fontSize: "2.5rem",
+                          fontSize: "2rem",
                           fontWeight: "bold",
                           fontFamily: "cairo",
                         }}
@@ -218,7 +232,7 @@ useEffect(() => {
                       <Typography
                         sx={{
                           color: "#17a2b8!important",
-                       fontSize: "1.8rem",
+                          fontSize: "1.8rem",
                           fontWeight: "bold",
                           fontFamily: "cairo",
                         }}
@@ -232,6 +246,7 @@ useEffect(() => {
                         }
                       />
                     </Stack>
+
                     <Stack
                       sx={{
                         display: "flex",
@@ -256,7 +271,53 @@ useEffect(() => {
                           fontWeight: 500,
                         }}
                       >
-                        {totalPrices[index] || item.price} EGP
+                        {(totalPrices[index] || item.price).toFixed(2)} EGP
+                      </Typography>
+                    </Stack>
+                    <Stack>
+                      {item.extras && item.extras.length > 0 && (
+                        <Stack>
+                          {item.extras.map((extra, i) => (
+                            <Stack
+                              key={i}
+                              direction={"row"}
+                              alignItems={"center"}
+                              sx={{ justifyContent: "space-between" }}
+                            >
+                              <Typography
+                                sx={{
+                                  color: "#17a2b8!important",
+                                  fontSize: "1.8rem",
+                                  fontWeight: "bold",
+                                  fontFamily: "cairo",
+                                }}
+                              >
+                                {extra.name}
+                              </Typography>{" "}
+                              <Typography
+                                sx={{
+                                  color: "#17a2b8!important",
+                                  fontSize: "1.8rem",
+                                  fontWeight: "bold",
+                                  fontFamily: "cairo",
+                                }}
+                              >
+                                {" "}
+                                {extra.price} EGP
+                              </Typography>
+                            </Stack>
+                          ))}
+                        </Stack>
+                      )}
+                      <Typography
+                        sx={{
+                          color: "#17a2b8!important",
+                          fontSize: "1.8rem",
+                          fontWeight: "bold",
+                          fontFamily: "cairo",
+                        }}
+                      >
+                        {item.extras.name}
                       </Typography>
                     </Stack>
                     <TextField
@@ -265,7 +326,7 @@ useEffect(() => {
                         transition: "1s",
                         "& input::placeholder": {
                           color: "gray",
-                          fontSize: "13px",
+                          fontSize: "1.3rem",
                           textAlign: "center",
                         },
                       }}
@@ -276,85 +337,70 @@ useEffect(() => {
         </Box>
       </Container>
 
-      {/* <Stack className="middleOrder" sx={{ p: 2 }}>
-        <TextField
-          className="formControl"
-          id="outlined-basic"
-          placeholder="Any notes? please enter it here."
-          fullWidth
-          multiline
-          minRows={5}
-          sx={{
-            width: "100%",
-            justifyContent: "center",
-            alignItems: "center",
-            transition: ".5s",
-            "& input::placeholder": {
-              color: "red",
-              fontSize: "22px",
-              textAlign: "center",
-            },
-          }}
-        />
-      </Stack> */}
-      <Stack className="middleOrder" sx={{ p: 2,borderBottom:"2px solid #ececec" }}>
-      <Stack className="middleOrder" sx={{ p: 2 }}>
-  <Stack direction="row" spacing={0} alignItems="center">
-    <TextField
-      id="coupon-code-input"
-      placeholder="Enter coupon code"
-      sx={{
-     
-        flex: 1,
-        "& .MuiInputBase-input": {
-          padding: "13px 10px !important",
-        },
-        "& input::placeholder": {
-          fontSize: "16px",
-        },
-        borderTopRightRadius: 0,
-        borderBottomRightRadius: 0,
-      }}
-    />
-    <Button
-      variant="contained"
-      color="primary"
-      sx={{
-        p:"10px 16px !important",
-        height: '100%',
-        borderTopLeftRadius: 0,
-        borderBottomLeftRadius: 0,
-        backgroundColor: "#1976d2",
-        "&:hover": { backgroundColor: "#115293" },
-      }}
-    >
-      Apply
-    </Button>
-  </Stack>
-  <TextField
-    className="formControl"
-    id="outlined-basic"
-    placeholder="Any notes? please enter it here."
-    fullWidth
-    multiline
-    minRows={5}
-    sx={{
-    
-      width: "100%",
-      justifyContent: "center",
-      alignItems: "center",
-      transition: ".5s",
-      "& input::placeholder": {
-        color: "red",
-        fontSize: "22px",
-        textAlign: "center",
-      },
-    }}
-  />
-</Stack>
-
-
-</Stack>
+      <Stack
+        className="middleOrder"
+        sx={{ p: 2, borderBottom: "2px solid #ececec" }}
+      >
+        <Stack className="middleOrder" sx={{ p: 2 }}>
+          <Stack
+            direction="row"
+            spacing={0}
+            alignItems="center"
+            sx={{ mb: "1rem" }}
+          >
+            <TextField
+              id="coupon-code-input"
+              placeholder="Enter coupon code"
+              sx={{
+                flex: 1,
+                "& .MuiInputBase-input": {
+                  padding: "1.1rem 1rem !important",
+                  borderTopRightRadius: 0,
+                  borderBottomRightRadius: 0,
+                },
+                "& input::placeholder": {
+                  fontSize: "1.6rem",
+                },
+              }}
+            />
+            <Stack>
+              <Button
+                variant="contained"
+                color="error"
+                sx={{
+                  p: "10px 16px !important",
+                  height: "100%",
+                  borderTopLeftRadius: 0,
+                  borderBottomLeftRadius: 0,
+                  backgroundColor: "#d32f2f",
+                  "&:hover": { backgroundColor: "#d32f2f" },
+                }}
+              >
+                Apply
+              </Button>
+            </Stack>
+          </Stack>
+          <TextField
+            className="formControl"
+            id="outlined-basic"
+            placeholder="Any notes? please enter it here."
+            fullWidth
+            multiline
+            minRows={5}
+            sx={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: "center",
+              transition: ".5s",
+              "& input::placeholder": {
+                color: "red",
+                fontSize: "22px",
+                textAlign: "center",
+              },
+            }}
+          />
+        </Stack>
+      </Stack>
 
       <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
         <Stack
@@ -369,7 +415,7 @@ useEffect(() => {
             Subtotal:
           </Typography>{" "}
           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {subtotal} EGP
+            {subtotal.toFixed(2)} EGP
           </Typography>
         </Stack>
         <Stack
@@ -390,7 +436,7 @@ useEffect(() => {
             Delivery Fee:{" "}
           </Typography>{" "}
           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {deliveryFee} EGP
+            {deliveryFee.toFixed(2)} EGP
           </Typography>
         </Stack>
         <Stack
@@ -402,11 +448,11 @@ useEffect(() => {
           alignItems={"center"}
         >
           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            Tax ({tax} %):
+            Tax {tax} %
           </Typography>
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+          {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
             {(subtotal * tax / 100).toFixed(2)} EGP
-          </Typography>
+          </Typography> */}
         </Stack>
         <Stack
           sx={{
@@ -425,57 +471,47 @@ useEffect(() => {
           </Typography>
         </Stack>
         <Stack className="stackBtn" sx={{ p: 2 }}>
-        <Button
-      color="error"
-      variant="contained"
-      className="placeOrderBtn"
-      disabled={cartItems.length === 0}
-      onClick={handleClickOpen}
-    >
-      PLACE ORDER
-    </Button>
-
+          <Button
+            color="error"
+            variant="contained"
+            className="placeOrderBtn"
+            disabled={cartItems.length === 0}
+            onClick={handleClickOpen}
+          >
+            PLACE ORDER
+          </Button>
         </Stack>
         <Dialog open={openPaymentDialog} onClose={handleClose}>
-      <DialogTitle>Select Payment Method</DialogTitle>
-      <DialogContent>
-        <RadioGroup
-          value={paymentMethod}
-          onChange={handlePaymentMethodChange}
-        >
-          <FormControlLabel value="cash" control={<Radio />} label="Cash" />
-          <FormControlLabel value="card" control={<Radio />} label="Credit Card" />
-        </RadioGroup>
-        {showCardForm && (
-          <Box mt={2}>
-            <TextField
-              label="Card Number"
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="Expiry Date"
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="CVV"
-              fullWidth
-              margin="normal"
-            />
-          </Box>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color="primary">
-          Cancel
-        </Button>
-        <Button onClick={handlePlaceOrder} color="primary">
-          Confirm
-        </Button>
-      </DialogActions>
-    </Dialog>
-
+          <DialogTitle>Select Payment Method</DialogTitle>
+          <DialogContent>
+            <RadioGroup
+              value={paymentMethod}
+              onChange={handlePaymentMethodChange}
+            >
+              <FormControlLabel value="cash" control={<Radio />} label="Cash" />
+              <FormControlLabel
+                value="card"
+                control={<Radio />}
+                label="Credit Card"
+              />
+            </RadioGroup>
+            {showCardForm && (
+              <Box mt={2}>
+                <TextField label="Card Number" fullWidth margin="normal" />
+                <TextField label="Expiry Date" fullWidth margin="normal" />
+                <TextField label="CVV" fullWidth margin="normal" />
+              </Box>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="error">
+              Cancel
+            </Button>
+            <Button onClick={handlePlaceOrder} color="error">
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Stack>
     </Container>
   );

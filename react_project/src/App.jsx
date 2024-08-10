@@ -35,7 +35,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     "/profile",
     "/order-online",
     "/change-password",
-    "/My_orders",
+    "/my_orders",
   ];
 
   const handleLogout = () => {
@@ -81,7 +81,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
           element={<ChangePasswordFromProfile />}
         />
         <Route path="/order-online" element={<OrderOnline />} />
-        <Route path="/My_orders" element={<MyOrders />} />
+        <Route path="/my_orders" element={<MyOrders />} />
 
         <Route path="*" element={<Error />} />
       </Routes>

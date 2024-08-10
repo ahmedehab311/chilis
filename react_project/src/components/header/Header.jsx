@@ -14,7 +14,7 @@ import {
 // import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import Hero from "../Hero/Hero";
 import SmallMediaQuary from "./SmallMediaQuary";
@@ -58,7 +58,7 @@ function Header({ token, handleLogout }) {
 
   return (
     <Stack className="hero">
-    {/* header only */}
+      {/* header only */}
       <Stack sx={{ bgcolor: "#050304", p: 1, position: "relative" }}>
         {useMediaQuery("(min-width:1000px)") && (
           <>
@@ -125,19 +125,21 @@ function Header({ token, handleLogout }) {
                   Contact Us
                 </Typography>
               </Link>
-          
               {token ? (
-  <Link component={RouterLink} to="/order-online">
-  <IconButton
-        aria-label="cart"
-        style={{ marginLeft: 'auto' }}
-      >
-  <Badge badgeContent={totalItems} color="error" invisible={totalItems === 0}>
-      <ShoppingCartOutlinedIcon sx={{fontSize:"3rem",color:"#fff"}} />
-    </Badge>
-      </IconButton>
-  </Link>
-) : null}
+                <Link component={RouterLink} to="/order-online">
+                  <IconButton aria-label="cart" style={{ marginLeft: "auto" }}>
+                    <Badge
+                      badgeContent={totalItems}
+                      color="error"
+                      invisible={totalItems === 0}
+                    >
+                      <ShoppingCartOutlinedIcon
+                        sx={{ fontSize: "3rem", color: "#fff" }}
+                      />
+                    </Badge>
+                  </IconButton>
+                </Link>
+              ) : null}
               {token ? (
                 <>
                   <IconButton
@@ -178,7 +180,7 @@ function Header({ token, handleLogout }) {
                     <MenuItem
                       onClick={handleClose}
                       component={RouterLink}
-                      to="/My_orders"
+                      to="/my_orders"
                     >
                       My ordres
                     </MenuItem>

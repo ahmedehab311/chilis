@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 const BASE_URL = "https://myres.me/chilis/";
 
 const APIURL = "https://myres.me/chilis/api/menu/2/1";
