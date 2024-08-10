@@ -100,12 +100,18 @@ function App() {
       setToken(storedToken);
     }
   }, []);
- useEffect(() => {
-    const storedTotalItems = parseInt(localStorage.getItem('totalItems'), 10);
-    if (!isNaN(storedTotalItems)) {
-      dispatch(setTotalItems(storedTotalItems));
+  useEffect(() => {
+    const storedTotalItems = localStorage.getItem('totalItems');
+    if (storedTotalItems) {
+      dispatch(setTotalItems(parseInt(storedTotalItems, 10)));
     }
   }, [dispatch]);
+  //  useEffect(() => {
+  //   // Reset the badge count to zero
+  //   localStorage.setItem('totalItems', '0');
+  //   dispatch(setTotalItems(0));
+  // }, [dispatch]);
+
   return (
     <>
       <CartProvider>

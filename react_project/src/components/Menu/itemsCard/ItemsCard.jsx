@@ -13,7 +13,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
       return (
         <>
           {text.slice(0, length)}
-          <span style={{  cursor: "pointer", textDecoration: "underline" }} >
+          <span style={{  cursor: "pointer", textDecoration: "underline", margin:"0 1rem 0 1rem" }} >
            Read More
           </span>
         </>

@@ -3,31 +3,30 @@ import {
   Stack,
   TextField,
   Typography,
-  Card,
-  Button,
   CircularProgress,
   Select,
   MenuItem,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogTitle,
   IconButton,
 } from "@mui/material";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-
+// import Dialog from "./addressDaiolg/Dialog";
+import AddressData from "./addressData/AddressData";
+import {
+  api_token,
+  API_AREAS,
+  API_CITIES,
+  API_ADDRESS,
+  API_ADD_ADDRESS,
+  API_DELETE_ADDRESS,
+} from "./api";
+import AddNewAddressButton from "../buttons/AddNewAddressButton";
+import DiaolgButtonsAddress from "../buttons/AddressDiaolgButtons";
+import DiaolgLabels from "../buttons/DiaolgLabels";
 function Address() {
-  const API_CITIES = "https://myres.me/chilis/api/cities";
-  const API_AREAS = "https://myres.me/chilis/api/areas?city=";
-  const api_token = localStorage.getItem("token");
-  // const API_ADDRESS = https://myres.me/chilis/api//profile/address/?api_token=${api_token};
-  const API_ADDRESS = `https://myres.me/chilis/api/profile/address?api_token=${api_token}`;
-  const API_ADD_ADDRESS = `https://myres.me/chilis/api/profile/address/add`;
-  const API_DELETE_ADDRESS = (id) =>
-    `https://myres.me/chilis/api/profile/address/delete/${id}?api_token=${api_token}`;
-
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
@@ -37,9 +36,9 @@ function Address() {
   const [open, setOpen] = useState(false);
   const [addressData, setAddressData] = useState([]);
   const [user, setUser] = useState(null);
-  const [activeIndex, setActiveIndex] = useState(null);
+  // const [activeIndex, setActiveIndex] = useState(null);
   const [errors, setErrors] = useState({});
-  const [addressName, setAddressName] = useState({});
+  // const [addressName, setAddressName] = useState({});
   const [currentAddress, setCurrentAddress] = useState({
     deliveryCity: "",
     deliveryArea: "",
@@ -105,10 +104,7 @@ function Address() {
 
   const fetchAddresses = async () => {
     try {
-      const response = await fetch(
-        // https://myres.me/chilis/api/profile/address?api_token=${api_token}
-      `  ${API_ADDRESS}`
-      );
+      const response = await fetch(`  ${API_ADDRESS}`);
       const responseData = await response.json();
       console.log("fetch address", responseData.data.address);
       setAddressData(responseData.data.address);
@@ -119,76 +115,6 @@ function Address() {
   const handleSelectLabel = (label) => {
     setCurrentAddress((prev) => ({ ...prev, label }));
   };
-  // const handleAddAddress = async () => {
-  //   const requiredFields = [
-  //     "deliveryCity",
-  //     "deliveryArea",
-  //     "street",
-  //     "building",
-  //     // "floor",
-  //     // "apt",
-  //   ];
-  //   const newErrors = {};
-
-  //   requiredFields.forEach((field) => {
-  //     if (!currentAddress[field]) {
-  //       newErrors[field] = "This field is required";
-  //     }
-  //   });
-
-  //   if (Object.keys(newErrors).length > 0) {
-  //     setErrors(newErrors);
-  //     return;
-  //   }
-
-  //   const queryParams = new URLSearchParams({
-  //     area: currentAddress.deliveryArea,
-  //     street: currentAddress.street,
-  //     building: currentAddress.building,
-  //     floor: currentAddress.floor,
-  //     apt: currentAddress.apt,
-  //     name: currentAddress.label,
-  //     lat: "0",
-  //     lng: "0",
-  //     api_token: api_token,
-  //   });
-  //   handleClose();
-  //   try {
-  //     const response = await axios.post(
-  //       `https://myres.me/chilis/api/profile/address/add?${queryParams.toString()}`
-  //     );
-  //     fetchAddresses();
-  //     console.log("Response Data:", response.data);
-
-  //     const dataResponse = await response.json();
-  //     console.log("response", dataResponse);
-  //     console.log(dataResponse);
-
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-  //     if (dataResponse.response  ) {
-  //       setCurrentAddress({
-  //         deliveryCity: "",
-  //         deliveryArea: "",
-  //         street: "",
-  //         building: "",
-  //         floor: "",
-  //         apt: "",
-  //         deliveryInstructions: "",
-  //         label: "",
-  //       });
-  //       handleClose();
-  //       fetchAddresses();
- 
-  //       setErrors({});
-  //     } else {
-  //       console.error("Error adding address:", dataResponse.message);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error adding address:", error);
-  //   }
-  // };
   const handleAddAddress = async () => {
     const requiredFields = [
       "deliveryCity",
@@ -199,18 +125,18 @@ function Address() {
       // "apt",
     ];
     const newErrors = {};
-  
+
     requiredFields.forEach((field) => {
       if (!currentAddress[field]) {
         newErrors[field] = "This field is required";
       }
     });
-  
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-  
+
     const queryParams = new URLSearchParams({
       area: currentAddress.deliveryArea,
       street: currentAddress.street,
@@ -222,23 +148,23 @@ function Address() {
       lng: "0",
       api_token: api_token,
     });
-  
+
     try {
       const response = await axios.post(
-        `https://myres.me/chilis/api/profile/address/add?${queryParams.toString()}`
+        `${API_ADD_ADDRESS}${queryParams.toString()}`
       );
-  
+
       // تحقق من الشكل الفعلي للبيانات المستلمة
       const dataResponse = response.data;
       console.log("response", dataResponse);
-  
+
       // تحقق من الاستجابة بشكل صحيح
       if (dataResponse.response) {
         handleClose(); // أغلق الحوار أولاً
-  
+
         // انتظر حتى يتم إغلاق الحوار
         await new Promise((resolve) => setTimeout(resolve, 500));
-  
+
         // ثم قم بتفريغ الحقول
         setCurrentAddress({
           deliveryCity: "",
@@ -251,17 +177,19 @@ function Address() {
           label: "",
         });
         setErrors({});
-        
+
         // جلب العناوين المحدثة
         fetchAddresses();
       } else {
-        console.error("Error adding address:", dataResponse.message || "Unknown error");
+        console.error(
+          "Error adding address:",
+          dataResponse.message || "Unknown error"
+        );
       }
     } catch (error) {
       console.error("Error adding address:", error);
     }
   };
-  
 
   useEffect(() => {
     fetchAddresses();
@@ -309,10 +237,15 @@ function Address() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setCurrentAddress((prevAddress) => ({
-      ...prevAddress,
-      [name]: value,
-    }));
+    setCurrentAddress((prevAddress) => ({ ...prevAddress, [name]: value }));
+    if (!value.trim()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "This field is required",
+      }));
+    } else {
+      setErrors((prevErrors) => ({ ...prevErrors, [name]: null }));
+    }
   };
 
   const handleBlur = (e) => {
@@ -339,129 +272,22 @@ function Address() {
       </Typography>
       */}
       <Stack>
-              <Typography
-                sx={{
-                  fontSize: "18px",
-                  fontWeight: 700,
-                  textAlign: "left",
-                  fontFamily: "cairo",
-                }}
-              >
-                Your Delivery Address List
-              </Typography>
-            </Stack>
-      {addressData.length > 0 ? (
-       
-        addressData.map((address, index) => (
-
-          <Card
-            key={index}
-            sx={{
-              mb: 3,
-              border: activeIndex === index ? "2px solid #d32f2f" : "none",
-            }}
-            onClick={() => setActiveIndex(index)}
-          >
-       
-            <Stack sx={{ background: "#f8f9fa!important", p: 2 }}>
-              <Typography
-                sx={{
-                  fontSize: "1.4rem",
-                  fontWeight: "500",
-                  lineHeight: "1.2",
-                }}
-              >
-                {address.address_name}
-              </Typography>
-            </Stack>
-            <Stack
-              sx={{ display: "flex", p: ".5rem" }}
-              direction={"row"}
-              alignItems={"center"}
-            >
-              <Stack sx={{ p: "1.5rem" }}>
-                <Typography
-                  sx={{
-                    display: "flex",
-                    color: "#6c757d!important",
-                    fontSize: "1.3rem",
-                    fontWeight: "500",
-                    lineHeight: "1.2",
-                    textTransform: "capitalize",
-                  }}
-                >
-                  {address.building}, {address.street},{address.area.area_name_en},
-                  {address.city.name_en},Building: {address.building} - Floor:{" "}
-                  {address.floor} 
-                  {/* Apt: {address.apt} */}
-                  <br />
-                  {/* Instructions: {address.deliveryInstructions} */}
-                </Typography>
-              </Stack>
-              <Stack
-                fontSize="22px"
-                direction={"row"}
-                alignItems={"center"}
-                sx={{
-                  border: "1px solid #dc3545",
-                  fontSize: "1.2rem",
-                  p: ".8rem 1.5rem",
-                  cursor: "pointer",
-                  "&:hover": {
-                    backgroundColor: "#dc3545",
-                    color: "#fff",
-                    "& .MuiSvgIcon-root": {
-                      color: "#fff",
-                    },
-                  },
-                }}
-                onClick={(e) => {
-                  e.stopPropagation(); // Prevent event bubbling to Card
-                  handleDeleteAddress(address.id);
-                }}
-              >
-                <Typography
-                  sx={{
-                    pr: 2,
-                    fontSize: "1.2rem",
-                    fontWeight: "500",
-                    lineHeight: "1.2",
-                    p: ".6rem .8rem",
-                  }}
-                >
-                  Delete
-                </Typography>
-                <DeleteOutlineOutlinedIcon />
-              </Stack>
-            </Stack>
-          </Card>
-        ))
-      ) : (
         <Typography
           sx={{
-            fontSize: "1.2rem",
-            fontWeight: "bold",
-            lineHeight: "1.2",
+            fontSize: "18px",
+            fontWeight: 700,
+            textAlign: "left",
+            fontFamily: "cairo",
           }}
         >
-          No address found ...
+          Your Delivery Address List
         </Typography>
-      )}
-      <Stack>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleClickOpen}
-          sx={{
-            backgroundColor: "#d32f2f",
-            "&:hover": {
-              backgroundColor: "#9a0007",
-            },
-          }}
-        >
-          Add New Address
-        </Button>
       </Stack>
+      <AddressData
+        handleDeleteAddress={handleDeleteAddress}
+        addressData={addressData}
+      />
+      <AddNewAddressButton handleClickOpen={handleClickOpen} />
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>
@@ -469,6 +295,7 @@ function Address() {
             sx={{
               fontSize: "1.5rem",
               fontWeight: "500",
+              textAlign: "left",
             }}
           >
             Add Address
@@ -561,61 +388,31 @@ function Address() {
               value={currentAddress.deliveryInstructions}
               onChange={handleInputChange}
             />
-            <Stack
-              direction="row"
-              spacing={1}
-              mt={2}
-              sx={{
-                "@media (max-width: 700px)": {
-                  flexWrap: "wrap !important",
-                },
-              }}
-            >
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleSelectLabel("Home")}
-                sx={{
-                  border:
-                    currentAddress.label === "Home" ? "2px solid #d32f2f" : "",
-                }}
-              >
-                Home
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleSelectLabel("Work")}
-                sx={{
-                  border:
-                    currentAddress.label === "Work" ? "2px solid #d32f2f" : "",
-                }}
-              >
-                Work
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() => handleSelectLabel("Other")}
-                sx={{
-                  border:
-                    currentAddress.label === "Other" ? "2px solid #d32f2f" : "",
-                }}
-              >
-                Other
-              </Button>
-            </Stack>
+            <DiaolgLabels
+              handleSelectLabel={handleSelectLabel}
+              currentAddress={currentAddress}
+            />
           </Stack>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleAddAddress} color="primary">
-            Add Address
-          </Button>
-        </DialogActions>
+
+        <DiaolgButtonsAddress
+          handleClose={handleClose}
+          handleAddAddress={handleAddAddress}
+        />
       </Dialog>
+      {/* <Dialog 
+          handleClose={handleClose}
+  handleBlur={handleBlur}
+  handleInputChange={handleInputChange}
+  handleAreaChange={handleAreaChange}
+  open={open}
+  loadingCities={loadingCities}
+  cities={cities}
+  loadingAreas={loadingAreas}
+  selectedCity={selectedCity}
+  areas={areas}
+  errors={errors}
+      /> */}
     </Stack>
   );
 }

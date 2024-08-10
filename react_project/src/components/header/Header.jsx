@@ -55,6 +55,7 @@ function Header({ token, handleLogout }) {
   // const totalCounter = cartItems.reduce((total, item) => total + item.quantity, 0);
   // const navigate = useNavigate();
   const totalItems = useSelector((state) => state.cart.totalItems);
+
   return (
     <Stack className="hero">
     {/* header only */}
@@ -131,9 +132,9 @@ function Header({ token, handleLogout }) {
         aria-label="cart"
         style={{ marginLeft: 'auto' }}
       >
-        <Badge badgeContent={totalItems} color="error" invisible={totalItems === 0}>
-          <ShoppingCartOutlinedIcon />
-        </Badge>
+  <Badge badgeContent={totalItems} color="error" invisible={totalItems === 0}>
+      <ShoppingCartOutlinedIcon />
+    </Badge>
       </IconButton>
   </Link>
 ) : null}

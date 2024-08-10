@@ -3,8 +3,11 @@ import { Stack } from "@mui/material";
 import "./OrderOnline.css";
 import CheckOut from "./checkOut/CheckOut";
 import Address from "../adderess/Address";
+import { useDispatch } from 'react-redux';
+import { removeItemFromCart } from "../../../../rtk/slices/orderSlice"; 
 // import img from "../"
 function OrderOnline() {
+  const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState([]);
   const [totalPrices, setTotalPrices] = useState({});
   const [cities, setCities] = useState([]);
@@ -14,18 +17,29 @@ function OrderOnline() {
   const API_CITIES = "https://myres.me/chilis/api/cities";
   const API_ARIA = (cityId) =>
     `https://myres.me/chilis/api/areas/?city=${cityId}`;
-  useEffect(() => {
-    // الحصول على العناصر المخزنة في السلة من localStorage عند تحميل المكون
-    const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartItems(storedCartItems);
+  // useEffect(() => {
+  //   // الحصول على العناصر المخزنة في السلة من localStorage عند تحميل المكون
+  //   const storedCartItems = JSON.parse(localStorage.getItem("cart")) || [];
+  //   setCartItems(storedCartItems);
 
-    // تهيئة الأسعار الإجمالية
-    const initialPrices = {};
-    storedCartItems.forEach((item, index) => {
-      initialPrices[index] = item.price;
-    });
-    setTotalPrices(initialPrices);
+  //   const initialPrices = {};
+  //   storedCartItems.forEach((item, index) => {
+  //     initialPrices[index] = item.price;
+  //   });
+  //   setTotalPrices(initialPrices);
+  // }, []);
+
+  const [bageCount,setBadgeCount] = useState(0)
+
+  useEffect(() => {
+    // تحديث عدد العناصر في البادج بناءً على العناصر الموجودة في السلة عند تحميل الصفحة
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    setBadgeCount(cart.length);
+    setCartItems(cart);
+
+    // يمكنك أيضاً تحميل الأسعار هنا إذا كنت تريد
   }, []);
+
 
   useEffect(() => {
     // تحديث الأسعار الإجمالية عند تغيير العناصر في السلة
@@ -43,18 +57,60 @@ function OrderOnline() {
     }));
   };
 
+  // const handleRemoveItem = (index) => {
+  //   // الحصول على السلة الحالية من localStorage
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  //   // إزالة العنصر من السلة
+  //   cart.splice(index, 1);
+
+  //   // حفظ السلة المحدثة في localStorage
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+
+  //   // تحديث الحالة
+  //   setCartItems(cart);
+  //   setTotalPrices((prevPrices) => {
+  //     const newPrices = { ...prevPrices };
+  //     delete newPrices[index];
+  //     return newPrices;
+  //   });
+  // };
+  
+  // const handleRemoveItem = (index) => {
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  
+  //   cart.splice(index, 1);
+  
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+  
+  //   setCartItems(cart);
+  //   setTotalPrices((prevPrices) => {
+  //     const newPrices = { ...prevPrices };
+  //     delete newPrices[index];
+  //     return newPrices;
+  //   });
+  
+  //   // تحديث badgeCount
+  //   setBadgeCount(cart.length);
+  //   console.log(cart.length)
+  // };
+  // const dispatch = useDispatch();
   const handleRemoveItem = (index) => {
-    // الحصول على السلة الحالية من localStorage
+  
+    // حذف العنصر من Redux store
+    dispatch(removeItemFromCart(index));
+  
+    // تحديث localStorage إذا كان لديك منطق إضافي هناك
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    // إزالة العنصر من السلة
     cart.splice(index, 1);
-
-    // حفظ السلة المحدثة في localStorage
     localStorage.setItem("cart", JSON.stringify(cart));
-
-    // تحديث الحالة
+    
+    // تحديث الحالة في الواجهة الأمامية إذا لزم الأمر
     setCartItems(cart);
+  
+    // عرض عدد العناصر في البادج بعد التحديث
+    console.log("Updated badge count:", cart.length);
+  
     setTotalPrices((prevPrices) => {
       const newPrices = { ...prevPrices };
       delete newPrices[index];
