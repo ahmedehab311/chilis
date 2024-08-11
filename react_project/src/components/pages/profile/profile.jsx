@@ -229,14 +229,22 @@
 // };
 
 // export default Profile;
-import { Box, Typography, TextField, Button, Stack, CardMedia } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Stack,
+  CardMedia,
+  Card,
+} from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 // import img from "./user-profile-icon"
-
- const Profile = () => {
+import CardProfile from "./cardProfile";
+const Profile = () => {
   const BASE_URL = "https://myres.me/chilis/api";
   const navigate = useNavigate();
   const [user, setUser] = useState({
@@ -288,83 +296,120 @@ import { useNavigate } from "react-router-dom";
   };
 
   return (
-<>
-
-{/* <Box sx={{
-       padding: 2,
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        boxShadow: 1,
-        maxWidth: "800px",
-    }}>
-    
-   <Stack alignItems={"end"}>
-   <img src={img} alt="User" style={{ borderRadius: '50%', width: '100px', height: '100px' }} />
-   <Typography sx={{fontSize:"22px", fontWight:"bold"}}>{user.user_name}</Typography>
-   <Typography sx={{fontSize:"18px", fontWight:"bold"}}>{user.email}</Typography>
-   </Stack>
-    </Box> */}
-<Stack direction={"row"} alignItems={"center"}  sx={{display:"flex"}}>
-
-
-
-    <Box
-      sx={{
-        padding: 2,
-        backgroundColor: "#fff",
-        borderRadius: "8px",
-        boxShadow: 1,
-        // width: "100%",
-        maxWidth: "800px",
-        margin: "auto",
-      }}
-    >
-      <Typography va riant="h6" gutterBottom>
-        My Account
-      </Typography>
-      <TextField
-        label="Name"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        name="user_name"
-        value={user.user_name}
-        onChange={handleInputChange}
-      />
-      <TextField
-        label="Phone"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        name="phone"
-        value={user.phone}
-        onChange={handleInputChange}
-      />
-      <TextField
-        label="Email"
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        name="email"
-        value={user.email}
-        onChange={handleInputChange}
-      />
-
-      <Button variant="contained" color="error" onClick={handleSave}>
-        Save changes
-      </Button>
-      <Button
-        variant="contained"
-        color="error"
-        onClick={handleChangePassword}
-        sx={{ marginLeft: "10px" }}
+    <>
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        sx={{
+          display: "flex",
+          "@media (max-width: 1000px)": {
+            flexDirection: "column !important",
+          },
+        }}
       >
-        Change password
-      </Button>
-      
-    </Box>
-</Stack>
-</>
+        <CardProfile user={user} />
+        <Stack
+          direction={"row"}
+          alignItems={"center"}
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
+          <Box
+            sx={{
+              padding: 2,
+              backgroundColor: "#fff",
+              borderRadius: "8px",
+              boxShadow: 1,
+              // width: "100%",
+              maxWidth: "800px",
+              margin: "4rem 1rem 1rem 1rem",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Typography
+              va
+              riant="h6"
+              gutterBottom
+              sx={{ fontSize: "2rem", fontWeight: "600" }}
+            >
+              My Account
+            </Typography>
+            <TextField
+              label="Name"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              name="user_name"
+              value={user.user_name}
+              onChange={handleInputChange}
+              sx={{
+                "& .MuiInputBase-input": {
+                  fontSize: "1.5rem", // لتغيير حجم النص
+                  color: "gray",
+                },
+                "& .MuiInputLabel-root": {
+                  fontSize: "1.2rem", // لتكبير حجم الـ label
+                },
+              }}
+            />
+            <TextField
+              label="Phone"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              name="phone"
+              value={user.phone}
+              onChange={handleInputChange}
+              sx={{
+                "& .MuiInputBase-input": {
+                  fontSize: "1.5rem", // لتغيير حجم النص
+                  color: "gray",
+                },
+                "& .MuiInputLabel-root": {
+                  fontSize: "1.2rem", // لتكبير حجم الـ label
+                },
+              }}
+            />
+            <TextField
+              label="Email"
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              name="email"
+              value={user.email}
+              onChange={handleInputChange}
+              sx={{
+                "& .MuiInputBase-input": {
+                  fontSize: "1.5rem", // لتغيير حجم النص
+                  color: "gray",
+                },
+                "& .MuiInputLabel-root": {
+                  fontSize: "1.2rem", // لتكبير حجم الـ label
+                },
+              }}
+            />
+
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              sx={{ display: "flex", flexWrap: "wrap" }}
+            >
+              <Button variant="contained" color="error" onClick={handleSave}>
+                Save changes
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleChangePassword}
+                sx={{ marginLeft: "10px" }}
+              >
+                Change password
+              </Button>
+            </Stack>
+          </Box>
+        </Stack>
+      </Stack>
+    </>
   );
 };
 

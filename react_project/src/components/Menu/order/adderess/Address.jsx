@@ -26,7 +26,7 @@ import {
 import AddNewAddressButton from "../buttons/AddNewAddressButton";
 import DiaolgButtonsAddress from "../buttons/AddressDiaolgButtons";
 import DiaolgLabels from "../buttons/DiaolgLabels";
-function Address() {
+function Address({ onClose}) {
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
@@ -259,7 +259,7 @@ function Address() {
   };
 
   return (
-    <Stack spacing={3} sx={{margin:"1rem"}}>
+    <Stack spacing={3} sx={{ margin: "1rem" }}>
       <Stack>
         <Typography
           sx={{
@@ -286,6 +286,7 @@ function Address() {
               fontWeight: "500",
               textAlign: "left",
             }}
+            
           >
             Add Address
           </Typography>

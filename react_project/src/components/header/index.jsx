@@ -7,9 +7,10 @@ import MainLayout from "../pages/MainLayout";
 import ForgetPass from "../pages/auth/ForgetPass";
 import Register from "../pages/auth/Register";
 import Error from "../pages/Error";
-import Profile from "../pages/profile";
+import Profile from "../pages/profile/profile";
 import OrderOnline from "../Menu/order/OrderOnline/OrderOnline";
 import signUpSchema from "../vaildations/signUpSchema";
 import useCheckEmailAvailability from "../hooks/useCheckEmailAvailability";
+import Header from "./Header";
 
-export {Hero,Main,Menu,Footer,LoginPage,MainLayout,ForgetPass,Register,Profile,OrderOnline,Error,signUpSchema,useCheckEmailAvailability}
+export {Header,Hero,Main,Menu,Footer,LoginPage,MainLayout,ForgetPass,Register,Profile,OrderOnline,Error,signUpSchema,useCheckEmailAvailability}

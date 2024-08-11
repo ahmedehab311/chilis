@@ -11,7 +11,7 @@ import {
 import "../OrderOnline.css";
 import imgLogo from "../../../../Hero/images/logo.png";
 import Counter from "../../../ButtonsMenu/CounterDiaolgButton";
-// import { API_TAX } from "../../../apis&fetchData/ApiLinks";
+import { API_TAX } from "../../../apis&fetchData/ApiLinks";
 import { useEffect, useState } from "react";
 import {
   Dialog,
@@ -25,15 +25,12 @@ import {
 import axios from "axios";
 
 function CheckOut({
-  // totalToPay,
   handleRemoveItem,
   cartItems,
   subtotal,
   deliveryFee,
   totalPrices,
   handleCounterChange,
-  // user,
-  // setTotalItems,
 }) {
   //
   const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
@@ -68,7 +65,6 @@ function CheckOut({
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
 
-  const API_TAX = "http://myres.me/chilis/api/settings";
   // في قسم useEffect الخاص بالحساب
   useEffect(() => {
     const fetchTax = async () => {
@@ -150,7 +146,7 @@ function CheckOut({
         </Typography>
       </Box>
 
-      <Container sx={{ margin: "0 auto", borderBottom: "2px solid #ececec" }}>
+      <Container sx={{ margin: "0 auto" }}>
         <Box
           className="orderNow"
           sx={{
@@ -296,7 +292,7 @@ function CheckOut({
                           ))}
                         </Stack>
                       )}
-                      <Typography
+                      {/* <Typography
                         sx={{
                           color: "#17a2b8!important",
                           fontSize: "1.8rem",
@@ -305,7 +301,7 @@ function CheckOut({
                         }}
                       >
                         {item.extras.name}
-                      </Typography>
+                      </Typography> */}
                     </Stack>
                     <TextField
                       placeholder="Enter any special request note"
@@ -391,7 +387,7 @@ function CheckOut({
               "& .MuiInputBase-input": {
                 fontSize: "1.5rem", // لتغيير حجم النص
                 color: "gray",
-                margin: ".4rem",
+                // margin: ".4rem",
               },
               "& .MuiInputBase-input::placeholder": {
                 color: "gray",
@@ -510,7 +506,6 @@ function CheckOut({
                     "& .MuiInputBase-input": {
                       fontSize: "1.5rem", // لتغيير حجم النص
                       color: "gray",
-                      margin: ".4rem",
                     },
                     "& .MuiInputBase-input::placeholder": {
                       color: "gray",
@@ -526,7 +521,7 @@ function CheckOut({
                     "& .MuiInputBase-input": {
                       fontSize: "1.5rem", // لتغيير حجم النص
                       color: "gray",
-                      margin: ".4rem",
+                      // margin: ".4rem",
                     },
                     "& .MuiInputBase-input::placeholder": {
                       color: "gray",
@@ -542,7 +537,7 @@ function CheckOut({
                     "& .MuiInputBase-input": {
                       fontSize: "1.5rem", // لتغيير حجم النص
                       color: "gray",
-                      margin: ".4rem",
+                      // margin: ".4rem",
                     },
                     "& .MuiInputBase-input::placeholder": {
                       color: "gray",

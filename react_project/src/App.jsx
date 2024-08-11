@@ -8,6 +8,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import {
+  Header,
   Main,
   Menu,
   Footer,
@@ -20,7 +21,6 @@ import {
   OrderOnline,
 } from "./components/header/index";
 import { ToastContainer } from "react-toastify";
-import Header from "./components/header/Header";
 import { CartProvider } from "./components/hooks/CardContext";
 import ChangePasswordFromProfile from "./components/pages/ChangePassFromProfile";
 import { useDispatch } from "react-redux";
@@ -36,6 +36,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     // "/order-online",
     "/change-password",
     // "/my_orders",
+    "*"
   ];
 
   const handleLogout = () => {

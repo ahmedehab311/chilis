@@ -13,11 +13,12 @@ function AddressData({ handleDeleteAddress, addressData }) {
             key={index}
             sx={{
               mb: 3,
+
               border: activeIndex === index ? "2px solid #d32f2f" : "none",
             }}
             onClick={() => setActiveIndex(index)}
           >
-            <Stack sx={{ background: "#f8f9fa!important", p: 2 }}>
+            <Stack sx={{ background: "#f8f9fa!important", p: 2}}>
               <Typography
                 sx={{
                   fontSize: "1.4rem",
@@ -29,7 +30,7 @@ function AddressData({ handleDeleteAddress, addressData }) {
               </Typography>
             </Stack>
             <Stack
-              sx={{ display: "flex", p: ".5rem" }}
+              sx={{ display: "flex", p: ".5rem",justifyContent:"space-between", }}
               direction={"row"}
               alignItems={"center"}
             >
@@ -53,10 +54,12 @@ function AddressData({ handleDeleteAddress, addressData }) {
                 </Typography>
               </Stack>
               <Stack
+              
                 fontSize="22px"
                 direction={"row"}
                 alignItems={"center"}
                 sx={{
+                  justifyContent:"space-between",
                   border: "1px solid #dc3545",
                   fontSize: "1.2rem",
                   p: ".8rem 1.5rem",
@@ -77,11 +80,12 @@ function AddressData({ handleDeleteAddress, addressData }) {
                 <Typography
                   sx={{
                     pr: 2,
-                    fontSize: "1.8rem",
+                    fontSize: "1.7rem",
                     color: "#000",
                     fontWeight: "500",
                     lineHeight: "1.2",
-                    p: ".6rem .8rem",
+                    // p: ".6rem .8rem",
+                    p: ".6rem .8rem !important",
                   }}
                 >
                   Delete

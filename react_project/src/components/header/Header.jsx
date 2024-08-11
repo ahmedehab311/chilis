@@ -72,6 +72,8 @@ function Header({ token, handleLogout }) {
     "/order-online",
     "/my_orders",
     "/profile",
+    "*",
+    "/error"
   ].includes(location.pathname);
   
   return (
