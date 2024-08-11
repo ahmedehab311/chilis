@@ -32,10 +32,10 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     "/login",
     "/register",
     "/forgot-password",
-    "/profile",
-    "/order-online",
+    // "/profile",
+    // "/order-online",
     "/change-password",
-    "/my_orders",
+    // "/my_orders",
   ];
 
   const handleLogout = () => {
@@ -112,19 +112,26 @@ function App() {
   //   localStorage.setItem('totalItems', '0');
   //   dispatch(setTotalItems(0));
   // }, [dispatch]);
+  const location = useLocation(); // استخدام useLocation للحصول على الموقع الحالي
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      document.getElementById(location.state.scrollTo)?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [location]); // تنفيذ useEffect عند تغيير الموقع
 
   return (
     <>
       <CartProvider>
         <ToastContainer />
-        <Router>
+        {/* <Router> */}
           <AppContent
             token={token}
             setToken={setToken}
             userData={userData}
             setUserData={setUserData}
           />
-        </Router>
+        {/* </Router> */}
       </CartProvider>
     </>
   );

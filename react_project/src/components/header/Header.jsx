@@ -23,6 +23,8 @@ import { useLocation } from "react-router-dom";
 
 // import Headerr from "./Headerr"
 function Header({ token, handleLogout }) {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [drawerState, setDrawerState] = useState({
     top: false,
     left: false,
@@ -56,10 +58,27 @@ function Header({ token, handleLogout }) {
   // const navigate = useNavigate();
   const totalItems = useSelector((state) => state.cart.totalItems);
 
+  const handleNavigation = (sectionId) => {
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollTo: sectionId } });
+    } else {
+      document
+        .getElementById(sectionId)
+        ?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  const showHero = ![
+    "/order-online",
+    "/my_orders",
+    "/profile",
+    // Add other paths where you don't want to show Hero
+  ].includes(location.pathname);
+  
   return (
     <Stack className="hero">
       {/* header only */}
-      <Stack sx={{ bgcolor: "#050304", p: 1, position: "relative" }}>
+      <Stack sx={{ bgcolor: "#050304",  position: "relative" }}> 
+      {/* color: isHomePage ? "#fff" : "#000", fontSize: "35px" */}
         {useMediaQuery("(min-width:1000px)") && (
           <>
             <Stack
@@ -85,6 +104,7 @@ function Header({ token, handleLogout }) {
                     fontFamily: "cairo",
                     fontWeight: "bold",
                   }}
+                  onClick={() => handleNavigation("menu")}
                 >
                   Menu
                 </Typography>
@@ -97,6 +117,7 @@ function Header({ token, handleLogout }) {
                     fontFamily: "cairo",
                     fontWeight: "bold",
                   }}
+                  onClick={() => handleNavigation("about")}
                 >
                   About Us
                 </Typography>
@@ -109,6 +130,8 @@ function Header({ token, handleLogout }) {
                     fontFamily: "cairo",
                     fontWeight: "bold",
                   }}
+                  onClick={() => handleNavigation("footer")}
+                  
                 >
                   Location
                 </Typography>
@@ -121,6 +144,7 @@ function Header({ token, handleLogout }) {
                     fontFamily: "cairo",
                     fontWeight: "bold",
                   }}
+                onClick={() => handleNavigation("footer")}
                 >
                   Contact Us
                 </Typography>
@@ -224,7 +248,7 @@ function Header({ token, handleLogout }) {
         )}
       </Stack>
 
-      <Hero />
+      {showHero && <Hero />}
     </Stack>
   );
 }

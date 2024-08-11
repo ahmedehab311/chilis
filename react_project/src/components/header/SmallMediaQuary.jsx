@@ -8,7 +8,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 
 function SmallMediaQuery({
@@ -21,6 +21,21 @@ function SmallMediaQuery({
 }) {
   const isSmallScreen = useMediaQuery("(max-width:1000px)");
 
+  const location = useLocation();
+  const navigate = useNavigate();
+
+ const handleNavigation = (sectionId) => {
+    if (isHomePage) {
+      document
+        .getElementById(sectionId)
+        ?.scrollIntoView({ behavior: "smooth" });
+    } else {
+      navigate("/", { state: { scrollTo: sectionId } });
+    }
+    closeDrawer();
+  };
+  // التحقق مما إذا كان المسار الحالي هو الصفحة الرئيسية
+  const isHomePage = location.pathname === "/";
   return (
     <>
       {isSmallScreen && (
@@ -41,7 +56,7 @@ function SmallMediaQuery({
               },
             }}
           >
-            <MenuIcon sx={{ color: "#fff", fontSize: "35px" }} />
+           <MenuIcon sx={{ color: isHomePage ? "#fff" : "#000", fontSize: "35px" }} />
           </IconButton>
           <Drawer
             anchor={"right"}
@@ -49,7 +64,7 @@ function SmallMediaQuery({
             onClose={toggleDrawer("right", false)}
             sx={{ ".MuiPaper-root": { height: "100%" } }}
           >
-            <Link href="#menu" onClick={closeDrawer}>
+            <Link href="#menu" onClick={() => handleNavigation("menu")}>
               <Typography
                 sx={{
                   color: "#fff",
@@ -61,7 +76,7 @@ function SmallMediaQuery({
                 Menu
               </Typography>
             </Link>
-            <Link href="#about" onClick={closeDrawer}>
+            <Link href="#about"  onClick={() => handleNavigation("about")}>
               <Typography
                 sx={{
                   color: "#fff",
@@ -73,7 +88,7 @@ function SmallMediaQuery({
                 About Us
               </Typography>
             </Link>
-            <Link href="#footer" onClick={closeDrawer}>
+            <Link href="#footer"  onClick={() => handleNavigation("footer")}>
               <Typography
                 sx={{
                   color: "#fff",
@@ -85,7 +100,7 @@ function SmallMediaQuery({
                 Location
               </Typography>
             </Link>
-            <Link href="#footer" onClick={closeDrawer}>
+            <Link href="#footer"  onClick={() => handleNavigation("footer")}>
               <Typography
                 sx={{
                   color: "#fff",
