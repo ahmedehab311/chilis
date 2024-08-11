@@ -54,8 +54,7 @@ function Header({ token, handleLogout }) {
     setAnchorEl(null);
   };
   const isLargeScreen = useMediaQuery("(min-width:1000px)");
-  // const totalCounter = cartItems.reduce((total, item) => total + item.quantity, 0);
-  // const navigate = useNavigate();
+
   const totalItems = useSelector((state) => state.cart.totalItems);
 
   const handleNavigation = (sectionId) => {
@@ -67,18 +66,18 @@ function Header({ token, handleLogout }) {
         ?.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  // disable hero in these sections
   const showHero = ![
     "/order-online",
     "/my_orders",
     "/profile",
-    // Add other paths where you don't want to show Hero
   ].includes(location.pathname);
   
   return (
     <Stack className="hero">
       {/* header only */}
       <Stack sx={{ bgcolor: "#050304",  position: "relative" }}> 
-      {/* color: isHomePage ? "#fff" : "#000", fontSize: "35px" */}
         {useMediaQuery("(min-width:1000px)") && (
           <>
             <Stack

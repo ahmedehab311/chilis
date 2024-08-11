@@ -259,18 +259,7 @@ function Address() {
   };
 
   return (
-    <Stack spacing={3}>
-      {/* <Typography
-        sx={{
-          fontSize: "18px",
-          fontWeight: 700,
-          textAlign: "left",
-          fontFamily: "cairo",
-        }}
-      >
-        add address
-      </Typography>
-      */}
+    <Stack spacing={3} sx={{margin:"1rem"}}>
       <Stack>
         <Typography
           sx={{

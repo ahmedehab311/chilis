@@ -24,524 +24,52 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-// function CheckOut({
-//   // totalToPay,
-//   handleRemoveItem,
-//   cartItems,
-//   subtotal,
-//   deliveryFee,
-//   totalPrices,
-//   handleCounterChange,
-//   // user,
-//   // setTotalItems,
-// }) {
-//   //
-//   const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
-//   const [paymentMethod, setPaymentMethod] = useState("cash");
-//   const [showCardForm, setShowCardForm] = useState(false);
-
-//   const handleClickOpen = () => {
-//     setOpenPaymentDialog(true);
-//   };
-
-//   const handleClose = () => {
-//     setOpenPaymentDialog(false);
-//   };
-
-//   const handlePaymentMethodChange = (event) => {
-//     setPaymentMethod(event.target.value);
-//     if (event.target.value === "card") {
-//       setShowCardForm(true);
-//     } else {
-//       setShowCardForm(false);
-//     }
-//   };
-
-//   const handlePlaceOrder = () => {
-//     handleClose();
-//     if (paymentMethod === "cash") {
-//       alert("Order placed successfully with cash payment!");
-//     } else if (paymentMethod === "card") {
-//       alert("Redirecting to credit card payment page...");
-//     }
-//   };
-//   const [tax, setTax] = useState(0);
-//   const [totalWithTax, setTotalWithTax] = useState(0);
-
-//   const API_TAX = "http://myres.me/chilis/api/settings";
-//   // في قسم useEffect الخاص بالحساب
-//   useEffect(() => {
-//     // Fetch tax data when the component mounts
-//     const fetchTax = async () => {
-//       try {
-//         const response = await axios.get(API_TAX);
-//         const taxValue = response.data.data.settings.tax;
-//         setTax(taxValue);
-
-//         // حساب الإجمالي مع الضريبة
-//         const subtotalWithDelivery = subtotal + deliveryFee;
-//         // 100+30
-//         const calculatedTax = subtotalWithDelivery * (taxValue / 100);
-//         // 130 * 14/100
-//         setTotalWithTax(subtotalWithDelivery + calculatedTax);
-
-//         // console.log(response.data.data.settings.tax);
-//       } catch (error) {
-//         console.error("Error fetching tax data:", error);
-//       }
-//     };
-
-//     fetchTax();
-//   }, [subtotal, deliveryFee, totalWithTax]); // التأكد من تحديث totalWithTax عند تغيير subtotal أو deliveryFee
-
-//   // useEffect(() => {
-//   //   // Fetch tax data when the component mounts or when subtotal or deliveryFee change
-//   //   const fetchTax = async () => {
-//   //     try {
-//   //       const response = await axios.get(API_TAX);
-//   //       const taxValue = response.data.data.settings.tax;
-//   //       setTax(taxValue);
-
-//   //       // حساب الإجمالي مع الضريبة
-//   //       const subtotalWithDelivery = subtotal + deliveryFee;
-//   //       const calculatedTax = subtotalWithDelivery * (taxValue / 100);
-//   //       setTotalWithTax(subtotalWithDelivery + calculatedTax);
-//   //     } catch (error) {
-//   //       console.error("Error fetching tax data:", error);
-//   //     }
-//   //   };
-
-//   //   fetchTax();
-//   // }, [subtotal, deliveryFee]); // تأكد من أن subtotal و deliveryFee يتغيران فقط عند الضرورة
-//   const calculateSubtotalWithExtras = () => {
-//     return cartItems.reduce((acc, item, index) => {
-//       const itemTotal = (totalPrices[index] || item.price);
-//       const extrasTotal = item.extras ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0) : 0;
-//       return acc + itemTotal + extrasTotal;
-//     }, 0);
-//   };
-
-//   const subtotalWithExtras = calculateSubtotalWithExtras();
-
-//   return (
-//     <Container
-//       sx={{
-//         maxWidth: "600px !important",
-//         background: "#fff !important",
-//         position: "sticky",
-//         margin: "0 auto",
-//         mr: "50px",
-//         mt: "15px",
-//         p: "0px !important",
-//         border: "1px solid #dee2e6!important",
-//         borderRadius: ".25rem !important",
-//         boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
-//         maxHeight: "550px",
-//         overflowY: "auto",
-//         "@media (max-width: 1000px)": {
-//           margin: "0 auto",
-//           mt: "2rem",
-//         },
-//       }}
-//     >
-//       <Box
-//         className="headerOrderOnline"
-//         direction={"row"}
-//         alignItems={"center"}
-//         sx={{
-//           p: 1,
-//           borderBottom: "2px solid #ececec",
-//         }}
-//       >
-//         <img
-//           className="imgOrder"
-//           alt="Image"
-//           width="150px"
-//           height="150px"
-//           src={imgLogo}
-//         />
-//         <Typography
-//           sx={{
-//             fontSize: "18px",
-//             fontWeight: 700,
-//             ml: 2,
-//             fontFamily: "cairo",
-//           }}
-//         >
-//           chilis
-//         </Typography>
-//       </Box>
-
-//       <Container sx={{ margin: "0 auto", borderBottom: "2px solid #ececec" }}>
-//         <Box
-//           className="orderNow"
-//           sx={{
-//             borderRadius: "8px",
-//           }}
-//         >
-//           {cartItems.length === 0
-//             ? null
-//             : cartItems.map((item, index) => (
-//                 <Card key={index} sx={{ p: 2, my: 3 }}>
-//                   <Stack sx={{ position: "relative" }}>
-//                     <Stack
-//                       sx={{ display: "flex" }}
-//                       direction={"row"}
-//                       alignItems={"center"}
-//                     >
-//                       <Typography
-//                         sx={{
-//                           color: "#000",
-//                           fontSize: "2rem",
-//                           fontWeight: "bold",
-//                           fontFamily: "cairo",
-//                         }}
-//                       >
-//                         {item.name}
-//                       </Typography>
-//                       <Typography
-//                         onClick={() => handleRemoveItem(index)}
-//                         sx={{
-//                           color: "red",
-//                           position: "absolute",
-//                           right: "-11px",
-//                           top: "-13px",
-//                           cursor: "pointer",
-//                           fontSize: "1.8rem",
-//                           fontWeight: "bold",
-//                           fontFamily: "cairo",
-//                           "&:hover": {
-//                             color: "#e31616!important",
-//                           },
-//                         }}
-//                       >
-//                         X
-//                       </Typography>
-//                     </Stack>
-
-//                     <Stack
-//                       sx={{
-//                         display: "flex",
-//                         justifyContent: "space-between",
-//                         m: "10px 0 10px 0",
-//                       }}
-//                       direction={"row"}
-//                       alignItems={"center"}
-//                     >
-//                       <Typography
-//                         sx={{
-//                           color: "#17a2b8!important",
-//                           fontSize: "1.8rem",
-//                           fontWeight: "bold",
-//                           fontFamily: "cairo",
-//                         }}
-//                       >
-//                         {item.name}
-//                       </Typography>
-//                       <Typography
-//                         sx={{
-//                           color: "#17a2b8!important",
-//                           fontSize: "1.8rem",
-//                           fontWeight: "bold",
-//                           fontFamily: "cairo",
-//                         }}
-//                       >
-//                         {item.price} EGP
-//                       </Typography>
-//                       <Counter
-//                         basePrice={item.price}
-//                         onChange={(newTotalPrice) =>
-//                           handleCounterChange(index, newTotalPrice)
-//                         }
-//                       />
-//                     </Stack>
-
-//                     <Stack
-//                       sx={{
-//                         display: "flex",
-//                         justifyContent: "space-between",
-//                       }}
-//                       direction={"row"}
-//                       alignItems={"center"}
-//                     >
-//                       <Typography
-//                         sx={{
-//                           color: "#424242 !important",
-//                           fontSize: "1.4rem",
-//                           fontWeight: 500,
-//                         }}
-//                       >
-//                         Regular
-//                       </Typography>
-//                       <Typography
-//                         sx={{
-//                           color: "#6c757d!important",
-//                           fontSize: "1.4rem",
-//                           fontWeight: 500,
-//                         }}
-//                       >
-//                         {(totalPrices[index] || item.price).toFixed(2)} EGP
-//                       </Typography>
-//                     </Stack>
-//                     <Stack>
-//                       {item.extras && item.extras.length > 0 && (
-//                         <Stack>
-//                           {item.extras.map((extra, i) => (
-//                             <Stack
-//                               key={i}
-//                               direction={"row"}
-//                               alignItems={"center"}
-//                               sx={{ justifyContent: "space-between" }}
-//                             >
-//                               <Typography
-//                                 sx={{
-//                                   color: "#17a2b8!important",
-//                                   fontSize: "1.8rem",
-//                                   fontWeight: "bold",
-//                                   fontFamily: "cairo",
-//                                 }}
-//                               >
-//                                 {extra.name}
-//                               </Typography>{" "}
-//                               <Typography
-//                                 sx={{
-//                                   color: "#17a2b8!important",
-//                                   fontSize: "1.8rem",
-//                                   fontWeight: "bold",
-//                                   fontFamily: "cairo",
-//                                 }}
-//                               >
-//                                 {" "}
-//                                 {extra.price} EGP
-//                               </Typography>
-//                             </Stack>
-//                           ))}
-//                         </Stack>
-//                       )}
-//                       <Typography
-//                         sx={{
-//                           color: "#17a2b8!important",
-//                           fontSize: "1.8rem",
-//                           fontWeight: "bold",
-//                           fontFamily: "cairo",
-//                         }}
-//                       >
-//                         {item.extras.name}
-//                       </Typography>
-//                     </Stack>
-//                     <TextField
-//                       placeholder="Enter any special request note"
-//                       sx={{
-//                         transition: "1s",
-//                         "& input::placeholder": {
-//                           color: "gray",
-//                           fontSize: "1.3rem",
-//                           textAlign: "center",
-//                         },
-//                       }}
-//                     />
-//                   </Stack>
-//                 </Card>
-//               ))}
-//         </Box>
-//       </Container>
-
-//       <Stack
-//         className="middleOrder"
-//         sx={{ p: 2, borderBottom: "2px solid #ececec" }}
-//       >
-//         <Stack className="middleOrder" sx={{ p: 2 }}>
-//           <Stack
-//             direction="row"
-//             spacing={0}
-//             alignItems="center"
-//             sx={{ mb: "1rem" }}
-//           >
-//             <TextField
-//               id="coupon-code-input"
-//               placeholder="Enter coupon code"
-//               sx={{
-//                 flex: 1,
-//                 "& .MuiInputBase-input": {
-//                   padding: "1.1rem 1rem !important",
-//                   borderTopRightRadius: 0,
-//                   borderBottomRightRadius: 0,
-//                 },
-//                 "& input::placeholder": {
-//                   fontSize: "1.6rem",
-//                 },
-//               }}
-//             />
-//             <Stack>
-//               <Button
-//                 variant="contained"
-//                 color="error"
-//                 sx={{
-//                   p: "10px 16px !important",
-//                   height: "100%",
-//                   borderTopLeftRadius: 0,
-//                   borderBottomLeftRadius: 0,
-//                   backgroundColor: "#d32f2f",
-//                   "&:hover": { backgroundColor: "#d32f2f" },
-//                 }}
-//               >
-//                 Apply
-//               </Button>
-//             </Stack>
-//           </Stack>
-//           <TextField
-//             className="formControl"
-//             id="outlined-basic"
-//             placeholder="Any notes? please enter it here."
-//             fullWidth
-//             multiline
-//             minRows={5}
-//             sx={{
-//               width: "100%",
-//               justifyContent: "center",
-//               alignItems: "center",
-//               transition: ".5s",
-//               "& input::placeholder": {
-//                 color: "red",
-//                 fontSize: "22px",
-//                 textAlign: "center",
-//               },
-//             }}
-//           />
-//         </Stack>
-//       </Stack>
-
-//       <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
-//         <Stack
-//           sx={{
-//             display: "flex",
-//             justifyContent: "space-between",
-//           }}
-//           direction={"row"}
-//           alignItems={"center"}
-//         >
-//           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-//             Subtotal:
-//           </Typography>{" "}
-//           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-//             {subtotal.toFixed(2)} EGP
-//           </Typography>
-//         </Stack>
-//         <Stack
-//           sx={{
-//             display: "flex",
-//             justifyContent: "space-between",
-//           }}
-//           direction={"row"}
-//           alignItems={"center"}
-//         >
-//           <Typography
-//             sx={{
-//               fontSize: "15px",
-//               fontWeight: "bold",
-//               my: 2,
-//             }}
-//           >
-//             Delivery Fee:{" "}
-//           </Typography>{" "}
-//           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-//             {deliveryFee.toFixed(2)} EGP
-//           </Typography>
-//         </Stack>
-//         <Stack
-//           sx={{
-//             display: "flex",
-//             justifyContent: "space-between",
-//           }}
-//           direction={"row"}
-//           alignItems={"center"}
-//         >
-//           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-//             Tax {tax} %
-//           </Typography>
-//           {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-//             {(subtotal * tax / 100).toFixed(2)} EGP
-//           </Typography> */}
-//         </Stack>
-//         <Stack
-//           sx={{
-//             display: "flex",
-//             justifyContent: "space-between",
-//           }}
-//           direction={"row"}
-//           alignItems={"center"}
-//         >
-//           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-//             Total:
-//           </Typography>
-//           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-//             {" "}
-//             {totalWithTax.toFixed(2)} EGP
-//           </Typography>
-//         </Stack>
-//         <Stack className="stackBtn" sx={{ p: 2 }}>
-//           <Button
-//             color="error"
-//             variant="contained"
-//             className="placeOrderBtn"
-//             disabled={cartItems.length === 0}
-//             onClick={handleClickOpen}
-//           >
-//             PLACE ORDER
-//           </Button>
-//         </Stack>
-//         <Dialog open={openPaymentDialog} onClose={handleClose}>
-//           <DialogTitle>Select Payment Method</DialogTitle>
-//           <DialogContent>
-//             <RadioGroup
-//               value={paymentMethod}
-//               onChange={handlePaymentMethodChange}
-//             >
-//               <FormControlLabel value="cash" control={<Radio />} label="Cash" />
-//               <FormControlLabel
-//                 value="card"
-//                 control={<Radio />}
-//                 label="Credit Card"
-//               />
-//             </RadioGroup>
-//             {showCardForm && (
-//               <Box mt={2}>
-//                 <TextField label="Card Number" fullWidth margin="normal" />
-//                 <TextField label="Expiry Date" fullWidth margin="normal" />
-//                 <TextField label="CVV" fullWidth margin="normal" />
-//               </Box>
-//             )}
-//           </DialogContent>
-//           <DialogActions>
-//             <Button onClick={handleClose} color="error">
-//               Cancel
-//             </Button>
-//             <Button onClick={handlePlaceOrder} color="error">
-//               Confirm
-//             </Button>
-//           </DialogActions>
-//         </Dialog>
-//       </Stack>
-//     </Container>
-//   );
-// }
 function CheckOut({
+  // totalToPay,
   handleRemoveItem,
   cartItems,
   subtotal,
   deliveryFee,
   totalPrices,
   handleCounterChange,
+  // user,
+  // setTotalItems,
 }) {
+  //
   const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [showCardForm, setShowCardForm] = useState(false);
 
+  const handleClickOpen = () => {
+    setOpenPaymentDialog(true);
+  };
+
+  const handleClose = () => {
+    setOpenPaymentDialog(false);
+  };
+
+  const handlePaymentMethodChange = (event) => {
+    setPaymentMethod(event.target.value);
+    if (event.target.value === "card") {
+      setShowCardForm(true);
+    } else {
+      setShowCardForm(false);
+    }
+  };
+
+  const handlePlaceOrder = () => {
+    handleClose();
+    if (paymentMethod === "cash") {
+      alert("Order placed successfully with cash payment!");
+    } else if (paymentMethod === "card") {
+      alert("Redirecting to credit card payment page...");
+    }
+  };
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
 
   const API_TAX = "http://myres.me/chilis/api/settings";
-
+  // في قسم useEffect الخاص بالحساب
   useEffect(() => {
     const fetchTax = async () => {
       try {
@@ -560,20 +88,23 @@ function CheckOut({
     fetchTax();
   }, [subtotal, deliveryFee]);
 
+
   const calculateSubtotalWithExtras = () => {
     return cartItems.reduce((acc, item, index) => {
-      const itemTotal = (totalPrices[index] || item.price);
-      const extrasTotal = item.extras ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0) : 0;
+      const itemTotal = totalPrices[index] || item.price;
+      const extrasTotal = item.extras
+        ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
+        : 0;
       return acc + itemTotal + extrasTotal;
     }, 0);
   };
 
-  const subtotalWithExtras = calculateSubtotalWithExtras();
-
+  const subtotalWithExtras = calculateSubtotalWithExtras()
+  ;
   return (
     <Container
       sx={{
-        maxWidth: "600px !important",
+        maxWidth: "514px !important",
         background: "#fff !important",
         position: "sticky",
         margin: "0 auto",
@@ -581,9 +112,9 @@ function CheckOut({
         mt: "15px",
         p: "0px !important",
         border: "1px solid #dee2e6!important",
-        borderRadius: ".25rem !important",
+        borderRadius: ".8rem !important",
         boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
-        maxHeight: "550px",
+        maxHeight: "500px",
         overflowY: "auto",
         "@media (max-width: 1000px)": {
           margin: "0 auto",
@@ -639,7 +170,7 @@ function CheckOut({
                       <Typography
                         sx={{
                           color: "#000",
-                          fontSize: "2rem",
+                          fontSize: "1.8rem",
                           fontWeight: "bold",
                           fontFamily: "cairo",
                         }}
@@ -678,7 +209,7 @@ function CheckOut({
                       <Typography
                         sx={{
                           color: "#17a2b8!important",
-                          fontSize: "1.8rem",
+                          fontSize: "1.5rem",
                           fontWeight: "bold",
                           fontFamily: "cairo",
                         }}
@@ -780,10 +311,13 @@ function CheckOut({
                       placeholder="Enter any special request note"
                       sx={{
                         transition: "1s",
-                        "& input::placeholder": {
+                        "& .MuiInputBase-input": {
+                          fontSize: "1.3rem",
+                          color: "gray",
+                        },
+                        "& .MuiInputBase-input::placeholder": {
                           color: "gray",
                           fontSize: "1.3rem",
-                          textAlign: "center",
                         },
                       }}
                     />
@@ -800,7 +334,7 @@ function CheckOut({
         <Stack className="middleOrder" sx={{ p: 2 }}>
           <Stack
             direction="row"
-            spacing={0}
+            spacing={1}
             alignItems="center"
             sx={{ mb: "1rem" }}
           >
@@ -809,13 +343,18 @@ function CheckOut({
               placeholder="Enter coupon code"
               sx={{
                 flex: 1,
+
                 "& .MuiInputBase-input": {
-                  padding: "1.1rem 1rem !important",
-                  borderTopRightRadius: 0,
-                  borderBottomRightRadius: 0,
+                  // borderTopRightRadius: 0,
+                  // borderBottomRightRadius: 0,
+                  padding: ".9rem 1rem !important",
+                  fontSize: "1.3rem", // لتغيير حجم النص
+                  color: "gray",
+                  // margin: ".4rem",
                 },
-                "& input::placeholder": {
-                  fontSize: "1.6rem",
+                "& .MuiInputBase-input::placeholder": {
+                  color: "gray",
+                  fontSize: "1.3rem",
                 },
               }}
             />
@@ -826,90 +365,206 @@ function CheckOut({
                 sx={{
                   p: "10px 16px !important",
                   height: "100%",
-                  borderTopLeftRadius: 0,
-                  borderBottomLeftRadius: 0,
-                  backgroundColor: "#017C8A",
-                  "&:hover": {
-                    backgroundColor: "#017C8A",
-                  },
+                  // borderTopLeftRadius: 0,
+                  // borderBottomLeftRadius: 0,
+                  backgroundColor: "#d32f2f",
+                  "&:hover": { backgroundColor: "#d32f2f" },
                 }}
               >
                 Apply
               </Button>
             </Stack>
           </Stack>
-          <Stack
-            direction={"row"}
-            sx={{ justifyContent: "space-between" }}
-          >
-            <Typography
-              sx={{ color: "#333", fontSize: "1.5rem", fontWeight: "bold" }}
-            >
-              Subtotal
-            </Typography>
-            <Typography
-              sx={{ color: "#333", fontSize: "1.5rem", fontWeight: "bold" }}
-            >
-              {subtotalWithExtras.toFixed(2)} EGP
-            </Typography>
-          </Stack>
-          <Stack
-            direction={"row"}
-            sx={{ justifyContent: "space-between" }}
-          >
-            <Typography
-              sx={{ color: "#333", fontSize: "1.5rem", fontWeight: "bold" }}
-            >
-              Delivery Fee
-            </Typography>
-            <Typography
-              sx={{ color: "#333", fontSize: "1.5rem", fontWeight: "bold" }}
-            >
-              {deliveryFee.toFixed(2)} EGP
-            </Typography>
-          </Stack>
-          <Stack
-            direction={"row"}
-            sx={{ justifyContent: "space-between" }}
-          >
-            <Typography
-              sx={{ color: "#333", fontSize: "1.5rem", fontWeight: "bold" }}
-            >
-              Tax ({tax}%)
-            </Typography>
-            <Typography
-              sx={{ color: "#333", fontSize: "1.5rem", fontWeight: "bold" }}
-            >
-              {(subtotalWithExtras * (tax / 100)).toFixed(2)} EGP
-            </Typography>
-          </Stack>
-          <Stack
-            direction={"row"}
-            sx={{ justifyContent: "space-between", borderTop: "2px solid #ececec", pt: 2 }}
-          >
-            <Typography
-              sx={{ color: "#333", fontSize: "1.8rem", fontWeight: "bold" }}
-            >
-              Total
-            </Typography>
-            <Typography
-              sx={{ color: "#333", fontSize: "1.8rem", fontWeight: "bold" }}
-            >
-              {totalWithTax.toFixed(2)} EGP
-            </Typography>
-          </Stack>
+          <TextField
+            className="formControl"
+            id="outlined-basic"
+            placeholder="Any notes? please enter it here."
+            fullWidth
+            multiline
+            minRows={5}
+            sx={{
+              width: "100%",
+              transition: ".5s",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              "& .MuiInputBase-input": {
+                fontSize: "1.5rem", // لتغيير حجم النص
+                color: "gray",
+                margin: ".4rem",
+              },
+              "& .MuiInputBase-input::placeholder": {
+                color: "gray",
+                fontSize: "1.3rem",
+              },
+            }}
+            InputProps={{
+              style: {
+                textAlign: "center", // Ensure placeholder text alignment
+              },
+            }}
+          />
         </Stack>
-        <Button
-          onClick={() => setOpenPaymentDialog(true)}
-          sx={{ mt: 2 }}
-          variant="contained"
+      </Stack>
+
+      <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
+        <Stack
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          direction={"row"}
+          alignItems={"center"}
         >
-          Proceed to Payment
-        </Button>
+          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            Subtotal:
+          </Typography>{" "}
+          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            {subtotalWithExtras.toFixed(2)} EGP
+          </Typography>
+        </Stack>
+        <Stack
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          direction={"row"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: "15px",
+              fontWeight: "bold",
+              my: 2,
+            }}
+          >
+            Delivery Fee:{" "}
+          </Typography>{" "}
+          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            {deliveryFee.toFixed(2)} EGP
+          </Typography>
+        </Stack>
+        <Stack
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          direction={"row"}
+          alignItems={"center"}
+        >
+          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            Tax {tax} %
+          </Typography>
+          {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            {(subtotal * tax / 100).toFixed(2)} EGP
+          </Typography> */}
+        </Stack>
+        <Stack
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          direction={"row"}
+          alignItems={"center"}
+        >
+          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            Total:
+          </Typography>
+          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            {" "}
+            {totalWithTax.toFixed(2)} EGP
+          </Typography>
+        </Stack>
+        <Stack className="stackBtn" sx={{ p: 2 }}>
+          <Button
+            color="error"
+            variant="contained"
+            className="placeOrderBtn"
+            disabled={cartItems.length === 0}
+            onClick={handleClickOpen}
+          >
+            PLACE ORDER
+          </Button>
+        </Stack>
+        <Dialog open={openPaymentDialog} onClose={handleClose}>
+          <DialogTitle>Select Payment Method</DialogTitle>
+          <DialogContent>
+            <RadioGroup
+              value={paymentMethod}
+              onChange={handlePaymentMethodChange}
+            >
+              <FormControlLabel value="cash" control={<Radio />} label="Cash" />
+              <FormControlLabel
+                value="card"
+                control={<Radio />}
+                label="Credit Card"
+              />
+            </RadioGroup>
+            {showCardForm && (
+              <Box mt={2}>
+                <TextField
+                  label="Card Number"
+                  fullWidth
+                  margin="normal"
+                  sx={{
+                    "& .MuiInputBase-input": {
+                      fontSize: "1.5rem", // لتغيير حجم النص
+                      color: "gray",
+                      margin: ".4rem",
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "gray",
+                      fontSize: "1.3rem",
+                    },
+                  }}
+                />
+                <TextField
+                  label="Expiry Date"
+                  fullWidth
+                  margin="normal"
+                  sx={{
+                    "& .MuiInputBase-input": {
+                      fontSize: "1.5rem", // لتغيير حجم النص
+                      color: "gray",
+                      margin: ".4rem",
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "gray",
+                      fontSize: "1.3rem",
+                    },
+                  }}
+                />
+                <TextField
+                  label="CVV"
+                  fullWidth
+                  margin="normal"
+                  sx={{
+                    "& .MuiInputBase-input": {
+                      fontSize: "1.5rem", // لتغيير حجم النص
+                      color: "gray",
+                      margin: ".4rem",
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "gray",
+                      fontSize: "1.3rem",
+                    },
+                  }}
+                />
+              </Box>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="error">
+              Cancel
+            </Button>
+            <Button onClick={handlePlaceOrder} color="error">
+              Confirm
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Stack>
     </Container>
   );
 }
-
 
 export default CheckOut;

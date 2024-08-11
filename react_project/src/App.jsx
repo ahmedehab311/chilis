@@ -43,8 +43,6 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     localStorage.removeItem("counter");
-    // localStorage.removeItem("addresses");
-    
     window.location.href = "/";
   };
 
@@ -92,7 +90,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
 function App() {
   const [token, setToken] = useState(null);
   const [userData, setUserData] = useState(null);
-  const dispatch = useDispatch() 
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -102,36 +100,38 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const storedTotalItems = localStorage.getItem('totalItems');
+    const storedTotalItems = localStorage.getItem("totalItems");
     if (storedTotalItems) {
       dispatch(setTotalItems(parseInt(storedTotalItems, 10)));
     }
   }, [dispatch]);
+
   //  useEffect(() => {
   //   // Reset the badge count to zero
   //   localStorage.setItem('totalItems', '0');
   //   dispatch(setTotalItems(0));
   // }, [dispatch]);
+
   const location = useLocation(); // استخدام useLocation للحصول على الموقع الحالي
 
   useEffect(() => {
     if (location.state?.scrollTo) {
-      document.getElementById(location.state.scrollTo)?.scrollIntoView({ behavior: "smooth" });
+      document
+        .getElementById(location.state.scrollTo)
+        ?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [location]); // تنفيذ useEffect عند تغيير الموقع
+  }, [location]); 
 
   return (
     <>
       <CartProvider>
         <ToastContainer />
-        {/* <Router> */}
-          <AppContent
-            token={token}
-            setToken={setToken}
-            userData={userData}
-            setUserData={setUserData}
-          />
-        {/* </Router> */}
+        <AppContent
+          token={token}
+          setToken={setToken}
+          userData={userData}
+          setUserData={setUserData}
+        />
       </CartProvider>
     </>
   );
