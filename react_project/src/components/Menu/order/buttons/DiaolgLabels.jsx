@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Button, Stack } from "@mui/material";
 
 function DiaolgLabels({ handleSelectLabel, currentAddress }) {
@@ -7,6 +8,7 @@ function DiaolgLabels({ handleSelectLabel, currentAddress }) {
       spacing={1}
       mt={2}
       sx={{
+        justifyContent:"center",
         "@media (max-width: 700px)": {
           flexWrap: "wrap !important",
         },

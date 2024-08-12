@@ -110,7 +110,8 @@ function CheckOut({
         border: "1px solid #dee2e6!important",
         borderRadius: ".8rem !important",
         boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
-        maxHeight: "500px",
+        // maxHeight: "500px",
+        maxHeight: "580px",
         overflowY: "auto",
         "@media (max-width: 1000px)": {
           margin: "0 auto",
@@ -205,7 +206,7 @@ function CheckOut({
                       <Typography
                         sx={{
                           color: "#17a2b8!important",
-                          fontSize: "1.5rem",
+                          fontSize: "1.3rem",
                           fontWeight: "bold",
                           fontFamily: "cairo",
                         }}
@@ -215,7 +216,7 @@ function CheckOut({
                       <Typography
                         sx={{
                           color: "#17a2b8!important",
-                          fontSize: "1.8rem",
+                          fontSize: "1.3rem",
                           fontWeight: "bold",
                           fontFamily: "cairo",
                         }}
@@ -451,9 +452,9 @@ function CheckOut({
           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
             Tax {tax} %
           </Typography>
-          {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {(subtotal * tax / 100).toFixed(2)} EGP
-          </Typography> */}
+          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            {((subtotal + deliveryFee) * tax / 100).toFixed(2)} EGP
+          </Typography>
         </Stack>
         <Stack
           sx={{
