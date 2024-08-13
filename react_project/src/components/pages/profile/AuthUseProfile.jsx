@@ -1,21 +1,28 @@
 /* eslint-disable react/prop-types */
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
-// import AddressDialog from "../../Menu/order/adderess/addressDaiolg/DialogAdderss";
-
+import img from "../profile/user-profile-icon.svg"
 function CardProfile({user}) {
  
   
   return (
     <Card
+
       sx={{
-        padding: 2,
-        maxWidth: 300,
-        width: "50%",
-        mr: "5rem",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
+        flexGrow: 1,
+        // padding: 2,
+        padding:" 15px 47px",
+        border: "1px solid #ddd",
+        boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)!important",
+        // maxWidth:  "50%" ,
+          // width: "100%",
+        ml:"170px" ,
+        "@media (max-width: 1000px)": {
+          alignItems: "center",
+        maxWidth:  "100%" ,
+        ml:"0" ,
+          width: "100%",
+        },
       }}
     >
       <Box
@@ -25,12 +32,13 @@ function CardProfile({user}) {
           width: "100%",
           marginBottom: 2,
           justifyContent: "space-between",
+          borderBottom:"1px solid #dee2e6"
         }}
       >
         <img
-          src="user-profile-icon.png"
+          src={img}
           alt="User"
-          style={{ borderRadius: "50%", width: "80px", height: "80px" }}
+          style={{ borderRadius: "50%", width: "60px", height: "80px" }}
         />
         <Box sx={{ marginLeft: 2 }}>
           <Stack direction={"row"} alignItems={"center"}>
@@ -40,19 +48,20 @@ function CardProfile({user}) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                fontSize: "1.5rem",
+                fontSize: "2rem",
                 fontWeight: "600",
+            
               }}
             >
               {user.user_name}
-              <CheckCircleOutlinedIcon sx={{ color: "#28a745!important" }} />
+              <CheckCircleOutlinedIcon sx={{ color: "#28a745!important",    ml:".3rem" }} />
             </Typography>
           </Stack>
 
           <Typography
             variant="body1"
             color="textSecondary"
-            sx={{ fontSize: "1.1rem", fontWeight: "500" }}
+            sx={{ fontSize: "1.5rem", fontWeight: "500" }}
           >
             {user.email}
           </Typography>

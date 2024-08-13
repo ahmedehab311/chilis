@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 // import img from "./user-profile-icon"
-import CardProfile from "./cardProfile";
+import CardProfile from "./AuthUseProfile";
 import UserInfo from "./userInfo";
 const Profile = () => {
   const BASE_URL = "https://myres.me/chilis/api";
@@ -59,10 +59,12 @@ const Profile = () => {
 
   return (
     <>
-      <Stack
+      {/* <Stack
+      spacing={4}
         direction={"row"}
         alignItems={"center"}
         sx={{
+          mt: "6rem",
           display: "flex",
           "@media (max-width: 1000px)": {
             flexDirection: "column !important",
@@ -70,14 +72,51 @@ const Profile = () => {
         }}
       >
         <CardProfile user={user} />
-        <Box flexGrow={1} />
         <UserInfo
           handleInputChange={handleInputChange}
           handleChangePassword={handleChangePassword}
           handleSave={handleSave}
           user={user}
         />
-      </Stack>
+      </Stack> */}
+      <Stack
+      spacing={4}
+      direction={"row" }
+      alignItems="flex-start"
+      // alignItems="center"
+      justifyContent="center"
+      sx={{
+          mt: "6rem",
+          display: "flex",
+          "@media (max-width: 1000px)": {
+            flexDirection: "column !important",
+            alignItems:"center"
+          },
+        }}
+    >
+     <Stack
+       sx={{
+        flexGrow: 1,
+        
+        // width: { md: "70%" }, //
+        width:"60%", 
+        
+        "@media (max-width: 1000px)": {
+          // width: "159%",
+        alignItems: "center",
+        justifyContent: "center",
+        },
+      }}
+      >
+     <CardProfile user={user} />
+     </Stack>
+      <UserInfo
+        handleInputChange={handleInputChange}
+        handleChangePassword={handleChangePassword}
+        handleSave={handleSave}
+        user={user}
+      />
+    </Stack>
     </>
   );
 };

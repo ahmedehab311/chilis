@@ -20,7 +20,7 @@ import Hero from "../Hero/Hero";
 import SmallMediaQuary from "./SmallMediaQuary";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { useLocation } from "react-router-dom";
-
+import logo from "../Hero/images/logo.png";
 // import Headerr from "./Headerr"
 function Header({ token, handleLogout }) {
   const location = useLocation();
@@ -73,13 +73,13 @@ function Header({ token, handleLogout }) {
     "/my_orders",
     "/profile",
     "*",
-    "/error"
+    "/error",
   ].includes(location.pathname);
-  
+
   return (
     <Stack className="hero">
       {/* header only */}
-      <Stack sx={{ bgcolor: "#050304",  position: "relative" }}> 
+      <Stack sx={{ bgcolor: "#050304", position: "relative" }}>
         {useMediaQuery("(min-width:1000px)") && (
           <>
             <Stack
@@ -89,6 +89,21 @@ function Header({ token, handleLogout }) {
               sx={{ textTransform: "uppercase", p: "10px !important" }}
               className="headerMenu"
             >
+              {location.pathname !== "/" && (
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  sx={{ padding: "10px" }}
+                >
+                  <Link component={RouterLink} to="/">
+                    <img
+                      src={logo}
+                      alt="Logo"
+                      style={{ height: "45px", width: "97px" }}
+                    />
+                  </Link>
+                </Stack>
+              )}
               <LanguageOutlinedIcon
                 sx={{
                   fontSize: "30px",
@@ -132,7 +147,6 @@ function Header({ token, handleLogout }) {
                     fontWeight: "bold",
                   }}
                   onClick={() => handleNavigation("footer")}
-                  
                 >
                   Location
                 </Typography>
@@ -145,7 +159,7 @@ function Header({ token, handleLogout }) {
                     fontFamily: "cairo",
                     fontWeight: "bold",
                   }}
-                onClick={() => handleNavigation("footer")}
+                  onClick={() => handleNavigation("footer")}
                 >
                   Contact Us
                 </Typography>
@@ -200,14 +214,20 @@ function Header({ token, handleLogout }) {
                       component={RouterLink}
                       to="/profile"
                     >
-                      Profile
+                      <Typography sx={{ fontSize: "1.2rem" }}>
+                        {" "}
+                        Profile
+                      </Typography>
                     </MenuItem>
                     <MenuItem
                       onClick={handleClose}
                       component={RouterLink}
                       to="/my_orders"
                     >
-                      My ordres
+                      <Typography sx={{ fontSize: "1.2rem" }}>
+                        {" "}
+                        My ordres
+                      </Typography>
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
@@ -215,7 +235,10 @@ function Header({ token, handleLogout }) {
                         handleClose();
                       }}
                     >
-                      Logout
+                      <Typography sx={{ fontSize: "1.2rem" }}>
+                        {" "}
+                        Logout
+                      </Typography>
                     </MenuItem>
                   </Menu>
                 </>

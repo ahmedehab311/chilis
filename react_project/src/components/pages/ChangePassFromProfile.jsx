@@ -1,4 +1,4 @@
-import { Box, Typography, TextField, Button } from "@mui/material";
+import { Box, Typography, TextField, Button, Stack } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -44,16 +44,22 @@ const ChangePassword = () => {
   };
 
   return (
-    <Box
+<Stack >
+<Box
       sx={{
         padding: 2,
         backgroundColor: "#fff",
         borderRadius: "8px",
         boxShadow: 1,
-        width: "100%",
         maxWidth: "800px",
-        margin: "auto",
+        margin: "20px auto",
+        width: "100%",
+        "@media (max-width: 1000px)": {
+        width: "80%",
+         
+        },
       }}
+      
     >
       <Typography variant="h6" gutterBottom>
         Change Password
@@ -91,6 +97,7 @@ const ChangePassword = () => {
         Save changes
       </Button>
     </Box>
+</Stack>
   );
 };
 

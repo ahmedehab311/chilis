@@ -4,13 +4,14 @@ import {
   Drawer,
   IconButton,
   Link,
+  Stack,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-
+import logo from "../Hero/images/logo.png";
 function SmallMediaQuery({
   closeDrawer,
   toggleDrawer,
@@ -24,7 +25,7 @@ function SmallMediaQuery({
   const location = useLocation();
   const navigate = useNavigate();
 
- const handleNavigation = (sectionId) => {
+  const handleNavigation = (sectionId) => {
     if (isHomePage) {
       document
         .getElementById(sectionId)
@@ -56,7 +57,9 @@ function SmallMediaQuery({
               },
             }}
           >
-           <MenuIcon sx={{ color: isHomePage ? "#fff" : "#000", fontSize: "35px" }} />
+            <MenuIcon
+              sx={{ color: isHomePage ? "#fff" : "#000", fontSize: "35px" }}
+            />
           </IconButton>
           <Drawer
             anchor={"right"}
@@ -76,7 +79,7 @@ function SmallMediaQuery({
                 Menu
               </Typography>
             </Link>
-            <Link href="#about"  onClick={() => handleNavigation("about")}>
+            <Link href="#about" onClick={() => handleNavigation("about")}>
               <Typography
                 sx={{
                   color: "#fff",
@@ -88,7 +91,7 @@ function SmallMediaQuery({
                 About Us
               </Typography>
             </Link>
-            <Link href="#footer"  onClick={() => handleNavigation("footer")}>
+            <Link href="#footer" onClick={() => handleNavigation("footer")}>
               <Typography
                 sx={{
                   color: "#fff",
@@ -100,7 +103,7 @@ function SmallMediaQuery({
                 Location
               </Typography>
             </Link>
-            <Link href="#footer"  onClick={() => handleNavigation("footer")}>
+            <Link href="#footer" onClick={() => handleNavigation("footer")}>
               <Typography
                 sx={{
                   color: "#fff",
@@ -133,6 +136,7 @@ function SmallMediaQuery({
                 {/* </IconButton> */}
               </Link>
             )}
+
             {token ? (
               <>
                 <Link
@@ -200,6 +204,7 @@ function SmallMediaQuery({
                 </Typography>
               </Link>
             )}
+          
           </Drawer>
         </>
       )}

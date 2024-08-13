@@ -13,7 +13,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
       return (
         <>
           {text.slice(0, length)}
-          <span style={{  cursor: "pointer", textDecoration: "underline", margin:"0 1rem 0 1rem" }} >
+          <span style={{  cursor: "pointer", textDecoration: "underline", textTransform:"capitalize",color:"#d32f2f" }} >
            Read More
           </span>
         </>
@@ -101,7 +101,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                     fontFamily: "uniform !important",
                   }}
                 >
-                                  {truncateText(item.description_en, 60)}
+                                  {truncateText (item.description_en, 60)}
 
                 </Typography>
                 <Typography sx={{ fontSize: "18px", color: "#777" }}>

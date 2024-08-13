@@ -1,25 +1,33 @@
+
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { Stack, Typography } from "@mui/material";
-import axios from "axios";
-import AddressData from "./addressData/AddressData";
-import { api_token, API_AREAS, API_CITIES, API_ADD_ADDRESS } from "./apiAdderss";
-import AddNewAddressButton from "../buttons/AddNewAddressButton";
-
 import {
-  fetchAddresses,
-  addAddress,
-  deleteAddress
-} from "../../../../rtk/slices/adderssSlice";
-
-import DialogAdderss from "./addressDaiolg/DialogAdderss";
-
-function Address({ onClose }) {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const addressData = useSelector((state) => state.addresses.items || []);
-
+  Stack,
+  TextField,
+  Typography,
+  CircularProgress,
+  Select,
+  MenuItem,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
+// import Dialog from "./addressDaiolg/Dialog";
+import AddressData from "./addressData/AddressData";
+import {
+  api_token,
+  API_AREAS,
+  API_CITIES,
+  API_ADDRESS,
+  API_ADD_ADDRESS,
+  API_DELETE_ADDRESS,
+} from "./apiAdderss";
+import AddNewAddressButton from "../buttons/AddNewAddressButton";
+import DiaolgButtonsAddress from "../buttons/AddressDiaolgButtons";
+import DiaolgLabels from "../buttons/DiaolgLabels";
+function Address({ onClose}) {
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
@@ -27,8 +35,11 @@ function Address({ onClose }) {
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedArea, setSelectedArea] = useState("");
   const [open, setOpen] = useState(false);
+  const [addressData, setAddressData] = useState([]);
   const [user, setUser] = useState(null);
+  // const [activeIndex, setActiveIndex] = useState(null);
   const [errors, setErrors] = useState({});
+  // const [addressName, setAddressName] = useState({});
   const [currentAddress, setCurrentAddress] = useState({
     deliveryCity: "",
     deliveryArea: "",
@@ -92,14 +103,16 @@ function Address({ onClose }) {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("Address Data:", addressData);
-  }, [addressData]);
-
-  useEffect(() => {
-    dispatch(fetchAddresses());
-  }, [dispatch]);
-
+  const fetchAddresses = async () => {
+    try {
+      const response = await fetch(`${API_ADDRESS}`);
+      const responseData = await response.json();
+      console.log("fetch address", responseData.data.address);
+      setAddressData(responseData.data.address);
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+    }
+  };
   const handleSelectLabel = (label) => {
     setCurrentAddress((prev) => ({ ...prev, label }));
   };
@@ -139,7 +152,7 @@ function Address({ onClose }) {
 
     try {
       const response = await axios.post(
-        `${API_ADD_ADDRESS}${queryParams.toString()}`
+`        ${API_ADD_ADDRESS}${queryParams.toString()}`
       );
 
       // تحقق من الشكل الفعلي للبيانات المستلمة
@@ -167,7 +180,7 @@ function Address({ onClose }) {
         setErrors({});
 
         // جلب العناوين المحدثة
-        dispatch(fetchAddresses());
+        fetchAddresses();
       } else {
         console.error(
           "Error adding address:",
@@ -179,14 +192,28 @@ function Address({ onClose }) {
     }
   };
 
+  useEffect(() => {
+    fetchAddresses();
+    handleDeleteAddress();
+  }, []);
   const handleDeleteAddress = async (id) => {
     try {
-      await dispatch(deleteAddress(id));
-      dispatch(fetchAddresses());
+      const response = await axios.post(API_DELETE_ADDRESS(id));
+
+      fetchAddresses();
+      if (response.data.success) {
+        // Update addressData state by filtering out the deleted address
+        setAddressData((prevData) =>
+          prevData.filter((address) => address.id !== id)
+        );
+      } else {
+        console.error("Error deleting address:", response.data.message);
+      }
     } catch (error) {
       console.error("Error deleting address:", error);
     }
   };
+
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -211,9 +238,12 @@ function Address({ onClose }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCurrentAddress((prevAddress) => ({ ...prevAddress, [name]: value }));
-
-    // إذا كان هناك خطأ في الحقل وتم إدخال قيمة جديدة، قم بإزالة الخطأ
-    if (value.trim()) {
+    if (!value.trim()) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "This field is required",
+      }));
+    } else {
       setErrors((prevErrors) => ({ ...prevErrors, [name]: null }));
     }
   };
@@ -248,25 +278,121 @@ function Address({ onClose }) {
       />
       <AddNewAddressButton handleClickOpen={handleClickOpen} />
 
-      <DialogAdderss
-        open={open}
-        handleClose={handleClose}
-        currentAddress={currentAddress}
-        cities={cities}
-        areas={areas}
-        loadingCities={loadingCities}
-        loadingAreas={loadingAreas}
-        handleCityChange={handleCityChange}
-        handleAreaChange={handleAreaChange}
-        handleInputChange={handleInputChange}
-        handleBlur={handleBlur}
-        errors={errors}
-        handleSelectLabel={handleSelectLabel}
-        handleAddAddress={handleAddAddress}
-      />
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>
+          <Typography
+            sx={{
+              fontSize: "1.5rem",
+              fontWeight: "500",
+              textAlign: "left",
+            }}
+            
+          >
+            Add Address
+          </Typography>
+          <IconButton
+            sx={{ position: "absolute", top: 8, right: 8 }}
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <Stack spacing={2}>
+            <Select
+              value={currentAddress.deliveryCity}
+              onChange={handleCityChange}
+              displayEmpty
+              inputProps={{ "aria-label": "City" }}
+            >
+              {loadingCities ? (
+                <MenuItem disabled>
+                  <CircularProgress size={24} />
+                </MenuItem>
+              ) : (
+                cities.map((city) => (
+                  <MenuItem key={city.id} value={city.id}>
+                    {city.name_en}
+                  </MenuItem>
+                ))
+              )}
+            </Select>
+            <Select
+              value={currentAddress.deliveryArea}
+              onChange={handleAreaChange}
+              displayEmpty
+              inputProps={{ "aria-label": "Area" }}
+              disabled={loadingAreas || !selectedCity}
+            >
+              {loadingAreas ? (
+                <MenuItem disabled>
+                  <CircularProgress size={24} />
+                </MenuItem>
+              ) : (
+                areas.map((area) => (
+                  <MenuItem key={area.id} value={area.id}>
+                    {area.name}
+                  </MenuItem>
+                ))
+              )}
+            </Select>
+            <TextField
+              name="street"
+              label="Street"
+              value={currentAddress.street}
+              onChange={handleInputChange}
+              onBlur={handleBlur}
+              error={!!errors.street}
+              helperText={errors.street}
+            />
+            <TextField
+              name="building"
+              label="Building"
+              value={currentAddress.building}
+              onChange={handleInputChange}
+              onBlur={handleBlur}
+              error={!!errors.building}
+              helperText={errors.building}
+            />
+            <TextField
+              name="floor"
+              label="Floor"
+              value={currentAddress.floor}
+              onChange={handleInputChange}
+              onBlur={handleBlur}
+              error={!!errors.floor}
+              helperText={errors.floor}
+            />
+            <TextField
+              name="apt"
+              label="Apt"
+              value={currentAddress.apt}
+              onChange={handleInputChange}
+              onBlur={handleBlur}
+              // error={!!errors.apt}
+              // helperText={errors.apt}
+            />
+            <TextField
+              name="deliveryInstructions"
+              label="Delivery Instructions"
+              value={currentAddress.deliveryInstructions}
+              onChange={handleInputChange}
+            />
+            <DiaolgLabels
+              handleSelectLabel={handleSelectLabel}
+              currentAddress={currentAddress}
+            />
+          </Stack>
+        </DialogContent>
+
+        <DiaolgButtonsAddress
+          handleClose={handleClose}
+          handleAddAddress={handleAddAddress}
+        />
+      </Dialog>
+   
     </Stack>
   );
 }
 
 export default Address;
-
