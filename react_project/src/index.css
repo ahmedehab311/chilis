@@ -95,3 +95,10 @@ input {
   animation: none !important;
   transition: none !important;
 }
+.addNameProfile{
+  display: flex !important;
+  justify-content: center !important;
+  margin: 20px auto !important;
+  align-items: center !important;
+  margin-bottom: 10px;
+}

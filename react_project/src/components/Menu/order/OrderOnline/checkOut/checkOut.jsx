@@ -242,7 +242,7 @@ function CheckOut({
                       <Typography
                         sx={{
                           color: "#424242 !important",
-                          fontSize: "1.4rem",
+                          fontSize: "1.5rem",
                           fontWeight: 500,
                         }}
                       >
@@ -250,8 +250,8 @@ function CheckOut({
                       </Typography>
                       <Typography
                         sx={{
-                          color: "#6c757d!important",
-                          fontSize: "1.4rem",
+                          // color: "#6c757d!important",
+                          fontSize: "1.5rem",
                           fontWeight: 500,
                         }}
                       >
@@ -270,20 +270,22 @@ function CheckOut({
                             >
                               <Typography
                                 sx={{
-                                  color: "#17a2b8!important",
-                                  fontSize: "1.8rem",
-                                  fontWeight: "bold",
+                                  color: "#000!important",
+                                  fontSize: "1.5rem",
+                                  // fontWeight: "bold",
                                   fontFamily: "cairo",
+                                  fontWeight: 500,
                                 }}
                               >
                                 {extra.name}
                               </Typography>{" "}
                               <Typography
                                 sx={{
-                                  color: "#17a2b8!important",
-                                  fontSize: "1.8rem",
-                                  fontWeight: "bold",
+                                  color: "#000!important",
+                                  fontSize: "1.5rem",
+                                  // fontWeight: "bold",
                                   fontFamily: "cairo",
+                                  fontWeight: 500,
                                 }}
                               >
                                 {" "}

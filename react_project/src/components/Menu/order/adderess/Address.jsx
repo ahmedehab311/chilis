@@ -1,21 +1,31 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import axios from "axios";
-import AddressData from "./addressData/AddressData";
-import { api_token, API_AREAS, API_CITIES, API_ADD_ADDRESS } from "./apiAdderss";
+import AddressData from "./addressData/DialogAdderss";
+import { API_AREAS, API_CITIES, API_ADD_ADDRESS } from "./apiAdderss";
 import AddNewAddressButton from "../buttons/AddNewAddressButton";
-
+import {
+  TextField,
+  CircularProgress,
+  Select,
+  MenuItem,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import DiaolgButtonsAddress from "../buttons/AddressDiaolgButtons";
+import DiaolgLabels from "../buttons/DiaolgLabels";
 import {
   fetchAddresses,
-  addAddress,
-  deleteAddress
+  deleteAddress,
 } from "../../../../rtk/slices/adderssSlice";
-
 import DialogAdderss from "./addressDaiolg/DialogAdderss";
-
 function Address({ onClose }) {
+  const api_token = localStorage.getItem("token");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const addressData = useSelector((state) => state.addresses.items || []);
@@ -190,43 +200,43 @@ function Address({ onClose }) {
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleCityChange = (event) => {
-    setSelectedCity(event.target.value);
-    setCurrentAddress((prevAddress) => ({
-      ...prevAddress,
-      deliveryCity: event.target.value,
-      deliveryArea: "",
-    }));
-    setAreas([]);
-  };
+  // const handleCityChange = (event) => {
+  //   setSelectedCity(event.target.value);
+  //   setCurrentAddress((prevAddress) => ({
+  //     ...prevAddress,
+  //     deliveryCity: event.target.value,
+  //     deliveryArea: "",
+  //   }));
+  //   setAreas([]);
+  // };
 
-  const handleAreaChange = (event) => {
-    setSelectedArea(event.target.value);
-    setCurrentAddress((prevAddress) => ({
-      ...prevAddress,
-      deliveryArea: event.target.value,
-    }));
-  };
+  // const handleAreaChange = (event) => {
+  //   setSelectedArea(event.target.value);
+  //   setCurrentAddress((prevAddress) => ({
+  //     ...prevAddress,
+  //     deliveryArea: event.target.value,
+  //   }));
+  // };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCurrentAddress((prevAddress) => ({ ...prevAddress, [name]: value }));
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setCurrentAddress((prevAddress) => ({ ...prevAddress, [name]: value }));
 
-    // إذا كان هناك خطأ في الحقل وتم إدخال قيمة جديدة، قم بإزالة الخطأ
-    if (value.trim()) {
-      setErrors((prevErrors) => ({ ...prevErrors, [name]: null }));
-    }
-  };
+  //   // إذا كان هناك خطأ في الحقل وتم إدخال قيمة جديدة، قم بإزالة الخطأ
+  //   if (value.trim()) {
+  //     setErrors((prevErrors) => ({ ...prevErrors, [name]: null }));
+  //   }
+  // };
 
-  const handleBlur = (e) => {
-    const { name, value } = e.target;
-    if (!value.trim()) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "This field is required",
-      }));
-    }
-  };
+  // const handleBlur = (e) => {
+  //   const { name, value } = e.target;
+  //   if (!value.trim()) {
+  //     setErrors((prevErrors) => ({
+  //       ...prevErrors,
+  //       [name]: "This field is required",
+  //     }));
+  //   }
+  // };
 
   return (
     <Stack spacing={3} sx={{ margin: "1rem" }}>
@@ -246,27 +256,25 @@ function Address({ onClose }) {
         handleDeleteAddress={handleDeleteAddress}
         addressData={addressData}
       />
-      <AddNewAddressButton handleClickOpen={handleClickOpen} />
 
-      <DialogAdderss
-        open={open}
-        handleClose={handleClose}
-        currentAddress={currentAddress}
-        cities={cities}
-        areas={areas}
-        loadingCities={loadingCities}
-        loadingAreas={loadingAreas}
-        handleCityChange={handleCityChange}
-        handleAreaChange={handleAreaChange}
-        handleInputChange={handleInputChange}
-        handleBlur={handleBlur}
-        errors={errors}
-        handleSelectLabel={handleSelectLabel}
-        handleAddAddress={handleAddAddress}
-      />
+{/* <Stack>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleClickOpen}
+          sx={{
+            backgroundColor: "#d32f2f",
+            "&:hover": {
+              backgroundColor: "#9a0007",
+            },
+          }}
+        >
+          Add New Address
+        </Button>
+      </Stack> */}
+      <DialogAdderss open={open} onclose={onClose} setopen={setOpen} />
     </Stack>
   );
 }
 
 export default Address;
-

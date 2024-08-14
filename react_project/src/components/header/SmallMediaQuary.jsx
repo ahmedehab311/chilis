@@ -204,7 +204,17 @@ function SmallMediaQuery({
                 </Typography>
               </Link>
             )}
-          
+            {location.pathname !== "/" && (
+          <Stack
+            direction="row"
+            alignItems="center"
+            sx={{ padding: "10px",justifyContent: "center" ,alignItems: "center" }}
+          >
+           <Link component={RouterLink} to="/"  onClick={closeDrawer}>
+           <img src={logo} alt="Logo" style={{ height: "45px" , width:"97px" }} />
+           </Link>
+          </Stack>
+        )}
           </Drawer>
         </>
       )}

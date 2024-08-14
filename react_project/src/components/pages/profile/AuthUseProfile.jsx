@@ -2,16 +2,102 @@
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import img from "../profile/user-profile-icon.svg"
+import { useState } from "react";
 function CardProfile({user}) {
+  const [currentAddress, setCurrentAddress] = useState({
+    deliveryCity: "",
+    deliveryArea: "",
+    street: "",
+    building: "",
+    floor: "",
+    apt: "",
+    deliveryInstructions: "",
+    label: "",
+  });
+  const [errors, setErrors] = useState({});
+  const handleAddAddress = async () => {
+    const requiredFields = [
+      "deliveryCity",
+      "deliveryArea",
+      "street",
+      "building",
+      // "floor",
+      // "apt",
+    ];
+    const newErrors = {};
+
+    requiredFields.forEach((field) => {
+      if (!currentAddress[field]) {
+        newErrors[field] = "This field is required";
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
  
-  
+    const queryParams = new URLSearchParams({
+      area: currentAddress.deliveryArea,
+      street: currentAddress.street,
+      building: currentAddress.building,
+      floor: currentAddress.floor,
+      apt: currentAddress.apt,
+      name: currentAddress.label,
+      lat: "0",
+      lng: "0",
+      api_token: api_token,
+    });
+
+    try {
+      const response = await axios.post(
+        `${API_ADD_ADDRESS}${queryParams.toString()}`
+      );
+
+      // تحقق من الشكل الفعلي للبيانات المستلمة
+      const dataResponse = response.data;
+      console.log("response", dataResponse);
+
+      // تحقق من الاستجابة بشكل صحيح
+      if (dataResponse.response) {
+        handleClose(); // أغلق الحوار أولاً
+
+        // انتظر حتى يتم إغلاق الحوار
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        // ثم قم بتفريغ الحقول
+        setCurrentAddress({
+          deliveryCity: "",
+          deliveryArea: "",
+          street: "",
+          building: "",
+          floor: "",
+          apt: "",
+          deliveryInstructions: "",
+          label: "",
+        });
+        setErrors({});
+
+        // جلب العناوين المحدثة
+        dispatch(fetchAddresses());
+      } else {
+        console.error(
+          "Error adding address:",
+          dataResponse.message || "Unknown error"
+        );
+      }
+    } catch (error) {
+      console.error("Error adding address:", error);
+    }
+  };
+
   return (
     <Card
 
       sx={{
         flexGrow: 1,
         // padding: 2,
-        padding:" 15px 47px",
+        // padding:" 15px 47px",
         border: "1px solid #ddd",
         boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)!important",
         // maxWidth:  "50%" ,
@@ -29,22 +115,30 @@ function CardProfile({user}) {
         sx={{
           display: "flex",
           alignItems: "center",
-          width: "100%",
+          // width: "100%",
           marginBottom: 2,
           justifyContent: "space-between",
-          borderBottom:"1px solid #dee2e6"
+          borderBottom:"1px solid #dee2e6",
+          padding:"2rem",
+          flexWrap: "wrap",
+        "@media (max-width:600px)": {
+          justifyContent: "center",
+          
+        },
         }}
+
       >
         <img
           src={img}
-          alt="User"
-          style={{ borderRadius: "50%", width: "60px", height: "80px" }}
+          alt="User"  
+          style={{ borderRadius: "50%", width: "105px", height: "125px" }}
         />
         <Box sx={{ marginLeft: 2 }}>
           <Stack direction={"row"} alignItems={"center"}>
             <Typography
               variant="h6"
               sx={{
+                // width:"80%",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -67,14 +161,15 @@ function CardProfile({user}) {
           </Typography>
         </Box>
       </Box>
-      {/* <Button variant="contained" color="error">
+   
+      <Button variant="contained" color="error" className="addNameProfile" >
         Add Address
-      </Button> */}
- 
+      </Button>
+
     </Card>
   );
 }
-
+  {/* <CardProfile user={user} /> */}
 export default CardProfile;
 
 // import { useState } from "react";

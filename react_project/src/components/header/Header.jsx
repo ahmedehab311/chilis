@@ -74,8 +74,8 @@ function Header({ token, handleLogout }) {
     "/profile",
     "*",
     "/error",
-  ].includes(location.pathname);
-
+    "/success", 
+    ].includes(location.pathname);
   return (
     <Stack className="hero">
       {/* header only */}
@@ -271,7 +271,6 @@ function Header({ token, handleLogout }) {
           />
         )}
       </Stack>
-
       {showHero && <Hero />}
     </Stack>
   );
