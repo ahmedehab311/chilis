@@ -126,8 +126,8 @@ function Address({ onClose }) {
         handleClickOpen={handleClickOpen2}
         buttonText="Add Address adderss"
         buttonStyle={{
-          backgroundColor: "blue",
-          "&:hover": { backgroundColor: "darkblue" },
+          backgroundColor: "#d32f2f",
+          "&:hover": { backgroundColor: "#d32f2f" },
         }}
       />
 

@@ -8,7 +8,7 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import img from "../profile/user-profile-icon.svg";
 import UserInfo from "./userInfo";
 import AddressDialog from "../../Menu/order/adderess/addressDaiolg/DialogAdderss.jsx";
-import AddNewAddressButton from "../../Menu/order/buttons/AddNewAddressButton.jsx";
+import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 const Profile = () => {
   const BASE_URL = "https://myres.me/chilis/api";
   const navigate = useNavigate();
@@ -144,11 +144,11 @@ const Profile = () => {
                 alignItems: "center",
                 marginBottom: 2,
                 justifyContent: "space-between",
-                borderBottom: "1px solid #dee2e6",
                 padding: "2rem",
-                flexWrap: "wrap",
+
                 "@media (max-width:600px)": {
                   justifyContent: "center",
+                  flexWrap: "wrap",
                 },
               }}
             >
@@ -185,15 +185,57 @@ const Profile = () => {
                 </Typography>
               </Box>
             </Box>
-
-            <AddNewAddressButton
-              handleClickOpen={handleClickOpen1}
-              buttonText="Add Address profile"
-              buttonStyle={{
-                backgroundColor: "blue",
-                "&:hover": { backgroundColor: "darkblue" },
+            <Stack
+              sx={{
+                cursor: "pointer",
+                padding: 2,
+                borderTop: "1px solid #dee2e6",
+                borderBottom: "1px solid #dee2e6",
               }}
-            />
+              onClick={handleClickOpen1}
+            >
+              <Typography
+                sx={{
+                  fontSize: "1.8rem",
+                  textTransform: "capitalize",
+                  fontWeight: "600",
+                  color: "#343a40 !important",
+                  textAlign: "left",
+                }}
+              >
+                address
+              </Typography>
+              <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
+                <Typography
+                  sx={{
+                    fontSize: "1.6rem",
+                    textTransform: "",
+                    fontWeight: "600",
+                    color: "#6c757d!important",
+                    textAlign: "left",
+                  }}
+                >
+                  Add a delivery address
+                </Typography>
+                <ArrowForwardIosOutlinedIcon
+                  sx={{
+                    fontSize: "2rem",
+                    animation: "moveRight 0.9s infinite",
+                    "@keyframes moveRight": {
+                      "0%": {
+                        transform: "translateX(0)", // المكان الأصلي
+                      },
+                      "50%": {
+                        transform: "translateX(10px)", // التحرك إلى اليمين بمقدار 10 بكسل
+                      },
+                      "100%": {
+                        transform: "translateX(0)", // العودة إلى المكان الأصلي
+                      },
+                    },
+                  }}
+                />
+              </Stack>
+            </Stack>
 
             <AddressDialog open={openDialog1} onClose={handleClose1} />
           </Card>

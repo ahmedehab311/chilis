@@ -233,15 +233,26 @@ function AddressDialog({ open, onClose }) {
         <DialogTitle>
           <Typography
             sx={{
-              fontSize: "1.5rem",
+              fontSize: "1.8rem",
               fontWeight: "500",
               textAlign: "left",
             }}
           >
-            Add Address
+            Add Delivery Address
           </Typography>
           <IconButton
-            sx={{ position: "absolute", top: 8, right: 8 }}
+            sx={{
+              "&:hover": {
+                backgroundColor: "transparent", // إزالة لون الخلفية عند التمرير
+              opacity:"1",
+              transition:".5s"
+              },
+              cursor: "pointer", // أو يمكنك ضبط المؤشر ليبقى كما هو
+              position: "absolute",
+              top: 8,
+              right: 8,
+              opacity:".6"
+            }}
             onClick={onClose}
           >
             <CloseIcon />

@@ -19,6 +19,9 @@ function DiaolgLabels({ handleSelectLabel, currentAddress }) {
         color="primary"
         onClick={() => handleSelectLabel("Home")}
         sx={{
+          fontSize:"1.1rem",
+          fontWeight:"500",
+
           border: currentAddress.label === "Home" ? "2px solid #d32f2f" : "",
         }}
       >
@@ -29,6 +32,9 @@ function DiaolgLabels({ handleSelectLabel, currentAddress }) {
         color="primary"
         onClick={() => handleSelectLabel("Work")}
         sx={{
+          fontSize:"1.1rem",
+          fontWeight:"500",
+
           border: currentAddress.label === "Work" ? "2px solid #d32f2f" : "",
         }}
       >
@@ -39,6 +45,9 @@ function DiaolgLabels({ handleSelectLabel, currentAddress }) {
         color="primary"
         onClick={() => handleSelectLabel("Other")}
         sx={{
+          fontSize:"1.1rem",
+          fontWeight:"500",
+
           border: currentAddress.label === "Other" ? "2px solid #d32f2f" : "",
         }}
       >

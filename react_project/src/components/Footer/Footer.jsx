@@ -14,32 +14,36 @@ function Footer() {
             background: "#e72323",
             position: "relative",
             p: 1,
+            "@media (max-width: 700px)": {
+              flexDirection: "column",
+            },
           }}
           gap={2}
         >
           <Stack>
             <ContactUs />
           </Stack>
-          {/* <Stack>
-            <Location />
-          </Stack> */}
+          <Stack>
+            {/* <Location /> */}
+            <Typography
+              sx={{
+                color: "#fff",
+                background: "#e72323",
+                fontWight: "600",
+                fontSize: "16px",
+                textAlign: "center",
+                textTransform: "uppercase",
+                pb: 2,
+              }}
+            >
+              all rights reserved to chilis egypt
+            </Typography>
+          </Stack>
+
           <Stack>
             <Email />
           </Stack>
         </Box>
-        <Typography
-          sx={{
-            color: "#fff",
-            background: "#e72323",
-            fontWight: "600",
-            fontSize: "16px",
-            textAlign: "center",
-            textTransform: "uppercase",
-            pb: 2,
-          }}
-        >
-          all rights reserved to chilis egypt
-        </Typography>
       </Stack>
     </div>
   );
