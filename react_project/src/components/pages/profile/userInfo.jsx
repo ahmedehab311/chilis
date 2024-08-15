@@ -71,7 +71,6 @@ function userInfo({
             Phone
           </Typography>
           <TextField
-            // label="Phone"
             variant="outlined"
             fullWidth
             margin="normal"
@@ -95,7 +94,6 @@ function userInfo({
             Email
           </Typography>
           <TextField
-            // label="Email"
             variant="outlined"
             fullWidth
             margin="normal"

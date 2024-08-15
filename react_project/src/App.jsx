@@ -80,7 +80,6 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
         />
         <Route path="/order-online" element={<OrderOnline />} />
         <Route path="/my_orders" element={<MyOrders />} />
-        {/* <Route path="/success" element={<Success />} /> */}
 
         <Route path="*" element={<Error />} />
       </Routes>
@@ -113,7 +112,7 @@ function App() {
   //   dispatch(setTotalItems(0));
   // }, [dispatch]);
 
-  const location = useLocation(); // استخدام useLocation للحصول على الموقع الحالي
+  const location = useLocation();
 
   useEffect(() => {
     if (location.state?.scrollTo) {

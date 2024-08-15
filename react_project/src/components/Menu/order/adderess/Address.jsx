@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Button, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import AddressData from "./addressData/DialogAdderss";
 import { API_AREAS, API_CITIES } from "./apiAdderss";
 import {
@@ -18,11 +18,8 @@ function Address({ onClose }) {
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingAreas, setLoadingAreas] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
-  // const [open, setOpen] = useState(false);
   const [user, setUser] = useState(null);
-  const [errors, setErrors] = useState({});
 
-  // const handleClose = () => setOpen(false);
   useEffect(() => {
     const fetchCities = async () => {
       setLoadingCities(true);
@@ -83,19 +80,11 @@ function Address({ onClose }) {
     dispatch(fetchAddresses());
   }, [dispatch]);
 
-  // const handleDeleteAddress = async (id) => {
-  //   try {
-  //     await dispatch(deleteAddress(id));
-  //     dispatch(fetchAddresses());
-  //   } catch (error) {
-  //     console.error("Error deleting address:", error);
-  //   }
-  // };
   const handleDeleteAddress = async (id) => {
-    // عرض نافذة تأكيد قبل الحذف
-    const isConfirmed = window.confirm("Are you sure you want to delete this address?");
-  
-    // إذا وافق المستخدم على الحذف
+    const isConfirmed = window.confirm(
+      "Are you sure you want to delete this address?"
+    );
+
     if (isConfirmed) {
       try {
         await dispatch(deleteAddress(id));
@@ -105,7 +94,7 @@ function Address({ onClose }) {
       }
     }
   };
-  
+
   const [openDialog2, setOpenDialog2] = useState(false);
 
   const handleClickOpen2 = () => {
