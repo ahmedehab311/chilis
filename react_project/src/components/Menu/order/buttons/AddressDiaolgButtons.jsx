@@ -14,10 +14,10 @@
 
 // export default AddAddressDiaolg;
 import { DialogActions, Button } from "@mui/material";
-function AddAddressDiaolg({ handleClose, handleAddAddress }) {
+function AddAddressDiaolg({ handleClose, handleAddAddress,onClose }) {
   return (
     <DialogActions>
-      <Button onClick={handleClose} color="error">
+      <Button onClick={onClose} color="error">
         Cancel
       </Button>
       <Button onClick={handleAddAddress} color="error">
