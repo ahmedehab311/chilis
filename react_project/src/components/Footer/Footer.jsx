@@ -9,7 +9,7 @@ function Footer() {
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            justifyContent: "space-around",
             borderTop: "3px solid #fff",
             background: "#e72323",
             position: "relative",
@@ -20,9 +20,9 @@ function Footer() {
           <Stack>
             <ContactUs />
           </Stack>
-          <Stack>
+          {/* <Stack>
             <Location />
-          </Stack>
+          </Stack> */}
           <Stack>
             <Email />
           </Stack>

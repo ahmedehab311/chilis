@@ -84,7 +84,6 @@ function CheckOut({
     fetchTax();
   }, [subtotal, deliveryFee]);
 
-
   const calculateSubtotalWithExtras = () => {
     return cartItems.reduce((acc, item, index) => {
       const itemTotal = totalPrices[index] || item.price;
@@ -95,8 +94,7 @@ function CheckOut({
     }, 0);
   };
 
-  const subtotalWithExtras = calculateSubtotalWithExtras()
-  ;
+  const subtotalWithExtras = calculateSubtotalWithExtras();
   return (
     <Container
       sx={{
@@ -408,60 +406,66 @@ function CheckOut({
 
       <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
         <Stack
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-          direction={"row"}
-          alignItems={"center"}
+        //  sx={{borderBottom:"1px solid rgba(0,0,0,.1)" }}
         >
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            Subtotal:
-          </Typography>{" "}
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {subtotalWithExtras.toFixed(2)} EGP
-          </Typography>
-        </Stack>
-        <Stack
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Typography
+          <Stack
             sx={{
-              fontSize: "15px",
-              fontWeight: "bold",
-              my: 2,
+              display: "flex",
+              justifyContent: "space-between",
             }}
+            direction={"row"}
+            alignItems={"center"}
           >
-            Delivery Fee:{" "}
-          </Typography>{" "}
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {deliveryFee.toFixed(2)} EGP
-          </Typography>
+            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              Subtotal:
+            </Typography>{" "}
+            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              {subtotalWithExtras.toFixed(2)} EGP
+            </Typography>
+          </Stack>
+          <Stack
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+            direction={"row"}
+            alignItems={"center"}
+          >
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: "bold",
+                my: 2,
+              }}
+            >
+              Delivery Fee:{" "}
+            </Typography>{" "}
+            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              {deliveryFee.toFixed(2)} EGP
+            </Typography>
+          </Stack>
+          <Stack
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+            direction={"row"}
+            alignItems={"center"}
+          >
+            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              Tax {tax} %
+            </Typography>
+            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              {(((subtotal + deliveryFee) * tax) / 100).toFixed(2)} EGP
+            </Typography>
+          </Stack>
         </Stack>
+
         <Stack
           sx={{
             display: "flex",
             justifyContent: "space-between",
-          }}
-          direction={"row"}
-          alignItems={"center"}
-        >
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            Tax {tax} %
-          </Typography>
-          <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {((subtotal + deliveryFee) * tax / 100).toFixed(2)} EGP
-          </Typography>
-        </Stack>
-        <Stack
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
+            // borderBottom:"1px solid rgba(0,0,0,.1)"
           }}
           direction={"row"}
           alignItems={"center"}
