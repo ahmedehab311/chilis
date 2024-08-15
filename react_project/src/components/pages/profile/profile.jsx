@@ -50,7 +50,7 @@ const Profile = () => {
 
 
   const handleSave = async () => {
-    // عرض مربع التأكيد
+
     const isConfirmed = window.confirm(
       "Are you sure you want to save these changes?"
     );
