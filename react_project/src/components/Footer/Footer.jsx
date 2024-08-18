@@ -15,7 +15,7 @@ function Footer() {
             position: "relative",
             p: 1,
             "@media (max-width: 700px)": {
-              flexDirection: "column",
+              flexDirection: "column"
             },
           }}
           gap={2}

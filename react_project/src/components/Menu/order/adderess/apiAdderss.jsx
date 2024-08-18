@@ -1,5 +1,4 @@
 const api_token = localStorage.getItem("token");
-console.log(api_token);
 const API_CITIES = "https://myres.me/chilis/api/cities";
 const API_AREAS = "https://myres.me/chilis/api/areas?city=";
 // const API_ADDRESS = https://myres.me/chilis/api//profile/address/?api_token=${api_token};

@@ -10,6 +10,7 @@ import {
   MenuItem,
   Typography,
   Badge,
+  Box,
 } from "@mui/material";
 // import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -74,8 +75,8 @@ function Header({ token, handleLogout }) {
     "/profile",
     "*",
     "/error",
-    "/success", 
-    ].includes(location.pathname);
+    "/success",
+  ].includes(location.pathname);
   return (
     <Stack className="hero">
       {/* header only */}
@@ -104,14 +105,14 @@ function Header({ token, handleLogout }) {
                   </Link>
                 </Stack>
               )}
-              <LanguageOutlinedIcon
+              {/* <LanguageOutlinedIcon
                 sx={{
                   fontSize: "30px",
                   cursor: "pointer",
                   color: "#777",
                   mr: 5,
                 }}
-              />
+              /> */}
               <Link href="#menu">
                 <Typography
                   sx={{
@@ -165,97 +166,88 @@ function Header({ token, handleLogout }) {
                 </Typography>
               </Link>
               {token ? (
-                <Link component={RouterLink} to="/order-online">
-                  <IconButton aria-label="cart" style={{ marginLeft: "auto" }}>
-                    <Badge
-                      badgeContent={totalItems}
-                      color="error"
-                      invisible={totalItems === 0}
-                    >
-                      <ShoppingCartOutlinedIcon
-                        sx={{ fontSize: "3rem", color: "#fff" }}
-                      />
-                    </Badge>
-                  </IconButton>
-                </Link>
-              ) : null}
-              {token ? (
-                <>
-                  <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={handleMenu}
-                    sx={{ color: "#fff", position: "absolute", right: "10px" }}
-                  >
-                    <AccountCircle sx={{ fontSize: "28px" }} />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "right",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                    sx={{
-                      mt: 1,
-                    }}
-                  >
-                    <MenuItem
-                      onClick={handleClose}
-                      component={RouterLink}
-                      to="/profile"
-                    >
-                      <Typography sx={{ fontSize: "1.2rem" }}>
-                        {" "}
-                        Profile
-                      </Typography>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={handleClose}
-                      component={RouterLink}
-                      to="/my_orders"
-                    >
-                      <Typography sx={{ fontSize: "1.2rem" }}>
-                        {" "}
-                        My ordres
-                      </Typography>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        handleLogout();
-                        handleClose();
-                      }}
-                    >
-                      <Typography sx={{ fontSize: "1.2rem" }}>
-                        {" "}
-                        Logout
-                      </Typography>
-                    </MenuItem>
-                  </Menu>
-                </>
-              ) : (
-                <Link component={RouterLink} to="/login">
-                  <Typography
-                    sx={{
-                      color: "#fff",
-                      fontSize: "2.2rem",
-                      fontFamily: "cairo",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Login
-                  </Typography>
-                </Link>
-              )}
+  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <Link component={RouterLink} to="/order-online">
+      <IconButton aria-label="cart" sx={{ ml: 'auto' }}>
+        <Badge
+          badgeContent={totalItems}
+          color="error"
+          invisible={totalItems === 0}
+        >
+          <ShoppingCartOutlinedIcon
+            sx={{ fontSize: "3rem", color: "#fff" }}
+          />
+        </Badge>
+      </IconButton>
+    </Link>
+
+    <IconButton
+      size="large"
+      aria-label="account of current user"
+      aria-controls="menu-appbar"
+      aria-haspopup="true"
+      onClick={handleMenu}
+      sx={{ color: "#fff" }}  
+    >
+      <AccountCircle sx={{ fontSize: "28px" }} />
+    </IconButton>
+
+    <Menu
+      id="menu-appbar"
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: "bottom",
+        horizontal: "right",
+      }}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={Boolean(anchorEl)}
+      onClose={handleClose}
+      sx={{ mt: 1 }}
+    >
+      <MenuItem
+        onClick={handleClose}
+        component={RouterLink}
+        to="/profile"
+      >
+        <Typography sx={{ fontSize: "1.2rem" }}> Profile</Typography>
+      </MenuItem>
+      <MenuItem
+        onClick={handleClose}
+        component={RouterLink}
+        to="/my_orders"
+      >
+        <Typography sx={{ fontSize: "1.2rem" }}> My Orders</Typography>
+      </MenuItem>
+      <MenuItem
+        onClick={() => {
+          handleLogout();
+          handleClose();
+        }}
+      >
+        <Typography sx={{ fontSize: "1.2rem" }}> Logout</Typography>
+      </MenuItem>
+    </Menu>
+  </Box>
+) : (
+  <Link component={RouterLink} to="/login">
+    <Typography
+      sx={{
+        color: "#fff",
+        fontSize: "2.2rem",
+        fontFamily: "cairo",
+        fontWeight: "bold",
+      }}
+    >
+      Login
+    </Typography>
+  </Link>
+)}
+
+
             </Stack>
           </>
         )}

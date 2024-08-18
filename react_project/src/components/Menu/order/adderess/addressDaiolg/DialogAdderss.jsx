@@ -99,9 +99,6 @@ function AddressDialog({ open, onClose }) {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("Address Data:", addressData);
-  }, [addressData]);
 
   useEffect(() => {
     dispatch(fetchAddresses());
@@ -151,7 +148,7 @@ function AddressDialog({ open, onClose }) {
 
       // تحقق من الشكل الفعلي للبيانات المستلمة
       const dataResponse = response.data;
-      console.log("response", dataResponse);
+      // console.log("response", dataResponse);
 
       // تحقق من الاستجابة بشكل صحيح
       if (dataResponse.response) {

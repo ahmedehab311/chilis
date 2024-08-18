@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+// /* eslint-disable react/prop-types */
+import { useEffect, useState } from "react";
 import {
   Box,
   Stack,
@@ -7,23 +9,23 @@ import {
   Card,
   Container,
   Button,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import "../OrderOnline.css";
 import imgLogo from "../../../../Hero/images/logo.png";
 import Counter from "../../../ButtonsMenu/CounterDiaolgButton";
 import { API_TAX } from "../../../apis&fetchData/ApiLinks";
-import { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-} from "@mui/material";
+import PaymentPage from "./PaymentPage";
 import axios from "axios";
-
+import Coupun from "./Coupon/Coupun";
 function CheckOut({
   handleRemoveItem,
   cartItems,
@@ -32,39 +34,13 @@ function CheckOut({
   totalPrices,
   handleCounterChange,
 }) {
-  //
-  const [openPaymentDialog, setOpenPaymentDialog] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("cash");
-  const [showCardForm, setShowCardForm] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpenPaymentDialog(true);
-  };
-
-  const handleClose = () => {
-    setOpenPaymentDialog(false);
-  };
-
-  const handlePaymentMethodChange = (event) => {
-    setPaymentMethod(event.target.value);
-    if (event.target.value === "card") {
-      setShowCardForm(true);
-    } else {
-      setShowCardForm(false);
-    }
-  };
-
-  const handlePlaceOrder = () => {
-    handleClose();
-    if (paymentMethod === "cash") {
-      alert("Order placed successfully with cash payment!");
-    } else if (paymentMethod === "card") {
-      alert("Redirecting to credit card payment page...");
-    }
-  };
+  const BASE_URL = "http://myres.me/chilis-dev";
+  const api_token = localStorage.getItem("token"); // استرجاع التوكن من localStorage
+  const API_CHECKOUT = `items={"items":[{"id":26,"choices":[],"extras":[],"options":[],"count":1,"special":""}]`;
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
-
+  const [paymentMethod, setPaymentMethod] = useState("cash"); // New state for payment method
+  const [openDialog, setOpenDialog] = useState(false);
   // في قسم useEffect الخاص بالحساب
   useEffect(() => {
     const fetchTax = async () => {
@@ -95,6 +71,55 @@ function CheckOut({
   };
 
   const subtotalWithExtras = calculateSubtotalWithExtras();
+  const handleCloseDialog = () => {
+    setOpenDialog(false); // غلق الـ Dialog
+  };
+  const API_PLACE_ORDER = `${BASE_URL}/place-order`; // عنوان الـ API لوضع الطلب
+
+  const handlePlaceOrder = async () => {
+    const orderDetails = {
+      items: cartItems.map((item, index) => ({
+        id: item.id,
+        count: item.count,
+        extras: item.extras || [],
+        options: item.options || [],
+        special: item.special || "",
+      })),
+      subtotal: subtotalWithExtras,
+      deliveryFee: deliveryFee,
+      totalPrice: totalWithTax,
+      paymentMethod: paymentMethod,
+      // أضف تفاصيل إضافية إذا لزم الأمر
+    };
+
+    if (paymentMethod === "credit") {
+      setOpenDialog(true); // فتح الـ Dialog إذا تم اختيار Credit Card
+    } else {
+      try {
+        const result = await placeOrder(orderDetails);
+        alert("Order placed successfully!");
+        // توجيه المستخدم إلى صفحة تأكيد الطلب أو أي صفحة أخرى إذا لزم الأمر
+      } catch (error) {
+        alert("Failed to place order. Please try again.");
+      }
+    }
+  };
+
+  const placeOrder = async (orderDetails) => {
+    try {
+      const response = await axios.post(API_PLACE_ORDER, orderDetails, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${api_token}`, // إضافة التوكن إلى الرؤوس
+        },
+      });
+      return response.data; // راجع استجابة الـ API هنا
+    } catch (error) {
+      console.error("Error placing order:", error);
+      throw error; // أعد طرح الخطأ للتعامل معه لاحقًا
+    }
+  };
+
   return (
     <Container
       sx={{
@@ -248,7 +273,6 @@ function CheckOut({
                       </Typography>
                       <Typography
                         sx={{
-                          // color: "#6c757d!important",
                           fontSize: "1.5rem",
                           fontWeight: 500,
                         }}
@@ -270,7 +294,7 @@ function CheckOut({
                                 sx={{
                                   color: "#000!important",
                                   fontSize: "1.5rem",
-                                  // fontWeight: "bold",
+
                                   fontFamily: "cairo",
                                   fontWeight: 500,
                                 }}
@@ -281,7 +305,6 @@ function CheckOut({
                                 sx={{
                                   color: "#000!important",
                                   fontSize: "1.5rem",
-                                  // fontWeight: "bold",
                                   fontFamily: "cairo",
                                   fontWeight: 500,
                                 }}
@@ -293,16 +316,6 @@ function CheckOut({
                           ))}
                         </Stack>
                       )}
-                      {/* <Typography
-                        sx={{
-                          color: "#17a2b8!important",
-                          fontSize: "1.8rem",
-                          fontWeight: "bold",
-                          fontFamily: "cairo",
-                        }}
-                      >
-                        {item.extras.name}
-                      </Typography> */}
                     </Stack>
                     <TextField
                       placeholder="Enter any special request note"
@@ -323,95 +336,15 @@ function CheckOut({
               ))}
         </Box>
       </Container>
-
-      <Stack
-        className="middleOrder"
-        sx={{ p: 2, borderBottom: "2px solid #ececec" }}
-      >
-        <Stack className="middleOrder" sx={{ p: 2 }}>
-          <Stack
-            direction="row"
-            spacing={1}
-            alignItems="center"
-            sx={{ mb: "1rem" }}
-          >
-            <TextField
-              id="coupon-code-input"
-              placeholder="Enter coupon code"
-              sx={{
-                flex: 1,
-
-                "& .MuiInputBase-input": {
-                  // borderTopRightRadius: 0,
-                  // borderBottomRightRadius: 0,
-                  padding: ".9rem 1rem !important",
-                  fontSize: "1.3rem", // لتغيير حجم النص
-                  color: "gray",
-                  // margin: ".4rem",
-                },
-                "& .MuiInputBase-input::placeholder": {
-                  color: "gray",
-                  fontSize: "1.3rem",
-                },
-              }}
-            />
-            <Stack>
-              <Button
-                variant="contained"
-                color="error"
-                sx={{
-                  p: "10px 16px !important",
-                  height: "100%",
-                  // borderTopLeftRadius: 0,
-                  // borderBottomLeftRadius: 0,
-                  backgroundColor: "#d32f2f",
-                  "&:hover": { backgroundColor: "#d32f2f" },
-                }}
-              >
-                Apply
-              </Button>
-            </Stack>
-          </Stack>
-          <TextField
-            className="formControl"
-            id="outlined-basic"
-            placeholder="Any notes? please enter it here."
-            fullWidth
-            multiline
-            minRows={5}
-            sx={{
-              width: "100%",
-              transition: ".5s",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              "& .MuiInputBase-input": {
-                fontSize: "1.5rem", // لتغيير حجم النص
-                color: "gray",
-                // margin: ".4rem",
-              },
-              "& .MuiInputBase-input::placeholder": {
-                color: "gray",
-                fontSize: "1.3rem",
-              },
-            }}
-            InputProps={{
-              style: {
-                textAlign: "center", // Ensure placeholder text alignment
-              },
-            }}
-          />
-        </Stack>
-      </Stack>
-
+      {/* coupon */}
+      <Coupun api_token={api_token}/>
       <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
-        <Stack
-        //  sx={{borderBottom:"1px solid rgba(0,0,0,.1)" }}
-        >
+        <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
           <Stack
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              mb: "5px",
             }}
             direction={"row"}
             alignItems={"center"}
@@ -427,6 +360,7 @@ function CheckOut({
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              mb: "5px",
             }}
             direction={"row"}
             alignItems={"center"}
@@ -435,7 +369,7 @@ function CheckOut({
               sx={{
                 fontSize: "15px",
                 fontWeight: "bold",
-                my: 2,
+                // my: 2,
               }}
             >
               Delivery Fee:{" "}
@@ -448,6 +382,7 @@ function CheckOut({
             sx={{
               display: "flex",
               justifyContent: "space-between",
+              mb: 1,
             }}
             direction={"row"}
             alignItems={"center"}
@@ -465,7 +400,6 @@ function CheckOut({
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            // borderBottom:"1px solid rgba(0,0,0,.1)"
           }}
           direction={"row"}
           alignItems={"center"}
@@ -478,89 +412,79 @@ function CheckOut({
             {totalWithTax.toFixed(2)} EGP
           </Typography>
         </Stack>
-        <Stack className="stackBtn" sx={{ p: 2 }}>
-          <Button
-            color="error"
-            variant="contained"
-            className="placeOrderBtn"
-            disabled={cartItems.length === 0}
-            onClick={handleClickOpen}
+        <FormControl
+          component="fieldset"
+          sx={{ mt: "2rem", textAlign: "center" }}
+        >
+          <FormLabel
+            component="legend"
+            sx={{ fontSize: "1.4rem", fontWeight: "600", textAlign: "center" }}
           >
-            PLACE ORDER
-          </Button>
-        </Stack>
-        <Dialog open={openPaymentDialog} onClose={handleClose}>
-          <DialogTitle>Select Payment Method</DialogTitle>
+            Select Payment Method
+          </FormLabel>
+          <RadioGroup
+            aria-label="payment-method"
+            name="payment-method"
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+            sx={{
+              justifyContent: "center",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <FormControlLabel
+              value="cash"
+              control={<Radio />}
+              label="Cash on Delivery"
+            />
+            <FormControlLabel
+              value="credit"
+              control={<Radio />}
+              label="Credit Card"
+            />
+          </RadioGroup>
+        </FormControl>
+
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handlePlaceOrder}
+          sx={{
+            mt: "1.5rem",
+            p: "1rem",
+            fontSize: "1.5rem",
+            backgroundColor: "#d32f2f",
+            textTransform: "capitalize",
+            "&:hover": {
+              backgroundColor: "#d32f2f",
+            },
+          }}
+        >
+          Place Order
+        </Button>
+        <Dialog
+          open={openDialog}
+          onClose={handleCloseDialog}
+          fullWidth
+          maxWidth="sm"
+        >
+          <DialogTitle
+            sx={{ fontSize: "1.8rem", fontWeight: "600", textAlign: "center" }}
+          >
+            Payment Information
+          </DialogTitle>
           <DialogContent>
-            <RadioGroup
-              value={paymentMethod}
-              onChange={handlePaymentMethodChange}
-            >
-              <FormControlLabel value="cash" control={<Radio />} label="Cash" />
-              <FormControlLabel
-                value="card"
-                control={<Radio />}
-                label="Credit Card"
-              />
-            </RadioGroup>
-            {showCardForm && (
-              <Box mt={2}>
-                <TextField
-                  label="Card Number"
-                  fullWidth
-                  margin="normal"
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      fontSize: "1.5rem", // لتغيير حجم النص
-                      color: "gray",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "gray",
-                      fontSize: "1.3rem",
-                    },
-                  }}
-                />
-                <TextField
-                  label="Expiry Date"
-                  fullWidth
-                  margin="normal"
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      fontSize: "1.5rem", // لتغيير حجم النص
-                      color: "gray",
-                      // margin: ".4rem",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "gray",
-                      fontSize: "1.3rem",
-                    },
-                  }}
-                />
-                <TextField
-                  label="CVV"
-                  fullWidth
-                  margin="normal"
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      fontSize: "1.5rem", // لتغيير حجم النص
-                      color: "gray",
-                      // margin: ".4rem",
-                    },
-                    "& .MuiInputBase-input::placeholder": {
-                      color: "gray",
-                      fontSize: "1.3rem",
-                    },
-                  }}
-                />
-              </Box>
-            )}
+            <PaymentPage />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose} color="error">
-              Cancel
-            </Button>
-            <Button onClick={handlePlaceOrder} color="error">
-              Confirm
+            <Button
+              onClick={handleCloseDialog}
+              color="error"
+              sx={{ fontSize: "1.1rem", fontWeight: "500" }}
+            >
+              Close
             </Button>
           </DialogActions>
         </Dialog>
@@ -570,3 +494,7 @@ function CheckOut({
 }
 
 export default CheckOut;
+
+// https://myres.me/chilis/api/coupon/validation?coupon=chi2022&api_token={{api_token}}
+// items={"items":[{"id":26,"choices":[],"extras":[],"options":[],"count":1,"special":""}]
+// http://myres.me/chilis-dev

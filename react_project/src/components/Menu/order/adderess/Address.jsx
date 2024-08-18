@@ -73,10 +73,6 @@ function Address({ onClose }) {
   }, []);
 
   useEffect(() => {
-    console.log("Address Data:", addressData);
-  }, [addressData]);
-
-  useEffect(() => {
     dispatch(fetchAddresses());
   }, [dispatch]);
 
