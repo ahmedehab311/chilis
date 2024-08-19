@@ -18,13 +18,11 @@ function Coupun({ api_token }) {
     try {
       const response = await axios.get(`${API_COUPON}?code=${couponCode}`, {
         headers: {
-          Authorization: `Bearer ${api_token}`, // إضافة التوكن إذا لزم الأمر
+          Authorization: `Bearer ${api_token}`,
         },
       });
 
-      // معالجة استجابة الـ API
       const couponData = response.data;
-      // تنفيذ المنطق الخاص بإضافة الكوبون وتحديث الحالة
     } catch (error) {
       console.error("Error applying coupon:", error);
       setError("Failed to apply coupon. Please try again.");
