@@ -44,7 +44,6 @@ function Main() {
             sx={{
               color: "#555",
               mt: 3,
-              // mb: 2,
               letterSpacing: 6,
               fontSize: "18px",
               textTransform: "uppercase",

@@ -1,56 +1,9 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import { useNavigate } from "react-router-dom";
+/* eslint-disable react/no-unescaped-entities */
 import { Box, Button, TextField, Typography, Stack } from "@mui/material";
-import axios from "axios";
-import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { setUser } from "../../../rtk/slices/userSlice"; // Import setUser action
-
-const BASE_URL = "https://myres.me/chilis/api";
-
-const LoginPage = ({ setToken }) => {
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const login = async (e) => {
-    e.preventDefault();
-
-    const APIURL = `/login?phone=${phone}&password=${password}&email=${phone}`;
-    try {
-      const response = await axios.post(`${BASE_URL}${APIURL}`);
-      console.log("Response Data:", response.data); // تحقق من استجابة API
-
-      if (response.data && response.data.data) {
-        const token = response.data.data.token;
-        const userData = response.data.data.user;
-
-        if (token && userData) {
-          setToken(token);
-          localStorage.setItem("token", token);
-          localStorage.setItem("user", JSON.stringify(userData)); // تخزين بيانات المستخدم
-
-          dispatch(setUser(userData)); // تخزين بيانات المستخدم في Redux
-
-          toast.success("Login successful!");
-          navigate("/");
-        } else {
-          throw new Error("Token or user data not found");
-        }
-      } else {
-        throw new Error(response.data.messages || "Login failed");
-      }
-    } catch (error) {
-      const errorMessage =
-        error.response?.data?.messages || "Invalid User Name or Password";
-      toast.error(errorMessage);
-      console.error("Error logging in: ", errorMessage);
-    }
-  };
-
+function LoginContent({login,phone,password,handleLogout,setPassword,setPhone }) {
   return (
     <Box
       sx={{
@@ -137,7 +90,7 @@ const LoginPage = ({ setToken }) => {
         </Box>
       </Stack>
     </Box>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginContent

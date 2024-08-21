@@ -26,6 +26,8 @@ import { API_TAX } from "../../../apis&fetchData/ApiLinks";
 import PaymentPage from "./PaymentPage";
 import axios from "axios";
 import Coupun from "./Coupon/Coupun";
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedAddress } from "../../../../../rtk/slices/adderssSlice";
 function CheckOut({
   handleRemoveItem,
   cartItems,
@@ -34,9 +36,177 @@ function CheckOut({
   totalPrices,
   handleCounterChange,
 }) {
-  const BASE_URL = "http://myres.me/chilis-dev";
   const api_token = localStorage.getItem("token"); // استرجاع التوكن من localStorage
-  const API_CHECKOUT = `items={"items":[{"id":26,"choices":[],"extras":[],"options":[],"count":1,"special":""}]`;
+
+  const handleCashPayment = async () => {
+    try {
+      const response = await axios.post(API_CHECKOUT, {
+        // هنا ترسل البيانات الخاصة بطلب الدفع النقدي
+      });
+
+      if (response.data.success) {
+        alert("تم الطلب بنجاح!");
+      } else {
+        alert("فشل الطلب، يرجى المحاولة مرة أخرى.");
+      }
+    } catch (error) {
+      console.error("Error processing payment:", error);
+      alert("حدث خطأ أثناء معالجة الدفع.");
+    }
+  };
+
+  const dispatch = useDispatch();
+  const addressData = useSelector((state) => state.addresses.items || []);
+  const selectedAddress = useSelector(
+    (state) => state.addresses.selectedAddress
+  );
+  useEffect(() => {
+    // Log the selected address to the console whenever it changes
+    if (selectedAddress) {
+      console.log("Selected Address:", selectedAddress);
+    }
+  }, [selectedAddress]);
+  const [orders, setOrders] = useState([]);
+
+
+  // const handleCheckout = () => {
+  //   // تحقق من العنوان الحالي
+  //   if (addressData.length === 1 && !selectedAddress) {
+  //     dispatch(setSelectedAddress(addressData[0]));
+  //   }
+  
+  //   const currentSelectedAddress = selectedAddress || addressData[0];
+  
+  //   // التحقق من وجود عنوان محدد
+  //   if (
+  //     (addressData.length > 1 && !selectedAddress) ||
+  //     !currentSelectedAddress
+  //   ) {
+  //     alert("Please select an address before placing the order.");
+  //     return;
+  //   }
+  
+  //   // تحقق من طريقة الدفع إذا كانت "credit card"
+  //   if (payment === 2) {
+  //     // فتح الديالوج الخاص بالـ credit card
+  //     openCreditCardDialog();
+  //     return; // إيقاف تنفيذ باقي الكود
+  //   }
+  
+  //   // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
+  //   const orders = cartItems.map((item) => ({
+  //     id: item.id,
+  //     special: item.specialNote || "",
+  //     extras: item.extras || [], 
+  //     count: item.count || 1, 
+  //     choices: item.choices || [], 
+  //   }));
+  
+  //   const dataToSend = {
+  //     delivery_type: 1,
+  //     payment: paymentMethod === "cash" ? 1 : 2, 
+  //     lat: currentSelectedAddress.lat,
+  //     lng: currentSelectedAddress.lng,
+  //     address: currentSelectedAddress.id,
+  //     area: 1,
+  //     branch: 1,
+  //     api_token: api_token,
+  //     items: { items: orders }, 
+  //     device_id: "",
+  //     notes: "",
+  //     time: "2024-08-20 14:07:07",
+  //     car_model: "",
+  //     car_color: "",
+  //     gift_cards: "",
+  //     coins: "00.00",
+  //   };
+  
+  //   console.log("Checkout data:", dataToSend);
+  
+  //   axios
+  //     .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+  //     .then((response) => {
+  //       console.log("Order placed successfully:", response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error placing order:", error);
+  //     });
+  // };
+
+  const handleCheckout = () => {
+    // تحقق من العنوان الحالي
+    if (addressData.length === 1 && !selectedAddress) {
+      dispatch(setSelectedAddress(addressData[0]));
+    }
+  
+    const currentSelectedAddress = selectedAddress || addressData[0];
+  
+    // التحقق من وجود عنوان محدد
+    if (
+      (addressData.length > 1 && !selectedAddress) ||
+      !currentSelectedAddress
+    ) {
+      alert("Please select an address before placing the order.");
+      return;
+    }
+  
+    // تحقق من طريقة الدفع إذا كانت "credit card"
+    if (paymentMethod === "credit card") {
+      setOpenCreditCardDialog(true); // فتح الديالوج الخاص بالكريديت كارد
+      return; // إيقاف تنفيذ باقي الكود
+    }
+  
+    // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
+    const orders = cartItems.map((item) => ({
+      id: item.id,
+      special: item.specialNote || "",
+      extras: item.extras || [], 
+      count: item.count || 1, 
+      choices: item.choices || [], 
+    }));
+  
+    const dataToSend = {
+      delivery_type: 1,
+      payment: paymentMethod === "cash" ? 1 : 2, 
+      lat: currentSelectedAddress.lat,
+      lng: currentSelectedAddress.lng,
+      address: currentSelectedAddress.id,
+      area: 1,
+      branch: 1,
+      api_token: api_token,
+      items: { items: orders }, 
+      device_id: "",
+      notes: "",
+      time: "2024-08-20 14:07:07",
+      car_model: "",
+      car_color: "",
+      gift_cards: "",
+      coins: "00.00",
+    };
+  
+    console.log("Checkout data:", dataToSend);
+  
+    axios
+      .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+      .then((response) => {
+        console.log("Order placed successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error placing order:", error);
+      });
+  };
+
+
+
+  const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
+  
+  
+  
+  const handleCloseCreditCardDialog = () => {
+    setOpenCreditCardDialog(false);
+  };
+  
+
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cash"); // New state for payment method
@@ -74,51 +244,6 @@ function CheckOut({
   const handleCloseDialog = () => {
     setOpenDialog(false); // غلق الـ Dialog
   };
-  const API_PLACE_ORDER = `${BASE_URL}/place-order`; // عنوان الـ API لوضع الطلب
-
-  const handlePlaceOrder = async () => {
-    const orderDetails = {
-      items: cartItems.map((item, index) => ({
-        id: item.id,
-        count: item.count,
-        extras: item.extras || [],
-        options: item.options || [],
-        special: item.special || "",
-      })),
-      subtotal: subtotalWithExtras,
-      deliveryFee: deliveryFee,
-      totalPrice: totalWithTax,
-      paymentMethod: paymentMethod,
-      // أضف تفاصيل إضافية إذا لزم الأمر
-    };
-
-    if (paymentMethod === "credit") {
-      setOpenDialog(true); // فتح الـ Dialog إذا تم اختيار Credit Card
-    } else {
-      try {
-        const result = await placeOrder(orderDetails);
-        alert("Order placed successfully!");
-        // توجيه المستخدم إلى صفحة تأكيد الطلب أو أي صفحة أخرى إذا لزم الأمر
-      } catch (error) {
-        alert("Failed to place order. Please try again.");
-      }
-    }
-  };
-
-  const placeOrder = async (orderDetails) => {
-    try {
-      const response = await axios.post(API_PLACE_ORDER, orderDetails, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${api_token}`, // إضافة التوكن إلى الرؤوس
-        },
-      });
-      return response.data; // راجع استجابة الـ API هنا
-    } catch (error) {
-      console.error("Error placing order:", error);
-      throw error; // أعد طرح الخطأ للتعامل معه لاحقًا
-    }
-  };
 
   return (
     <Container
@@ -133,7 +258,6 @@ function CheckOut({
         border: "1px solid #dee2e6!important",
         borderRadius: ".8rem !important",
         boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
-        // maxHeight: "500px",
         maxHeight: "580px",
         overflowY: "auto",
         "@media (max-width: 1000px)": {
@@ -300,7 +424,7 @@ function CheckOut({
                                 }}
                               >
                                 {extra.name}
-                              </Typography>{" "}
+                              </Typography>
                               <Typography
                                 sx={{
                                   color: "#000!important",
@@ -309,7 +433,6 @@ function CheckOut({
                                   fontWeight: 500,
                                 }}
                               >
-                                {" "}
                                 {extra.price} EGP
                               </Typography>
                             </Stack>
@@ -326,7 +449,7 @@ function CheckOut({
                           color: "gray",
                         },
                         "& .MuiInputBase-input::placeholder": {
-                          color: "gray",
+                          color: "#000",
                           fontSize: "1.3rem",
                         },
                       }}
@@ -337,7 +460,7 @@ function CheckOut({
         </Box>
       </Container>
       {/* coupon */}
-      <Coupun api_token={api_token}/>
+      <Coupun api_token={api_token} />
       <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
         <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
           <Stack
@@ -412,6 +535,7 @@ function CheckOut({
             {totalWithTax.toFixed(2)} EGP
           </Typography>
         </Stack>
+
         <FormControl
           component="fieldset"
           sx={{ mt: "2rem", textAlign: "center" }}
@@ -450,7 +574,7 @@ function CheckOut({
           variant="contained"
           color="primary"
           fullWidth
-          onClick={handlePlaceOrder}
+          onClick={handleCheckout}
           sx={{
             mt: "1.5rem",
             p: "1rem",
@@ -465,8 +589,7 @@ function CheckOut({
           Place Order
         </Button>
         <Dialog
-          open={openDialog}
-          onClose={handleCloseDialog}
+        open={openCreditCardDialog} onClose={handleCloseCreditCardDialog}
           fullWidth
           maxWidth="sm"
         >

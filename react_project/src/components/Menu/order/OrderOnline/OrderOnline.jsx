@@ -170,8 +170,7 @@ function OrderOnline() {
       address: addressData[activeIndex], // استخدام العنوان النشط
     };
 
-    // إرسال orderData إلى الخادم
-    // ...
+
   };
 
   return (
@@ -179,13 +178,12 @@ function OrderOnline() {
       className={"orderOnline"}
       sx={{
         display: "flex",
-        ml: "2rem",
+        mx: "6rem",
         "@media (max-width: 1000px)": {
-          // Adjust based on your needs
           flexDirection: "column !important",
         },
         "@media (max-width: 480px)": {
-          ml: "0.5rem",
+          mx: "0.5rem",
         },
       }}
       direction={"row"}

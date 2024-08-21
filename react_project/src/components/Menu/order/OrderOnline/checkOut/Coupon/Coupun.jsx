@@ -94,7 +94,7 @@ function Coupun({ api_token }) {
               m: ".2rem",
             },
             "& .MuiInputBase-input::placeholder": {
-              color: "gray",
+              color: "#000",
               fontSize: "1.3rem",
             },
           }}

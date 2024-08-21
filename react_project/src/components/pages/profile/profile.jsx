@@ -1,16 +1,11 @@
-import { Box, Stack } from "@mui/material";
-import axios from "axios";
+import { Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { Card, Typography } from "@mui/material";
-import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
-import img from "../profile/user-profile-icon.svg";
 import UserInfo from "./userInfo";
-import AddressDialog from "../../Menu/order/adderess/addressDaiolg/DialogAdderss.jsx";
-import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
+import UserCard from "./InfoUserCard/UserCard.jsx";
+import { handleSave } from "./HandleSaveProfile.jsx";
 const Profile = () => {
-  const BASE_URL = "https://myres.me/chilis/api";
   const navigate = useNavigate();
   const [user, setUser] = useState({
     user_name: "",
@@ -23,8 +18,10 @@ const Profile = () => {
     email: "",
     phone: "",
   });
+
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
+    
     if (storedUser) {
       setUser({
         user_name: storedUser.user_name,
@@ -38,45 +35,25 @@ const Profile = () => {
       });
     }
   }, []);
-
+useEffect(() => {
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  
+  if (storedUser) {
+    setUser(storedUser);
+    setDisplayedUser(storedUser);
+  }
+}, []);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
+    setUser(prevState => ({
+        ...prevState,
+        [name]: value
     }));
+};
+
+  const onSave = () => {
+    handleSave(user);
   };
-
-  const handleSave = async () => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to save these changes?"
-    );
-
-    if (!isConfirmed) {
-      return;
-    }
-
-    try {
-      const api_token = localStorage.getItem("api_token");
-
-      const APIURL = `/profile/update?name=${user.user_name}&phone=${user.phone}&email=${user.email}&api_token=${api_token}`;
-      const response = await axios.post(`${BASE_URL}${APIURL}`);
-
-      if (response.data) {
-        localStorage.setItem("user", JSON.stringify(user));
-
-        window.location.reload();
-
-        localStorage.setItem("profileUpdateSuccess", "true");
-      } else {
-        throw new Error("Update failed");
-      }
-    } catch (error) {
-      toast.error("Failed to update profile.");
-      console.error("Error updating profile: ", error);
-    }
-  };
-
   useEffect(() => {
     if (localStorage.getItem("profileUpdateSuccess") === "true") {
       toast.success("Profile updated successfully!");
@@ -114,136 +91,16 @@ const Profile = () => {
           },
         }}
       >
-        <Stack
-          sx={{
-            flexGrow: 1,
-            width: "60%",
-            "@media (max-width: 1000px)": {
-              alignItems: "center",
-              justifyContent: "center",
-            },
-          }}
-        >
-          <Card
-            sx={{
-              flexGrow: 1,
-              border: "1px solid #ddd",
-              boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)!important",
-              ml: "170px",
-              "@media (max-width: 1000px)": {
-                alignItems: "center",
-                maxWidth: "100%",
-                ml: "0",
-                width: "100%",
-              },
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                marginBottom: 2,
-                justifyContent: "space-between",
-                padding: "2rem",
-
-                "@media (max-width:600px)": {
-                  justifyContent: "center",
-                  flexWrap: "wrap",
-                },
-              }}
-            >
-              <img
-                src={img}
-                alt="User"
-                style={{ borderRadius: "50%", width: "105px", height: "125px" }}
-              />
-              <Box sx={{ marginLeft: 2 }}>
-                <Stack direction={"row"} alignItems={"center"}>
-                  <Typography
-                    variant="h6"
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      fontSize: "2rem",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {displayedUser.user_name}
-                    <CheckCircleOutlinedIcon
-                      sx={{ color: "#28a745!important", ml: ".3rem" }}
-                    />
-                  </Typography>
-                </Stack>
-
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  sx={{ fontSize: "1.5rem", fontWeight: "500" }}
-                >
-                  {displayedUser.email}
-                </Typography>
-              </Box>
-            </Box>
-            <Stack
-              sx={{
-                cursor: "pointer",
-                padding: 2,
-                borderTop: "1px solid #dee2e6",
-                borderBottom: "1px solid #dee2e6",
-              }}
-              onClick={handleClickOpen1}
-            >
-              <Typography
-                sx={{
-                  fontSize: "1.8rem",
-                  textTransform: "capitalize",
-                  fontWeight: "600",
-                  color: "#343a40 !important",
-                  textAlign: "left",
-                }}
-              >
-                address
-              </Typography>
-              <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
-                <Typography
-                  sx={{
-                    fontSize: "1.6rem",
-                    textTransform: "",
-                    fontWeight: "600",
-                    color: "#6c757d!important",
-                    textAlign: "left",
-                  }}
-                >
-                  Add a delivery address
-                </Typography>
-                <ArrowForwardIosOutlinedIcon
-                  sx={{
-                    fontSize: "2rem",
-                    animation: "moveRight 0.9s infinite",
-                    "@keyframes moveRight": {
-                      "0%": {
-                        transform: "translateX(0)", // المكان الأصلي
-                      },
-                      "50%": {
-                        transform: "translateX(10px)", // التحرك إلى اليمين بمقدار 10 بكسل
-                      },
-                      "100%": {
-                        transform: "translateX(0)", // العودة إلى المكان الأصلي
-                      },
-                    },
-                  }}
-                />
-              </Stack>
-            </Stack>
-
-            <AddressDialog open={openDialog1} onClose={handleClose1} />
-          </Card>
-        </Stack>
+        <UserCard
+          displayedUser={displayedUser}
+          handleClickOpen1={handleClickOpen1}
+          openDialog1={openDialog1}
+          handleClose1={handleClose1}
+        />
         <UserInfo
           handleInputChange={handleInputChange}
           handleChangePassword={handleChangePassword}
-          handleSave={handleSave}
+          handleSave={onSave}
           user={user}
         />
       </Stack>

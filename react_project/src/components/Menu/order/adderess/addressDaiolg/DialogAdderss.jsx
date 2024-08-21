@@ -1,4 +1,4 @@
-/* eslint-disable no-empty-pattern */
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -17,6 +17,7 @@ import {
 
 function AddressDialog({ open, onClose }) {
   const api_token = localStorage.getItem("token");
+  // const api_token = localStorage.getItem("api_token");
   const dispatch = useDispatch();
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
@@ -92,6 +93,9 @@ function AddressDialog({ open, onClose }) {
   useEffect(() => {
     dispatch(fetchAddresses());
   }, [dispatch]);
+  // useEffect(() => {
+  //   console.log(fetchAddresses())
+  // }, []);
 
   const handleSelectLabel = (label) => {
     setCurrentAddress((prev) => ({ ...prev, label }));
@@ -137,7 +141,7 @@ function AddressDialog({ open, onClose }) {
 
       // تحقق من الشكل الفعلي للبيانات المستلمة
       const dataResponse = response.data;
-      // console.log("response", dataResponse);
+      console.log("response", dataResponse);
 
       // تحقق من الاستجابة بشكل صحيح
       if (dataResponse.response) {

@@ -26,7 +26,7 @@ import ChangePasswordFromProfile from "./components/pages/ChangePassFromProfile"
 import { useDispatch } from "react-redux";
 import { setTotalItems } from "./rtk/slices/orderSlice";
 import MyOrders from "./components/Menu/order/MyOrders/MyOrders";
-import Success from "./components/pages/succsed";
+// import Success from "./components/pages/succsed";
 import { Dialog } from "@mui/material";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
@@ -34,13 +34,14 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     "/login",
     "/register",
     "/forgot-password",
-    "/change-password",
+    // "/change-password",
     "*"
   ];
 
   const handleLogout = () => {
     setToken(null);
     localStorage.removeItem("token");
+    localStorage.removeItem("api_token");
     localStorage.removeItem("user");
     localStorage.removeItem("counter");
     window.location.href = "/";
@@ -94,6 +95,7 @@ function App() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
+    // const storedToken = localStorage.getItem("api_token");
     if (storedToken) {
       setToken(storedToken);
     }

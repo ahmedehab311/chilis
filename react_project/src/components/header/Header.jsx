@@ -6,23 +6,15 @@ import {
   Link,
   Stack,
   useMediaQuery,
-  Menu,
-  MenuItem,
   Typography,
   Badge,
   Box,
 } from "@mui/material";
-// import MenuIcon from "@mui/icons-material/Menu";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
-import Hero from "../Hero/Hero";
-import SmallMediaQuary from "./SmallMediaQuary";
+import { SmallMediaQuary, Hero,LinksHeader,LinksIconCircle,LogoHeader } from "./index";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { useLocation } from "react-router-dom";
-import logo from "../Hero/images/logo.png";
-// import Headerr from "./Headerr"
 function Header({ token, handleLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -75,11 +67,10 @@ function Header({ token, handleLogout }) {
     "/profile",
     "*",
     "/error",
-    "/success",
+      "/change-password",
   ].includes(location.pathname);
   return (
     <Stack className="hero">
-      {/* header only */}
       <Stack sx={{ bgcolor: "#050304", position: "relative" }}>
         {useMediaQuery("(min-width:1000px)") && (
           <>
@@ -90,168 +81,49 @@ function Header({ token, handleLogout }) {
               sx={{ textTransform: "uppercase", p: "10px !important" }}
               className="headerMenu"
             >
-              {location.pathname !== "/" && (
-                <Stack
-                  direction="row"
-                  alignItems="center"
-                  sx={{ padding: "10px" }}
-                >
-                  <Link component={RouterLink} to="/">
-                    <img
-                      src={logo}
-                      alt="Logo"
-                      style={{ height: "45px", width: "97px" }}
-                    />
-                  </Link>
-                </Stack>
-              )}
-              {/* <LanguageOutlinedIcon
-                sx={{
-                  fontSize: "30px",
-                  cursor: "pointer",
-                  color: "#777",
-                  mr: 5,
-                }}
-              /> */}
-              <Link href="#menu">
-                <Typography
-                  sx={{
-                    color: "#fff",
-                    fontSize: "2.2rem",
-                    fontFamily: "cairo",
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => handleNavigation("menu")}
-                >
-                  Menu
-                </Typography>
-              </Link>{" "}
-              <Link href="#about">
-                <Typography
-                  sx={{
-                    color: "#fff",
-                    fontSize: "2.2rem",
-                    fontFamily: "cairo",
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => handleNavigation("about")}
-                >
-                  About Us
-                </Typography>
-              </Link>
-              <Link href="#footer">
-                <Typography
-                  sx={{
-                    color: "#fff",
-                    fontSize: "2.2rem",
-                    fontFamily: "cairo",
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => handleNavigation("footer")}
-                >
-                  Location
-                </Typography>
-              </Link>
-              <Link href="#footer">
-                <Typography
-                  sx={{
-                    color: "#fff",
-                    fontSize: "2.2rem",
-                    fontFamily: "cairo",
-                    fontWeight: "bold",
-                  }}
-                  onClick={() => handleNavigation("footer")}
-                >
-                  Contact Us
-                </Typography>
-              </Link>
+              {location.pathname !== "/" && <LogoHeader />}
+
+              <LinksHeader handleNavigation={handleNavigation} />
               {token ? (
-  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-    <Link component={RouterLink} to="/order-online">
-      <IconButton aria-label="cart" sx={{ ml: 'auto' }}>
-        <Badge
-          badgeContent={totalItems}
-          color="error"
-          invisible={totalItems === 0}
-        >
-          <ShoppingCartOutlinedIcon
-            sx={{ fontSize: "3rem", color: "#fff" }}
-          />
-        </Badge>
-      </IconButton>
-    </Link>
-
-    <IconButton
-      size="large"
-      aria-label="account of current user"
-      aria-controls="menu-appbar"
-      aria-haspopup="true"
-      onClick={handleMenu}
-      sx={{ color: "#fff" }}  
-    >
-      <AccountCircle sx={{ fontSize: "28px" }} />
-    </IconButton>
-
-    <Menu
-      id="menu-appbar"
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "right",
-      }}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={Boolean(anchorEl)}
-      onClose={handleClose}
-      sx={{ mt: 1 }}
-    >
-      <MenuItem
-        onClick={handleClose}
-        component={RouterLink}
-        to="/profile"
-      >
-        <Typography sx={{ fontSize: "1.2rem" }}> Profile</Typography>
-      </MenuItem>
-      <MenuItem
-        onClick={handleClose}
-        component={RouterLink}
-        to="/my_orders"
-      >
-        <Typography sx={{ fontSize: "1.2rem" }}> My Orders</Typography>
-      </MenuItem>
-      <MenuItem
-        onClick={() => {
-          handleLogout();
-          handleClose();
-        }}
-      >
-        <Typography sx={{ fontSize: "1.2rem" }}> Logout</Typography>
-      </MenuItem>
-    </Menu>
-  </Box>
-) : (
-  <Link component={RouterLink} to="/login">
-    <Typography
-      sx={{
-        color: "#fff",
-        fontSize: "2.2rem",
-        fontFamily: "cairo",
-        fontWeight: "bold",
-      }}
-    >
-      Login
-    </Typography>
-  </Link>
-)}
-
-
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Link component={RouterLink} to="/order-online">
+                    <IconButton aria-label="cart" sx={{ ml: "auto" }}>
+                      <Badge
+                        badgeContent={totalItems}
+                        color="error"
+                        invisible={totalItems === 0}
+                      >
+                        <ShoppingCartOutlinedIcon
+                          sx={{ fontSize: "3rem", color: "#fff" }}
+                        />
+                      </Badge>
+                    </IconButton>
+                  </Link>
+                  <LinksIconCircle
+                   handleLogout={handleLogout}
+                    anchorEl={anchorEl}
+                    handleMenu={handleMenu}
+                    onClose={handleClose}
+                    handleClose={handleClose}
+                  />
+                </Box>
+              ) : (
+                <Link component={RouterLink} to="/login">
+                  <Typography
+                    sx={{
+                      color: "#fff",
+                      fontSize: "2.2rem",
+                      fontFamily: "cairo",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Login
+                  </Typography>
+                </Link>
+              )}
             </Stack>
           </>
         )}
-
         {!isLargeScreen && (
           <SmallMediaQuary
             toggleDrawer={toggleDrawer}

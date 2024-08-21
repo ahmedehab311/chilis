@@ -48,80 +48,45 @@ function DialogItem({
 
   const totalItems = useSelector((state) => state.cart.totalItems);
 
-  // const handleAddToCart = () => {
-  //   handleCloseDialog();
 
-  //   // الحصول على الاختيارات المختارة من الـ RadioGroup
-  //   const selectedExtras = dataExtra
-  //     .filter(
-  //       (extra) =>
-  //         document.querySelector(`input[value="${extra.description_en}"]`)
-  //           .checked
-  //     )
-  //     .map((extra) => ({
-  //       name: extra.description_en,
-  //       price: extra.price_en,
-  //     }));
+//   const handleAddToCart = () => {
+//   handleCloseDialog();
 
-  //   const itemDetailsToAdd = {
-  //     name: itemDetails?.name_en || "Default Name",
-  //     price: price || tempSelectedItemPrice || 0,
-  //     quantity: 1,
-  //     extras: selectedExtras,
-  //     totalPrice:
-  //       (price || tempSelectedItemPrice || 0) +
-  //       selectedExtras.reduce((sum, extra) => sum + extra.price_en, 0),
-  //   };
+//   // الحصول على الاختيارات المختارة من الـ RadioGroup
+//   const selectedExtras = dataExtra
+//     .filter(
+//       (extra) =>
+//         document.querySelector(`input[value="${extra.description_en}"]`)
+//           .checked
+//     )
+//     .map((extra) => ({
+//       name: extra.description_en,
+//       price: parseFloat(extra.price_en), // تأكد من تحويل السعر إلى رقم
+//     }));
 
-  //   // تحديث الـ Redux state
-  //   dispatch(addItemToCart(itemDetailsToAdd));
+//   const itemDetailsToAdd = {
+//     name: itemDetails?.name_en || "Default Name",
+//     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0, // تأكد من تحويل السعر إلى رقم
+//     quantity: 1,
+//     extras: selectedExtras,
+//     totalPrice:
+//       (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
+//       selectedExtras.reduce((sum, extra) => sum + extra.price, 0), // حساب الإجمالي مع إضافة أسعار extras
+//   };
 
-  //   // الحصول على الكارت من localStorage
-  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+//   // تحديث الـ Redux state
+//   dispatch(addItemToCart(itemDetailsToAdd));
 
-  //   // إضافة الطلب الجديد إلى الكارت
-  //   cart.push(itemDetailsToAdd);
+//   // الحصول على الكارت من localStorage
+//   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  //   // حفظ الكارت المحدث في localStorage
-  //   localStorage.setItem("cart", JSON.stringify(cart));
-  // };
-  const handleAddToCart = () => {
-  handleCloseDialog();
+//   // إضافة الطلب الجديد إلى الكارت
+//   cart.push(itemDetailsToAdd);
 
-  // الحصول على الاختيارات المختارة من الـ RadioGroup
-  const selectedExtras = dataExtra
-    .filter(
-      (extra) =>
-        document.querySelector(`input[value="${extra.description_en}"]`)
-          .checked
-    )
-    .map((extra) => ({
-      name: extra.description_en,
-      price: parseFloat(extra.price_en), // تأكد من تحويل السعر إلى رقم
-    }));
+//   // حفظ الكارت المحدث في localStorage
+//   localStorage.setItem("cart", JSON.stringify(cart));
+// };
 
-  const itemDetailsToAdd = {
-    name: itemDetails?.name_en || "Default Name",
-    price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0, // تأكد من تحويل السعر إلى رقم
-    quantity: 1,
-    extras: selectedExtras,
-    totalPrice:
-      (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
-      selectedExtras.reduce((sum, extra) => sum + extra.price, 0), // حساب الإجمالي مع إضافة أسعار extras
-  };
-
-  // تحديث الـ Redux state
-  dispatch(addItemToCart(itemDetailsToAdd));
-
-  // الحصول على الكارت من localStorage
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  // إضافة الطلب الجديد إلى الكارت
-  cart.push(itemDetailsToAdd);
-
-  // حفظ الكارت المحدث في localStorage
-  localStorage.setItem("cart", JSON.stringify(cart));
-};
 
 
   const [totalPrice, setTotalPrice] = useState(0);
