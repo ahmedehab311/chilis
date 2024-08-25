@@ -50,6 +50,21 @@ function CardContent() {
     fetchDataAsync();
   }, []);
 
+
+  const handleItemClick = async (item) => {
+    try {
+      const response = await axios.get(
+        `https://myres.me/chilis/api/item/${item.id}/1`
+      );
+      setItemDetails(response.data);
+      setPrice(response.data.info[0].price.price);
+      setDataExtra(response.data.item_extras[0]?.data || []);
+      console.log(response.data.item_extras[0]?.data )
+      setOpenDialog(true);
+    } catch (error) {
+      console.error("Error fetching item details: ", error);
+    }
+  };
   const handleCardClick = (index) => {
     setSelectedItem(menuItems[index]);
     setShowCards(false);
@@ -61,19 +76,7 @@ function CardContent() {
     setOpenDialog(false);
   };
 
-  const handleItemClick = async (item) => {
-    try {
-      const response = await axios.get(
-        `https://myres.me/chilis/api/item/${item.id}/1`
-      );
-      setItemDetails(response.data);
-      setPrice(response.data.info[0].price.price);
-      setDataExtra(response.data.item_extras[0]?.data || []);
-      setOpenDialog(true);
-    } catch (error) {
-      console.error("Error fetching item details: ", error);
-    }
-  };
+
   const handleAddToCart = () => {
     if (itemDetails) {
       onAddToCart({

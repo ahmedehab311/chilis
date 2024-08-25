@@ -28,6 +28,8 @@ import axios from "axios";
 import Coupun from "./Coupon/Coupun";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedAddress } from "../../../../../rtk/slices/adderssSlice";
+import Pickup from "../Pickup/Pickup";
+import Address from "../../adderess/Address";
 function CheckOut({
   handleRemoveItem,
   cartItems,
@@ -68,16 +70,14 @@ function CheckOut({
   }, [selectedAddress]);
   const [orders, setOrders] = useState([]);
 
-
   // const handleCheckout = () => {
   //   // تحقق من العنوان الحالي
   //   if (addressData.length === 1 && !selectedAddress) {
   //     dispatch(setSelectedAddress(addressData[0]));
   //   }
-  
+
   //   const currentSelectedAddress = selectedAddress || addressData[0];
-  
-  //   // التحقق من وجود عنوان محدد
+
   //   if (
   //     (addressData.length > 1 && !selectedAddress) ||
   //     !currentSelectedAddress
@@ -85,33 +85,33 @@ function CheckOut({
   //     alert("Please select an address before placing the order.");
   //     return;
   //   }
-  
+
   //   // تحقق من طريقة الدفع إذا كانت "credit card"
   //   if (payment === 2) {
   //     // فتح الديالوج الخاص بالـ credit card
   //     openCreditCardDialog();
   //     return; // إيقاف تنفيذ باقي الكود
   //   }
-  
+
   //   // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
   //   const orders = cartItems.map((item) => ({
   //     id: item.id,
   //     special: item.specialNote || "",
-  //     extras: item.extras || [], 
-  //     count: item.count || 1, 
-  //     choices: item.choices || [], 
+  //     extras: item.extras || [],
+  //     count: item.count || 1,
+  //     choices: item.choices || [],
   //   }));
-  
+
   //   const dataToSend = {
   //     delivery_type: 1,
-  //     payment: paymentMethod === "cash" ? 1 : 2, 
+  //     payment: paymentMethod === "cash" ? 1 : 2,
   //     lat: currentSelectedAddress.lat,
   //     lng: currentSelectedAddress.lng,
   //     address: currentSelectedAddress.id,
   //     area: 1,
   //     branch: 1,
   //     api_token: api_token,
-  //     items: { items: orders }, 
+  //     items: { items: orders },
   //     device_id: "",
   //     notes: "",
   //     time: "2024-08-20 14:07:07",
@@ -120,9 +120,9 @@ function CheckOut({
   //     gift_cards: "",
   //     coins: "00.00",
   //   };
-  
+
   //   console.log("Checkout data:", dataToSend);
-  
+
   //   axios
   //     .post("http://myres.me/chilis-dev/orders/create", dataToSend)
   //     .then((response) => {
@@ -134,14 +134,12 @@ function CheckOut({
   // };
 
   const handleCheckout = () => {
-    // تحقق من العنوان الحالي
     if (addressData.length === 1 && !selectedAddress) {
       dispatch(setSelectedAddress(addressData[0]));
     }
-  
+
     const currentSelectedAddress = selectedAddress || addressData[0];
-  
-    // التحقق من وجود عنوان محدد
+
     if (
       (addressData.length > 1 && !selectedAddress) ||
       !currentSelectedAddress
@@ -149,32 +147,31 @@ function CheckOut({
       alert("Please select an address before placing the order.");
       return;
     }
-  
-    // تحقق من طريقة الدفع إذا كانت "credit card"
+
     if (paymentMethod === "credit card") {
-      setOpenCreditCardDialog(true); // فتح الديالوج الخاص بالكريديت كارد
-      return; // إيقاف تنفيذ باقي الكود
+      setOpenCreditCardDialog(true); 
+      return; 
     }
-  
+
     // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
     const orders = cartItems.map((item) => ({
       id: item.id,
       special: item.specialNote || "",
-      extras: item.extras || [], 
-      count: item.count || 1, 
-      choices: item.choices || [], 
+      extras: item.extras || [],
+      count: item.count || 1,
+      choices: item.choices || [],
     }));
-  
+
     const dataToSend = {
       delivery_type: 1,
-      payment: paymentMethod === "cash" ? 1 : 2, 
+      payment: paymentMethod === "cash" ? 1 : 2,
       lat: currentSelectedAddress.lat,
       lng: currentSelectedAddress.lng,
       address: currentSelectedAddress.id,
       area: 1,
       branch: 1,
       api_token: api_token,
-      items: { items: orders }, 
+      items: { items: orders },
       device_id: "",
       notes: "",
       time: "2024-08-20 14:07:07",
@@ -183,9 +180,9 @@ function CheckOut({
       gift_cards: "",
       coins: "00.00",
     };
-  
+
     console.log("Checkout data:", dataToSend);
-  
+
     axios
       .post("http://myres.me/chilis-dev/orders/create", dataToSend)
       .then((response) => {
@@ -196,57 +193,75 @@ function CheckOut({
       });
   };
 
-
-
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
-  
-  
-  
+
   const handleCloseCreditCardDialog = () => {
     setOpenCreditCardDialog(false);
   };
-  
 
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cash"); // New state for payment method
   const [openDialog, setOpenDialog] = useState(false);
-  // في قسم useEffect الخاص بالحساب
+
+   const calculateSubtotalWithExtras = () => {
+    return cartItems.reduce((accumulator, item, index) => {
+      const itemTotal =
+        parseFloat(totalPrices[index]) || parseFloat(item.price);
+
+      const extrasTotal = item.extras
+        ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
+        : 0;
+
+
+      // إعادة تجميع المجموع الكلي
+      return accumulator + itemTotal + extrasTotal;
+    }, 0);
+  };
+
+  // حساب المجموع الفرعي مع الإضافات
+  const subtotalWithExtras = calculateSubtotalWithExtras();
   useEffect(() => {
     const fetchTax = async () => {
       try {
         const response = await axios.get(API_TAX);
         const taxValue = response.data.data.settings.tax;
         setTax(taxValue);
-
-        const subtotalWithDelivery = subtotal + deliveryFee;
-        const calculatedTax = subtotalWithDelivery * (taxValue / 100);
-        setTotalWithTax(subtotalWithDelivery + calculatedTax);
+  
+        const subtotalWithDelivery = subtotalWithExtras + deliveryFee;
+  
+        const calculatedTax = (subtotalWithDelivery * (taxValue / 100)).toFixed(2);
+  
+        const newTotalWithTax = parseFloat(subtotalWithDelivery) + parseFloat(calculatedTax);
+  
+        setTotalWithTax(newTotalWithTax);
+  
+        // console.log("Subtotal with Extras and Delivery:", subtotalWithDelivery);
+        // console.log("Calculated Tax:", calculatedTax);
+        // console.log("New Total with Tax:", newTotalWithTax);
       } catch (error) {
         console.error("Error fetching tax data:", error);
       }
     };
-
+  
     fetchTax();
-  }, [subtotal, deliveryFee]);
-
-  const calculateSubtotalWithExtras = () => {
-    return cartItems.reduce((acc, item, index) => {
-      const itemTotal = totalPrices[index] || item.price;
-      const extrasTotal = item.extras
-        ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
-        : 0;
-      return acc + itemTotal + extrasTotal;
-    }, 0);
+  }, [subtotalWithExtras, deliveryFee]);
+  
+  const handleCloseDialog = () => {
+    setOpenDialog(false); 
   };
 
-  const subtotalWithExtras = calculateSubtotalWithExtras();
-  const handleCloseDialog = () => {
-    setOpenDialog(false); // غلق الـ Dialog
+  // 
+  const [deliveryType, setDeliveryType] = useState('Delivery'); 
+
+  const handleChange = (event) => {
+    setDeliveryType(event.target.value);
   };
 
   return (
-    <Container
+<>
+
+<Container
       sx={{
         maxWidth: "514px !important",
         background: "#fff !important",
@@ -461,6 +476,80 @@ function CheckOut({
       </Container>
       {/* coupon */}
       <Coupun api_token={api_token} />
+      {/* <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
+      <FormControl
+          component="fieldset"
+          sx={{ mt: "2rem", textAlign: "center" }}
+        >
+          <FormLabel
+            component="legend"
+            sx={{ fontSize: "1.6rem", fontWeight: "600", textAlign: "center" }}
+          >
+            Select delivery type
+          </FormLabel>
+          <RadioGroup
+            aria-label="payment-method"
+            name="payment-method"
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+            sx={{
+              justifyContent: "center",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <FormControlLabel
+              value="cash"
+              control={<Radio />}
+              label="Packup"
+            />
+            <FormControlLabel
+            sx={{fontSize:"1.5rem"}}
+              value="credit"
+              control={<Radio />}
+              label="Delivery"
+            />
+          </RadioGroup>
+        </FormControl>
+      </Stack> */}
+      <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
+        <FormControl
+          component="fieldset"
+          sx={{ mt: "2rem", textAlign: "center" }}
+        >
+          <FormLabel
+            component="legend"
+            sx={{ fontSize: "1.6rem", fontWeight: "600", textAlign: "center" }}
+          >
+            Select delivery type
+          </FormLabel>
+          <RadioGroup
+            aria-label="delivery-type"
+            name="delivery-type"
+            value={deliveryType}
+            onChange={(e) => setDeliveryType(e.target.value)}
+            sx={{
+              justifyContent: "center",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <FormControlLabel
+              value="pickup"
+              control={<Radio />}
+              label="Pickup"
+              sx={{ fontSize: "1.5rem" }}
+            />
+            <FormControlLabel
+              value="delivery"
+              control={<Radio />}
+              label="Delivery"
+              sx={{ fontSize: "1.5rem" }}
+            />
+          </RadioGroup>
+        </FormControl>
+      </Stack>
+
       <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
         <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
           <Stack
@@ -474,7 +563,7 @@ function CheckOut({
           >
             <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
               Subtotal:
-            </Typography>{" "}
+            </Typography>
             <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
               {subtotalWithExtras.toFixed(2)} EGP
             </Typography>
@@ -492,11 +581,10 @@ function CheckOut({
               sx={{
                 fontSize: "15px",
                 fontWeight: "bold",
-                // my: 2,
               }}
             >
-              Delivery Fee:{" "}
-            </Typography>{" "}
+              Delivery Fee:
+            </Typography>
             <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
               {deliveryFee.toFixed(2)} EGP
             </Typography>
@@ -514,7 +602,8 @@ function CheckOut({
               Tax {tax} %
             </Typography>
             <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-              {(((subtotal + deliveryFee) * tax) / 100).toFixed(2)} EGP
+              {((subtotalWithExtras + deliveryFee) * (tax / 100)).toFixed(2)}{" "}
+              EGP
             </Typography>
           </Stack>
         </Stack>
@@ -531,7 +620,6 @@ function CheckOut({
             Total:
           </Typography>
           <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-            {" "}
             {totalWithTax.toFixed(2)} EGP
           </Typography>
         </Stack>
@@ -589,7 +677,8 @@ function CheckOut({
           Place Order
         </Button>
         <Dialog
-        open={openCreditCardDialog} onClose={handleCloseCreditCardDialog}
+          open={openCreditCardDialog}
+          onClose={handleCloseCreditCardDialog}
           fullWidth
           maxWidth="sm"
         >
@@ -613,6 +702,7 @@ function CheckOut({
         </Dialog>
       </Stack>
     </Container>
+</>
   );
 }
 

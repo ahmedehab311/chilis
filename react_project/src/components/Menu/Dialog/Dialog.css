@@ -14,7 +14,7 @@
   align-items: end !important;
 }
 @media (max-width: 600px) {
-  .css-1jv2z0n-MuiStack-root,
+  /* .css-1jv2z0n-MuiStack-root, */
   .css-lih5v3 {
     flex-direction: column !important;
   }

@@ -14,6 +14,7 @@ import {
   Box,
   Typography,
   Stack,
+  Checkbox,
 } from "@mui/material";
 import { CounterDiaolgButton, AddToCardButton } from "../index";
 import {
@@ -48,50 +49,85 @@ function DialogItem({
 
   const totalItems = useSelector((state) => state.cart.totalItems);
 
+  // const handleAddToCart = () => {
+  //   handleCloseDialog();
 
-//   const handleAddToCart = () => {
-//   handleCloseDialog();
+  //   // الحصول على الاختيارات المختارة من الـ RadioGroup
+  //   const selectedExtras = dataExtra
+  //     .filter(
+  //       (extra) =>
+  //         document.querySelector(`input[value="${extra.description_en}"]`)
+  //           .checked
+  //     )
+  //     .map((extra) => ({
+  //       name: extra.description_en,
+  //       price: parseFloat(extra.price_en), // تأكد من تحويل السعر إلى رقم
+  //     }));
 
-//   // الحصول على الاختيارات المختارة من الـ RadioGroup
-//   const selectedExtras = dataExtra
-//     .filter(
-//       (extra) =>
-//         document.querySelector(`input[value="${extra.description_en}"]`)
-//           .checked
-//     )
-//     .map((extra) => ({
-//       name: extra.description_en,
-//       price: parseFloat(extra.price_en), // تأكد من تحويل السعر إلى رقم
-//     }));
+  //   const itemDetailsToAdd = {
+  //     name: itemDetails?.name_en || "Default Name",
+  //     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0, // تأكد من تحويل السعر إلى رقم
+  //     quantity: 1,
+  //     extras: selectedExtras,
+  //     totalPrice:
+  //       (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
+  //       selectedExtras.reduce((sum, extra) => sum + extra.price, 0), // حساب الإجمالي مع إضافة أسعار extras
+  //   };
 
-//   const itemDetailsToAdd = {
-//     name: itemDetails?.name_en || "Default Name",
-//     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0, // تأكد من تحويل السعر إلى رقم
-//     quantity: 1,
-//     extras: selectedExtras,
-//     totalPrice:
-//       (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
-//       selectedExtras.reduce((sum, extra) => sum + extra.price, 0), // حساب الإجمالي مع إضافة أسعار extras
-//   };
+  //   // تحديث الـ Redux state
+  //   dispatch(addItemToCart(itemDetailsToAdd));
 
-//   // تحديث الـ Redux state
-//   dispatch(addItemToCart(itemDetailsToAdd));
+  //   // الحصول على الكارت من localStorage
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-//   // الحصول على الكارت من localStorage
-//   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   // إضافة الطلب الجديد إلى الكارت
+  //   cart.push(itemDetailsToAdd);
 
-//   // إضافة الطلب الجديد إلى الكارت
-//   cart.push(itemDetailsToAdd);
+  //   // حفظ الكارت المحدث في localStorage
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+  // };
 
-//   // حفظ الكارت المحدث في localStorage
-//   localStorage.setItem("cart", JSON.stringify(cart));
-// };
+  const handleAddToCart = () => {
+    handleCloseDialog();
 
+    // تحضير تفاصيل الطلب للإضافة إلى الكارت
+    const itemDetailsToAdd = {
+      name: itemDetails?.name_en || "Default Name",
+      price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0, // تأكد من تحويل السعر إلى رقم
+      quantity: 1,
+      extras: selectedExtras.map((extra) => ({
+        name: extra.description_en,
+        price: parseFloat(extra.price_en),
+      })),
+      totalPrice:
+        (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
+        selectedExtras.reduce(
+          (sum, extra) => sum + parseFloat(extra.price_en),
+          0
+        ), // حساب الإجمالي مع إضافة أسعار extras
+    };
 
+    // تحديث الـ Redux state
+    dispatch(addItemToCart(itemDetailsToAdd));
 
+    // تحديث الـ localStorage
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    cart.push(itemDetailsToAdd);
+    localStorage.setItem("cart", JSON.stringify(cart));
+  };
   const [totalPrice, setTotalPrice] = useState(0);
   const handlePriceChange = (price) => {
     setTotalPrice(price);
+  };
+
+  // const [selectedExtras, setSelectedExtras] = useState([]);
+
+  const handleCheckboxChange = (extra) => (event) => {
+    if (event.target.checked) {
+      setSelectedExtras([...selectedExtras, extra]);
+    } else {
+      setSelectedExtras(selectedExtras.filter((item) => item !== extra));
+    }
   };
   return (
     <Dialog
@@ -151,17 +187,6 @@ function DialogItem({
                 <Typography variant="h6" sx={{ color: "#000" }}>
                   Add on
                 </Typography>
-                {/* <RadioGroup>
-                {dataExtra.map((extra, index) => (
-                  <FormControlLabel
-                    key={index}
-                    sx={{ color: "#000" }}
-                    value={extra.description_en}
-                    control={<Radio sx={{ color: "#000" }} />}
-                    label={`${extra.description_en} - ${extra.price_en} EGP`}
-                  />
-                ))}
-              </RadioGroup> */}
                 <RadioGroup
                   onChange={(e) => {
                     const selectedExtra = dataExtra.find(
@@ -181,12 +206,30 @@ function DialogItem({
                     }
                   }}
                 >
-                  {dataExtra.map((extra, index) => (
+                  {/* {dataExtra.map((extra, index) => (
                     <FormControlLabel
                       key={index}
                       sx={{ color: "#000" }}
                       value={extra.description_en}
                       control={<Radio sx={{ color: "#000" }} />}
+                      label={`${extra.description_en} - ${extra.price_en} EGP`}
+                    />
+                  ))} */}
+                  {dataExtra.map((extra, index) => (
+                    <FormControlLabel
+                      key={index}
+                      sx={{ color: "#000", fontSize: "8px" }}
+                      control={
+                        <Checkbox
+                          sx={{
+                            color: "#000",
+                            transform: "scale(0.8)",
+                            padding: "4px",
+                          }}
+                          checked={selectedExtras.includes(extra)}
+                          onChange={handleCheckboxChange(extra)}
+                        />
+                      }
                       label={`${extra.description_en} - ${extra.price_en} EGP`}
                     />
                   ))}

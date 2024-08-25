@@ -11,11 +11,13 @@
 //   useEffect(() => {
 //     // حساب السعر الإجمالي بناءً على العدد وسعر الأساس
 //     const totalPrice = counter * basePrice;
+    
+//     // استخدم useCallback لإنشاء دالة ثابتة
 //     onChange(totalPrice);
 
 //     // تخزين القيمة في localStorage
 //     localStorage.setItem('counter', counter);
-//   }, [counter, basePrice, onChange]);
+//   }, [counter, basePrice, onChange]); // تأكد من أن هذه التبعيات لا تتسبب في تكرار التحديثات
 
 //   const handleClick1 = () => {
 //     setCounter(prevCounter => prevCounter + 1); // زيادة بمقدار 1
@@ -74,34 +76,35 @@
 // }
 
 // export default Counter;
+
 import { useState, useEffect } from "react";
 import { Stack } from "@mui/material";
 
-function Counter({ basePrice, onChange }) {
+function CounterDiaolgButton({ basePrice, onChange }) {
   // استرجاع القيمة من localStorage أو تعيين القيمة الافتراضية 1
   const [counter, setCounter] = useState(() => {
-    const savedCounter = localStorage.getItem('counter');
-    return savedCounter ? parseInt(savedCounter, 10) : 1;
-  });
-
-  useEffect(() => {
-    // حساب السعر الإجمالي بناءً على العدد وسعر الأساس
-    const totalPrice = counter * basePrice;
+        const savedCounter = localStorage.getItem('counter');
+        return savedCounter ? parseInt(savedCounter, 10) : 1;
+      });
     
-    // استخدم useCallback لإنشاء دالة ثابتة
-    onChange(totalPrice);
-
-    // تخزين القيمة في localStorage
-    localStorage.setItem('counter', counter);
-  }, [counter, basePrice, onChange]); // تأكد من أن هذه التبعيات لا تتسبب في تكرار التحديثات
-
-  const handleClick1 = () => {
-    setCounter(prevCounter => prevCounter + 1); // زيادة بمقدار 1
-  };
-
-  const handleClick2 = () => {
-    setCounter(prevCounter => Math.max(1, prevCounter - 1)); // تقليل بمقدار 1 مع التأكد من أن العدد لا يقل عن 1
-  };
+      useEffect(() => {
+        // حساب السعر الإجمالي بناءً على العدد وسعر الأساس
+        const totalPrice = counter * basePrice;
+        
+        // استخدم useCallback لإنشاء دالة ثابتة
+        onChange(totalPrice);
+    
+        // تخزين القيمة في localStorage
+        localStorage.setItem('counter', counter);
+      }, [counter, basePrice, onChange]); // تأكد من أن هذه التبعيات لا تتسبب في تكرار التحديثات
+    
+      const handleClick1 = () => {
+        setCounter(prevCounter => prevCounter + 1); // زيادة بمقدار 1
+      };
+    
+      const handleClick2 = () => {
+        setCounter(prevCounter => Math.max(1, prevCounter - 1)); // تقليل بمقدار 1 مع التأكد من أن العدد لا يقل عن 1
+      };
 
   return (
     <Stack
@@ -151,4 +154,4 @@ function Counter({ basePrice, onChange }) {
   );
 }
 
-export default Counter;
+export default CounterDiaolgButton;
