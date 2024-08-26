@@ -19,7 +19,8 @@ import {
 import { CounterDiaolgButton, AddToCardButton } from "../index";
 import {
   addItemToCart,
-  setTotalItems,
+  // setTotalItems,
+  // totalItems
 } from "../../../rtk/slices/orderSlice.js"; // import your action
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";

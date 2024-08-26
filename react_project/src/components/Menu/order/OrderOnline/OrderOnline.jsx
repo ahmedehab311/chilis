@@ -286,162 +286,173 @@ function OrderOnline() {
   //     });
   // };
 
-  // const handleCheckout = () => {
-  //   if (addressData.length === 1 && !selectedAddress) {
-  //     dispatch(setSelectedAddress(addressData[0]));
-  //   }
-
-  //   const currentSelectedAddress = selectedAddress || addressData[0];
-
-  //   if (
-  //     (addressData.length > 1 && !selectedAddress) ||
-  //     !currentSelectedAddress
-  //   ) {
-  //     alert("Please select an address before placing the order.");
-  //     return;
-  //   }
-
-  //   if (paymentMethod === "credit card") {
-  //     setOpenCreditCardDialog(true);
-  //     return;
-  //   }
-
-  //   // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-  //   const orders = cartItems.map((item) => ({
-  //     id: item.id,
-  //     special: item.specialNote || "",
-  //     extras: item.extras || [],
-  //     count: item.count || 1,
-  //     choices: item.name || [],
-  //   }));
-
-  //   const dataToSend = {
-  //     delivery_type: 1,
-  //     payment: paymentMethod === "cash" ? 1 : 2,
-  //     lat: currentSelectedAddress.lat,
-  //     lng: currentSelectedAddress.lng,
-  //     address: currentSelectedAddress.id,
-  //     area: 1,
-  //     branch: 1,
-  //     api_token: api_token,
-  //     items: { items: orders },
-  //     device_id: "",
-  //     notes: "",
-  //     time: "2024-08-20 14:07:07",
-  //     car_model: "",
-  //     car_color: "",
-  //     gift_cards: "",
-  //     coins: "00.00",
-  //   };
-
-  //   console.log("Checkout data:", dataToSend);
-
-  //   axios
-  //     .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-  //     .then((response) => {
-  //       console.log("Order placed successfully:", response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error placing order:", error);
-  //     });
-  // };
   const handleCheckout = () => {
-    // تحقق من العنوان الحالي في حالة "دليفري"
-    if (deliveryType === 1) { // 1 يعني "دليفري"
-        if (addressData.length === 1 && !selectedAddress) {
-            dispatch(setSelectedAddress(addressData[0]));
-        }
+              if (addressData.length === 1 && !selectedAddress) {
+                  dispatch(setSelectedAddress(addressData[0]));
+              }
 
-        const currentSelectedAddress = selectedAddress || addressData[0];
+    const currentSelectedAddress = selectedAddress || addressData[0];
 
-        if (
-            (addressData.length > 1 && !selectedAddress) ||
-            !currentSelectedAddress
-        ) {
-            alert("Please select an address before placing the order.");
-            return;
-        }
-
-        // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-        const orders = cartItems.map((item) => ({
-            id: item.id,
-            special: item.specialNote || "",
-            extras: item.extras || [],
-            count: item.count || 1,
-            choices: item.name || [],
-        }));
-
-        const dataToSend = {
-            delivery_type: 1, // دليفري
-            payment: paymentMethod === "cash" ? 1 : 2,
-            lat: currentSelectedAddress.lat,
-            lng: currentSelectedAddress.lng,
-            address: currentSelectedAddress.id,
-            area: 1,
-            branch: 1,
-            api_token: api_token,
-            items: { items: orders },
-            device_id: "",
-            notes: "",
-            time: "2024-08-20 14:07:07",
-            car_model: "",
-            car_color: "",
-            gift_cards: "",
-            coins: "00.00",
-        };
-
-        
-        axios
-        .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-        .then((response) => {
-          console.log("Order placed successfully:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error placing order:", error);
-        });
-        
-        console.log("Checkout data:", dataToSend);
-    } else if (deliveryType === 2) { // 2 يعني "باك أب"
-        // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-        const orders = cartItems.map((item) => ({
-            id: item.id,
-            special: item.specialNote || "",
-            extras: item.extras || [],
-            count: item.count || 1,
-            choices: item.choices || [],
-        }));
-
-        const dataToSend = {
-            delivery_type: 2, // باك أب
-            payment: paymentMethod === "cash" ? 1 : 2,
-            lat: null, // لا حاجة لإرسال موقع
-            lng: null, // لا حاجة لإرسال موقع
-            address: 0, // قيمة العنوان 0 في حالة الباك أب
-            area: null, // لا حاجة لإرسال منطقة
-            branch: selectedBranchId, // تحديد البرانش المختار
-            api_token: api_token,
-            items: { items: orders },
-            device_id: "",
-            notes: "",
-            time: "2024-08-20 14:07:07",
-            car_model: "",
-            car_color: "",
-            gift_cards: "",
-            coins: "00.00",
-        };
-
-        console.log("Checkout data:", dataToSend);
-
-        axios
-            .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-            .then((response) => {
-                console.log("Order placed successfully:", response.data);
-            })
-            .catch((error) => {
-                console.error("Error placing order:", error);
-            });
+    if (
+      (addressData.length > 1 && !selectedAddress) ||
+      !currentSelectedAddress
+    ) {
+      alert("Please select an address before placing the order.");
+      return;
     }
-};
+
+    if (paymentMethod === "credit card") {
+      setOpenCreditCardDialog(true);
+      return;
+    }
+
+    // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
+    // const orders = cartItems.map((item) => ({
+    //   id: item.id,
+    //   special: item.specialNote || "",
+    //   extras: item.extras || [],
+    //   count: item.count || 1,
+    //   choices: item.name || [],
+    // }));
+    const orders = cartItems.map((item) => ({
+      id: item.id,
+      special: item.specialNote || "",
+      extras: item.extras || [],
+      count: item.count || 1,
+      choices: item.name || [],
+    }));
+  
+    const dataToSend = {
+      delivery_type: deliveryType, // 1 يعني "دليفري"، 2 يعني "باك أب"
+      payment: paymentMethod === "cash" ? 1 : 2,
+      lat: deliveryType === 1 ? selectedAddress.lat : null,
+      lng: deliveryType === 1 ? selectedAddress.lng : null,
+      address: deliveryType === 1 ? selectedAddress.id : 0,
+      area: deliveryType === 1 ? selectedAddress.area : null,
+      branch: deliveryType === 2 ? selectedBranchId : null,
+      api_token: api_token,
+      items: JSON.stringify({ items: orders }), // تحويلها لسلسلة JSON
+      device_id: "",
+      notes: "",
+      time: "2024-08-20 14:07:07",
+      car_model: "",
+      car_color: "",
+      gift_cards: "",
+      coins: "00.00",
+    };
+
+    console.log("Checkout data:", dataToSend);
+    const params = new URLSearchParams(dataToSend);
+
+
+
+    axios
+    .post(`http://myres.me/chilis-dev/orders/create?${params.toString()}`)
+    // .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+    .then((response) => {
+      console.log("Order placed successfully:", response.data);
+    })
+    .catch((error) => {
+      console.error("Error placing order:", error);
+    });
+  };
+//   const handleCheckout = () => {
+//     // تحقق من العنوان الحالي في حالة "دليفري"
+//     if (deliveryType === 1) { // 1 يعني "دليفري"
+//         if (addressData.length === 1 && !selectedAddress) {
+//             dispatch(setSelectedAddress(addressData[0]));
+//         }
+
+//         const currentSelectedAddress = selectedAddress || addressData[0];
+
+//         if (
+//             (addressData.length > 1 && !selectedAddress) ||
+//             !currentSelectedAddress
+//         ) {
+//             alert("Please select an address before placing the order.");
+//             return;
+//         }
+
+//         // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
+//         const orders = cartItems.map((item) => ({
+//             id: item.id,
+//             special: item.specialNote || "",
+//             extras: item.extras || [],
+//             count: item.count || 1,
+//             choices: item.name || [],
+//         }));
+
+//         const dataToSend = {
+//             delivery_type: 1, // دليفري
+//             payment: paymentMethod === "cash" ? 1 : 2,
+//             lat: currentSelectedAddress.lat,
+//             lng: currentSelectedAddress.lng,
+//             address: currentSelectedAddress.id,
+//             area: 1,
+//             branch: 1,
+//             api_token: api_token,
+//             items: { items: orders },
+//             device_id: "",
+//             notes: "",
+//             time: "2024-08-20 14:07:07",
+//             car_model: "",
+//             car_color: "",
+//             gift_cards: "",
+//             coins: "00.00",
+//         };
+
+        
+//         axios
+//         .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+//         .then((response) => {
+//           console.log("Order placed successfully:", response.data);
+//         })
+//         .catch((error) => {
+//           console.error("Error placing order:", error);
+//         });
+        
+//         console.log("Checkout data:", dataToSend);
+//     } else if (deliveryType === 2) { // 2 يعني "باك أب"
+//         // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
+//         const orders = cartItems.map((item) => ({
+//             id: item.id,
+//             special: item.specialNote || "",
+//             extras: item.extras || [],
+//             count: item.count || 1,
+//             choices: item.choices || [],
+//         }));
+
+//         const dataToSend = {
+//             delivery_type: 2, // باك أب
+//             payment: paymentMethod === "cash" ? 1 : 2,
+//             lat: null, // لا حاجة لإرسال موقع
+//             lng: null, // لا حاجة لإرسال موقع
+//             address: 0, // قيمة العنوان 0 في حالة الباك أب
+//             area: null, // لا حاجة لإرسال منطقة
+//             branch: selectedBranchId, // تحديد البرانش المختار
+//             api_token: api_token,
+//             items: { items: orders },
+//             device_id: "",
+//             notes: "",
+//             time: "2024-08-20 14:07:07",
+//             car_model: "",
+//             car_color: "",
+//             gift_cards: "",
+//             coins: "00.00",
+//         };
+
+//         console.log("Checkout data:", dataToSend);
+
+//         axios
+//             .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+//             .then((response) => {
+//                 console.log("Order placed successfully:", response.data);
+//             })
+//             .catch((error) => {
+//                 console.error("Error placing order:", error);
+//             });
+//     }
+// };
 
 
 
