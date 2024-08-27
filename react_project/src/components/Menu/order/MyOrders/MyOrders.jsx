@@ -4,6 +4,7 @@ import { Stack, Typography, Card, CardContent, Button } from "@mui/material";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+// import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import img from "./meal.jpg";
 
 function MyOrders() {
@@ -189,17 +190,54 @@ function MyOrders() {
                     </Stack>
 
                     <Stack>
-                      <Typography variant="h6">
-                        Order ID: {order.order_id}
+                      <Stack direction={"row"} alignItems={"center"}>
+                        <Typography sx={{ fontSize: "2rem", color: "#000 " }}>
+                          Order{" "}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "2rem",
+                            ml: ".5rem",
+                            color: "#17a2b8!important",
+                          }}
+                        >
+                          {order.order_id}
+                        </Typography>
+                      </Stack>
+                      <Typography
+                        sx={{
+                          border: "2px solid #bd946d",
+                          textAlign: "center",
+                          width: "fit-content",
+                          mt: "1.3rem",
+                          p: ".8rem 2rem",
+                          fontSize: "1.3rem",
+                          cursor: "pointer",
+                          transition: "background-color 0.8s ease",
+                          "&:hover": {
+                            backgroundImage:
+                              "linear-gradient(135deg, #cea076 0%, #bd946d 100%)",
+                            color: "white",
+                            borderColor: "#cea076",
+                          },
+                        }}
+                      >
+                        View Details
                       </Typography>
-                      <Button>View Details</Button>
                     </Stack>
                   </Stack>
                   <Stack sx={{ ml: "auto" }}>
                     <Typography variant="h6">progress</Typography>
-                    <Typography variant="body2">
-                      Schedule: {order.schedule}
-                    </Typography>
+                    <Stack
+                      variant="body2"
+                      alignItems={"center"}
+                      direction={"row"}
+                    >
+                      <AccessTimeOutlinedIcon
+                        sx={{ fontSize: "1.8rem", mr: ".4rem" }}
+                      />{" "}
+                      {order.schedule}
+                    </Stack>
                     <Stack>
                       <Typography>Total Payment</Typography>
                       <Typography>657.78 EGP</Typography>
