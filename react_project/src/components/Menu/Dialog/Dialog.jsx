@@ -37,65 +37,22 @@ function DialogItem({
   dataOptions,
   BASE_URL,
 }) {
-  const description =
-    itemDetails?.description ||
-    tempSelectedItemDescription ||
-    "Default Description";
-  const image =
-    itemDetails?.image || tempSelectedItemImage || "default-image.jpg";
+  const dispatch = useDispatch();
+
   const [showOrderNow, setShowOrderNow] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const [selectedExtras, setSelectedExtras] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
-  const dispatch = useDispatch();
 
   const totalItems = useSelector((state) => state.cart.totalItems);
 
   // const handleAddToCart = () => {
   //   handleCloseDialog();
 
-  //   // الحصول على الاختيارات المختارة من الـ RadioGroup
-  //   const selectedExtras = dataExtra
-  //     .filter(
-  //       (extra) =>
-  //         document.querySelector(`input[value="${extra.description_en}"]`)
-  //           .checked
-  //     )
-  //     .map((extra) => ({
-  //       name: extra.description_en,
-  //       price: parseFloat(extra.price_en), // تأكد من تحويل السعر إلى رقم
-  //     }));
-
   //   const itemDetailsToAdd = {
+  //  id: itemDetails?.id || "default-id",
   //     name: itemDetails?.name_en || "Default Name",
-  //     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0, // تأكد من تحويل السعر إلى رقم
-  //     quantity: 1,
-  //     extras: selectedExtras,
-  //     totalPrice:
-  //       (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
-  //       selectedExtras.reduce((sum, extra) => sum + extra.price, 0), // حساب الإجمالي مع إضافة أسعار extras
-  //   };
-
-  //   // تحديث الـ Redux state
-  //   dispatch(addItemToCart(itemDetailsToAdd));
-
-  //   // الحصول على الكارت من localStorage
-  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  //   // إضافة الطلب الجديد إلى الكارت
-  //   cart.push(itemDetailsToAdd);
-
-  //   // حفظ الكارت المحدث في localStorage
-  //   localStorage.setItem("cart", JSON.stringify(cart));
-  // };
-
-  // const handleAddToCart = () => {
-  //   handleCloseDialog();
-
-  //   // تحضير تفاصيل الطلب للإضافة إلى الكارت
-  //   const itemDetailsToAdd = {
-  //     name: itemDetails?.name_en || "Default Name",
-  //     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0, // تأكد من تحويل السعر إلى رقم
+  //     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0,
   //     quantity: 1,
   //     extras: selectedExtras.map((extra) => ({
   //       name: extra.description_en,
@@ -107,29 +64,75 @@ function DialogItem({
   //       selectedExtras.reduce(
   //         (sum, extra) => sum + parseFloat(extra.price_en),
   //         0
-  //       ), // حساب الإجمالي مع إضافة أسعار extras
+  //       ),
   //   };
 
   //   dispatch(addItemToCart(itemDetailsToAdd));
 
-  //   // تحديث الـ localStorage
   //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   //   cart.push(itemDetailsToAdd);
   //   localStorage.setItem("cart", JSON.stringify(cart));
   // };
+  // const handleAddToCart = () => {
+  //   handleCloseDialog();
+
+  //   console.log("Selected Option:", selectedOption);
+  //  console.log("Selected Extras:", selectedExtras);
+
+  //   // تأكد من استخدام الـ IDs بشكل صحيح
+  //   const itemDetailsToAdd = {
+  //     id: itemDetails?.id || "default-id",
+  //     name: itemDetails?.name_en || "Default Name",
+  //     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0,
+  //     quantity: 1,
+  //    extras: Array.isArray(selectedExtras) ? selectedExtras.map((extra) => ({
+  //     id: extra.id, // اجلب الـ ID هنا
+  //     name: extra.description_en,
+  //     price: parseFloat(extra.price_en),
+  //   })) : [],
+  //   option: selectedOption ? {
+  //     id: selectedOption.id,
+  //     name: selectedOption,
+  //   } : null,
+  //     totalPrice:
+  //       (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
+  //       selectedExtras.reduce(
+  //         (sum, extra) => sum + parseFloat(extra.price_en),
+  //         0
+  //       ),
+  //   };
+
+  //   dispatch(addItemToCart(itemDetailsToAdd));
+
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   cart.push(itemDetailsToAdd);
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+  // };
+
   const handleAddToCart = () => {
     handleCloseDialog();
-  
+
+    console.log("Selected Option:", selectedOption);
+    console.log("Selected Extras:", selectedExtras);
+
     const itemDetailsToAdd = {
-   id: itemDetails?.id || "default-id",
+      id: itemDetails?.id || "default-id",
       name: itemDetails?.name_en || "Default Name",
       price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0,
       quantity: 1,
-      extras: selectedExtras.map((extra) => ({
-        name: extra.description_en,
-        price: parseFloat(extra.price_en),
-      })),
-      option: selectedOption,
+      extras: Array.isArray(selectedExtras)
+        ? selectedExtras.map((extra) => ({
+            id: extra.id,
+            name: extra.description_en,
+            price: parseFloat(extra.price_en),
+          }))
+        : [],
+      option: selectedOption
+        ? {
+            id: selectedOption.id, // استخدام الـ ID هنا
+            name: selectedOption.name_en, // استخدام الاسم المناسب
+          }
+        : null,
       totalPrice:
         (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
         selectedExtras.reduce(
@@ -137,25 +140,20 @@ function DialogItem({
           0
         ),
     };
-  
+
     dispatch(addItemToCart(itemDetailsToAdd));
-  
+
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     cart.push(itemDetailsToAdd);
     localStorage.setItem("cart", JSON.stringify(cart));
   };
-  
+
   const [totalPrice, setTotalPrice] = useState(0);
   const handlePriceChange = (price) => {
     setTotalPrice(price);
   };
 
   // const [selectedExtras, setSelectedExtras] = useState([]);
-
-  const handleOptionChange = (event) => {
-    setSelectedOption(event.target.value);
-
-  };
 
   const handleCheckboxChange = (extra) => (event) => {
     if (event.target.checked) {
@@ -164,10 +162,22 @@ function DialogItem({
       setSelectedExtras(selectedExtras.filter((item) => item !== extra));
     }
   };
+  // const handleOptionChange = (event) => {
+  //   setSelectedOption(event.target.value);
+
+  // };
   useEffect(() => {
     console.log("dataOptions:", dataOptions);
     console.log("dataExtra:", dataExtra);
   }, [dataOptions, dataExtra]);
+
+  const handleOptionChange = (event) => {
+    const selectedOption = dataOptions.find(
+      (option) => option.name_en === event.target.value
+    );
+    setSelectedOption(selectedOption);
+  };
+
   return (
     <Dialog
       open={openDialog}
@@ -224,23 +234,23 @@ function DialogItem({
                     Options
                   </Typography>
                   <RadioGroup
-  value={selectedOption}
-  onChange={handleOptionChange}
->
-  {dataOptions.map((option, index) => (
-    <FormControlLabel
-      key={index}
-      value={option.description_en}
-      control={<Radio sx={{ color: "#000" }} />}
-      label={`${option.description_en}`}
-      sx={{ color: "#000" }}
-    />
-  ))}
-</RadioGroup>
-
+                    value={selectedOption}
+                    onChange={handleOptionChange}
+                  >
+                    {dataOptions.map((option, index) => (
+                      <FormControlLabel
+                        key={index}
+                        value={option.name_en}
+                        control={<Radio sx={{ color: "#000" }} />}
+                        label={`${option.name_en}`}
+                        sx={{ color: "#000" }}
+                      />
+                    ))}
+                  </RadioGroup>
                 </FormControl>
               )}
             </Stack>
+
             {dataExtra && dataExtra.length > 0 && (
               <FormControl component="fieldset">
                 {/* <Typography variant="h6" sx={{ color: "#000" }}>

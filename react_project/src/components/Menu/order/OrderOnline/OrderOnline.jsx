@@ -168,7 +168,6 @@ function OrderOnline() {
     setCurrentAddress((prev) => ({ ...prev, label }));
   };
 
-
   const handleCardClick = (index) => {
     setActiveIndex(index);
     setSelectedAddress(addressData[index]); // Set selected address when card is clicked
@@ -187,8 +186,8 @@ function OrderOnline() {
     const orderData = {
       items: cartItems,
       total: totalToPay,
-      user: user, // تضمين معلومات المستخدم هنا
-      address: addressData[activeIndex], // استخدام العنوان النشط
+      user: user,
+      address: addressData[activeIndex],
     };
   };
   // checkout
@@ -221,7 +220,25 @@ function OrderOnline() {
   }, [selectedAddress]);
   const [orders, setOrders] = useState([]);
 
+  const selectedExtras = useSelector((state) => state.info.selectedExtras);
+  const selectedOption = useSelector((state) => state.info.selectedOption);
   const idInfo = useSelector((state) => state.info.idInfo);
+
+  const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+
+  const [specialNotes, setSpecialNotes] = useState({});
+
+  // تحديث الملاحظات الخاصة عند تغيير الحقل النصي
+  const handleSpecialNoteChange = (itemId, note) => {
+    setSpecialNotes((prevNotes) => ({
+      ...prevNotes,
+      [itemId]: note,
+    }));
+  };
+
+
   const handleCheckout = () => {
     if (addressData.length === 1 && !selectedAddress) {
       dispatch(setSelectedAddress(addressData[0]));
@@ -242,25 +259,43 @@ function OrderOnline() {
       setOpenCreditCardDialog(true);
       return;
     }
-    
+    // const orders = cartItems.map((item) => ({
+    //   id: idInfo,
+    //   special: item.specialNote || "",
+    //   extras: Array.isArray(item.extras)
+    //     ? item.extras.map((extra) => extra.id)
+    //     : [],
+    //   count: item.count || 1,
+    //   choices: [],
+    //   options: item.option ? [item.option.id] : [],
+    // }));
     const orders = cartItems.map((item) => ({
       id: idInfo,
-      special: `item.specialNote `|| "",
-      extras: [1, 2] || [],
+      special: specialNotes[item.id] || "",  // ربط الملاحظات الخاصة مع كل عنصر
+      extras: Array.isArray(item.extras)
+        ? item.extras.map((extra) => extra.id)
+        : [],
       count: item.count || 1,
-      choices: [] || [],
+      choices: [],
+      options: item.option ? [item.option.id] : [],
     }));
-console.log(orders)
+    console.log("Selected Extras:", selectedExtras);
+    console.log("Selected Option:", selectedOption);
+
+    console.log(orders);
+
     const dataToSend = {
-      delivery_type: deliveryType, // 1 يعني "دليفري"، 2 يعني "باك أب"
+      delivery_type: 1,
       payment: paymentMethod === "cash" ? 1 : 2,
-      lat: deliveryType === 1 ? currentSelectedAddress.lat : null,
-      lng: deliveryType === 1 ? currentSelectedAddress.lng : null,
+      lat: deliveryType === 1 ? currentSelectedAddress.lat : 0,
+      lng: deliveryType === 1 ? currentSelectedAddress.lng : 0,
       address: currentSelectedAddress.id,
-      area: deliveryType === 1 ? selectedAddress.area : null,
-      branch: deliveryType === 2 ? selectedBranchId : null,
+      area: deliveryType === 1 ? selectedAddress.area : 10,
+      branch: selectedBranchId || null,
+      // لو هو مختار دليفري ممكن يحصل يكون في برانش او لا
+      // ولاكن لو مختار
       api_token: api_token,
-      items: JSON.stringify({ items: orders }), // تحويلها لسلسلة JSON
+      items: JSON.stringify({ items: orders }),
       device_id: "",
       notes: "",
       time: "2024-08-20 14:07:07",
@@ -274,8 +309,8 @@ console.log(orders)
     const params = new URLSearchParams(dataToSend);
 
     axios
-      .post(`http://myres.me/chilis-dev/orders/create?${params.toString()}`)
-      // .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+      .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
+
       .then((response) => {
         console.log("Order placed successfully:", response.data);
       })
@@ -283,102 +318,6 @@ console.log(orders)
         console.error("Error placing order:", error);
       });
   };
-  //   const handleCheckout = () => {
-  //     // تحقق من العنوان الحالي في حالة "دليفري"
-  //     if (deliveryType === 1) { // 1 يعني "دليفري"
-  //         if (addressData.length === 1 && !selectedAddress) {
-  //             dispatch(setSelectedAddress(addressData[0]));
-  //         }
-
-  //         const currentSelectedAddress = selectedAddress || addressData[0];
-
-  //         if (
-  //             (addressData.length > 1 && !selectedAddress) ||
-  //             !currentSelectedAddress
-  //         ) {
-  //             alert("Please select an address before placing the order.");
-  //             return;
-  //         }
-
-  //         // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-  //         const orders = cartItems.map((item) => ({
-  //             id: item.id,
-  //             special: item.specialNote || "",
-  //             extras: item.extras || [],
-  //             count: item.count || 1,
-  //             choices: item.name || [],
-  //         }));
-
-  //         const dataToSend = {
-  //             delivery_type: 1, // دليفري
-  //             payment: paymentMethod === "cash" ? 1 : 2,
-  //             lat: currentSelectedAddress.lat,
-  //             lng: currentSelectedAddress.lng,
-  //             address: currentSelectedAddress.id,
-  //             area: 1,
-  //             branch: 1,
-  //             api_token: api_token,
-  //             items: { items: orders },
-  //             device_id: "",
-  //             notes: "",
-  //             time: "2024-08-20 14:07:07",
-  //             car_model: "",
-  //             car_color: "",
-  //             gift_cards: "",
-  //             coins: "00.00",
-  //         };
-
-  //         axios
-  //         .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-  //         .then((response) => {
-  //           console.log("Order placed successfully:", response.data);
-  //         })
-  //         .catch((error) => {
-  //           console.error("Error placing order:", error);
-  //         });
-
-  //         console.log("Checkout data:", dataToSend);
-  //     } else if (deliveryType === 2) { // 2 يعني "باك أب"
-  //         // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-  //         const orders = cartItems.map((item) => ({
-  //             id: item.id,
-  //             special: item.specialNote || "",
-  //             extras: item.extras || [],
-  //             count: item.count || 1,
-  //             choices: item.choices || [],
-  //         }));
-
-  //         const dataToSend = {
-  //             delivery_type: 2, // باك أب
-  //             payment: paymentMethod === "cash" ? 1 : 2,
-  //             lat: null, // لا حاجة لإرسال موقع
-  //             lng: null, // لا حاجة لإرسال موقع
-  //             address: 0, // قيمة العنوان 0 في حالة الباك أب
-  //             area: null, // لا حاجة لإرسال منطقة
-  //             branch: selectedBranchId, // تحديد البرانش المختار
-  //             api_token: api_token,
-  //             items: { items: orders },
-  //             device_id: "",
-  //             notes: "",
-  //             time: "2024-08-20 14:07:07",
-  //             car_model: "",
-  //             car_color: "",
-  //             gift_cards: "",
-  //             coins: "00.00",
-  //         };
-
-  //         console.log("Checkout data:", dataToSend);
-
-  //         axios
-  //             .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-  //             .then((response) => {
-  //                 console.log("Order placed successfully:", response.data);
-  //             })
-  //             .catch((error) => {
-  //                 console.error("Error placing order:", error);
-  //             });
-  //     }
-  // };
 
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
@@ -446,9 +385,6 @@ console.log(orders)
   const [dataOptions, setDataOptions] = useState([]);
 
   // console.log("dataOptions",dataOptions)
-  const handleDataOptionsUpdate = (options) => {
-    setDataOptions(options);
-  };
 
   return (
     <Stack
@@ -672,40 +608,41 @@ console.log(orders)
                             </Stack>
                           ))}
 
-                          {dataOptions.length > 0 && (
+                          {selectedOption && (
                             <Stack sx={{ mb: 2 }}>
                               <Typography
                                 variant="body1"
-                                sx={{ fontWeight: "bold" }}
+                                sx={{ fontWeight: "bold", color: "red" }}
                               >
-                                Options:
+                                option
                               </Typography>
-                              <Stack spacing={1} sx={{ marginLeft: 2 }}>
-                                {dataOptions.map((option, index) => (
-                                  <Typography key={index} variant="body2">
-                                    - {option.name_en}
-                                  </Typography>
-                                ))}
-                              </Stack>
+                              <Typography
+                                variant="body2"
+                                sx={{ marginLeft: 2 }}
+                              >
+                                {selectedOption.name_en}
+                              </Typography>
                             </Stack>
                           )}
                         </Stack>
                       )}
 
                       <TextField
-                        placeholder="Enter any special request note"
-                        sx={{
-                          transition: "1s",
-                          "& .MuiInputBase-input": {
-                            fontSize: "1.3rem",
-                            color: "gray",
-                          },
-                          "& .MuiInputBase-input::placeholder": {
-                            color: "#000",
-                            fontSize: "1.3rem",
-                          },
-                        }}
-                      />
+            placeholder="Enter any special request note"
+            value={specialNotes[item.id] || ""}  // ربط الحقل النصي مع الحالة
+            onChange={(e) => handleSpecialNoteChange(item.id, e.target.value)}  // تحديث الحالة عند تغيير المحتوى
+            sx={{
+              transition: "1s",
+              "& .MuiInputBase-input": {
+                fontSize: "1.3rem",
+                color: "gray",
+              },
+              "& .MuiInputBase-input::placeholder": {
+                color: "#000",
+                fontSize: "1.3rem",
+              },
+            }}
+          />
                     </Stack>
                   </Card>
                 ))}
