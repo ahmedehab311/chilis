@@ -167,9 +167,7 @@ function OrderOnline() {
   const handleSelectLabel = (label) => {
     setCurrentAddress((prev) => ({ ...prev, label }));
   };
-  // const [selectedAddress, setSelectedAddress] = useState(null);
 
-  // existing useEffects and functions...
 
   const handleCardClick = (index) => {
     setActiveIndex(index);
@@ -223,76 +221,15 @@ function OrderOnline() {
   }, [selectedAddress]);
   const [orders, setOrders] = useState([]);
 
-  // const handleCheckout = () => {
-  //   // تحقق من العنوان الحالي
-  //   if (addressData.length === 1 && !selectedAddress) {
-  //     dispatch(setSelectedAddress(addressData[0]));
-  //   }
-
-  //   const currentSelectedAddress = selectedAddress || addressData[0];
-
-  //   if (
-  //     (addressData.length > 1 && !selectedAddress) ||
-  //     !currentSelectedAddress
-  //   ) {
-  //     alert("Please select an address before placing the order.");
-  //     return;
-  //   }
-
-  //   // تحقق من طريقة الدفع إذا كانت "credit card"
-  //   if (payment === 2) {
-  //     // فتح الديالوج الخاص بالـ credit card
-  //     openCreditCardDialog();
-  //     return; // إيقاف تنفيذ باقي الكود
-  //   }
-
-  //   // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-  //   const orders = cartItems.map((item) => ({
-  //     id: item.id,
-  //     special: item.specialNote || "",
-  //     extras: item.extras || [],
-  //     count: item.count || 1,
-  //     choices: item.choices || [],
-  //   }));
-
-  //   const dataToSend = {
-  //     delivery_type: 1,
-  //     payment: paymentMethod === "cash" ? 1 : 2,
-  //     lat: currentSelectedAddress.lat,
-  //     lng: currentSelectedAddress.lng,
-  //     address: currentSelectedAddress.id,
-  //     area: 1,
-  //     branch: 1,
-  //     api_token: api_token,
-  //     items: { items: orders },
-  //     device_id: "",
-  //     notes: "",
-  //     time: "2024-08-20 14:07:07",
-  //     car_model: "",
-  //     car_color: "",
-  //     gift_cards: "",
-  //     coins: "00.00",
-  //   };
-
-  //   console.log("Checkout data:", dataToSend);
-
-  //   axios
-  //     .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-  //     .then((response) => {
-  //       console.log("Order placed successfully:", response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error placing order:", error);
-  //     });
-  // };
-
+  const idInfo = useSelector((state) => state.info.idInfo);
   const handleCheckout = () => {
-              if (addressData.length === 1 && !selectedAddress) {
-                  dispatch(setSelectedAddress(addressData[0]));
-              }
+    if (addressData.length === 1 && !selectedAddress) {
+      dispatch(setSelectedAddress(addressData[0]));
+    }
 
     const currentSelectedAddress = selectedAddress || addressData[0];
 
+    // console.log("selectedAddress",selectedAddress.area)
     if (
       (addressData.length > 1 && !selectedAddress) ||
       !currentSelectedAddress
@@ -305,29 +242,21 @@ function OrderOnline() {
       setOpenCreditCardDialog(true);
       return;
     }
-
-    // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-    // const orders = cartItems.map((item) => ({
-    //   id: item.id,
-    //   special: item.specialNote || "",
-    //   extras: item.extras || [],
-    //   count: item.count || 1,
-    //   choices: item.name || [],
-    // }));
+    
     const orders = cartItems.map((item) => ({
-      id: item.id,
-      special: item.specialNote || "",
-      extras: item.extras || [],
+      id: idInfo,
+      special: `item.specialNote `|| "",
+      extras: [1, 2] || [],
       count: item.count || 1,
-      choices: item.name || [],
+      choices: [] || [],
     }));
-  
+console.log(orders)
     const dataToSend = {
       delivery_type: deliveryType, // 1 يعني "دليفري"، 2 يعني "باك أب"
       payment: paymentMethod === "cash" ? 1 : 2,
-      lat: deliveryType === 1 ? selectedAddress.lat : null,
-      lng: deliveryType === 1 ? selectedAddress.lng : null,
-      address: deliveryType === 1 ? selectedAddress.id : 0,
+      lat: deliveryType === 1 ? currentSelectedAddress.lat : null,
+      lng: deliveryType === 1 ? currentSelectedAddress.lng : null,
+      address: currentSelectedAddress.id,
       area: deliveryType === 1 ? selectedAddress.area : null,
       branch: deliveryType === 2 ? selectedBranchId : null,
       api_token: api_token,
@@ -344,117 +273,112 @@ function OrderOnline() {
     console.log("Checkout data:", dataToSend);
     const params = new URLSearchParams(dataToSend);
 
-
-
     axios
-    .post(`http://myres.me/chilis-dev/orders/create?${params.toString()}`)
-    // .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-    .then((response) => {
-      console.log("Order placed successfully:", response.data);
-    })
-    .catch((error) => {
-      console.error("Error placing order:", error);
-    });
+      .post(`http://myres.me/chilis-dev/orders/create?${params.toString()}`)
+      // .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+      .then((response) => {
+        console.log("Order placed successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error placing order:", error);
+      });
   };
-//   const handleCheckout = () => {
-//     // تحقق من العنوان الحالي في حالة "دليفري"
-//     if (deliveryType === 1) { // 1 يعني "دليفري"
-//         if (addressData.length === 1 && !selectedAddress) {
-//             dispatch(setSelectedAddress(addressData[0]));
-//         }
+  //   const handleCheckout = () => {
+  //     // تحقق من العنوان الحالي في حالة "دليفري"
+  //     if (deliveryType === 1) { // 1 يعني "دليفري"
+  //         if (addressData.length === 1 && !selectedAddress) {
+  //             dispatch(setSelectedAddress(addressData[0]));
+  //         }
 
-//         const currentSelectedAddress = selectedAddress || addressData[0];
+  //         const currentSelectedAddress = selectedAddress || addressData[0];
 
-//         if (
-//             (addressData.length > 1 && !selectedAddress) ||
-//             !currentSelectedAddress
-//         ) {
-//             alert("Please select an address before placing the order.");
-//             return;
-//         }
+  //         if (
+  //             (addressData.length > 1 && !selectedAddress) ||
+  //             !currentSelectedAddress
+  //         ) {
+  //             alert("Please select an address before placing the order.");
+  //             return;
+  //         }
 
-//         // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-//         const orders = cartItems.map((item) => ({
-//             id: item.id,
-//             special: item.specialNote || "",
-//             extras: item.extras || [],
-//             count: item.count || 1,
-//             choices: item.name || [],
-//         }));
+  //         // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
+  //         const orders = cartItems.map((item) => ({
+  //             id: item.id,
+  //             special: item.specialNote || "",
+  //             extras: item.extras || [],
+  //             count: item.count || 1,
+  //             choices: item.name || [],
+  //         }));
 
-//         const dataToSend = {
-//             delivery_type: 1, // دليفري
-//             payment: paymentMethod === "cash" ? 1 : 2,
-//             lat: currentSelectedAddress.lat,
-//             lng: currentSelectedAddress.lng,
-//             address: currentSelectedAddress.id,
-//             area: 1,
-//             branch: 1,
-//             api_token: api_token,
-//             items: { items: orders },
-//             device_id: "",
-//             notes: "",
-//             time: "2024-08-20 14:07:07",
-//             car_model: "",
-//             car_color: "",
-//             gift_cards: "",
-//             coins: "00.00",
-//         };
+  //         const dataToSend = {
+  //             delivery_type: 1, // دليفري
+  //             payment: paymentMethod === "cash" ? 1 : 2,
+  //             lat: currentSelectedAddress.lat,
+  //             lng: currentSelectedAddress.lng,
+  //             address: currentSelectedAddress.id,
+  //             area: 1,
+  //             branch: 1,
+  //             api_token: api_token,
+  //             items: { items: orders },
+  //             device_id: "",
+  //             notes: "",
+  //             time: "2024-08-20 14:07:07",
+  //             car_model: "",
+  //             car_color: "",
+  //             gift_cards: "",
+  //             coins: "00.00",
+  //         };
 
-        
-//         axios
-//         .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-//         .then((response) => {
-//           console.log("Order placed successfully:", response.data);
-//         })
-//         .catch((error) => {
-//           console.error("Error placing order:", error);
-//         });
-        
-//         console.log("Checkout data:", dataToSend);
-//     } else if (deliveryType === 2) { // 2 يعني "باك أب"
-//         // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-//         const orders = cartItems.map((item) => ({
-//             id: item.id,
-//             special: item.specialNote || "",
-//             extras: item.extras || [],
-//             count: item.count || 1,
-//             choices: item.choices || [],
-//         }));
+  //         axios
+  //         .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+  //         .then((response) => {
+  //           console.log("Order placed successfully:", response.data);
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error placing order:", error);
+  //         });
 
-//         const dataToSend = {
-//             delivery_type: 2, // باك أب
-//             payment: paymentMethod === "cash" ? 1 : 2,
-//             lat: null, // لا حاجة لإرسال موقع
-//             lng: null, // لا حاجة لإرسال موقع
-//             address: 0, // قيمة العنوان 0 في حالة الباك أب
-//             area: null, // لا حاجة لإرسال منطقة
-//             branch: selectedBranchId, // تحديد البرانش المختار
-//             api_token: api_token,
-//             items: { items: orders },
-//             device_id: "",
-//             notes: "",
-//             time: "2024-08-20 14:07:07",
-//             car_model: "",
-//             car_color: "",
-//             gift_cards: "",
-//             coins: "00.00",
-//         };
+  //         console.log("Checkout data:", dataToSend);
+  //     } else if (deliveryType === 2) { // 2 يعني "باك أب"
+  //         // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
+  //         const orders = cartItems.map((item) => ({
+  //             id: item.id,
+  //             special: item.specialNote || "",
+  //             extras: item.extras || [],
+  //             count: item.count || 1,
+  //             choices: item.choices || [],
+  //         }));
 
-//         console.log("Checkout data:", dataToSend);
+  //         const dataToSend = {
+  //             delivery_type: 2, // باك أب
+  //             payment: paymentMethod === "cash" ? 1 : 2,
+  //             lat: null, // لا حاجة لإرسال موقع
+  //             lng: null, // لا حاجة لإرسال موقع
+  //             address: 0, // قيمة العنوان 0 في حالة الباك أب
+  //             area: null, // لا حاجة لإرسال منطقة
+  //             branch: selectedBranchId, // تحديد البرانش المختار
+  //             api_token: api_token,
+  //             items: { items: orders },
+  //             device_id: "",
+  //             notes: "",
+  //             time: "2024-08-20 14:07:07",
+  //             car_model: "",
+  //             car_color: "",
+  //             gift_cards: "",
+  //             coins: "00.00",
+  //         };
 
-//         axios
-//             .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-//             .then((response) => {
-//                 console.log("Order placed successfully:", response.data);
-//             })
-//             .catch((error) => {
-//                 console.error("Error placing order:", error);
-//             });
-//     }
-// };
+  //         console.log("Checkout data:", dataToSend);
 
-
+  //         axios
+  //             .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+  //             .then((response) => {
+  //                 console.log("Order placed successfully:", response.data);
+  //             })
+  //             .catch((error) => {
+  //                 console.error("Error placing order:", error);
+  //             });
+  //     }
+  // };
 
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
@@ -519,7 +443,12 @@ function OrderOnline() {
   //
   const [deliveryType, setDeliveryType] = useState("delivery");
 
+  const [dataOptions, setDataOptions] = useState([]);
 
+  // console.log("dataOptions",dataOptions)
+  const handleDataOptionsUpdate = (options) => {
+    setDataOptions(options);
+  };
 
   return (
     <Stack
@@ -611,21 +540,16 @@ function OrderOnline() {
         </Box>
 
         <Container sx={{ margin: "0 auto" }}>
-          <Box
-            className="orderNow"
-            sx={{
-              borderRadius: "8px",
-            }}
-          >
+          <Box className="orderNow" sx={{ borderRadius: "8px" }}>
             {cartItems.length === 0
               ? null
               : cartItems.map((item, index) => (
                   <Card key={index} sx={{ p: 2, my: 3 }}>
                     <Stack sx={{ position: "relative" }}>
                       <Stack
-                        sx={{ display: "flex" }}
                         direction={"row"}
                         alignItems={"center"}
+                        sx={{ display: "flex" }}
                       >
                         <Typography
                           sx={{
@@ -648,9 +572,7 @@ function OrderOnline() {
                             fontSize: "1.8rem",
                             fontWeight: "bold",
                             fontFamily: "cairo",
-                            "&:hover": {
-                              color: "#e31616!important",
-                            },
+                            "&:hover": { color: "#e31616!important" },
                           }}
                         >
                           X
@@ -658,13 +580,13 @@ function OrderOnline() {
                       </Stack>
 
                       <Stack
+                        direction={"row"}
+                        alignItems={"center"}
                         sx={{
                           display: "flex",
                           justifyContent: "space-between",
-                          m: "10px 0 10px 0",
+                          m: "10px 0",
                         }}
-                        direction={"row"}
-                        alignItems={"center"}
                       >
                         <Typography
                           sx={{
@@ -695,12 +617,12 @@ function OrderOnline() {
                       </Stack>
 
                       <Stack
+                        direction={"row"}
+                        alignItems={"center"}
                         sx={{
                           display: "flex",
                           justifyContent: "space-between",
                         }}
-                        direction={"row"}
-                        alignItems={"center"}
                       >
                         <Typography
                           sx={{
@@ -712,50 +634,64 @@ function OrderOnline() {
                           Regular
                         </Typography>
                         <Typography
-                          sx={{
-                            fontSize: "1.5rem",
-                            fontWeight: 500,
-                          }}
+                          sx={{ fontSize: "1.5rem", fontWeight: 500 }}
                         >
                           {(totalPrices[index] || item.price).toFixed(2)} EGP
                         </Typography>
                       </Stack>
-                      <Stack>
-                        {item.extras && item.extras.length > 0 && (
-                          <Stack>
-                            {item.extras.map((extra, i) => (
-                              <Stack
-                                key={i}
-                                direction={"row"}
-                                alignItems={"center"}
-                                sx={{ justifyContent: "space-between" }}
-                              >
-                                <Typography
-                                  sx={{
-                                    color: "#000!important",
-                                    fontSize: "1.5rem",
 
-                                    fontFamily: "cairo",
-                                    fontWeight: 500,
-                                  }}
-                                >
-                                  {extra.name}
-                                </Typography>
-                                <Typography
-                                  sx={{
-                                    color: "#000!important",
-                                    fontSize: "1.5rem",
-                                    fontFamily: "cairo",
-                                    fontWeight: 500,
-                                  }}
-                                >
-                                  {extra.price} EGP
-                                </Typography>
+                      {item.extras && item.extras.length > 0 && (
+                        <Stack sx={{ mt: 2 }}>
+                          {item.extras.map((extra, i) => (
+                            <Stack
+                              key={i}
+                              direction={"row"}
+                              alignItems={"center"}
+                              sx={{ justifyContent: "space-between", mb: 1 }}
+                            >
+                              <Typography
+                                sx={{
+                                  color: "#000!important",
+                                  fontSize: "1.5rem",
+                                  fontFamily: "cairo",
+                                  fontWeight: 500,
+                                }}
+                              >
+                                {extra.name}
+                              </Typography>
+                              <Typography
+                                sx={{
+                                  color: "#000!important",
+                                  fontSize: "1.5rem",
+                                  fontFamily: "cairo",
+                                  fontWeight: 500,
+                                }}
+                              >
+                                {extra.price} EGP
+                              </Typography>
+                            </Stack>
+                          ))}
+
+                          {dataOptions.length > 0 && (
+                            <Stack sx={{ mb: 2 }}>
+                              <Typography
+                                variant="body1"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                Options:
+                              </Typography>
+                              <Stack spacing={1} sx={{ marginLeft: 2 }}>
+                                {dataOptions.map((option, index) => (
+                                  <Typography key={index} variant="body2">
+                                    - {option.name_en}
+                                  </Typography>
+                                ))}
                               </Stack>
-                            ))}
-                          </Stack>
-                        )}
-                      </Stack>
+                            </Stack>
+                          )}
+                        </Stack>
+                      )}
+
                       <TextField
                         placeholder="Enter any special request note"
                         sx={{
@@ -775,6 +711,7 @@ function OrderOnline() {
                 ))}
           </Box>
         </Container>
+
         {/* coupon */}
         <Coupun api_token={api_token} />
 

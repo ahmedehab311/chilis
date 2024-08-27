@@ -8,7 +8,7 @@ import { setUser } from "../../../../rtk/slices/userSlice";
 import LoginContent from "./LoginContent";
 import { fetchAddresses } from "../../../../rtk/slices/adderssSlice";
 
-const BASE_URL = "https://myres.me/chilis/api";
+const BASE_URL = "https://myres.me/chilis-dev/api";
 
 const LoginPage = ({ setToken }) => {
   const [phone, setPhone] = useState("");

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 function Pickup() {
-  const API_BRANCHES = `https://myres.me/happyjoes_test/api/branches/1`;
+  const API_BRANCHES = `https://myres.me/chilis-dev/api/branches/1`;
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -22,6 +22,8 @@ function Pickup() {
       .get(API_BRANCHES)
       .then((response) => {
         const branchData = response.data.data?.branches;
+        // console.log("branchData",response.data);
+        
         if (Array.isArray(branchData)) {
           setBranches(branchData);
           setLoading(false);

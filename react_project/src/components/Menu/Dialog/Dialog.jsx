@@ -34,6 +34,7 @@ function DialogItem({
   itemDetails,
   price,
   dataExtra,
+  dataOptions,
   BASE_URL,
 }) {
   const description =
@@ -45,7 +46,7 @@ function DialogItem({
   const [showOrderNow, setShowOrderNow] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const [selectedExtras, setSelectedExtras] = useState([]);
-
+  const [selectedOption, setSelectedOption] = useState("");
   const dispatch = useDispatch();
 
   const totalItems = useSelector((state) => state.cart.totalItems);
@@ -88,40 +89,73 @@ function DialogItem({
   //   localStorage.setItem("cart", JSON.stringify(cart));
   // };
 
+  // const handleAddToCart = () => {
+  //   handleCloseDialog();
+
+  //   // تحضير تفاصيل الطلب للإضافة إلى الكارت
+  //   const itemDetailsToAdd = {
+  //     name: itemDetails?.name_en || "Default Name",
+  //     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0, // تأكد من تحويل السعر إلى رقم
+  //     quantity: 1,
+  //     extras: selectedExtras.map((extra) => ({
+  //       name: extra.description_en,
+  //       price: parseFloat(extra.price_en),
+  //     })),
+  //     option: selectedOption,
+  //     totalPrice:
+  //       (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
+  //       selectedExtras.reduce(
+  //         (sum, extra) => sum + parseFloat(extra.price_en),
+  //         0
+  //       ), // حساب الإجمالي مع إضافة أسعار extras
+  //   };
+
+  //   dispatch(addItemToCart(itemDetailsToAdd));
+
+  //   // تحديث الـ localStorage
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   cart.push(itemDetailsToAdd);
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+  // };
   const handleAddToCart = () => {
     handleCloseDialog();
-
-    // تحضير تفاصيل الطلب للإضافة إلى الكارت
+  
     const itemDetailsToAdd = {
+   id: itemDetails?.id || "default-id",
       name: itemDetails?.name_en || "Default Name",
-      price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0, // تأكد من تحويل السعر إلى رقم
+      price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0,
       quantity: 1,
       extras: selectedExtras.map((extra) => ({
         name: extra.description_en,
         price: parseFloat(extra.price_en),
       })),
+      option: selectedOption,
       totalPrice:
         (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
         selectedExtras.reduce(
           (sum, extra) => sum + parseFloat(extra.price_en),
           0
-        ), // حساب الإجمالي مع إضافة أسعار extras
+        ),
     };
-
-    // تحديث الـ Redux state
+  
     dispatch(addItemToCart(itemDetailsToAdd));
-
-    // تحديث الـ localStorage
+  
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     cart.push(itemDetailsToAdd);
     localStorage.setItem("cart", JSON.stringify(cart));
   };
+  
   const [totalPrice, setTotalPrice] = useState(0);
   const handlePriceChange = (price) => {
     setTotalPrice(price);
   };
 
   // const [selectedExtras, setSelectedExtras] = useState([]);
+
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+
+  };
 
   const handleCheckboxChange = (extra) => (event) => {
     if (event.target.checked) {
@@ -130,6 +164,10 @@ function DialogItem({
       setSelectedExtras(selectedExtras.filter((item) => item !== extra));
     }
   };
+  useEffect(() => {
+    console.log("dataOptions:", dataOptions);
+    console.log("dataExtra:", dataExtra);
+  }, [dataOptions, dataExtra]);
   return (
     <Dialog
       open={openDialog}
@@ -179,14 +217,37 @@ function DialogItem({
             <Typography variant="body1" sx={{ mb: 2, color: "#000" }}>
               {itemDetails.description_en}
             </Typography>
+            <Stack>
+              {dataOptions && dataOptions.length > 0 && (
+                <FormControl component="fieldset" sx={{ mt: 2 }}>
+                  <Typography variant="h6" sx={{ color: "#000" }}>
+                    Options
+                  </Typography>
+                  <RadioGroup
+  value={selectedOption}
+  onChange={handleOptionChange}
+>
+  {dataOptions.map((option, index) => (
+    <FormControlLabel
+      key={index}
+      value={option.description_en}
+      control={<Radio sx={{ color: "#000" }} />}
+      label={`${option.description_en}`}
+      sx={{ color: "#000" }}
+    />
+  ))}
+</RadioGroup>
 
+                </FormControl>
+              )}
+            </Stack>
             {dataExtra && dataExtra.length > 0 && (
               <FormControl component="fieldset">
-                <Typography variant="h6" sx={{ color: "#000" }}>
+                {/* <Typography variant="h6" sx={{ color: "#000" }}>
                   Option
-                </Typography>
+                </Typography> */}
                 <Typography variant="h6" sx={{ color: "#000" }}>
-                  Add on
+                  Extras
                 </Typography>
                 <RadioGroup
                   onChange={(e) => {
@@ -194,7 +255,6 @@ function DialogItem({
                       (extra) => extra.description_en === e.target.value
                     );
                     if (selectedExtra) {
-                      // إضافة الإضافة المختارة إلى القائمة إذا لم تكن موجودة
                       if (
                         !selectedExtras.some(
                           (extra) =>
@@ -216,6 +276,7 @@ function DialogItem({
                       label={`${extra.description_en} - ${extra.price_en} EGP`}
                     />
                   ))} */}
+
                   {dataExtra.map((extra, index) => (
                     <FormControlLabel
                       key={index}
@@ -237,6 +298,7 @@ function DialogItem({
                 </RadioGroup>
               </FormControl>
             )}
+
             <AddToCardButton onClick={handleAddToCart} />
           </DialogContentText>
         </DialogContent>
