@@ -1,47 +1,47 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 import { Stack, Typography, Card, CardContent, Box } from "@mui/material";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { fetchOrderHistory } from "../../../../rtk/slices/myOrderSlice";
 import img from "./meal.jpg";
 
 function MyOrders() {
   const [activeSection, setActiveSection] = useState("progress");
-  const [orders, setOrders] = useState([]);
-  const api_token = localStorage.getItem("token");
-  const API_HESTORY = `http://myres.me/chilis-dev/api/user/history?api_token=${api_token}`;
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const dispatch = useDispatch();
+  const { orders, status, error } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    console.log("Fetching order history...");
-    axios
-      .get(API_HESTORY)
-      .then((response) => {
-        const ordersData = response.data.data.details;
-        console.log("Orders Data:", ordersData);
-        ordersData.forEach((order, index) => {
-          console.log(`Order ${index + 1}:`, order.status);
-        });
-        setOrders(ordersData);
-      })
-      .catch((error) => {
-        console.error("Error fetching order history:", error);
-      });
-  }, [API_HESTORY]);
+    if (status === "idle") {
+      dispatch(fetchOrderHistory());
+    }
+  }, [status, dispatch]);
 
   const handleSectionClick = (section) => {
-    console.log("Active Section Clicked:", section);
     setActiveSection(section);
+    setSelectedOrder(null); // إخفاء تفاصيل الطلب عند تغيير القسم
   };
-
+  const handleViewDetailsClick = (order) => {
+    setSelectedOrder(order); // تعيين الطلب المحدد
+  };
   const filterOrdersByStatus = (status) => {
-    const filteredOrders = orders.filter(
+    return orders.filter(
       (order) => order.status.toLowerCase() === status.toLowerCase()
     );
-    console.log(`Filtering orders with status '${status}':`, filteredOrders);
-    return filteredOrders;
   };
 
+  if (status === "loading") {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (status === "failed") {
+    return <Typography>Error: {error}</Typography>;
+  }
+  const handleViewDetailsClick = (order) => {
+    setSelectedOrder(order); // تعيين الطلب المحدد
+  };
   return (
     <Stack
       direction={"row"}
@@ -174,16 +174,8 @@ function MyOrders() {
           filterOrdersByStatus("new").map((order) => (
             <Card key={order.order_id} sx={{ marginBottom: 2 }}>
               <CardContent>
-                <Stack
-                  sx={{ display: "felx" }}
-                  direction={"row"}
-                  alignItems={"center"}
-                >
-                  <Stack
-                    sx={{ display: "felx" }}
-                    direction={"row"}
-                    alignItems={"center"}
-                  >
+                <Stack direction={"row"} alignItems={"center"}>
+                  <Stack direction={"row"} alignItems={"center"}>
                     <Stack
                       sx={{
                         width: "180px",
@@ -230,6 +222,7 @@ function MyOrders() {
                         </Typography>
                       </Stack>
                       <Typography
+                        onClick={() => handleViewDetailsClick(order)}
                         sx={{
                           border: "2px solid #bd946d",
                           textAlign: "center",
@@ -245,7 +238,6 @@ function MyOrders() {
                           "&:hover": {
                             backgroundImage:
                               "linear-gradient(135deg, #cea076 0%, #bd946d 100%)",
-                            // color: "inh",
                             borderColor: "#cea076",
                           },
                         }}
@@ -273,11 +265,7 @@ function MyOrders() {
                     >
                       progress
                     </Typography>
-                    <Stack
-                      variant="body2"
-                      alignItems={"center"}
-                      direction={"row"}
-                    >
+                    <Stack alignItems={"center"} direction={"row"}>
                       <AccessTimeOutlinedIcon sx={{ mr: ".4rem" }} />
                       <Typography
                         sx={{
