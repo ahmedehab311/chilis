@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
-const api_token = localStorage.getItem('token');
-const API_HISTORY = `http://myres.me/chilis-dev/api/user/history?api_token=${api_token}`;
+const getApiToken = () => localStorage.getItem("token");
+// const api_token = localStorage.getItem('token');
+const API_HISTORY = `http://myres.me/chilis-dev/api/user/history?api_token=${getApiToken()}`;
 
 
 export const fetchOrderHistory = createAsyncThunk('orders/fetchHistory', async () => {

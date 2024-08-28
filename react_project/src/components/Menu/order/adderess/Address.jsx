@@ -1,175 +1,38 @@
-// import { useState, useEffect } from "react";
-// import { useSelector, useDispatch } from "react-redux";
-// import { Stack, Typography } from "@mui/material";
-// import AddressData from "./addressData/DialogAdderss";
-// import { API_AREAS, API_CITIES } from "./apiAdderss";
-// import {
-//   fetchAddresses,
-//   deleteAddress,
-// } from "../../../../rtk/slices/adderssSlice";
-// import DialogAdderss from "./addressDaiolg/DialogAdderss";
-// import AddNewAddressButton from "../buttons/AddNewAddressButton";
-// function Address({ onClose  }) {
-//   const dispatch = useDispatch();
-//   const addressData = useSelector((state) => state.addresses.items || []);
-
-//   const [cities, setCities] = useState([]);
-//   const [areas, setAreas] = useState([]);
-//   const [loadingCities, setLoadingCities] = useState(false);
-//   const [loadingAreas, setLoadingAreas] = useState(false);
-//   const [selectedCity, setSelectedCity] = useState("");
-//   const [user, setUser] = useState(null);
-  
-//   // const handleAddressSelect = (addressId) => {
-//   //   if (onAddressSelect) {
-//   //     onAddressSelect(addressId);
-//   //   }
-//   // };
-
-//   useEffect(() => {
-//     const fetchCities = async () => {
-//       setLoadingCities(true);
-//       try {
-//         const response = await fetch(API_CITIES);
-//         const data = await response.json();
-//         setCities(data.data.cities);
-//       } catch (error) {
-//         console.error("Error fetching cities:", error);
-//       } finally {
-//         setLoadingCities(false);
-//       }
-//     };
-
-//     fetchCities();
-//   }, []);
-
-//   useEffect(() => {
-//     if (selectedCity) {
-//       const fetchAreas = async () => {
-//         setLoadingAreas(true);
-//         try {
-//           const response = await fetch(`${API_AREAS}${selectedCity}`);
-//           const responseData = await response.json();
-//           if (!response.ok) {
-//             throw new Error("Network response was not ok");
-//           }
-
-//           const areaNames = responseData.data.areas.map((area) => ({
-//             id: area.id,
-//             name: area.area_name_en,
-//           }));
-
-//           setAreas(areaNames);
-//         } catch (error) {
-//           console.error("Error fetching areas:", error);
-//         } finally {
-//           setLoadingAreas(false);
-//         }
-//       };
-
-//       fetchAreas();
-//     }
-//   }, [selectedCity]);
-
-//   useEffect(() => {
-//     const storedUser = JSON.parse(localStorage.getItem("user"));
-//     if (storedUser) {
-//       setUser(storedUser);
-//     }
-//   }, []);
-
-
-//   useEffect(() => {
-//     dispatch(fetchAddresses());
-//   }, [dispatch]);
-
-
-//   const addresses = useSelector((state) => state.addresses); // افتراضًا أن الحالة هي addresses
-// useEffect(() => {
-//   console.log("Addresses from Redux state:", addresses.items);
-// }, [addresses]);
-//   const handleDeleteAddress = async (id) => {
-//     const isConfirmed = window.confirm(
-//       "Are you sure you want to delete this address?"
-//     );
-
-//     if (isConfirmed) {
-//       try {
-//         await dispatch(deleteAddress(id));
-//         dispatch(fetchAddresses());
-//       } catch (error) {
-//         console.error("Error deleting address:", error);
-//       }
-//     }
-//   };
-
-//   const [openDialog2, setOpenDialog2] = useState(false);
-
-//   const handleClickOpen2 = () => {
-//     setOpenDialog2(true);
-//   };
-
-//   const handleClose2 = () => {
-//     setOpenDialog2(false);
-//   };
-//   return (
-//     <Stack spacing={3} sx={{ margin: "1rem" }}>
-//       <Stack>
-//         <Typography
-//           sx={{
-//             fontSize: "18px",
-//             fontWeight: 700,
-//             textAlign: "left",
-//             fontFamily: "cairo",
-//           }}
-//         >
-//           Your Delivery Address List
-//         </Typography>
-//       </Stack>
-//       <AddressData
-//         handleDeleteAddress={handleDeleteAddress}
-//         addressData={addressData}
-//       />
-//       {/* <AddressData
-//           handleDeleteAddress={() => {}}
-//           addressData={addressData}
-//           onAddressSelect={handleAddressSelect}
-//         /> */}
-//       <AddNewAddressButton
-//         handleClickOpen={handleClickOpen2}
-//         buttonText="Add Address adderss"
-//         buttonStyle={{
-//           backgroundColor: "#d32f2f",
-//           "&:hover": { backgroundColor: "#d32f2f" },
-//         }}
-//       />
-
-//       <DialogAdderss open={openDialog2} onClose={handleClose2} />
-//     </Stack>
-//   );
-// }
-
-// export default Address;
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Stack, Typography } from "@mui/material";
 import AddressData from "./addressData/DialogAdderss";
 import { API_AREAS, API_CITIES } from "./apiAdderss";
-import { setSelectedAddress, fetchAddresses, deleteAddress } from "../../../../rtk/slices/adderssSlice";
+import {
+  fetchAddresses,
+  deleteAddress,
+} from "../../../../rtk/slices/adderssSlice";
 import DialogAdderss from "./addressDaiolg/DialogAdderss";
 import AddNewAddressButton from "../buttons/AddNewAddressButton";
-
 function Address({ onClose }) {
   const dispatch = useDispatch();
   const addressData = useSelector((state) => state.addresses.items || []);
-  const selectedAddress = useSelector((state) => state.addresses.selectedAddress); // Redux selected address
+
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingAreas, setLoadingAreas] = useState(false);
   const [selectedCity, setSelectedCity] = useState("");
   const [user, setUser] = useState(null);
-  const [selectedAddressId, setSelectedAddressId] = useState(null); // state for selected address
+
+  useEffect(() => {
+    const fetchData = async () => {
+      console.log("Starting fetchAddresses...");
+      try {
+        const result = await dispatch(fetchAddresses());
+        console.log("fetchAddresses completed:", result);
+      } catch (error) {
+        console.error("Error fetching addresses:", error);
+      }
+    };
+
+    fetchData();
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -227,6 +90,10 @@ function Address({ onClose }) {
     dispatch(fetchAddresses());
   }, [dispatch]);
 
+  const addresses = useSelector((state) => state.addresses); // افتراضًا أن الحالة هي addresses
+  useEffect(() => {
+    console.log("Addresses from Redux state:", addresses.items);
+  }, [addresses]);
   const handleDeleteAddress = async (id) => {
     const isConfirmed = window.confirm(
       "Are you sure you want to delete this address?"
@@ -251,16 +118,6 @@ function Address({ onClose }) {
   const handleClose2 = () => {
     setOpenDialog2(false);
   };
-
-  // دالة لالتقاط الـ ID الخاص بالعنوان المختار
-  const handleAddressSelect = (addressId) => {
-    const address = addressData.find((addr) => addr.id === addressId);
-    if (address) {
-      dispatch(setSelectedAddress(address)); // قم بتحديث الحالة
-      setSelectedAddressId(addressId); // إذا كنت بحاجة إلى استخدامه في مكان آخر
-    }
-  };
-
   return (
     <Stack spacing={3} sx={{ margin: "1rem" }}>
       <Stack>
@@ -278,7 +135,6 @@ function Address({ onClose }) {
       <AddressData
         handleDeleteAddress={handleDeleteAddress}
         addressData={addressData}
-        onAddressSelect={handleAddressSelect} // Pass the function as a prop
       />
       <AddNewAddressButton
         handleClickOpen={handleClickOpen2}
