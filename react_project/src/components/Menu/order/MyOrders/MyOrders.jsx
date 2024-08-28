@@ -39,9 +39,7 @@ function MyOrders() {
   if (status === "failed") {
     return <Typography>Error: {error}</Typography>;
   }
-  const handleViewDetailsClick = (order) => {
-    setSelectedOrder(order); // تعيين الطلب المحدد
-  };
+
   return (
     <Stack
       direction={"row"}
