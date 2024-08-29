@@ -1,20 +1,38 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-const getApiToken = () => localStorage.getItem("token");
-// const api_token = localStorage.getItem('token');
-const API_HISTORY = `http://myres.me/chilis-dev/api/user/history?api_token=${getApiToken()}`;
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
+const API_HISTORY = `http://myres.me/chilis-dev/api/user/history`;
 
-export const fetchOrderHistory = createAsyncThunk('orders/fetchHistory', async () => {
-  const response = await axios.get(API_HISTORY);
-  return response.data.data.details;
-});
+export const fetchOrderHistory = createAsyncThunk(
+  "orders/fetchHistory",
+
+  async () => {
+    const getApiToken = () => localStorage.getItem("token");
+    console.log(getApiToken());
+    try {
+      const apiToken = getApiToken();
+      if (!apiToken) {
+        throw new Error("No token found. Please log in again.");
+      }
+      const response = await axios.get(`${API_HISTORY}?api_token=${apiToken}`);
+      console.log("API Response:", response.data);
+      if (response.data.data.details) {
+        return response.data.data.details;
+      } else {
+        throw new Error("Invalid response structure");
+      }
+    } catch (error) {
+      console.error("Error in fetchOrderHistory:", error.message);
+      throw error;
+    }
+  }
+);
 
 const myOrderSlice = createSlice({
-  name: 'orders',
+  name: "orders",
   initialState: {
     orders: [],
-    status: 'idle',
+    status: "idle",
     error: null,
   },
   reducers: {
@@ -23,14 +41,14 @@ const myOrderSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrderHistory.pending, (state) => {
-        state.status = 'loading';
+        state.status = "loading";
       })
       .addCase(fetchOrderHistory.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.status = "succeeded";
         state.orders = action.payload;
       })
       .addCase(fetchOrderHistory.rejected, (state, action) => {
-        state.status = 'failed';
+        state.status = "failed";
         state.error = action.error.message;
       });
   },

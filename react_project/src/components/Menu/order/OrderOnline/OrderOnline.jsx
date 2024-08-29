@@ -45,7 +45,7 @@ function OrderOnline() {
     `https://myres.me/chilis/api/areas/?city=${cityId}`;
 
   const [bageCount, setBadgeCount] = useState(0);
-  const api_token = localStorage.getItem("token"); // استرجاع التوكن من localStorage
+  const api_token = localStorage.getItem("token");
 
   useEffect(() => {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
