@@ -267,6 +267,8 @@ const cartSlice = createSlice({
   },
   reducers: {
     addItemToCart: (state, action) => {
+      // localStorage.removeItem('itemss', JSON.stringify(state.items));
+
       const item = action.payload;
       const existingItem = state.items.find((i) => i.id === item.id);
       const itemIndex = state.items.findIndex((item) => item.id === item.id);
@@ -275,7 +277,7 @@ const cartSlice = createSlice({
         state.items[itemIndex].cartQuantity += 1;
         state.items[itemIndex].selectedExtras = item.selectedExtras;
         state.items[itemIndex].selectedOption = item.selectedOption;
-        state.items[itemIndex].idInfo = item.idInfo;  // إضافة idInfo إلى العنصر الموجود
+        state.items[itemIndex].idInfo = item.idInfo;  
       } else {
         const tempProduct = {
           ...item,
@@ -290,7 +292,7 @@ const cartSlice = createSlice({
         0
       );
 
-      localStorage.setItem('itemss', JSON.stringify(state.items));
+      // localStorage.setItem('itemss', JSON.stringify(state.items));
     },
     removeItemFromCart: (state, action) => {
       const itemId = action.payload;
@@ -299,7 +301,7 @@ const cartSlice = createSlice({
         (total, i) => total + i.cartQuantity,
         0
       );
-      localStorage.setItem('itemss', JSON.stringify(state.items));
+      // localStorage.setItem('itemss', JSON.stringify(state.items));
     },
     updateItemQuantity: (state, action) => {
       const { itemId, quantity } = action.payload;
@@ -317,6 +319,9 @@ const cartSlice = createSlice({
     setTotalItems: (state, action) => {
       state.cartTotalQuantity = action.payload;
     },
+    clearCart: (state) => {
+      state.cartItems = []; // مسح جميع العناصر من السلة
+  },
   },
 });
 
@@ -325,6 +330,7 @@ export const {
   removeItemFromCart,
   updateItemQuantity,
   setTotalItems,
+  clearCart
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

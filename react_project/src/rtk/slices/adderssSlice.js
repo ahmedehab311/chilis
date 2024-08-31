@@ -69,6 +69,8 @@
 // export const { setSelectedAddress } = addressSlice.actions;
 
 // export default addressSlice.reducer;
+
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import {
@@ -80,10 +82,10 @@ import {
 export const fetchAddresses = createAsyncThunk(
   "addresses/fetchAddresses",
   async () => {
-    console.log("Inside fetchAddresses thunk...");
+    // console.log("Inside fetchAddresses thunk...");
     try {
       const response = await axios.get(API_ADDRESS());
-      console.log("API response:", response.data);
+      console.log("API response:",  response.data.data.address);
 
       // التحقق من وجود البيانات المطلوبة
       if ( response.data.data.address) {

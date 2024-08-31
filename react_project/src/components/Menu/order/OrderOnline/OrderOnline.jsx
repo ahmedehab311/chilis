@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Stack } from "@mui/material";
+import { toast } from "react-toastify";
 import "./OrderOnline.css";
-import CheckOut from "./checkOut/CheckOut";
+// import CheckOut from "./checkOut/CheckOut";
 import Address from "../adderess/Address";
 import { useDispatch, useSelector } from "react-redux";
-import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
 import {
   Box,
   TextField,
@@ -22,7 +22,6 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import "./OrderOnline.css";
 import imgLogo from "../../../Hero/images/logo.png";
 import Counter from "../../ButtonsMenu/CounterDiaolgButton";
 import { API_TAX } from "../../apis&fetchData/ApiLinks";
@@ -30,8 +29,10 @@ import PaymentPage from "../OrderOnline/checkOut/PaymentPage";
 import axios from "axios";
 import Coupun from "./checkOut/Coupon/Coupun";
 import { setSelectedAddress } from "../../../../rtk/slices/adderssSlice";
+import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
+import { clearCart } from "../../../../rtk/slices/cartSlice";
 import Pickup from "./Pickup/Pickup";
-// import img from "../"
+
 function OrderOnline() {
   const dispatch = useDispatch();
   const [cartItems, setCartItems] = useState([]);
@@ -43,7 +44,6 @@ function OrderOnline() {
   const API_CITIES = "https://myres.me/chilis/api/cities";
   const API_ARIA = (cityId) =>
     `https://myres.me/chilis/api/areas/?city=${cityId}`;
-
   const [bageCount, setBadgeCount] = useState(0);
   const api_token = localStorage.getItem("token");
 
@@ -157,21 +157,31 @@ function OrderOnline() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("addresses", JSON.stringify(addressData));
+    if (addressData.length > 0) {
+      localStorage.setItem("addresses", JSON.stringify(addressData));
+    }
   }, [addressData]);
 
+  // تخزين activeIndex
+  const handleCardClick = (index) => {
+    if (Number.isInteger(index)) {
+      setActiveIndex(index);
+      setSelectedAddress(addressData[index]);
+    } else {
+      console.error("Invalid index:", index);
+    }
+  };
+
   useEffect(() => {
-    localStorage.setItem("activeIndex", activeIndex);
+    if (activeIndex !== null && !isNaN(activeIndex)) {
+      localStorage.setItem("activeIndex", activeIndex.toString());
+    }
   }, [activeIndex]);
 
   const handleSelectLabel = (label) => {
     setCurrentAddress((prev) => ({ ...prev, label }));
   };
 
-  const handleCardClick = (index) => {
-    setActiveIndex(index);
-    setSelectedAddress(addressData[index]); // Set selected address when card is clicked
-  };
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -220,10 +230,15 @@ function OrderOnline() {
   }, [selectedAddress]);
   const [orders, setOrders] = useState([]);
 
-  const selectedExtras = useSelector((state) => state.info.selectedExtras);
+  // const selectedExtras = useSelector((state) => state.info.selectedExtras);
   const selectedOption = useSelector((state) => state.info.selectedOption);
   const idInfo = useSelector((state) => state.info.idInfo);
-
+  useEffect(() => {
+    if (idInfo) {
+      // تخزين idInfo في localStorage
+      localStorage.setItem("idInfo", idInfo);
+    }
+  }, [idInfo]); // يتم استدعاء useEffect عند تغير idInfo
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
@@ -238,40 +253,180 @@ function OrderOnline() {
     }));
   };
 
+  // const handleCheckout = () => {
+  //   console.log("addressData", addressData);
 
+  //   if (addressData.length === 1 && !selectedAddress) {
+  //     dispatch(setSelectedAddress(addressData[activeIndex]));
+  //   }
+
+  //   console.log("selectedAddress", selectedAddress);
+
+  // const currentSelectedAddress = selectedAddress || addressData[0];
+
+  //   if (paymentMethod === "credit card") {
+  //     setOpenCreditCardDialog(true);
+  //     return;
+  //   }
+
+  //   const orders = cartItems.map((item) => ({
+  //     id: idInfo,
+  //     special: specialNotes[item.id] || "",
+  //     extras: Array.isArray(item.extras)
+  //       ? item.extras.map((extra) => extra.id)
+  //       : [],
+  //     count: item.count || 1,
+  //     choices: [],
+  //     options: item.option ? [item.option.id] : [],
+  //   }));
+
+  //   console.log("Selected Extras:", selectedExtras);
+  //   console.log("Selected Option:", selectedOption);
+  //   console.log(orders);
+
+  //   const dataToSend = {
+  //     delivery_type: 1,
+  //     payment: paymentMethod === "cash" ? 1 : 2,
+  // lat: deliveryType === 1 ? currentSelectedAddress.lat : 0,
+  // lng: deliveryType === 1 ? currentSelectedAddress.lng : 0,
+  //     address: selectedAddress,
+  //     area: deliveryType === 1 ? selectedAddress.area : 10,
+  //     branch: selectedBranchId || null,
+  //     api_token: api_token,
+  //     items: JSON.stringify({ items: orders }),
+  //     device_id: "",
+  //     notes: "",
+  //     time: "2024-08-20 14:07:07",
+  //     car_model: "",
+  //     car_color: "",
+  //     gift_cards: "",
+  //     coins: "00.00",
+  //   };
+
+  //   console.log("Checkout data:", dataToSend);
+
+  //   const params = new URLSearchParams(dataToSend);
+
+  //   axios
+  //     .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
+  //     .then((response) => {
+  //       console.log("Order placed successfully:", response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error placing order:", error);
+  //     });
+  // };
+  //   const handleCheckout = () => {
+  //     console.log("addressData", addressData);
+
+  //     if (addressData.length === 1 && !selectedAddress) {
+  //         dispatch(setSelectedAddress(addressData[activeIndex]));
+  //     }
+
+  //     console.log("selectedAddress", selectedAddress);
+
+  // const currentSelectedAddress = selectedAddress || addressData[0];
+
+  //     if (paymentMethod === "credit card") {
+  //         setOpenCreditCardDialog(true);
+  //         return;
+  //     }
+
+  //     const orders = cartItems.map((item) => ({
+  //         id: idInfo,
+  //         special: specialNotes[item.id] || "",
+  //         extras: Array.isArray(item.extras)
+  //             ? item.extras.map((extra) => extra.id)
+  //             : [],
+  //         count: item.count || 1,
+  //         choices: [],
+  //         options: item.option ? [item.option.id] : [],
+  //     }));
+
+  //     console.log("Selected Extras:", selectedExtras);
+  //     console.log("Selected Option:", selectedOption);
+  //     console.log(orders);
+
+  //     const dataToSend = {
+  //         delivery_type: 1,
+  //         payment: paymentMethod === "cash" ? 1 : 2,
+  // lat: deliveryType === 1 ? currentSelectedAddress.lat : 0,
+  // lng: deliveryType === 1 ? currentSelectedAddress.lng : 0,
+  //         address: selectedAddress,
+  //         area: deliveryType === 1 ? selectedAddress.area : 10,
+  //         branch: selectedBranchId || null,
+  //         api_token: api_token,
+  //         items: JSON.stringify({ items: orders }),
+  //         device_id: "",
+  //         notes: "",
+  //         time: "2024-08-20 14:07:07",
+  //         car_model: "",
+  //         car_color: "",
+  //         gift_cards: "",
+  //         coins: "00.00",
+  //     };
+
+  //     console.log("Checkout data:", dataToSend);
+
+  //     const params = new URLSearchParams(dataToSend);
+
+  //     axios
+  //         .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
+  //         .then((response) => {
+  //             console.log("Order placed successfully:", response.data);
+
+  //             if (response.data.response) { // Assuming the API returns a "success" key for successful orders
+  //                 toast.success("تم طلبك بنجاح، سيتم توصيله في أقرب وقت.");
+
+  //                 // مسح السلة من localStorage
+  //                 localStorage.removeItem('cart');
+
+  //                 // مسح السلة في Redux
+  //                 dispatch(clearCart());
+
+  //                 // مسح العناصر من حالة cartItems
+  //                 cartItems.forEach(item => {
+  //                     dispatch(removeItemFromCart(item.id));
+  //                 });
+  //             } else {
+  //                 toast.error("حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.");
+  //             }
+  //         })
+  //         .catch((error) => {
+  //             console.error("Error placing order:", error);
+  //             toast.error("حدث خطأ أثناء الاتصال بالخادم. يرجى المحاولة مرة أخرى.");
+  //         });
+  // };
+  useEffect(() => {
+    // التحقق من وجود رسالة النجاح في localStorage
+    const orderSuccess = localStorage.getItem("orderSuccess");
+
+    if (orderSuccess === "true") {
+      // عرض رسالة النجاح
+      // toast.success("تم طلبك بنجاح، سيتم توصيله في أقرب وقت.");
+
+      // مسح حالة النجاح من localStorage
+      localStorage.removeItem("orderSuccess");
+    }
+  }, []);
   const handleCheckout = () => {
+    console.log("addressData", addressData);
+
     if (addressData.length === 1 && !selectedAddress) {
-      dispatch(setSelectedAddress(addressData[0]));
+      dispatch(setSelectedAddress(addressData[activeIndex]));
     }
 
-    const currentSelectedAddress = selectedAddress || addressData[0];
+    console.log("selectedAddress", selectedAddress);
 
-    // console.log("selectedAddress",selectedAddress.area)
-    if (
-      (addressData.length > 1 && !selectedAddress) ||
-      !currentSelectedAddress
-    ) {
-      alert("Please select an address before placing the order.");
-      return;
-    }
 
     if (paymentMethod === "credit card") {
       setOpenCreditCardDialog(true);
       return;
     }
-    // const orders = cartItems.map((item) => ({
-    //   id: idInfo,
-    //   special: item.specialNote || "",
-    //   extras: Array.isArray(item.extras)
-    //     ? item.extras.map((extra) => extra.id)
-    //     : [],
-    //   count: item.count || 1,
-    //   choices: [],
-    //   options: item.option ? [item.option.id] : [],
-    // }));
+    const getIdInfo = localStorage.getItem("idInfo");
     const orders = cartItems.map((item) => ({
-      id: idInfo,
-      special: specialNotes[item.id] || "",  // ربط الملاحظات الخاصة مع كل عنصر
+      id: getIdInfo,
+      special: specialNotes[item.id] || "",
       extras: Array.isArray(item.extras)
         ? item.extras.map((extra) => extra.id)
         : [],
@@ -279,21 +434,14 @@ function OrderOnline() {
       choices: [],
       options: item.option ? [item.option.id] : [],
     }));
-    console.log("Selected Extras:", selectedExtras);
-    console.log("Selected Option:", selectedOption);
-
-    console.log(orders);
-
     const dataToSend = {
       delivery_type: 1,
       payment: paymentMethod === "cash" ? 1 : 2,
-      lat: deliveryType === 1 ? currentSelectedAddress.lat : 0,
-      lng: deliveryType === 1 ? currentSelectedAddress.lng : 0,
-      address: currentSelectedAddress.id,
+      lat: deliveryType === 1 ? selectedAddress.lat : 0,
+      lng: deliveryType === 1 ? selectedAddress.lng : 0,
+      address: selectedAddress,
       area: deliveryType === 1 ? selectedAddress.area : 10,
       branch: selectedBranchId || null,
-      // لو هو مختار دليفري ممكن يحصل يكون في برانش او لا
-      // ولاكن لو مختار
       api_token: api_token,
       items: JSON.stringify({ items: orders }),
       device_id: "",
@@ -305,17 +453,31 @@ function OrderOnline() {
       coins: "00.00",
     };
 
+    console.log("selectedBranchId", selectedBranchId);
     console.log("Checkout data:", dataToSend);
     const params = new URLSearchParams(dataToSend);
 
     axios
       .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
-
       .then((response) => {
-        console.log("Order placed successfully:", response.data);
+        if (response.data.response) {
+          localStorage.setItem("orderSuccess", "true");
+          localStorage.removeItem("idInfo");
+
+          // إعادة تحميل الصفحة
+          // window.location.reload();
+
+          toast.success("Your order has been placed successfully. It will be delivered as soon as possible.");
+
+          // مسح السلة من Redux و localStorage
+          dispatch(clearCart());
+        } else {
+          toast.error("An error occurred while processing your order. Please try again.");
+        }
       })
       .catch((error) => {
         console.error("Error placing order:", error);
+        toast.error("Error placing order, Please try again.");
       });
   };
 
@@ -628,21 +790,23 @@ function OrderOnline() {
                       )}
 
                       <TextField
-            placeholder="Enter any special request note"
-            value={specialNotes[item.id] || ""}  // ربط الحقل النصي مع الحالة
-            onChange={(e) => handleSpecialNoteChange(item.id, e.target.value)}  // تحديث الحالة عند تغيير المحتوى
-            sx={{
-              transition: "1s",
-              "& .MuiInputBase-input": {
-                fontSize: "1.3rem",
-                color: "gray",
-              },
-              "& .MuiInputBase-input::placeholder": {
-                color: "#000",
-                fontSize: "1.3rem",
-              },
-            }}
-          />
+                        placeholder="Enter any special request note"
+                        value={specialNotes[item.id] || ""} // ربط الحقل النصي مع الحالة
+                        onChange={(e) =>
+                          handleSpecialNoteChange(item.id, e.target.value)
+                        } // تحديث الحالة عند تغيير المحتوى
+                        sx={{
+                          transition: "1s",
+                          "& .MuiInputBase-input": {
+                            fontSize: "1.3rem",
+                            color: "gray",
+                          },
+                          "& .MuiInputBase-input::placeholder": {
+                            color: "#000",
+                            fontSize: "1.3rem",
+                          },
+                        }}
+                      />
                     </Stack>
                   </Card>
                 ))}
@@ -811,14 +975,15 @@ function OrderOnline() {
             color="primary"
             fullWidth
             onClick={handleCheckout}
+            disabled={cartItems.length === 0}
             sx={{
               mt: "1.5rem",
               p: "1rem",
               fontSize: "1.5rem",
-              backgroundColor: "#d32f2f",
+              backgroundColor: cartItems.length === 0 ? "#ccc" : "#d32f2f",
               textTransform: "capitalize",
               "&:hover": {
-                backgroundColor: "#d32f2f",
+                backgroundColor: cartItems.length === 0 ? "#ccc" : "#d32f2f",
               },
             }}
           >

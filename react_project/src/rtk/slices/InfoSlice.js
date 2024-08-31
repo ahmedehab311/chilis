@@ -19,8 +19,8 @@ const infoSlice = createSlice({
     price: null,
     itemExtras: [],
     dataOptions: [],
-     selectedExtras: [], // تأكد من أن هذه مصفوفة في البداية
-    selectedOption: null, // تأكد من أن هذه قيمة بدئية مناسبة
+    selectedExtras: [],
+    selectedOption: null,
     status: "idle",
     error: null,
   },
@@ -32,14 +32,14 @@ const infoSlice = createSlice({
       })
       .addCase(fetchItemDetails.fulfilled, (state, action) => {
         const data = action.payload;
-        console.log("Fetched data:", data); // تحقق من البنية الصحيحة للبيانات
+        console.log("Fetched data:", data); 
         state.itemDetails = data;
         state.idInfo = data.info[0]?.id || null;
         state.price = data.info[0]?.price?.price || null;
         state.itemExtras = data.item_extras[0]?.data || [];
         state.dataOptions = data.info[0]?.item_extras[0]?.data || [];
-        console.log("  state.itemExtras", state.itemExtras);
-        console.log("  state.dataOptions", state.dataOptions);
+        console.log("state.itemExtras", state.itemExtras);
+        console.log("state.dataOptions", state.dataOptions);
         state.status = "succeeded";
       })
 

@@ -17,11 +17,8 @@ import {
   Checkbox,
 } from "@mui/material";
 import { CounterDiaolgButton, AddToCardButton } from "../index";
-import {
-  addItemToCart,
-  // setTotalItems,
-  // totalItems
-} from "../../../rtk/slices/orderSlice.js"; // import your action
+// import { addItemToCart } from "../../../rtk/slices/orderSlice.js"; // import your action
+import { addItemToCart } from '../../../rtk/slices/cartSlice.js'; // تأكد من المسار الصحيح
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 function DialogItem({
@@ -49,51 +46,27 @@ function DialogItem({
   // const handleAddToCart = () => {
   //   handleCloseDialog();
 
-  //   const itemDetailsToAdd = {
-  //  id: itemDetails?.id || "default-id",
-  //     name: itemDetails?.name_en || "Default Name",
-  //     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0,
-  //     quantity: 1,
-  //     extras: selectedExtras.map((extra) => ({
-  //       name: extra.description_en,
-  //       price: parseFloat(extra.price_en),
-  //     })),
-  //     option: selectedOption,
-  //     totalPrice:
-  //       (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
-  //       selectedExtras.reduce(
-  //         (sum, extra) => sum + parseFloat(extra.price_en),
-  //         0
-  //       ),
-  //   };
-
-  //   dispatch(addItemToCart(itemDetailsToAdd));
-
-  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  //   cart.push(itemDetailsToAdd);
-  //   localStorage.setItem("cart", JSON.stringify(cart));
-  // };
-  // const handleAddToCart = () => {
-  //   handleCloseDialog();
-
   //   console.log("Selected Option:", selectedOption);
-  //  console.log("Selected Extras:", selectedExtras);
+  //   console.log("Selected Extras:", selectedExtras);
 
-  //   // تأكد من استخدام الـ IDs بشكل صحيح
   //   const itemDetailsToAdd = {
   //     id: itemDetails?.id || "default-id",
   //     name: itemDetails?.name_en || "Default Name",
   //     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0,
   //     quantity: 1,
-  //    extras: Array.isArray(selectedExtras) ? selectedExtras.map((extra) => ({
-  //     id: extra.id, // اجلب الـ ID هنا
-  //     name: extra.description_en,
-  //     price: parseFloat(extra.price_en),
-  //   })) : [],
-  //   option: selectedOption ? {
-  //     id: selectedOption.id,
-  //     name: selectedOption,
-  //   } : null,
+  //     extras: Array.isArray(selectedExtras)
+  //       ? selectedExtras.map((extra) => ({
+  //           id: extra.id,
+  //           name: extra.description_en,
+  //           price: parseFloat(extra.price_en),
+  //         }))
+  //       : [],
+  //     option: selectedOption
+  //       ? {
+  //           id: selectedOption.id, // استخدام الـ ID هنا
+  //           name: selectedOption.name_en, // استخدام الاسم المناسب
+  //         }
+  //       : null,
   //     totalPrice:
   //       (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
   //       selectedExtras.reduce(
@@ -108,52 +81,45 @@ function DialogItem({
   //   cart.push(itemDetailsToAdd);
   //   localStorage.setItem("cart", JSON.stringify(cart));
   // };
-
+  
   const handleAddToCart = () => {
-    handleCloseDialog();
-
-    console.log("Selected Option:", selectedOption);
-    console.log("Selected Extras:", selectedExtras);
-
-    const itemDetailsToAdd = {
-      id: itemDetails?.id || "default-id",
-      name: itemDetails?.name_en || "Default Name",
-      price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0,
-      quantity: 1,
-      extras: Array.isArray(selectedExtras)
-        ? selectedExtras.map((extra) => ({
-            id: extra.id,
-            name: extra.description_en,
-            price: parseFloat(extra.price_en),
-          }))
-        : [],
-      option: selectedOption
-        ? {
-            id: selectedOption.id, // استخدام الـ ID هنا
-            name: selectedOption.name_en, // استخدام الاسم المناسب
-          }
-        : null,
-      totalPrice:
-        (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
-        selectedExtras.reduce(
-          (sum, extra) => sum + parseFloat(extra.price_en),
-          0
-        ),
-    };
-
-    dispatch(addItemToCart(itemDetailsToAdd));
-
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.push(itemDetailsToAdd);
-    localStorage.setItem("cart", JSON.stringify(cart));
+      handleCloseDialog();
+  
+      const itemDetailsToAdd = {
+        id: itemDetails?.id || "default-id",
+        name: itemDetails?.name_en || "Default Name",
+        price: parseFloat(price) || 0,
+        quantity: 1,
+        extras: Array.isArray(selectedExtras)
+          ? selectedExtras.map((extra) => ({
+              id: extra.id,
+              name: extra.description_en,
+              price: parseFloat(extra.price_en),
+            }))
+          : [],
+        option: selectedOption
+          ? {
+              id: selectedOption.id,
+              name: selectedOption.name_en,
+            }
+          : null,
+        totalPrice:
+          (parseFloat(price) || 0) +
+          selectedExtras.reduce(
+            (sum, extra) => sum + parseFloat(extra.price_en),
+            0
+          ),
+      };
+  
+      // إضافة العنصر إلى السلة في Redux
+      dispatch(addItemToCart(itemDetailsToAdd));
   };
+  
 
   const [totalPrice, setTotalPrice] = useState(0);
   const handlePriceChange = (price) => {
     setTotalPrice(price);
   };
-
-  // const [selectedExtras, setSelectedExtras] = useState([]);
 
   const handleCheckboxChange = (extra) => (event) => {
     if (event.target.checked) {
@@ -162,10 +128,6 @@ function DialogItem({
       setSelectedExtras(selectedExtras.filter((item) => item !== extra));
     }
   };
-  // const handleOptionChange = (event) => {
-  //   setSelectedOption(event.target.value);
-
-  // };
   useEffect(() => {
     console.log("dataOptions:", dataOptions);
     console.log("dataExtra:", dataExtra);
@@ -277,16 +239,6 @@ function DialogItem({
                     }
                   }}
                 >
-                  {/* {dataExtra.map((extra, index) => (
-                    <FormControlLabel
-                      key={index}
-                      sx={{ color: "#000" }}
-                      value={extra.description_en}
-                      control={<Radio sx={{ color: "#000" }} />}
-                      label={`${extra.description_en} - ${extra.price_en} EGP`}
-                    />
-                  ))} */}
-
                   {dataExtra.map((extra, index) => (
                     <FormControlLabel
                       key={index}

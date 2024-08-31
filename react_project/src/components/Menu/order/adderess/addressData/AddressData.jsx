@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // /* eslint-disable react/prop-types */
 // import { Card, Stack, Typography } from "@mui/material";
 // import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
@@ -54,7 +55,7 @@
 //                 </Typography>
 //               </Stack>
 //               <Stack
-              
+
 //                 fontSize="22px"
 //                 direction={"row"}
 //                 alignItems={"center"}
@@ -118,23 +119,37 @@
 // }
 
 // export default AddressData;
-
 import { Card, Stack, Typography } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useState, useEffect } from "react";
 
 function AddressData({ handleDeleteAddress, addressData, onAddressSelect }) {
-  const [activeIndex, setActiveIndex] = useState(null);
-  
+  const [activeIndex, setActiveIndex] = useState(() => {
+    // قم بجلب القيمة المخزنة مسبقاً من localStorage عند التحميل الأولي
+    const savedIndex = localStorage.getItem("activeIndex");
+    return savedIndex !== null ? parseInt(savedIndex, 10) : null;
+  });
+
   useEffect(() => {
-    if (activeIndex !== null && addressData[activeIndex]) {
+    if (activeIndex !== null && !isNaN(activeIndex) && addressData[activeIndex]) {
       const selectedAddressId = addressData[activeIndex].id;
-      console.log("Selected Address ID:", selectedAddressId);
-  
-      // استدعاء الدالة المرسلة من المكون الرئيسي
+      // console.log("Selected Address ID:", selectedAddressId);
+
+      // تحديث القيمة في localStorage
+      localStorage.setItem("activeIndex", activeIndex.toString());
+
       onAddressSelect(selectedAddressId);
     }
-  }, [activeIndex, addressData]);
+  }, [activeIndex, addressData, onAddressSelect]);
+
+  const handleCardClick = (index) => {
+    if (Number.isInteger(index) && index >= 0 && index < addressData.length) {
+      setActiveIndex(index);
+    } else {
+      console.error("Invalid index:", index);
+    }
+  };
+
   return (
     <>
       {addressData.length > 0 ? (
@@ -145,7 +160,7 @@ function AddressData({ handleDeleteAddress, addressData, onAddressSelect }) {
               mb: 3,
               border: activeIndex === index ? "2px solid #d32f2f" : "none",
             }}
-            onClick={() => setActiveIndex(index)}
+            onClick={() => handleCardClick(index)}
           >
             <Stack sx={{ background: "#f8f9fa!important", p: 2 }}>
               <Typography
@@ -238,7 +253,7 @@ function AddressData({ handleDeleteAddress, addressData, onAddressSelect }) {
             lineHeight: "1.2",
           }}
         >
-          {/* No address found ... */}
+          No address found ...
         </Typography>
       )}
     </>
