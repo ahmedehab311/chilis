@@ -92,27 +92,26 @@ function OrderOnline() {
   const handleRemoveItem = (index) => {
     // حذف العنصر من Redux store
     dispatch(removeItemFromCart(index));
-  
+
     // تحديث localStorage إذا كان لديك منطق إضافي هناك
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     if (index >= 0 && index < cart.length) {
       cart.splice(index, 1); // حذف العنصر المحدد فقط
       localStorage.setItem("cart", JSON.stringify(cart));
     }
-  
+
     // تحديث الحالة في الواجهة الأمامية إذا لزم الأمر
     setCartItems(cart);
-  
+
     // عرض عدد العناصر في البادج بعد التحديث
     console.log("Updated badge count:", cart.length);
-  
+
     setTotalPrices((prevPrices) => {
       const newPrices = { ...prevPrices };
       delete newPrices[index];
       return newPrices;
     });
   };
-  
 
   const subtotal = Object.values(totalPrices).reduce(
     (acc, price) => acc + price,
@@ -320,17 +319,17 @@ function OrderOnline() {
       .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
       .then((response) => {
         if (response.data.response) {
+          console.log(response.data);
           localStorage.setItem("orderSuccess", "true");
           localStorage.removeItem("idInfo");
 
           // إعادة تحميل الصفحة
-          // window.location.reload();
+          window.location.reload();
 
           toast.success(
             "Your order has been placed successfully. It will be delivered as soon as possible."
           );
 
-          // مسح السلة من Redux و localStorage
           dispatch(clearCart());
         } else {
           toast.error(
@@ -339,8 +338,23 @@ function OrderOnline() {
         }
       })
       .catch((error) => {
-        console.error("Error placing order:", error);
-        toast.error("Error placing order, Please try again.");
+        // تسجيل تفاصيل الخطأ في الكونسول
+        if (error.response) {
+          // الطلب تم إرساله واستلام الاستجابة مع خطأ
+          console.error("Error response:", error.response);
+          console.error("Error response data:", error.response.data);
+          console.error("Error response status:", error.response.status);
+          console.error("Error response headers:", error.response.headers);
+        } else if (error.request) {
+          // تم إرسال الطلب ولكن لم يتم تلقي استجابة
+          console.error("Error request:", error.request);
+        } else {
+          // خطأ في إعداد الطلب
+          console.error("Error message:", error.message);
+        }
+        console.error("Error config:", error.config);
+
+        toast.error("Error placing order. Please try again.");
       });
   };
 

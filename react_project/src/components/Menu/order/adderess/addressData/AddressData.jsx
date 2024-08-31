@@ -253,7 +253,7 @@ function AddressData({ handleDeleteAddress, addressData, onAddressSelect }) {
             lineHeight: "1.2",
           }}
         >
-          No address found ...
+          {/* No address found ... */}
         </Typography>
       )}
     </>
