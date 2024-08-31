@@ -155,13 +155,20 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { SmallMediaQuary, Hero, LinksHeader, LinksIconCircle, LogoHeader } from "./index";
+import {
+  SmallMediaQuary,
+  Hero,
+  LinksHeader,
+  LinksIconCircle,
+  LogoHeader,
+} from "./index";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { useLocation } from "react-router-dom";
 
 function Header({ token, handleLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
+
   const [drawerState, setDrawerState] = useState({
     top: false,
     left: false,
@@ -241,7 +248,11 @@ function Header({ token, handleLogout }) {
               <LinksHeader handleNavigation={handleNavigation} />
 
               <Box sx={{ display: "flex", alignItems: "center" }}>
-                <IconButton aria-label="cart" sx={{ ml: "auto" }} onClick={handleCartClick}>
+                <IconButton
+                  aria-label="cart"
+                  sx={{ ml: "auto" }}
+                  onClick={handleCartClick}
+                >
                   <Badge
                     badgeContent={totalItems}
                     color="error"

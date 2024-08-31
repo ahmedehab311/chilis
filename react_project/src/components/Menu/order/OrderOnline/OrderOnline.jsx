@@ -68,27 +68,49 @@ function OrderOnline() {
     }));
   };
 
+  // const handleRemoveItem = (index) => {
+  //   // حذف العنصر من Redux store
+  //   dispatch(removeItemFromCart(index));
+
+  //   // تحديث localStorage إذا كان لديك منطق إضافي هناك
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   cart.splice(index, 1);
+  //   localStorage.setItem("cart", JSON.stringify(cart));
+
+  //   // تحديث الحالة في الواجهة الأمامية إذا لزم الأمر
+  //   setCartItems(cart);
+
+  //   // عرض عدد العناصر في البادج بعد التحديث
+  //   console.log("Updated badge count:", cart.length);
+
+  //   setTotalPrices((prevPrices) => {
+  //     const newPrices = { ...prevPrices };
+  //     delete newPrices[index];
+  //     return newPrices;
+  //   });
+  // };
   const handleRemoveItem = (index) => {
     // حذف العنصر من Redux store
     dispatch(removeItemFromCart(index));
-
+  
     // تحديث localStorage إذا كان لديك منطق إضافي هناك
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     cart.splice(index, 1);
     localStorage.setItem("cart", JSON.stringify(cart));
-
+  
     // تحديث الحالة في الواجهة الأمامية إذا لزم الأمر
     setCartItems(cart);
-
+  
     // عرض عدد العناصر في البادج بعد التحديث
     console.log("Updated badge count:", cart.length);
-
+  
     setTotalPrices((prevPrices) => {
       const newPrices = { ...prevPrices };
       delete newPrices[index];
       return newPrices;
     });
   };
+  
 
   const subtotal = Object.values(totalPrices).reduce(
     (acc, price) => acc + price,
@@ -200,24 +222,8 @@ function OrderOnline() {
       address: addressData[activeIndex],
     };
   };
+
   // checkout
-
-  const handleCashPayment = async () => {
-    try {
-      const response = await axios.post(API_CHECKOUT, {
-        // هنا ترسل البيانات الخاصة بطلب الدفع النقدي
-      });
-
-      if (response.data.success) {
-        alert("تم الطلب بنجاح!");
-      } else {
-        alert("فشل الطلب، يرجى المحاولة مرة أخرى.");
-      }
-    } catch (error) {
-      console.error("Error processing payment:", error);
-      alert("حدث خطأ أثناء معالجة الدفع.");
-    }
-  };
 
   const selectedAddress = useSelector(
     (state) => state.addresses.selectedAddress
@@ -228,9 +234,7 @@ function OrderOnline() {
       console.log("Selected Address:", selectedAddress);
     }
   }, [selectedAddress]);
-  const [orders, setOrders] = useState([]);
 
-  // const selectedExtras = useSelector((state) => state.info.selectedExtras);
   const selectedOption = useSelector((state) => state.info.selectedOption);
   const idInfo = useSelector((state) => state.info.idInfo);
   useEffect(() => {
@@ -238,14 +242,13 @@ function OrderOnline() {
       // تخزين idInfo في localStorage
       localStorage.setItem("idInfo", idInfo);
     }
-  }, [idInfo]); // يتم استدعاء useEffect عند تغير idInfo
+  }, [idInfo]);
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
 
   const [specialNotes, setSpecialNotes] = useState({});
 
-  // تحديث الملاحظات الخاصة عند تغيير الحقل النصي
   const handleSpecialNoteChange = (itemId, note) => {
     setSpecialNotes((prevNotes) => ({
       ...prevNotes,
@@ -253,159 +256,10 @@ function OrderOnline() {
     }));
   };
 
-  // const handleCheckout = () => {
-  //   console.log("addressData", addressData);
-
-  //   if (addressData.length === 1 && !selectedAddress) {
-  //     dispatch(setSelectedAddress(addressData[activeIndex]));
-  //   }
-
-  //   console.log("selectedAddress", selectedAddress);
-
-  // const currentSelectedAddress = selectedAddress || addressData[0];
-
-  //   if (paymentMethod === "credit card") {
-  //     setOpenCreditCardDialog(true);
-  //     return;
-  //   }
-
-  //   const orders = cartItems.map((item) => ({
-  //     id: idInfo,
-  //     special: specialNotes[item.id] || "",
-  //     extras: Array.isArray(item.extras)
-  //       ? item.extras.map((extra) => extra.id)
-  //       : [],
-  //     count: item.count || 1,
-  //     choices: [],
-  //     options: item.option ? [item.option.id] : [],
-  //   }));
-
-  //   console.log("Selected Extras:", selectedExtras);
-  //   console.log("Selected Option:", selectedOption);
-  //   console.log(orders);
-
-  //   const dataToSend = {
-  //     delivery_type: 1,
-  //     payment: paymentMethod === "cash" ? 1 : 2,
-  // lat: deliveryType === 1 ? currentSelectedAddress.lat : 0,
-  // lng: deliveryType === 1 ? currentSelectedAddress.lng : 0,
-  //     address: selectedAddress,
-  //     area: deliveryType === 1 ? selectedAddress.area : 10,
-  //     branch: selectedBranchId || null,
-  //     api_token: api_token,
-  //     items: JSON.stringify({ items: orders }),
-  //     device_id: "",
-  //     notes: "",
-  //     time: "2024-08-20 14:07:07",
-  //     car_model: "",
-  //     car_color: "",
-  //     gift_cards: "",
-  //     coins: "00.00",
-  //   };
-
-  //   console.log("Checkout data:", dataToSend);
-
-  //   const params = new URLSearchParams(dataToSend);
-
-  //   axios
-  //     .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
-  //     .then((response) => {
-  //       console.log("Order placed successfully:", response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error placing order:", error);
-  //     });
-  // };
-  //   const handleCheckout = () => {
-  //     console.log("addressData", addressData);
-
-  //     if (addressData.length === 1 && !selectedAddress) {
-  //         dispatch(setSelectedAddress(addressData[activeIndex]));
-  //     }
-
-  //     console.log("selectedAddress", selectedAddress);
-
-  // const currentSelectedAddress = selectedAddress || addressData[0];
-
-  //     if (paymentMethod === "credit card") {
-  //         setOpenCreditCardDialog(true);
-  //         return;
-  //     }
-
-  //     const orders = cartItems.map((item) => ({
-  //         id: idInfo,
-  //         special: specialNotes[item.id] || "",
-  //         extras: Array.isArray(item.extras)
-  //             ? item.extras.map((extra) => extra.id)
-  //             : [],
-  //         count: item.count || 1,
-  //         choices: [],
-  //         options: item.option ? [item.option.id] : [],
-  //     }));
-
-  //     console.log("Selected Extras:", selectedExtras);
-  //     console.log("Selected Option:", selectedOption);
-  //     console.log(orders);
-
-  //     const dataToSend = {
-  //         delivery_type: 1,
-  //         payment: paymentMethod === "cash" ? 1 : 2,
-  // lat: deliveryType === 1 ? currentSelectedAddress.lat : 0,
-  // lng: deliveryType === 1 ? currentSelectedAddress.lng : 0,
-  //         address: selectedAddress,
-  //         area: deliveryType === 1 ? selectedAddress.area : 10,
-  //         branch: selectedBranchId || null,
-  //         api_token: api_token,
-  //         items: JSON.stringify({ items: orders }),
-  //         device_id: "",
-  //         notes: "",
-  //         time: "2024-08-20 14:07:07",
-  //         car_model: "",
-  //         car_color: "",
-  //         gift_cards: "",
-  //         coins: "00.00",
-  //     };
-
-  //     console.log("Checkout data:", dataToSend);
-
-  //     const params = new URLSearchParams(dataToSend);
-
-  //     axios
-  //         .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
-  //         .then((response) => {
-  //             console.log("Order placed successfully:", response.data);
-
-  //             if (response.data.response) { // Assuming the API returns a "success" key for successful orders
-  //                 toast.success("تم طلبك بنجاح، سيتم توصيله في أقرب وقت.");
-
-  //                 // مسح السلة من localStorage
-  //                 localStorage.removeItem('cart');
-
-  //                 // مسح السلة في Redux
-  //                 dispatch(clearCart());
-
-  //                 // مسح العناصر من حالة cartItems
-  //                 cartItems.forEach(item => {
-  //                     dispatch(removeItemFromCart(item.id));
-  //                 });
-  //             } else {
-  //                 toast.error("حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.");
-  //             }
-  //         })
-  //         .catch((error) => {
-  //             console.error("Error placing order:", error);
-  //             toast.error("حدث خطأ أثناء الاتصال بالخادم. يرجى المحاولة مرة أخرى.");
-  //         });
-  // };
   useEffect(() => {
-    // التحقق من وجود رسالة النجاح في localStorage
     const orderSuccess = localStorage.getItem("orderSuccess");
 
     if (orderSuccess === "true") {
-      // عرض رسالة النجاح
-      // toast.success("تم طلبك بنجاح، سيتم توصيله في أقرب وقت.");
-
-      // مسح حالة النجاح من localStorage
       localStorage.removeItem("orderSuccess");
     }
   }, []);
@@ -417,7 +271,6 @@ function OrderOnline() {
     }
 
     console.log("selectedAddress", selectedAddress);
-
 
     if (paymentMethod === "credit card") {
       setOpenCreditCardDialog(true);
@@ -453,7 +306,7 @@ function OrderOnline() {
       coins: "00.00",
     };
 
-    console.log("selectedBranchId", selectedBranchId);
+    // console.log("selectedBranchId", selectedBranchId);
     console.log("Checkout data:", dataToSend);
     const params = new URLSearchParams(dataToSend);
 
@@ -465,14 +318,18 @@ function OrderOnline() {
           localStorage.removeItem("idInfo");
 
           // إعادة تحميل الصفحة
-          // window.location.reload();
+          window.location.reload();
 
-          toast.success("Your order has been placed successfully. It will be delivered as soon as possible.");
+          toast.success(
+            "Your order has been placed successfully. It will be delivered as soon as possible."
+          );
 
           // مسح السلة من Redux و localStorage
           dispatch(clearCart());
         } else {
-          toast.error("An error occurred while processing your order. Please try again.");
+          toast.error(
+            "An error occurred while processing your order. Please try again."
+          );
         }
       })
       .catch((error) => {
@@ -525,10 +382,6 @@ function OrderOnline() {
           parseFloat(subtotalWithDelivery) + parseFloat(calculatedTax);
 
         setTotalWithTax(newTotalWithTax);
-
-        // console.log("Subtotal with Extras and Delivery:", subtotalWithDelivery);
-        // console.log("Calculated Tax:", calculatedTax);
-        // console.log("New Total with Tax:", newTotalWithTax);
       } catch (error) {
         console.error("Error fetching tax data:", error);
       }

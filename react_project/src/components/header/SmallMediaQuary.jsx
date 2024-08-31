@@ -18,7 +18,6 @@
 //   state,
 //   handleLogout,
 //   token,
-//   totalItems,
 // }) {
 //   const isSmallScreen = useMediaQuery("(max-width:1000px)");
 
@@ -125,9 +124,7 @@
 //                 {/* <IconButton */}
 
 //                 <Badge
-//                   badgeContent={totalItems}
 //                   color="error"
-//                   invisible={totalItems === 0}
 //                 >
 //                   <ShoppingCartOutlinedIcon
 //                     sx={{ fontSize: "3rem", color: "#fff" }}
@@ -238,6 +235,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import logo from "../Hero/images/logo.png";
+import { useSelector } from "react-redux";
 
 function SmallMediaQuery({
   closeDrawer,
@@ -245,7 +243,6 @@ function SmallMediaQuery({
   state,
   handleLogout,
   token,
-  totalItems,
 }) {
   const isSmallScreen = useMediaQuery("(max-width:1000px)");
 
@@ -273,7 +270,7 @@ function SmallMediaQuery({
       navigate("/order-online");
     }
   };
-
+  const totalItems = useSelector((state) => state.cart.totalItems);
   return (
     <>
       {isSmallScreen && (

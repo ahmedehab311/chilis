@@ -264,11 +264,12 @@ const cartSlice = createSlice({
     cartTotalQuantity: 0,
     cartTotalAmount: 0,
     status: null,
+    totalItems: 0,
   },
   reducers: {
     addItemToCart: (state, action) => {
       // localStorage.removeItem('itemss', JSON.stringify(state.items));
-
+      state.totalItems = state.items.length; // تحديث العدد
       const item = action.payload;
       const existingItem = state.items.find((i) => i.id === item.id);
       const itemIndex = state.items.findIndex((item) => item.id === item.id);
@@ -301,6 +302,7 @@ const cartSlice = createSlice({
         (total, i) => total + i.cartQuantity,
         0
       );
+      state.totalItems = state.items.length;  
       // localStorage.setItem('itemss', JSON.stringify(state.items));
     },
     updateItemQuantity: (state, action) => {
@@ -321,6 +323,7 @@ const cartSlice = createSlice({
     },
     clearCart: (state) => {
       state.cartItems = []; // مسح جميع العناصر من السلة
+      state.totalItems = 0;
   },
   },
 });
