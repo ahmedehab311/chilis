@@ -95,8 +95,10 @@ function OrderOnline() {
   
     // تحديث localStorage إذا كان لديك منطق إضافي هناك
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cart.splice(index, 1);
-    localStorage.setItem("cart", JSON.stringify(cart));
+    if (index >= 0 && index < cart.length) {
+      cart.splice(index, 1); // حذف العنصر المحدد فقط
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
   
     // تحديث الحالة في الواجهة الأمامية إذا لزم الأمر
     setCartItems(cart);
@@ -276,9 +278,13 @@ function OrderOnline() {
       setOpenCreditCardDialog(true);
       return;
     }
-    const getIdInfo = localStorage.getItem("idInfo");
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    const ids = cart.map((item) => item.id);
+
+    // const getIdInfo = localStorage.getItem("idInfo");
     const orders = cartItems.map((item) => ({
-      id: getIdInfo,
+      id: item.id,
       special: specialNotes[item.id] || "",
       extras: Array.isArray(item.extras)
         ? item.extras.map((extra) => extra.id)
@@ -318,7 +324,7 @@ function OrderOnline() {
           localStorage.removeItem("idInfo");
 
           // إعادة تحميل الصفحة
-          window.location.reload();
+          // window.location.reload();
 
           toast.success(
             "Your order has been placed successfully. It will be delivered as soon as possible."

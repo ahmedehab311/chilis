@@ -143,7 +143,7 @@
 // export default Header;
 
 import "./Header.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   IconButton,
   Link,
@@ -154,7 +154,7 @@ import {
   Box,
 } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   SmallMediaQuary,
   Hero,
@@ -164,10 +164,19 @@ import {
 } from "./index";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { useLocation } from "react-router-dom";
-
+import { updateCartItems } from '../../rtk/slices/cartSlice.js'
 function Header({ token, handleLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // const totalItems = useSelector((state) => state.cart.totalItems);
+  const totalItems = useSelector((state) => state.cart.totalItems); // التأكد من المسار الصحيح
+
+  useEffect(() => {
+    // عند تحميل الصفحة، قراءة السلة من localStorage وتحديث Redux store
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    dispatch(updateCartItems(cart.length));
+  }, [dispatch]);
 
   const [drawerState, setDrawerState] = useState({
     top: false,
@@ -201,7 +210,6 @@ function Header({ token, handleLogout }) {
 
   const isLargeScreen = useMediaQuery("(min-width:1000px)");
 
-  const totalItems = useSelector((state) => state.cart.totalItems);
 
   const handleNavigation = (sectionId) => {
     if (location.pathname !== "/") {

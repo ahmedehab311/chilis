@@ -222,6 +222,7 @@
 // export default SmallMediaQuery;
 
 /* eslint-disable react/prop-types */
+import { useEffect } from "react";
 import {
   Badge,
   Drawer,
@@ -235,8 +236,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Link as RouterLink, useLocation, useNavigate } from "react-router-dom";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import logo from "../Hero/images/logo.png";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { updateCartItems } from '../../rtk/slices/cartSlice.js'
 function SmallMediaQuery({
   closeDrawer,
   toggleDrawer,
@@ -244,6 +245,16 @@ function SmallMediaQuery({
   handleLogout,
   token,
 }) {
+  const dispatch = useDispatch();
+  // const totalItems = useSelector((state) => state.cart.totalItems);
+  const totalItems = useSelector((state) => state.cart.totalItems); // التأكد من المسار الصحيح
+
+  useEffect(() => {
+    // عند تحميل الصفحة، قراءة السلة من localStorage وتحديث Redux store
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    dispatch(updateCartItems(cart.length));
+  }, [dispatch]);
+
   const isSmallScreen = useMediaQuery("(max-width:1000px)");
 
   const location = useLocation();
@@ -270,7 +281,6 @@ function SmallMediaQuery({
       navigate("/order-online");
     }
   };
-  const totalItems = useSelector((state) => state.cart.totalItems);
   return (
     <>
       {isSmallScreen && (
