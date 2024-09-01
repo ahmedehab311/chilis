@@ -7,8 +7,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../../../rtk/slices/userSlice";
 import LoginContent from "./LoginContent";
 import { fetchAddresses } from "../../../../rtk/slices/adderssSlice";
-
-const BASE_URL = "https://myres.me/chilis-dev/api";
+import { BASE_URL } from "../../../setting";
 
 const LoginPage = ({ setToken }) => {
   const [phone, setPhone] = useState("");

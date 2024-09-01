@@ -18,9 +18,9 @@ import {
 } from "@mui/material";
 import { CounterDiaolgButton, AddToCardButton } from "../index";
 // import { addItemToCart } from "../../../rtk/slices/orderSlice.js"; // import your action
-import { addItemToCart } from '../../../rtk/slices/cartSlice.js'; // تأكد من المسار الصحيح
+import { addItemToCart,updateItemQuantity } from '../../../rtk/slices/cartSlice.js'; // تأكد من المسار الصحيح
 import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 function DialogItem({
   openDialog,
   handleCloseDialog,
@@ -32,15 +32,14 @@ function DialogItem({
   price,
   dataExtra,
   dataOptions,
-  BASE_URL,
+  BASE_URL_images,
 }) {
   const dispatch = useDispatch();
 
-  const [showOrderNow, setShowOrderNow] = useState(false);
-  const [orderDetails, setOrderDetails] = useState(null);
   const [selectedExtras, setSelectedExtras] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
-
+// console.log("selectedExtras",selectedExtras)
+// console.log("selectedOption",selectedOption)
   const totalItems = useSelector((state) => state.cart.totalItems);
 
   // const handleAddToCart = () => {
@@ -81,15 +80,27 @@ function DialogItem({
   //   cart.push(itemDetailsToAdd);
   //   localStorage.setItem("cart", JSON.stringify(cart));
   // };
+  // const counters = useSelector((state) => state.cart.counters);
   
-  const handleAddToCart = () => {
+  
+  const [quantity, setQuantity] = useState(1);
+  // console.log("quantity",quantity)
+
+  const handleQuantityChange = (newQuantity) => {
+    setQuantity(newQuantity);
+    dispatch(updateItemQuantity({ itemId: itemDetails.id, newQuantity }));
+  };
+  // const handleAddToCart = () => {
+    
+    const handleAddToCart = () => {
       handleCloseDialog();
-  
+    
       const itemDetailsToAdd = {
         id: itemDetails?.id || "default-id",
         name: itemDetails?.name_en || "Default Name",
         price: parseFloat(price) || 0,
-        quantity: 1,
+        quantity: quantity, 
+        // quantity: counter,
         extras: Array.isArray(selectedExtras)
           ? selectedExtras.map((extra) => ({
               id: extra.id,
@@ -110,10 +121,40 @@ function DialogItem({
             0
           ),
       };
-  
-      // إضافة العنصر إلى السلة في Redux
+    
       dispatch(addItemToCart(itemDetailsToAdd));
-  };
+    };
+  //     handleCloseDialog();
+  
+  //     const itemDetailsToAdd = {
+  //       id: itemDetails?.id || "default-id",
+  //       name: itemDetails?.name_en || "Default Name",
+  //       price: parseFloat(price) || 0,
+  //       quantity: 1,
+  //       extras: Array.isArray(selectedExtras)
+  //         ? selectedExtras.map((extra) => ({
+  //             id: extra.id,
+  //             name: extra.description_en,
+  //             price: parseFloat(extra.price_en),
+  //           }))
+  //         : [],
+  //       option: selectedOption
+  //         ? {
+  //             id: selectedOption.id,
+  //             name: selectedOption.name_en,
+  //           }
+  //         : null,
+  //       totalPrice:
+  //         (parseFloat(price) || 0) +
+  //         selectedExtras.reduce(
+  //           (sum, extra) => sum + parseFloat(extra.price_en),
+  //           0
+  //         ),
+  //     };
+  
+  //     // إضافة العنصر إلى السلة في Redux
+  //     dispatch(addItemToCart(itemDetailsToAdd));
+  // };
   
 
   const [totalPrice, setTotalPrice] = useState(0);
@@ -128,10 +169,11 @@ function DialogItem({
       setSelectedExtras(selectedExtras.filter((item) => item !== extra));
     }
   };
-  useEffect(() => {
-    console.log("dataOptions:", dataOptions);
-    console.log("dataExtra:", dataExtra);
-  }, [dataOptions, dataExtra]);
+
+  // useEffect(() => {
+  //   console.log("dataOptions:", dataOptions);
+  //   console.log("dataExtra:", dataExtra);
+  // }, [dataOptions, dataExtra]);
 
   const handleOptionChange = (event) => {
     const selectedOption = dataOptions.find(
@@ -159,7 +201,7 @@ function DialogItem({
         >
           <Box>
             <img
-              src={`${BASE_URL}${itemDetails.image}`}
+              src={`${BASE_URL_images}${itemDetails.image}`}
               alt={itemDetails.name_en}
               width={300}
               height={200}
@@ -176,10 +218,19 @@ function DialogItem({
                 {itemDetails.name_en}
               </DialogTitle>
               <Stack direction={"row"} alignItems={"center"}>
-                <CounterDiaolgButton
+                {/* <CounterDiaolgButton
                   basePrice={10}
                   onChange={handlePriceChange}
+                  onQuantityChange={handleQuantityChange}
+                  // onQuantityChange={(newQuantity) => handleQuantityChange(item.id, newQuantity)}
+                /> */}
+                <CounterDiaolgButton
+                  itemId={itemDetails.id} // استخدام itemDetails هنا
+                  basePrice={parseFloat(price)}
+                  onChange={handlePriceChange}
+                  onQuantityChange={(newQuantity) => handleQuantityChange(newQuantity)}
                 />
+
                 <span style={{ color: "#000", fontSize: "12px" }}>
                   {price} EGP
                 </span>

@@ -48,7 +48,7 @@ function LinksHeader({ handleNavigation }) {
           }}
           onClick={() => handleNavigation("footer")}
         >
-          Location
+          Locations
         </Typography>
       </Link>
       <Link href="#footer">

@@ -1,11 +1,11 @@
 import { Button, Stack, TextField } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
-
+import { BASE_URL } from "../../../../../setting";
 function Coupun({ api_token }) {
-  const [couponCode, setCouponCode] = useState(""); // حالة لتخزين قيمة الكوبون
-  const [error, setError] = useState(""); // حالة لتخزين رسائل الخطأ
-  const API_COUPON = `https://myres.me/chilis/api/coupon/validation?coupon=${couponCode}&api_token=${api_token}`;
+  const [couponCode, setCouponCode] = useState("");
+  const [error, setError] = useState("");
+  const API_COUPON = `${BASE_URL}/coupon/validation?coupon=${couponCode}&api_token=${api_token}`;
 
   const handleApplyCoupon = async () => {
     if (couponCode.trim() === "") {

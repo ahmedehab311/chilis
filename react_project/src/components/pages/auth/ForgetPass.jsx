@@ -140,8 +140,8 @@ import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Link, Link as RouterLink } from "react-router-dom";
+import { BASE_URL } from "../../setting";
 function ForgetPass() {
-  const BASE_URL = "https://myres.me/chilis-dev/api";
   const [form, setForm] = useState({
     email: "",
   });

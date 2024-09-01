@@ -344,7 +344,7 @@ function SmallMediaQuery({
                   fontWeight: "bold",
                 }}
               >
-                Location
+                Locations
               </Typography>
             </Link>
             <Link href="#footer" onClick={() => handleNavigation("footer")}>

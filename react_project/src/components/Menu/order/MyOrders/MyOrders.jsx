@@ -14,6 +14,7 @@ import {
 import img from "./meal.jpg";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import { BASE_URL_images } from "../../apis&fetchData/ApiLinks";
 function MyOrders() {
   const [showCard, setShowCard] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
@@ -341,7 +342,7 @@ function MyOrders() {
               >
                 <Stack direction={"row"} alignItems={"center"}>
                   <img
-                    src={`https://myres.me/chilis-dev/${orderDetails.items[0].info[0].image}`}
+                    src={`${BASE_URL_images}${orderDetails.items[0].info[0].image}`}
                     alt="image"
                     style={{ width: "100px", height: "auto" }}
                   />

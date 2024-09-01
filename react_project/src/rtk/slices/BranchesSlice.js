@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { BASE_URL } from "../../components/setting";
+const API_BRANCHES = `${BASE_URL}/branches/1`;
 
-const API_BRANCHES = `https://myres.me/chilis-dev/api/branches/1`;
+// const API_BRANCHES = `https://myres.me/chilis-dev/api/branches/1`;
 
 // إنشاء asyncThunk لجلب البيانات
 export const fetchBranches = createAsyncThunk(
@@ -20,7 +22,7 @@ export const branchesSlice = createSlice({
   name: 'branches',
   initialState: {
     branches: [],
-    selectedBranchId: null, // إضافة selectedBranchId لحفظ الـ ID
+    selectedBranchId: null, 
     loading: false,
     error: null,
   },

@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import { BASE_URL } from "../../components/setting";
 export const fetchItemDetails = createAsyncThunk(
   "info/fetchItemDetails",
   async (itemId) => {
     const response = await axios.get(
-      `https://myres.me/chilis-dev/api/item/${itemId}/1`
+      `${BASE_URL}/item/${itemId}/1`
     );
     return response.data;
   }

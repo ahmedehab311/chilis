@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
-const API_HISTORY = `http://myres.me/chilis-dev/api/user/history`;
+import { BASE_URL } from "../../components/setting";
+const API_HISTORY = `${BASE_URL}/user/history`;
 
 export const fetchOrderHistory = createAsyncThunk(
   "orders/fetchHistory",

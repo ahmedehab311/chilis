@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedAddress } from "../../../../../rtk/slices/adderssSlice";
 import Pickup from "../Pickup/Pickup";
 import Address from "../../adderess/Address";
+import { BASE_URL } from "../../../apis&fetchData/ApiLinks";
 function CheckOut({
   handleRemoveItem,
   cartItems,
@@ -184,7 +185,7 @@ function CheckOut({
     console.log("Checkout data:", dataToSend);
 
     axios
-      .post("http://myres.me/chilis-dev/orders/create", dataToSend)
+      .post(`${BASE_URL}/orders/create`, dataToSend)
       .then((response) => {
         console.log("Order placed successfully:", response.data);
       })
@@ -273,8 +274,6 @@ function CheckOut({
         border: "1px solid #dee2e6!important",
         borderRadius: ".8rem !important",
         boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
-        maxHeight: "580px",
-        overflowY: "auto",
         "@media (max-width: 1000px)": {
           margin: "0 auto",
           mt: "2rem",

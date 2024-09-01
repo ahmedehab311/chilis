@@ -26,7 +26,6 @@ import ChangePasswordFromProfile from "./components/pages/ChangePassFromProfile"
 import { useDispatch } from "react-redux";
 import { setTotalItems } from "./rtk/slices/orderSlice";
 import MyOrders from "./components/Menu/order/MyOrders/MyOrders";
-// import Success from "./components/pages/succsed";
 import { Dialog } from "@mui/material";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();

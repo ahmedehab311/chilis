@@ -30,36 +30,34 @@ import axios from "axios";
 import Coupun from "./checkOut/Coupon/Coupun";
 import { setSelectedAddress } from "../../../../rtk/slices/adderssSlice";
 import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
-import { clearCart } from "../../../../rtk/slices/cartSlice";
+import { clearCart,updateItemQuantity } from "../../../../rtk/slices/cartSlice";
 import Pickup from "./Pickup/Pickup";
-
+import { BASE_URL } from "../../apis&fetchData/ApiLinks";
 function OrderOnline() {
   const dispatch = useDispatch();
-  const [cartItems, setCartItems] = useState([]);
+  const cartItems = useSelector(state => state.cart.items);
   const [totalPrices, setTotalPrices] = useState({});
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingAreas, setLoadingAreas] = useState(false);
-  const API_CITIES = "https://myres.me/chilis/api/cities";
-  const API_ARIA = (cityId) =>
-    `https://myres.me/chilis/api/areas/?city=${cityId}`;
+  const API_CITIES = `${BASE_URL}/cities`;
+  const API_ARIA = (cityId) => `${BASE_URL}/areas/?city=${cityId}`;
   const [bageCount, setBadgeCount] = useState(0);
   const api_token = localStorage.getItem("token");
-
-  useEffect(() => {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    setBadgeCount(cart.length);
-    setCartItems(cart);
-  }, []);
-
+  // const handleRemoveItem = (index) => {
+  //   dispatch(removeItemFromCart(index));
+  // };
   useEffect(() => {
     const updatedPrices = {};
     cartItems.forEach((item, index) => {
-      updatedPrices[index] = totalPrices[index] || item.price;
+      updatedPrices[index] = item.price; // Assuming price is already correct
     });
     setTotalPrices(updatedPrices);
   }, [cartItems]);
+
+
+
 
   const handleCounterChange = (index, newTotalPrice) => {
     setTotalPrices((prevPrices) => ({
@@ -89,29 +87,96 @@ function OrderOnline() {
   //     return newPrices;
   //   });
   // };
+  // const handleRemoveItem = (index) => {
+  //   // حذف العنصر من Redux store
+  //   dispatch(removeItemFromCart(index));
+
+  //   // تحديث localStorage إذا كان لديك منطق إضافي هناك
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   if (index >= 0 && index < cart.length) {
+  //     cart.splice(index, 1); // حذف العنصر المحدد فقط
+  //     localStorage.setItem("cart", JSON.stringify(cart));
+  //   }
+
+  //   // تحديث الحالة في الواجهة الأمامية إذا لزم الأمر
+  //   setCartItems(cart);
+
+  //   // عرض عدد العناصر في البادج بعد التحديث
+  //   console.log("Updated badge count:", cart.length);
+
+  //   setTotalPrices((prevPrices) => {
+  //     const newPrices = { ...prevPrices };
+  //     delete newPrices[index];
+  //     return newPrices;
+  //   });
+  // };
+  // const handleRemoveItem = (index) => {
+  //   console.log('Removing item at index:', index);
+    
+  //   // قراءة السلة من localStorage
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   console.log('Cart before removal:', cart);
+  
+  //   if (index >= 0 && index < cart.length) {
+  //     // حذف العنصر من Redux store
+  //     dispatch(removeItemFromCart(index));
+  
+  //     // حذف العنصر من localStorage
+  //     cart.splice(index, 1);
+  //     localStorage.setItem("cart", JSON.stringify(cart));
+  //     console.log('Cart after removal:', cart);
+  //   }
+  
+  //   // تحديث الحالة في الواجهة الأمامية
+  //   setCartItems(cart);
+  
+  //   // عرض عدد العناصر في البادج بعد التحديث
+  //   console.log("Updated badge count:", cart.length);
+  
+  //   // تحديث الأسعار بعد حذف العنصر
+  //   setTotalPrices(prevPrices => {
+  //     const newPrices = { ...prevPrices };
+  //     delete newPrices[index];
+  //     console.log('Prices after removal:', newPrices);
+  //     return newPrices;
+  //   });
+  // };
   const handleRemoveItem = (index) => {
-    // حذف العنصر من Redux store
-    dispatch(removeItemFromCart(index));
-
-    // تحديث localStorage إذا كان لديك منطق إضافي هناك
+    console.log('Removing item at index:', index);
+    
+    // قراءة السلة من localStorage
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    console.log('Cart before removal:', cart);
+  
     if (index >= 0 && index < cart.length) {
-      cart.splice(index, 1); // حذف العنصر المحدد فقط
+      // حذف العنصر من Redux store
+      dispatch(removeItemFromCart(cart[index].id)); // Assuming item has id
+      
+      // حذف العنصر من localStorage
+      cart.splice(index, 1);
       localStorage.setItem("cart", JSON.stringify(cart));
+      console.log('Cart after removal:', cart);
+      
+      // تحديث الحالة في الواجهة الأمامية
+      setCartItems(cart);
     }
-
-    // تحديث الحالة في الواجهة الأمامية إذا لزم الأمر
-    setCartItems(cart);
-
+    
     // عرض عدد العناصر في البادج بعد التحديث
     console.log("Updated badge count:", cart.length);
-
-    setTotalPrices((prevPrices) => {
-      const newPrices = { ...prevPrices };
-      delete newPrices[index];
-      return newPrices;
+    
+    // تحديث الأسعار بعد حذف العنصر
+    const updatedPrices = {};
+    cart.forEach((item, idx) => {
+      updatedPrices[idx] = item.price * item.quantity;
     });
+  
+    setTotalPrices(updatedPrices);
+    console.log('Prices after removal:', updatedPrices);
   };
+  
+  
+  
+  
 
   const subtotal = Object.values(totalPrices).reduce(
     (acc, price) => acc + price,
@@ -223,6 +288,13 @@ function OrderOnline() {
       address: addressData[activeIndex],
     };
   };
+  const [quantity, setQuantity] = useState(1);
+console.log('Cart items in checkout:', cartItems);
+  const handleQuantityChange = (itemId, newQuantity) => {
+    dispatch(updateItemQuantity({ itemId, newQuantity }));
+  };
+  
+  // const cartItems = useSelector((state) => state.cart.items);
 
   // checkout
 
@@ -288,9 +360,9 @@ function OrderOnline() {
       extras: Array.isArray(item.extras)
         ? item.extras.map((extra) => extra.id)
         : [],
-      count: item.count || 1,
+      count: quantity,
       choices: [],
-      options: item.option ? [item.option.id] : [],
+      options: [item.option.id] || [],
     }));
     const dataToSend = {
       delivery_type: 1,
@@ -316,7 +388,7 @@ function OrderOnline() {
     const params = new URLSearchParams(dataToSend);
 
     axios
-      .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
+      .post(`${BASE_URL}/orders/create?${params.toString()}`)
       .then((response) => {
         if (response.data.response) {
           console.log(response.data);
@@ -324,7 +396,7 @@ function OrderOnline() {
           localStorage.removeItem("idInfo");
 
           // إعادة تحميل الصفحة
-          window.location.reload();
+          // window.location.reload();
 
           toast.success(
             "Your order has been placed successfully. It will be delivered as soon as possible."
@@ -338,18 +410,12 @@ function OrderOnline() {
         }
       })
       .catch((error) => {
-        // تسجيل تفاصيل الخطأ في الكونسول
         if (error.response) {
-          // الطلب تم إرساله واستلام الاستجابة مع خطأ
           console.error("Error response:", error.response);
           console.error("Error response data:", error.response.data);
-          console.error("Error response status:", error.response.status);
-          console.error("Error response headers:", error.response.headers);
         } else if (error.request) {
-          // تم إرسال الطلب ولكن لم يتم تلقي استجابة
           console.error("Error request:", error.request);
         } else {
-          // خطأ في إعداد الطلب
           console.error("Error message:", error.message);
         }
         console.error("Error config:", error.config);
@@ -378,12 +444,10 @@ function OrderOnline() {
         ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
         : 0;
 
-      // إعادة تجميع المجموع الكلي
       return accumulator + itemTotal + extrasTotal;
     }, 0);
   };
 
-  // حساب المجموع الفرعي مع الإضافات
   const subtotalWithExtras = calculateSubtotalWithExtras();
   useEffect(() => {
     const fetchTax = async () => {
@@ -474,8 +538,7 @@ function OrderOnline() {
           border: "1px solid #dee2e6!important",
           borderRadius: ".8rem !important",
           boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
-          maxHeight: "580px",
-          overflowY: "auto",
+          // maxHeight: "580px",
           "@media (max-width: 1000px)": {
             margin: "0 auto",
             mt: "2rem",
@@ -579,12 +642,22 @@ function OrderOnline() {
                         >
                           {item.price} EGP
                         </Typography>
-                        <Counter
+                        {/* <Counter
                           basePrice={item.price}
                           onChange={(newTotalPrice) =>
                             handleCounterChange(index, newTotalPrice)
                           }
-                        />
+                          onQuantityChange={handleQuantityChange}
+                        /> */}
+                        <Counter
+                        basePrice={item.price}
+                        onChange={(newTotalPrice) =>
+                          handleCounterChange(index, newTotalPrice)
+                        }
+                        onQuantityChange={(newQuantity) =>
+                          handleQuantityChange(index, newQuantity)
+                        }
+                      />
                       </Stack>
 
                       <Stack
@@ -667,7 +740,7 @@ function OrderOnline() {
                         value={specialNotes[item.id] || ""} // ربط الحقل النصي مع الحالة
                         onChange={(e) =>
                           handleSpecialNoteChange(item.id, e.target.value)
-                        } // تحديث الحالة عند تغيير المحتوى
+                        }
                         sx={{
                           transition: "1s",
                           "& .MuiInputBase-input": {
@@ -749,7 +822,7 @@ function OrderOnline() {
                 {subtotalWithExtras.toFixed(2)} EGP
               </Typography>
             </Stack>
-            <Stack
+            {/* <Stack
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -769,7 +842,30 @@ function OrderOnline() {
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 {deliveryFee.toFixed(2)} EGP
               </Typography>
-            </Stack>
+            </Stack> */}
+            {deliveryType === "delivery" && (
+              <Stack
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mb: "5px",
+                }}
+                direction={"row"}
+                alignItems={"center"}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Delivery Fee:
+                </Typography>
+                <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+                  {deliveryFee.toFixed(2)} EGP
+                </Typography>
+              </Stack>
+            )}
             <Stack
               sx={{
                 display: "flex",
@@ -782,14 +878,22 @@ function OrderOnline() {
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 Tax {tax} %
               </Typography>
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 {((subtotalWithExtras + deliveryFee) * (tax / 100)).toFixed(2)}{" "}
+                EGP
+              </Typography> */}
+              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+                {(
+                  (subtotalWithExtras +
+                    (deliveryType === "delivery" ? deliveryFee : 0)) *
+                  (tax / 100)
+                ).toFixed(2)}{" "}
                 EGP
               </Typography>
             </Stack>
           </Stack>
 
-          <Stack
+          {/* <Stack
             sx={{
               display: "flex",
               justifyContent: "space-between",
@@ -802,6 +906,28 @@ function OrderOnline() {
             </Typography>
             <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
               {totalWithTax.toFixed(2)} EGP
+            </Typography>
+          </Stack> */}
+          <Stack
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+            direction={"row"}
+            alignItems={"center"}
+          >
+            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              Total:
+            </Typography>
+            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              {(
+                subtotalWithExtras +
+                (deliveryType === "delivery" ? deliveryFee : 0) +
+                (subtotalWithExtras +
+                  (deliveryType === "delivery" ? deliveryFee : 0)) *
+                  (tax / 100)
+              ).toFixed(2)}{" "}
+              EGP
             </Typography>
           </Stack>
 

@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
+import { BASE_URL } from '../../components/setting';
 // API call to fetch order details
 export const fetchOrderDetails = createAsyncThunk(
   'orderDetails/fetchOrderDetails',
   async ({ order_id, api_token }) => {
-    const response = await axios.get(`http://myres.me/chilis-dev/api/order/details/${order_id}?api_token=${api_token}`);
-    console.log("Fetched Data:", response.data.data.order[0]);  // اطبع الهيكل الكامل للبيانات
+  const response = await axios.get(`${BASE_URL}/order/details/${order_id}?api_token=${api_token}`);
+    console.log("Fetched Data:", response.data.data.order[0]);  
     return response.data.data.order[0];
   }
 );

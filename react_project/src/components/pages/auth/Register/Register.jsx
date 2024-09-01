@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useCheckEmailAvailability, signUpSchema } from "../../../header/index";
 import RegisterContent from "./RegisterContent";
+import { BASE_URL } from "../../../setting";
 
-const BASE_URL = "https://myres.me/chilis-dev/api";
 
 const Register = ({ setToken }) => {
   const [first_name, setFirst_name] = useState("");

@@ -169,9 +169,8 @@ import { Box, Typography, TextField, Button, Stack } from "@mui/material";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "react-toastify";
-
+import { BASE_URL } from "../setting";
 const ChangePassword = () => {
-  const BASE_URL = "https://myres.me/chilis-dev/api";
   const [form, setForm] = useState({
     email: "",
     old_password: "",

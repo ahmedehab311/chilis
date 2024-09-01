@@ -30,7 +30,14 @@ function Pickup() {
   return (
     <div>
       <FormControl fullWidth sx={{ mt: 2 }}>
-        <Typography>Your Location</Typography>
+        <Typography sx={{
+          fontSize: "1.6rem",
+          textAlign: "center",
+          mb:".5rem",
+          fontWeight: "bold",
+          textTransform: "capitalize",
+          color: "#000",
+        }}>Select Branch</Typography>
         <Select
           id="branch-select"
           value={selectedBranchId || ""}

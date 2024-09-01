@@ -1,7 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-
-const BASE_URL = "https://myres.me/chilis-dev/api";
+import { BASE_URL } from "../../setting";
 export const handleSave = async (user) => {
   const isConfirmed = window.confirm(
     "Are you sure you want to save these changes?"

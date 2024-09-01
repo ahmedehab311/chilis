@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Grid, Typography, Card, CardMedia } from "@mui/material";
-import { BASE_URL, OrderButton } from "../index";
+import { BASE_URL_images, OrderButton } from "../index";
 const ItemCard = ({ handleItemClick, selectedItem }) => {
   // const truncateText = (text, length) => {
   //   if (text.length > length) {
@@ -72,7 +72,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                 <CardMedia
                   component="img"
                   height="140"
-                  image={`${BASE_URL}${item.image}`}
+                  image={`${BASE_URL_images}${item.image}`}
                   alt={item.description_ar}
                   sx={{ objectFit: "cover", width: "100%" }}
                 />

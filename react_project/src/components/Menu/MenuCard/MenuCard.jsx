@@ -13,7 +13,8 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "../sliderMenu.css";
-import { BASE_URL } from "../apis&fetchData/ApiLinks";
+import { BASE_URL_images } from "../apis&fetchData/ApiLinks";
+
 
 function MenuCard({ handleCardClick, menuItems, loading }) {
   return (
@@ -92,7 +93,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
                     <CardMedia
                       component="img"
                       height="140"
-                      image={`${BASE_URL}${menuItem.image}`}
+                      image={`${BASE_URL_images}${menuItem.image}`}
                       alt={menuItem.description_ar}
                       sx={{ objectFit: "cover", width: "100%" }}
                     />
