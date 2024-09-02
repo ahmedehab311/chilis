@@ -3,7 +3,14 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Box, Button, TextField, Typography, Stack } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-function LoginContent({login,phone,password,handleLogout,setPassword,setPhone }) {
+function LoginContent({
+  login,
+  phone,
+  password,
+  handleLogout,
+  setPassword,
+  setPhone,
+}) {
   return (
     <Box
       sx={{
@@ -35,38 +42,77 @@ function LoginContent({login,phone,password,handleLogout,setPassword,setPhone })
             flex: 1,
           }}
         >
-          <Typography variant="h6" gutterBottom>
+          <Typography
+            variant="h6"
+            sx={{ fontSize: "1.8rem", fontWeight: "bold" }}
+          >
             Welcome Back
           </Typography>
 
-          <Typography variant="h6" gutterBottom>
+          <Typography
+            variant="h6"
+            sx={{ fontSize: "1.4rem", fontWeight: "600" }}
+          >
             Sign in to continue
           </Typography>
-          <TextField
-            label="Enter Your email"
-            variant="outlined"
-            fullWidth
-            required
-            onChange={(e) => setPhone(e.target.value)}
-            value={phone}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            variant="outlined"
-            fullWidth
-            required
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
-          <Button type="submit" variant="contained" color="error" sx={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+          <Stack>
+            <Typography variant="h6">Email</Typography>
+            <TextField
+              placeholder="Enter Email"
+              variant="outlined"
+              fullWidth
+              required
+              onChange={(e) => setPhone(e.target.value)}
+              value={phone}
+              sx={{
+                "& .MuiInputBase-input": {
+                  fontSize: "1.3rem",
+                  color: "gray",
+                },
+                "& .MuiInputLabel-root": {
+                  fontSize: "1.2rem",
+                },
+              }}
+            />
+          </Stack>
+          <Stack>
+            <Typography variant="h6" gutterBottom>
+              Password
+            </Typography>
+            <TextField
+              placeholder="Enter Password "
+              type="password"
+              variant="outlined"
+              fullWidth
+              required
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              sx={{
+                "& .MuiInputBase-input": {
+                  fontSize: "1.3rem",
+                  color: "gray",
+                },
+                "& .MuiInputLabel-root": {
+                  fontSize: "1.2rem",
+                },
+              }}
+            />
+          </Stack>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="error"
+            sx={{ fontSize: "1.2rem", fontWeight: "600" }}
+          >
             Login
           </Button>
           <Typography variant="body2" align="center" sx={{ mt: 1 }}>
             <RouterLink to="/forgot-password">
               <Typography
                 variant="h6"
-                sx={{ fontSize: "1.5rem", fontWeight: "bold" }}
+                
+                sx={{ fontSize: "1.5rem", fontWeight: "600" }}
               >
                 Forgot Your Password?
               </Typography>
@@ -76,11 +122,7 @@ function LoginContent({login,phone,password,handleLogout,setPassword,setPhone })
             <RouterLink to="/register">
               <Typography
                 variant="h6"
-                sx={{
-                  fontFamily: "cairo important",
-                  fontSize: "1.5rem",
-                  fontWeight: "bold",
-                }}
+                sx={{ fontSize: "1.5rem", fontWeight: "600" }}
               >
                 {" "}
                 Don't have an account? Sign up
@@ -90,7 +132,7 @@ function LoginContent({login,phone,password,handleLogout,setPassword,setPhone })
         </Box>
       </Stack>
     </Box>
-  )
+  );
 }
 
-export default LoginContent
+export default LoginContent;

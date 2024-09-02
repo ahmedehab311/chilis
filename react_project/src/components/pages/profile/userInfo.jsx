@@ -44,7 +44,7 @@ function userInfo({
           My Account
         </Typography>
         <Stack sx={{ textTransform: "capitalize", fontSize: "1.5rem" }}>
-          <Typography sx={{ m: "10px 0 10px 0", fontSize: "1.6rem" }}>
+          <Typography sx={{  m: ".5rem 0 .5rem 0", fontSize: "1.6rem" }}>
             name
           </Typography>
           <TextField
@@ -55,42 +55,75 @@ function userInfo({
             value={user.user_name}
             onChange={handleInputChange}
             sx={{
-              m: "0",
-              "& .MuiInputBase-input": {
-                fontSize: "1.5rem",
-                color: "gray",
-              },
-              "& .MuiInputLabel-root": {
-                fontSize: "1.2rem",
-              },
-            }}
+             mt:0,
+             "& .MuiInputBase-input": {
+               fontSize: "1.3rem",
+               color: "gray",
+             },
+             "& .MuiInputLabel-root": {
+               fontSize: "1.2rem",
+             },
+           }}
           />
         </Stack>
-        <Stack>
-          <Typography sx={{ m: "10px 0 10px 0", fontSize: "1.6rem" }}>
+        {/* <Stack>
+          <Typography sx={{  m: ".5rem 0 .5rem 0", fontSize: "1.6rem" }}>
             Phone
           </Typography>
           <TextField
             variant="outlined"
-            fullWidth
-            margin="normal"
-            name="phone"
-            value={user.phone}
-            onChange={handleInputChange}
-            sx={{
-              m: 0,
-              "& .MuiInputBase-input": {
-                fontSize: "1.5rem",
-                color: "gray",
-              },
-              "& .MuiInputLabel-root": {
-                fontSize: "1.2rem",
-              },
-            }}
-          />
-        </Stack>
+        fullWidth
+        margin="normal"
+        name="phone"
+        value={user.phone}
+        onChange={handleInputChange}
+        type="tel"
+        inputMode="numeric" // Use numeric mode for numeric keyboards on mobile
+        pattern="[0-9]*" // Restrict input to numbers only
+        sx={{
+          m: 0,
+          "& .MuiInputBase-input": {
+            fontSize: "1.3rem",
+            color: "gray",
+          },
+          "& .MuiInputLabel-root": {
+            fontSize: "1.2rem",
+          },
+        }}
+      />
+        </Stack> */}
         <Stack>
-          <Typography sx={{ m: "10px 0 10px 0", fontSize: "1.6rem" }}>
+      <Typography sx={{ m: ".5rem 0", fontSize: "1.6rem" }}>
+        Phone
+      </Typography>
+      <TextField
+        variant="outlined"
+        fullWidth
+        margin="normal"
+        name="phone"
+        value={user.phone}
+        onChange={(e) => {
+          // Ensure only numeric values are set
+          const value = e.target.value.replace(/\D/g, '');
+          handleInputChange({ target: { name: 'phone', value } });
+        }}
+        type="tel"
+        inputMode="numeric" // Use numeric mode for numeric keyboards on mobile
+        pattern="[0-9]*" // Restrict input to numbers only
+        sx={{
+          m: 0,
+          "& .MuiInputBase-input": {
+            fontSize: "1.3rem",
+            color: "gray",
+          },
+          "& .MuiInputLabel-root": {
+            fontSize: "1.2rem",
+          },
+        }}
+      />
+    </Stack>
+        <Stack>
+          <Typography sx={{ m: ".5rem 0 .5rem 0", fontSize: "1.6rem" }}>
             Email
           </Typography>
           <TextField
