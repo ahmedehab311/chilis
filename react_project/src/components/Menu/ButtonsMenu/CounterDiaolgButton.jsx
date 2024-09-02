@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // import { useState, useEffect } from "react";
 // import { Stack } from "@mui/material";
 
@@ -340,35 +341,44 @@ import { updateItemQuantity } from "../../../rtk/slices/orderSlice";
 import { useState,useEffect } from "react";
 
 
-function Counter({ itemId, basePrice, onChange, onQuantityChange }) {
+function Counter({ itemId, basePrice, onChange, onQuantityChange,initialQuantity }) {
   const dispatch = useDispatch();
   const item = useSelector(state => state.cart.items.find(item => item.id === itemId));
-  const [quantity, setQuantity] = useState(item ? item.quantity : 1);  // استخدم الحالة المحلية
-
-  // تحديث الكمية عند تحميل المكون
-  useEffect(() => {
-    if (item) {
-      setQuantity(item.quantity);
-    }
-  }, [item]);
+  const [quantity, setQuantity] = useState(initialQuantity || 1);
 
   const handleIncrease = () => {
     const newQuantity = quantity + 1;
     setQuantity(newQuantity);
-    onQuantityChange(newQuantity); // تحديث الكمية في المكون الأب
-    dispatch(updateItemQuantity({ itemId, quantity: newQuantity })); // تحديث الكمية في Redux
-    onChange(newQuantity * basePrice); // تحديث السعر الإجمالي
+    onQuantityChange(newQuantity);
+    onChange(basePrice * newQuantity); // تحديث السعر الإجمالي
   };
 
   const handleDecrease = () => {
     if (quantity > 1) {
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
-      onQuantityChange(newQuantity); // تحديث الكمية في المكون الأب
-      dispatch(updateItemQuantity({ itemId, quantity: newQuantity })); // تحديث الكمية في Redux
-      onChange(newQuantity * basePrice); // تحديث السعر الإجمالي
+      onQuantityChange(newQuantity);
+      onChange(basePrice * newQuantity); // تحديث السعر الإجمالي
     }
   };
+
+  // const handleIncrease = () => {
+  //   const newQuantity = quantity + 1;
+  //   setQuantity(newQuantity);
+  //   onQuantityChange(newQuantity); // تحديث الكمية في المكون الأب
+  //   dispatch(updateItemQuantity({ itemId, quantity: newQuantity })); // تحديث الكمية في Redux
+  //   onChange(newQuantity * basePrice); // تحديث السعر الإجمالي
+  // };
+
+  // const handleDecrease = () => {
+  //   if (quantity > 1) {
+  //     const newQuantity = quantity - 1;
+  //     setQuantity(newQuantity);
+  //     onQuantityChange(newQuantity); // تحديث الكمية في المكون الأب
+  //     dispatch(updateItemQuantity({ itemId, quantity: newQuantity })); // تحديث الكمية في Redux
+  //     onChange(newQuantity * basePrice); // تحديث السعر الإجمالي
+  //   }
+  // };
 
   return (
     <Stack

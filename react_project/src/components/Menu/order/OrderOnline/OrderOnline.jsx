@@ -30,13 +30,16 @@ import axios from "axios";
 import Coupun from "./checkOut/Coupon/Coupun";
 import { setSelectedAddress } from "../../../../rtk/slices/adderssSlice";
 import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
-import { clearCart,updateItemQuantity } from "../../../../rtk/slices/cartSlice";
+import {
+  clearCart,
+  updateItemQuantity,
+} from "../../../../rtk/slices/cartSlice";
 import Pickup from "./Pickup/Pickup";
 import { BASE_URL } from "../../apis&fetchData/ApiLinks";
 function OrderOnline() {
   const dispatch = useDispatch();
-  const cartItems = useSelector(state => state.cart.items);
-  const [totalPrices, setTotalPrices] = useState({});
+  const cartItems = useSelector((state) => state.cart.items);
+  const [totalPrices, setTotalPrices] = useState([]);
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
@@ -51,132 +54,56 @@ function OrderOnline() {
   useEffect(() => {
     const updatedPrices = {};
     cartItems.forEach((item, index) => {
-      updatedPrices[index] = item.price; // Assuming price is already correct
+      updatedPrices[index] = item.price; 
     });
     setTotalPrices(updatedPrices);
   }, [cartItems]);
 
-
-
-
-  const handleCounterChange = (index, newTotalPrice) => {
-    setTotalPrices((prevPrices) => ({
-      ...prevPrices,
-      [index]: newTotalPrice,
-    }));
-  };
-
-  // const handleRemoveItem = (index) => {
-  //   // حذف العنصر من Redux store
-  //   dispatch(removeItemFromCart(index));
-
-  //   // تحديث localStorage إذا كان لديك منطق إضافي هناك
-  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  //   cart.splice(index, 1);
-  //   localStorage.setItem("cart", JSON.stringify(cart));
-
-  //   // تحديث الحالة في الواجهة الأمامية إذا لزم الأمر
-  //   setCartItems(cart);
-
-  //   // عرض عدد العناصر في البادج بعد التحديث
-  //   console.log("Updated badge count:", cart.length);
-
-  //   setTotalPrices((prevPrices) => {
-  //     const newPrices = { ...prevPrices };
-  //     delete newPrices[index];
-  //     return newPrices;
-  //   });
-  // };
-  // const handleRemoveItem = (index) => {
-  //   // حذف العنصر من Redux store
-  //   dispatch(removeItemFromCart(index));
-
-  //   // تحديث localStorage إذا كان لديك منطق إضافي هناك
-  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  //   if (index >= 0 && index < cart.length) {
-  //     cart.splice(index, 1); // حذف العنصر المحدد فقط
-  //     localStorage.setItem("cart", JSON.stringify(cart));
-  //   }
-
-  //   // تحديث الحالة في الواجهة الأمامية إذا لزم الأمر
-  //   setCartItems(cart);
-
-  //   // عرض عدد العناصر في البادج بعد التحديث
-  //   console.log("Updated badge count:", cart.length);
-
-  //   setTotalPrices((prevPrices) => {
-  //     const newPrices = { ...prevPrices };
-  //     delete newPrices[index];
-  //     return newPrices;
-  //   });
-  // };
-  // const handleRemoveItem = (index) => {
-  //   console.log('Removing item at index:', index);
-    
-  //   // قراءة السلة من localStorage
-  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  //   console.log('Cart before removal:', cart);
+const handleCounterChange = (index, newTotalPrice) => {
+  // تأكد من أن `totalPrices` هو array
+  if (!Array.isArray(totalPrices)) {
+    setTotalPrices([]);
+    return;
+  }
   
-  //   if (index >= 0 && index < cart.length) {
-  //     // حذف العنصر من Redux store
-  //     dispatch(removeItemFromCart(index));
+  const updatedPrices = [...totalPrices];
+  updatedPrices[index] = newTotalPrice;
+  setTotalPrices(updatedPrices); // تحديث السعر الإجمالي في حالة state
+};
+// const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
+
+
   
-  //     // حذف العنصر من localStorage
-  //     cart.splice(index, 1);
-  //     localStorage.setItem("cart", JSON.stringify(cart));
-  //     console.log('Cart after removal:', cart);
-  //   }
-  
-  //   // تحديث الحالة في الواجهة الأمامية
-  //   setCartItems(cart);
-  
-  //   // عرض عدد العناصر في البادج بعد التحديث
-  //   console.log("Updated badge count:", cart.length);
-  
-  //   // تحديث الأسعار بعد حذف العنصر
-  //   setTotalPrices(prevPrices => {
-  //     const newPrices = { ...prevPrices };
-  //     delete newPrices[index];
-  //     console.log('Prices after removal:', newPrices);
-  //     return newPrices;
-  //   });
-  // };
   const handleRemoveItem = (index) => {
-    console.log('Removing item at index:', index);
-    
+    console.log("Removing item at index:", index);
+
+    // حذف العنصر من Redux store
+    dispatch(removeItemFromCart(index));
+
     // قراءة السلة من localStorage
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    console.log('Cart before removal:', cart);
-  
+    console.log("Cart before removal:", cart);
+
     if (index >= 0 && index < cart.length) {
-      // حذف العنصر من Redux store
-      dispatch(removeItemFromCart(cart[index].id)); // Assuming item has id
-      
       // حذف العنصر من localStorage
       cart.splice(index, 1);
       localStorage.setItem("cart", JSON.stringify(cart));
-      console.log('Cart after removal:', cart);
-      
-      // تحديث الحالة في الواجهة الأمامية
-      setCartItems(cart);
+      console.log("Cart after removal:", cart);
     }
-    
-    // عرض عدد العناصر في البادج بعد التحديث
+
+    // تحديث عدد العناصر في البادج بعد التحديث
     console.log("Updated badge count:", cart.length);
-    
+
     // تحديث الأسعار بعد حذف العنصر
     const updatedPrices = {};
     cart.forEach((item, idx) => {
       updatedPrices[idx] = item.price * item.quantity;
     });
-  
+
     setTotalPrices(updatedPrices);
-    console.log('Prices after removal:', updatedPrices);
+    console.log("Prices after removal:", updatedPrices);
   };
-  
-  
-  
-  
+  0;
 
   const subtotal = Object.values(totalPrices).reduce(
     (acc, price) => acc + price,
@@ -289,11 +216,37 @@ function OrderOnline() {
     };
   };
   const [quantity, setQuantity] = useState(1);
-console.log('Cart items in checkout:', cartItems);
+
+  console.log("Cart items in checkout:", cartItems);
+  // const handleQuantityChange = (itemId, newQuantity) => {
+  //   dispatch(updateItemQuantity({ itemId, quantity: newQuantity }));
+  // };
+  useEffect(() => {
+    const initialPrices = cartItems.map(item => item.price * item.quantity);
+    setTotalPrices(initialPrices);
+  }, [cartItems]);
   const handleQuantityChange = (itemId, newQuantity) => {
-    dispatch(updateItemQuantity({ itemId, newQuantity }));
+    // تحديث الكمية في Redux أو الحالة المناسبة
+    dispatch(updateItemQuantity({ itemId, quantity: newQuantity }));
+  
+    // تحديث totalPrices بناءً على الكمية الجديدة
+    setTotalPrices(prevPrices => {
+      if (!Array.isArray(prevPrices)) {
+        // ضمان أن prevPrices هو مصفوفة
+        return [];
+      }
+      const updatedPrices = [...prevPrices];
+      const itemIndex = cartItems.findIndex(item => item.id === itemId);
+      if (itemIndex > -1) {
+        const item = cartItems[itemIndex];
+        updatedPrices[itemIndex] = item.price * newQuantity;
+      }
+      return updatedPrices;
+    });
   };
   
+  
+
   // const cartItems = useSelector((state) => state.cart.items);
 
   // checkout
@@ -336,6 +289,90 @@ console.log('Cart items in checkout:', cartItems);
       localStorage.removeItem("orderSuccess");
     }
   }, []);
+
+  // const handleCheckout = () => {
+  //   console.log("addressData", addressData);
+
+  //   if (addressData.length === 1 && !selectedAddress) {
+  //     dispatch(setSelectedAddress(addressData[activeIndex]));
+  //   }
+
+  //   console.log("selectedAddress", selectedAddress);
+
+  //   if (paymentMethod === "credit card") {
+  //     setOpenCreditCardDialog(true);
+  //     return;
+  //   }
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  //   const ids = cart.map((item) => item.id);
+
+  //   // const getIdInfo = localStorage.getItem("idInfo");
+  //   const orders = cartItems.map((item) => ({
+  //     id: item.id,
+  //     special: specialNotes[item.id] || "",
+  //     extras: Array.isArray(item.extras)
+  //       ? item.extras.map((extra) => extra.id)
+  //       : [],
+  //     count: item.count || 1,
+  //     choices: [],
+  //     options: item.option ? [item.option.id] : [],
+  //   }));
+  //   const dataToSend = {
+  //     delivery_type: 1,
+  //     payment: paymentMethod === "cash" ? 1 : 2,
+  //     lat: deliveryType === 1 ? selectedAddress.lat : 0,
+  //     lng: deliveryType === 1 ? selectedAddress.lng : 0,
+  //     address: selectedAddress,
+  //     area: deliveryType === 1 ? selectedAddress.area : 10,
+  //     branch: selectedBranchId || null,
+  //     api_token: api_token,
+  //     items: JSON.stringify({ items: orders }),
+  //     device_id: "",
+  //     notes: "",
+  //     time: "2024-08-20 14:07:07",
+  //     car_model: "",
+  //     car_color: "",
+  //     gift_cards: "",
+  //     coins: "00.00",
+  //   };
+
+  //   // console.log("selectedBranchId", selectedBranchId);
+  //   console.log("Checkout data:", dataToSend);
+  //   const params = new URLSearchParams(dataToSend);
+  //   axios
+  //   .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
+  //   .then((response) => {
+  //     if (response.data.response) {
+  //       // console.log(response.data);
+  //       localStorage.setItem("orderSuccess", "true");
+  //       localStorage.removeItem("idInfo");
+
+  //       toast.success(
+  //         "Your order has been placed successfully. It will be delivered as soon as possible."
+  //       );
+
+  //       dispatch(clearCart());
+  //     } else {
+  //       toast.error(
+  //         "An error occurred while processing your order. Please try again."
+  //       );
+  //     }
+  //   })
+  //   .then((response) => {
+  //     console.log("Order placed successfully:",response.data.response);
+  //   })
+  //   .catch((error) => {
+  //     // Log full error details to the console
+  //     if (error.response) {
+  //       // Request made and server responded
+  //       console.error("Error response:", error);
+  //     }
+  //     toast.error("Error placing order. Please try again.");
+  //   });
+
+  // };
+
   const handleCheckout = () => {
     console.log("addressData", addressData);
 
@@ -360,9 +397,9 @@ console.log('Cart items in checkout:', cartItems);
       extras: Array.isArray(item.extras)
         ? item.extras.map((extra) => extra.id)
         : [],
-      count: quantity,
+      count: item.quantity,
       choices: [],
-      options: [item.option.id] || [],
+      options: item.option ? [item.option.id] : [],
     }));
     const dataToSend = {
       delivery_type: 1,
@@ -388,7 +425,7 @@ console.log('Cart items in checkout:', cartItems);
     const params = new URLSearchParams(dataToSend);
 
     axios
-      .post(`${BASE_URL}/orders/create?${params.toString()}`)
+      .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
       .then((response) => {
         if (response.data.response) {
           console.log(response.data);
@@ -410,20 +447,13 @@ console.log('Cart items in checkout:', cartItems);
         }
       })
       .catch((error) => {
-        if (error.response) {
-          console.error("Error response:", error.response);
-          console.error("Error response data:", error.response.data);
-        } else if (error.request) {
-          console.error("Error request:", error.request);
-        } else {
-          console.error("Error message:", error.message);
+        if (error) {
+          console.error("Error response:", error);
         }
-        console.error("Error config:", error.config);
 
         toast.error("Error placing order. Please try again.");
       });
   };
-
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
   const handleCloseCreditCardDialog = () => {
@@ -434,21 +464,49 @@ console.log('Cart items in checkout:', cartItems);
   const [totalWithTax, setTotalWithTax] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cash"); // New state for payment method
   const [openDialog, setOpenDialog] = useState(false);
+  // const subtotalWithExtras = calculateSubtotalWithExtras();
+  // const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
+
+  // useEffect(() => {
+  //   const newSubtotalWithExtras = calculateSubtotalWithExtras();
+  //   setSubtotalWithExtras(newSubtotalWithExtras);
+  // }, [cartItems, totalPrices]);
+  
+  // const calculateSubtotalWithExtras = () => {
+  //   return cartItems.reduce((accumulator, item, index) => {
+  //     const itemTotal =
+  //       parseFloat(totalPrices[index]) || parseFloat(item.price);
+
+  //     const extrasTotal = item.extras
+  //       ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
+  //       : 0;
+
+  //     return accumulator + itemTotal + extrasTotal;
+  //   }, 0);
+  // };
+  const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
 
   const calculateSubtotalWithExtras = () => {
     return cartItems.reduce((accumulator, item, index) => {
       const itemTotal =
         parseFloat(totalPrices[index]) || parseFloat(item.price);
-
+  
       const extrasTotal = item.extras
         ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
         : 0;
-
+  
       return accumulator + itemTotal + extrasTotal;
     }, 0);
   };
+  
+  
+  useEffect(() => {
+    const newSubtotalWithExtras = calculateSubtotalWithExtras();
+    setSubtotalWithExtras(newSubtotalWithExtras);
+  }, [cartItems, totalPrices]);
+  
 
-  const subtotalWithExtras = calculateSubtotalWithExtras();
+  // const subtotalWithExtras = calculateSubtotalWithExtras();
   useEffect(() => {
     const fetchTax = async () => {
       try {
@@ -478,12 +536,7 @@ console.log('Cart items in checkout:', cartItems);
     setOpenDialog(false);
   };
 
-  //
   const [deliveryType, setDeliveryType] = useState("delivery");
-
-  const [dataOptions, setDataOptions] = useState([]);
-
-  // console.log("dataOptions",dataOptions)
 
   return (
     <Stack
@@ -538,7 +591,6 @@ console.log('Cart items in checkout:', cartItems);
           border: "1px solid #dee2e6!important",
           borderRadius: ".8rem !important",
           boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
-          // maxHeight: "580px",
           "@media (max-width: 1000px)": {
             margin: "0 auto",
             mt: "2rem",
@@ -642,22 +694,12 @@ console.log('Cart items in checkout:', cartItems);
                         >
                           {item.price} EGP
                         </Typography>
-                        {/* <Counter
-                          basePrice={item.price}
-                          onChange={(newTotalPrice) =>
-                            handleCounterChange(index, newTotalPrice)
-                          }
-                          onQuantityChange={handleQuantityChange}
-                        /> */}
                         <Counter
-                        basePrice={item.price}
-                        onChange={(newTotalPrice) =>
-                          handleCounterChange(index, newTotalPrice)
-                        }
-                        onQuantityChange={(newQuantity) =>
-                          handleQuantityChange(index, newQuantity)
-                        }
-                      />
+   basePrice={item.price}
+  onChange={(newTotalPrice) => handleCounterChange(index, newTotalPrice)}
+  onQuantityChange={(newQuantity) => handleQuantityChange(item.id, newQuantity)}
+  initialQuantity={item.quantity}  
+                        />
                       </Stack>
 
                       <Stack
@@ -680,7 +722,7 @@ console.log('Cart items in checkout:', cartItems);
                         <Typography
                           sx={{ fontSize: "1.5rem", fontWeight: 500 }}
                         >
-                          {(totalPrices[index] || item.price).toFixed(2)} EGP
+                           {(totalPrices[index] || item.price * item.quantity).toFixed(2)} EGP
                         </Typography>
                       </Stack>
 
@@ -819,7 +861,7 @@ console.log('Cart items in checkout:', cartItems);
                 Subtotal:
               </Typography>
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {subtotalWithExtras.toFixed(2)} EGP
+              {subtotalWithExtras.toFixed(2)} EGP
               </Typography>
             </Stack>
             {/* <Stack
