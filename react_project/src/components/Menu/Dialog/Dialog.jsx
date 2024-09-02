@@ -17,8 +17,7 @@ import {
   Checkbox,
 } from "@mui/material";
 import { CounterDiaolgButton, AddToCardButton } from "../index";
-// import { addItemToCart } from "../../../rtk/slices/orderSlice.js"; // import your action
-import { addItemToCart,updateItemQuantity } from '../../../rtk/slices/cartSlice.js'; // تأكد من المسار الصحيح
+import { addItemToCart,updateItemQuantity } from '../../../rtk/slices/cartSlice.js'; 
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 function DialogItem({
@@ -38,60 +37,17 @@ function DialogItem({
 
   const [selectedExtras, setSelectedExtras] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
-// console.log("selectedExtras",selectedExtras)
-// console.log("selectedOption",selectedOption)
   const totalItems = useSelector((state) => state.cart.totalItems);
 
-  // const handleAddToCart = () => {
-  //   handleCloseDialog();
 
-  //   console.log("Selected Option:", selectedOption);
-  //   console.log("Selected Extras:", selectedExtras);
-
-  //   const itemDetailsToAdd = {
-  //     id: itemDetails?.id || "default-id",
-  //     name: itemDetails?.name_en || "Default Name",
-  //     price: parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0,
-  //     quantity: 1,
-  //     extras: Array.isArray(selectedExtras)
-  //       ? selectedExtras.map((extra) => ({
-  //           id: extra.id,
-  //           name: extra.description_en,
-  //           price: parseFloat(extra.price_en),
-  //         }))
-  //       : [],
-  //     option: selectedOption
-  //       ? {
-  //           id: selectedOption.id, // استخدام الـ ID هنا
-  //           name: selectedOption.name_en, // استخدام الاسم المناسب
-  //         }
-  //       : null,
-  //     totalPrice:
-  //       (parseFloat(price) || parseFloat(tempSelectedItemPrice) || 0) +
-  //       selectedExtras.reduce(
-  //         (sum, extra) => sum + parseFloat(extra.price_en),
-  //         0
-  //       ),
-  //   };
-
-  //   dispatch(addItemToCart(itemDetailsToAdd));
-
-  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  //   cart.push(itemDetailsToAdd);
-  //   localStorage.setItem("cart", JSON.stringify(cart));
-  // };
-  // const counters = useSelector((state) => state.cart.counters);
   
-  
-  const [quantity, setQuantity] = useState(1);
-  // console.log("quantity",quantity)
+  const [quantity, setQuantity] = useState(1); 
 
   const handleQuantityChange = (newQuantity) => {
     setQuantity(newQuantity);
     dispatch(updateItemQuantity({ itemId: itemDetails.id, newQuantity }));
   };
-  // const handleAddToCart = () => {
-    
+
     const handleAddToCart = () => {
       handleCloseDialog();
     
@@ -100,7 +56,6 @@ function DialogItem({
         name: itemDetails?.name_en || "Default Name",
         price: parseFloat(price) || 0,
         quantity: quantity, 
-        // quantity: counter,
         extras: Array.isArray(selectedExtras)
           ? selectedExtras.map((extra) => ({
               id: extra.id,
@@ -124,38 +79,6 @@ function DialogItem({
     
       dispatch(addItemToCart(itemDetailsToAdd));
     };
-  //     handleCloseDialog();
-  
-  //     const itemDetailsToAdd = {
-  //       id: itemDetails?.id || "default-id",
-  //       name: itemDetails?.name_en || "Default Name",
-  //       price: parseFloat(price) || 0,
-  //       quantity: 1,
-  //       extras: Array.isArray(selectedExtras)
-  //         ? selectedExtras.map((extra) => ({
-  //             id: extra.id,
-  //             name: extra.description_en,
-  //             price: parseFloat(extra.price_en),
-  //           }))
-  //         : [],
-  //       option: selectedOption
-  //         ? {
-  //             id: selectedOption.id,
-  //             name: selectedOption.name_en,
-  //           }
-  //         : null,
-  //       totalPrice:
-  //         (parseFloat(price) || 0) +
-  //         selectedExtras.reduce(
-  //           (sum, extra) => sum + parseFloat(extra.price_en),
-  //           0
-  //         ),
-  //     };
-  
-  //     // إضافة العنصر إلى السلة في Redux
-  //     dispatch(addItemToCart(itemDetailsToAdd));
-  // };
-  
 
   const [totalPrice, setTotalPrice] = useState(0);
   const handlePriceChange = (price) => {
@@ -170,10 +93,6 @@ function DialogItem({
     }
   };
 
-  // useEffect(() => {
-  //   console.log("dataOptions:", dataOptions);
-  //   console.log("dataExtra:", dataExtra);
-  // }, [dataOptions, dataExtra]);
 
   const handleOptionChange = (event) => {
     const selectedOption = dataOptions.find(
@@ -218,14 +137,8 @@ function DialogItem({
                 {itemDetails.name_en}
               </DialogTitle>
               <Stack direction={"row"} alignItems={"center"}>
-                {/* <CounterDiaolgButton
-                  basePrice={10}
-                  onChange={handlePriceChange}
-                  onQuantityChange={handleQuantityChange}
-                  // onQuantityChange={(newQuantity) => handleQuantityChange(item.id, newQuantity)}
-                /> */}
                 <CounterDiaolgButton
-                  itemId={itemDetails.id} // استخدام itemDetails هنا
+                  itemId={itemDetails.id} 
                   basePrice={parseFloat(price)}
                   onChange={handlePriceChange}
                   onQuantityChange={(newQuantity) => handleQuantityChange(newQuantity)}
@@ -266,9 +179,7 @@ function DialogItem({
 
             {dataExtra && dataExtra.length > 0 && (
               <FormControl component="fieldset">
-                {/* <Typography variant="h6" sx={{ color: "#000" }}>
-                  Option
-                </Typography> */}
+            
                 <Typography variant="h6" sx={{ color: "#000" }}>
                   Extras
                 </Typography>

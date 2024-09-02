@@ -11,6 +11,7 @@ export const fetchBranches = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(API_BRANCHES);
+      console.log(response.data.data?.branches)
       return response.data.data?.branches;
     } catch (error) {
       return rejectWithValue(error.response.data.message || "Failed to fetch branches");
