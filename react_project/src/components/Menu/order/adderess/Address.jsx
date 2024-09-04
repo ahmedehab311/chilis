@@ -168,7 +168,8 @@ import { API_AREAS, API_CITIES } from "./apiAdderss";
 import {
   fetchAddresses,
   deleteAddress,
-  setSelectedAddress, // استيراد ال action لتعيين العنوان المختار
+  setSelectedAddress, 
+  setUnavailableAddresses
 } from "../../../../rtk/slices/adderssSlice";
 import DialogAdderss from "./addressDaiolg/DialogAdderss";
 import AddNewAddressButton from "../buttons/AddNewAddressButton";
@@ -184,6 +185,7 @@ function Address({ onClose }) {
   const [selectedCity, setSelectedCity] = useState("");
   const [user, setUser] = useState(null);
   const addresses = useSelector((state) => state.addresses.items);
+  const unavailableAddresses = useSelector((state) => state.addresses.unavailableAddresses);
   useEffect(() => {
     if (addresses.length > 0) {
       localStorage.setItem('addresses', JSON.stringify(addresses));
@@ -280,9 +282,31 @@ function Address({ onClose }) {
     setOpenDialog2(false);
   };
 
+  // const handleAddressSelect = (selectedAddressId) => {
+  //   // console.log("Selected address ID in parent component:", selectedAddressId);
+  //   dispatch(setSelectedAddress(selectedAddressId));
+  // };
+  const checkAvailability = (addresses) => {
+    const now = new Date();
+    const unavailable = addresses.filter((address) => {
+      const branch = address.branches[0];
+      if (branch) {
+        const branchOpenTime = new Date(branch.open);
+        const lastDeliveryTime = new Date(branch.last_delivery);
+        return now < branchOpenTime || now > lastDeliveryTime;
+      }
+      return false;
+    });
+
+    dispatch(setUnavailableAddresses(unavailable.map((addr) => addr.id)));
+  };
+  
   const handleAddressSelect = (selectedAddressId) => {
-    // console.log("Selected address ID in parent component:", selectedAddressId);
-    dispatch(setSelectedAddress(selectedAddressId));
+    if (unavailableAddresses.includes(selectedAddressId)) {
+      alert("This address is currently unavailable for delivery.");
+    } else {
+      dispatch(setSelectedAddress(selectedAddressId));
+    }
   };
 
   return (

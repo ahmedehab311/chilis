@@ -8,6 +8,7 @@ import { useCheckEmailAvailability, signUpSchema } from "../../../header/index";
 import RegisterContent from "./RegisterContent";
 import { BASE_URL } from "../../../setting";
 
+
 const Register = ({ setToken }) => {
   const [first_name, setFirst_name] = useState("");
   const [password, setPassword] = useState("");
@@ -15,10 +16,13 @@ const Register = ({ setToken }) => {
   const [phone, setPhone] = useState("");
   const navigate = useNavigate();
 
-  const registerUser = async (data) => {
+  const registerUser = async (e) => {
+    e.preventDefault();
+
+    const APIURL = `/register?first_name=${first_name}&email=${email}&password=${password}&phone=${phone}`;
+
     try {
-      const APIURL = `/register`;
-      const response = await axios.post(`${BASE_URL}${APIURL}`, data);
+      const response = await axios.post(`${BASE_URL}${APIURL}`);
 
       if (response.data.response) {
         const token = response.data.data.user.token;
@@ -36,24 +40,15 @@ const Register = ({ setToken }) => {
       console.error("Error registering: ", error);
     }
   };
-
   const {
     register,
     handleSubmit,
     getFieldState,
     trigger,
     formState: { errors },
-    setValue,
-    clearErrors
   } = useForm({
     mode: "onBlur",
     resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      firstName: first_name,
-      email,
-      password,
-      phone
-    }
   });
 
   const {
@@ -77,30 +72,15 @@ const Register = ({ setToken }) => {
   return (
     <RegisterContent
       emailOnBlurHandler={emailOnBlurHandler}
-      registerUser={handleSubmit(registerUser)}
+      registerUser={registerUser}
       register={register}
       errors={errors}
-      setEmail={(value) => {
-        setEmail(value);
-        setValue("email", value);
-        clearErrors("email");
-      }}
+      firstName={first_name}
+      setEmail={setEmail}
       emailAvailabilityStatus={emailAvailabilityStatus}
-      setFirst_name={(value) => {
-        setFirst_name(value);
-        setValue("firstName", value);
-        clearErrors("firstName");
-      }}
-      setPassword={(value) => {
-        setPassword(value);
-        setValue("password", value);
-        clearErrors("password");
-      }}
-      setPhone={(value) => {
-        setPhone(value);
-        setValue("phone", value);
-        clearErrors("phone");
-      }}
+      setFirst_name={setFirst_name}
+      setPassword={setPassword}
+      setPhone={setPhone}
     />
   );
 };

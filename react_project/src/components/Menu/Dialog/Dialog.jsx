@@ -78,6 +78,7 @@ function DialogItem({
       };
     
       dispatch(addItemToCart(itemDetailsToAdd));
+
     };
 
   const [totalPrice, setTotalPrice] = useState(0);

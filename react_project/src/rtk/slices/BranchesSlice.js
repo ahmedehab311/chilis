@@ -3,15 +3,15 @@ import axios from "axios";
 import { BASE_URL } from "../../components/setting";
 const API_BRANCHES = `${BASE_URL}/branches/1`;
 
-// const API_BRANCHES = `https://myres.me/chilis-dev/api/branches/1`;
 
-// إنشاء asyncThunk لجلب البيانات
 export const fetchBranches = createAsyncThunk(
   "branches/fetchBranches",
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(API_BRANCHES);
       console.log(response.data.data?.branches)
+      console.log(response.data.data?.branches[0].open)
+      console.log(response.data.data?.branches[0].close)
       return response.data.data?.branches;
     } catch (error) {
       return rejectWithValue(error.response.data.message || "Failed to fetch branches");

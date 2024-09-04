@@ -33,6 +33,7 @@ import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
 import {
   clearCart,
   updateItemQuantity,
+  updateCartItems,
 } from "../../../../rtk/slices/cartSlice";
 import Pickup from "./Pickup/Pickup";
 import { BASE_URL } from "../../apis&fetchData/ApiLinks";
@@ -54,26 +55,27 @@ function OrderOnline() {
   useEffect(() => {
     const updatedPrices = {};
     cartItems.forEach((item, index) => {
-      updatedPrices[index] = item.price; 
+      updatedPrices[index] = item.price;
     });
     setTotalPrices(updatedPrices);
   }, [cartItems]);
+  useEffect(() => {
+    const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    dispatch(updateCartItems(savedCart)); // تحديث السلة في Redux
+  }, [dispatch]);
+  const handleCounterChange = (index, newTotalPrice) => {
+    // تأكد من أن `totalPrices` هو array
+    if (!Array.isArray(totalPrices)) {
+      setTotalPrices([]);
+      return;
+    }
 
-const handleCounterChange = (index, newTotalPrice) => {
-  // تأكد من أن `totalPrices` هو array
-  if (!Array.isArray(totalPrices)) {
-    setTotalPrices([]);
-    return;
-  }
-  
-  const updatedPrices = [...totalPrices];
-  updatedPrices[index] = newTotalPrice;
-  setTotalPrices(updatedPrices); // تحديث السعر الإجمالي في حالة state
-};
-// const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
+    const updatedPrices = [...totalPrices];
+    updatedPrices[index] = newTotalPrice;
+    setTotalPrices(updatedPrices); // تحديث السعر الإجمالي في حالة state
+  };
+  // const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
 
-
-  
   const handleRemoveItem = (index) => {
     console.log("Removing item at index:", index);
 
@@ -217,26 +219,26 @@ const handleCounterChange = (index, newTotalPrice) => {
   };
   const [quantity, setQuantity] = useState(1);
 
-  console.log("Cart items in checkout:", cartItems);
+  // console.log("Cart items in checkout:", cartItems);
   // const handleQuantityChange = (itemId, newQuantity) => {
   //   dispatch(updateItemQuantity({ itemId, quantity: newQuantity }));
   // };
   useEffect(() => {
-    const initialPrices = cartItems.map(item => item.price * item.quantity);
+    const initialPrices = cartItems.map((item) => item.price * item.quantity);
     setTotalPrices(initialPrices);
   }, [cartItems]);
   const handleQuantityChange = (itemId, newQuantity) => {
     // تحديث الكمية في Redux أو الحالة المناسبة
     dispatch(updateItemQuantity({ itemId, quantity: newQuantity }));
-  
+
     // تحديث totalPrices بناءً على الكمية الجديدة
-    setTotalPrices(prevPrices => {
+    setTotalPrices((prevPrices) => {
       if (!Array.isArray(prevPrices)) {
         // ضمان أن prevPrices هو مصفوفة
         return [];
       }
       const updatedPrices = [...prevPrices];
-      const itemIndex = cartItems.findIndex(item => item.id === itemId);
+      const itemIndex = cartItems.findIndex((item) => item.id === itemId);
       if (itemIndex > -1) {
         const item = cartItems[itemIndex];
         updatedPrices[itemIndex] = item.price * newQuantity;
@@ -244,10 +246,6 @@ const handleCounterChange = (index, newTotalPrice) => {
       return updatedPrices;
     });
   };
-  
-  
-
-  // const cartItems = useSelector((state) => state.cart.items);
 
   // checkout
 
@@ -375,7 +373,10 @@ const handleCounterChange = (index, newTotalPrice) => {
 
   const handleCheckout = () => {
     console.log("addressData", addressData);
-
+    if (!selectedAddress || selectedAddress === null) {
+      toast.error("Please select a delivery address before proceeding.");
+      return;
+    }
     if (addressData.length === 1 && !selectedAddress) {
       dispatch(setSelectedAddress(addressData[activeIndex]));
     }
@@ -471,7 +472,7 @@ const handleCounterChange = (index, newTotalPrice) => {
   //   const newSubtotalWithExtras = calculateSubtotalWithExtras();
   //   setSubtotalWithExtras(newSubtotalWithExtras);
   // }, [cartItems, totalPrices]);
-  
+
   // const calculateSubtotalWithExtras = () => {
   //   return cartItems.reduce((accumulator, item, index) => {
   //     const itemTotal =
@@ -490,21 +491,19 @@ const handleCounterChange = (index, newTotalPrice) => {
     return cartItems.reduce((accumulator, item, index) => {
       const itemTotal =
         parseFloat(totalPrices[index]) || parseFloat(item.price);
-  
+
       const extrasTotal = item.extras
         ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
         : 0;
-  
+
       return accumulator + itemTotal + extrasTotal;
     }, 0);
   };
-  
-  
+
   useEffect(() => {
     const newSubtotalWithExtras = calculateSubtotalWithExtras();
     setSubtotalWithExtras(newSubtotalWithExtras);
   }, [cartItems, totalPrices]);
-  
 
   // const subtotalWithExtras = calculateSubtotalWithExtras();
   useEffect(() => {
@@ -537,7 +536,10 @@ const handleCounterChange = (index, newTotalPrice) => {
   };
 
   const [deliveryType, setDeliveryType] = useState("delivery");
-
+  const [branchClosed, setBranchClosed] = useState(false);
+  const handleBranchStatusChange = (isClosed) => {
+    setBranchClosed(isClosed);
+  };
   return (
     <Stack
       className={"orderOnline"}
@@ -555,21 +557,10 @@ const handleCounterChange = (index, newTotalPrice) => {
       alignItems={"center"}
     >
       {/* <Pickup/> */}
-      {/* <CheckOut
-        totalToPay={totalToPay}
-        handleRemoveItem={handleRemoveItem}
-        cartItems={cartItems}
-        subtotal={subtotal}
-        deliveryFee={deliveryFee}
-        totalPrices={totalPrices}
-        handleCounterChange={handleCounterChange}
-        selectedAddress={selectedAddress} // Pass selected address to CheckOut
-        deliveryType={deliveryType}
-      /> */}
 
       <div>
         {deliveryType === "pickup" ? (
-          <Pickup />
+          <Pickup onBranchStatusChange={handleBranchStatusChange} />
         ) : (
           <Address
             handlePlaceOrder={handlePlaceOrder}
@@ -695,10 +686,14 @@ const handleCounterChange = (index, newTotalPrice) => {
                           {item.price} EGP
                         </Typography>
                         <Counter
-   basePrice={item.price}
-  onChange={(newTotalPrice) => handleCounterChange(index, newTotalPrice)}
-  onQuantityChange={(newQuantity) => handleQuantityChange(item.id, newQuantity)}
-  initialQuantity={item.quantity}  
+                          basePrice={item.price}
+                          onChange={(newTotalPrice) =>
+                            handleCounterChange(index, newTotalPrice)
+                          }
+                          onQuantityChange={(newQuantity) =>
+                            handleQuantityChange(item.id, newQuantity)
+                          }
+                          initialQuantity={item.quantity}
                         />
                       </Stack>
 
@@ -722,7 +717,10 @@ const handleCounterChange = (index, newTotalPrice) => {
                         <Typography
                           sx={{ fontSize: "1.5rem", fontWeight: 500 }}
                         >
-                           {(totalPrices[index] || item.price * item.quantity).toFixed(2)} EGP
+                          {(
+                            totalPrices[index] || item.price * item.quantity
+                          ).toFixed(2)}{" "}
+                          EGP
                         </Typography>
                       </Stack>
 
@@ -861,30 +859,10 @@ const handleCounterChange = (index, newTotalPrice) => {
                 Subtotal:
               </Typography>
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-              {subtotalWithExtras.toFixed(2)} EGP
+                {subtotalWithExtras.toFixed(2)} EGP
               </Typography>
             </Stack>
-            {/* <Stack
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mb: "5px",
-              }}
-              direction={"row"}
-              alignItems={"center"}
-            >
-              <Typography
-                sx={{
-                  fontSize: "15px",
-                  fontWeight: "bold",
-                }}
-              >
-                Delivery Fee:
-              </Typography>
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {deliveryFee.toFixed(2)} EGP
-              </Typography>
-            </Stack> */}
+
             {deliveryType === "delivery" && (
               <Stack
                 sx={{
@@ -920,10 +898,6 @@ const handleCounterChange = (index, newTotalPrice) => {
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 Tax {tax} %
               </Typography>
-              {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {((subtotalWithExtras + deliveryFee) * (tax / 100)).toFixed(2)}{" "}
-                EGP
-              </Typography> */}
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 {(
                   (subtotalWithExtras +
@@ -935,21 +909,7 @@ const handleCounterChange = (index, newTotalPrice) => {
             </Stack>
           </Stack>
 
-          {/* <Stack
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-            direction={"row"}
-            alignItems={"center"}
-          >
-            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-              Total:
-            </Typography>
-            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-              {totalWithTax.toFixed(2)} EGP
-            </Typography>
-          </Stack> */}
+
           <Stack
             sx={{
               display: "flex",
@@ -1012,24 +972,26 @@ const handleCounterChange = (index, newTotalPrice) => {
           </FormControl>
 
           <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleCheckout}
-            disabled={cartItems.length === 0}
-            sx={{
-              mt: "1.5rem",
-              p: "1rem",
-              fontSize: "1.5rem",
-              backgroundColor: cartItems.length === 0 ? "#ccc" : "#d32f2f",
-              textTransform: "capitalize",
-              "&:hover": {
-                backgroundColor: cartItems.length === 0 ? "#ccc" : "#d32f2f",
-              },
-            }}
-          >
-            Place Order
-          </Button>
+          variant="contained"
+          color="primary"
+          fullWidth
+          onClick={handleCheckout}
+          disabled={cartItems.length === 0 || branchClosed}
+          sx={{
+            mt: "1.5rem",
+            p: "1rem",
+            fontSize: "1.5rem",
+            backgroundColor:
+              cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
+            textTransform: "capitalize",
+            "&:hover": {
+              backgroundColor:
+                cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
+            },
+          }}
+        >
+          Place Order
+        </Button>
           <Dialog
             open={openCreditCardDialog}
             onClose={handleCloseCreditCardDialog}

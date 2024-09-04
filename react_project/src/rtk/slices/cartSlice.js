@@ -18,8 +18,19 @@ const cartSlice = createSlice({
       state.items.splice(action.payload, 1);
       state.totalItems = state.items.length;
     },
+    // updateCartItems: (state, action) => {
+    //   state.totalItems = action.payload;
+    // },
     updateCartItems: (state, action) => {
-      state.totalItems = action.payload;
+      if (Array.isArray(action.payload)) {
+        state.items = action.payload;
+        state.totalItems = action.payload.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+      } else {
+        // console.error("Payload is not an array:", action.payload);
+      }
     },
     clearCart(state) {
       localStorage.removeItem("cart");
@@ -37,6 +48,7 @@ const cartSlice = createSlice({
         localStorage.setItem("cart", JSON.stringify(state.items));
       }
     },
+    
   },
 });
 
