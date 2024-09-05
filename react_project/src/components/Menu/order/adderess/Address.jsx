@@ -170,7 +170,7 @@ import {
   deleteAddress,
   setSelectedAddress, 
   setUnavailableAddresses
-} from "../../../../rtk/slices/adderssSlice";
+} from "../../../../rtk/slices/adderssSlice.js";
 import DialogAdderss from "./addressDaiolg/DialogAdderss";
 import AddNewAddressButton from "../buttons/AddNewAddressButton";
 
@@ -282,10 +282,6 @@ function Address({ onClose }) {
     setOpenDialog2(false);
   };
 
-  // const handleAddressSelect = (selectedAddressId) => {
-  //   // console.log("Selected address ID in parent component:", selectedAddressId);
-  //   dispatch(setSelectedAddress(selectedAddressId));
-  // };
   const checkAvailability = (addresses) => {
     const now = new Date();
     const unavailable = addresses.filter((address) => {
@@ -300,7 +296,7 @@ function Address({ onClose }) {
 
     dispatch(setUnavailableAddresses(unavailable.map((addr) => addr.id)));
   };
-  
+
   const handleAddressSelect = (selectedAddressId) => {
     if (unavailableAddresses.includes(selectedAddressId)) {
       alert("This address is currently unavailable for delivery.");
@@ -327,6 +323,7 @@ function Address({ onClose }) {
         handleDeleteAddress={handleDeleteAddress}
         addressData={addressData}
         onAddressSelect={handleAddressSelect}
+        unavailableAddresses={unavailableAddresses}
       />
       <AddNewAddressButton
         handleClickOpen={handleClickOpen2}
