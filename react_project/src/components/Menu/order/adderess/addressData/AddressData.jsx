@@ -466,30 +466,24 @@ function AddressData({
     const hours = now.getHours();
     const minutes = now.getMinutes();
 
-    // الوقت الحالي بتنسيق HH:MM
     const currentTimeMinutes = hours * 60 + minutes;
 
     let isAvailable = false;
-
+  if (address && Array.isArray(address.branches)) {
     address.branches.forEach((branch) => {
-      // console.log(`Checking branch: ${branch.address_en}`);
-      // console.log(
-      //   `Open: ${branch.open}, Last Delivery: ${branch.last_delivery}`
-      // );
-
+      console.log(`Checking branch: ${branch.address_en}`);
+      console.log(
+        `Open: ${branch.open}, Last Delivery: ${branch.last_delivery}`
+      );
+  
       const [openHour, openMinute] = branch.open.split(":").map(Number);
       const [deliveryHour, deliveryMinute] = branch.last_delivery
         .split(":")
         .map(Number);
-
+  
       const branchOpenMinutes = openHour * 60 + openMinute;
       const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
-
-      // console.log(
-      //   `Branch open minutes: ${branchOpenMinutes}, Branch last delivery minutes: ${branchLastDeliveryMinutes}`
-      // );
-      // console.log(`Current time minutes: ${currentTimeMinutes}`);
-
+  
       if (branchLastDeliveryMinutes < branchOpenMinutes) {
         if (
           currentTimeMinutes >= branchOpenMinutes ||
@@ -506,10 +500,12 @@ function AddressData({
         }
       }
     });
-
-    // console.log(`Final availability for address: ${isAvailable}`);
-    return isAvailable;
-  };
+  } else {
+    console.error("Branches data is missing or invalid.");
+  }
+  
+  return isAvailable;
+}
 
   const handleCardClick = (index) => {
     if (Number.isInteger(index) && index >= 0 && index < addressData.length) {

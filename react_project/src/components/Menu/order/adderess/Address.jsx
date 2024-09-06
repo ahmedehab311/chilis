@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // import { useState, useEffect } from "react";
 // import { useSelector, useDispatch } from "react-redux";
 // import { Stack, Typography } from "@mui/material";
@@ -168,13 +169,13 @@ import { API_AREAS, API_CITIES } from "./apiAdderss";
 import {
   fetchAddresses,
   deleteAddress,
-  setSelectedAddress, 
-  setUnavailableAddresses
+  setSelectedAddress,
+  setUnavailableAddresses,
 } from "../../../../rtk/slices/adderssSlice.js";
 import DialogAdderss from "./addressDaiolg/DialogAdderss";
 import AddNewAddressButton from "../buttons/AddNewAddressButton";
 
-function Address({ onClose }) {
+function Address() {
   const dispatch = useDispatch();
   const addressData = useSelector((state) => state.addresses.items || []);
 
@@ -185,10 +186,12 @@ function Address({ onClose }) {
   const [selectedCity, setSelectedCity] = useState("");
   const [user, setUser] = useState(null);
   const addresses = useSelector((state) => state.addresses.items);
-  const unavailableAddresses = useSelector((state) => state.addresses.unavailableAddresses);
+  const unavailableAddresses = useSelector(
+    (state) => state.addresses.unavailableAddresses
+  );
   useEffect(() => {
     if (addresses.length > 0) {
-      localStorage.setItem('addresses', JSON.stringify(addresses));
+      localStorage.setItem("addresses", JSON.stringify(addresses));
     }
   }, [addresses]);
   useEffect(() => {
@@ -280,21 +283,6 @@ function Address({ onClose }) {
 
   const handleClose2 = () => {
     setOpenDialog2(false);
-  };
-
-  const checkAvailability = (addresses) => {
-    const now = new Date();
-    const unavailable = addresses.filter((address) => {
-      const branch = address.branches[0];
-      if (branch) {
-        const branchOpenTime = new Date(branch.open);
-        const lastDeliveryTime = new Date(branch.last_delivery);
-        return now < branchOpenTime || now > lastDeliveryTime;
-      }
-      return false;
-    });
-
-    dispatch(setUnavailableAddresses(unavailable.map((addr) => addr.id)));
   };
 
   const handleAddressSelect = (selectedAddressId) => {

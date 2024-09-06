@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -15,10 +14,8 @@ import {
   DiolgTitle,
   fetchAddresses,
 } from "./index";
-
 function AddressDialog({ open, onClose }) {
   const api_token = localStorage.getItem("token");
-  // const api_token = localStorage.getItem("api_token");
   const dispatch = useDispatch();
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
@@ -38,7 +35,7 @@ function AddressDialog({ open, onClose }) {
     deliveryInstructions: "",
     label: "",
   });
-
+  const [isAddingNewAddress, setIsAddingNewAddress] = useState(false);
   useEffect(() => {
     const fetchCities = async () => {
       setLoadingCities(true);
@@ -94,9 +91,6 @@ function AddressDialog({ open, onClose }) {
   useEffect(() => {
     dispatch(fetchAddresses());
   }, [dispatch]);
-  // useEffect(() => {
-  //   console.log(fetchAddresses())
-  // }, []);
 
   const handleSelectLabel = (label) => {
     setCurrentAddress((prev) => ({ ...prev, label }));
@@ -107,8 +101,8 @@ function AddressDialog({ open, onClose }) {
       "deliveryArea",
       "street",
       "building",
-      // "floor",
-      // "apt",
+      "floor",
+      "apt",
     ];
     const newErrors = {};
 
@@ -140,20 +134,20 @@ function AddressDialog({ open, onClose }) {
         `${API_ADD_ADDRESS}${queryParams.toString()}`
       );
 
-      // تحقق من الشكل الفعلي للبيانات المستلمة
+      //   الشكل الفعلي للبيانات المستلمة
       const dataResponse = response.data;
       console.log("response", dataResponse);
 
-      // تحقق من الاستجابة بشكل صحيح
+      //   الاستجابة بشكل صحيح
       if (dataResponse.response) {
         if (window.location.pathname === "/profile") {
           toast.success("Address added successfully!");
         }
         onClose();
-        // انتظر حتى يتم إغلاق الحوار
+        //  حتى يتم إغلاق الحوار
         await new Promise((resolve) => setTimeout(resolve, 500));
 
-        // ثم قم بتفريغ الحقول
+        // ثم تفريغ الحقول
         setCurrentAddress({
           deliveryCity: "",
           deliveryArea: "",
@@ -216,7 +210,6 @@ function AddressDialog({ open, onClose }) {
               loadingAreas={loadingAreas}
               setSelectedArea={setSelectedArea}
             />
-
             <InputsAdderss
               currentAddress={currentAddress}
               setCurrentAddress={setCurrentAddress}
@@ -230,7 +223,6 @@ function AddressDialog({ open, onClose }) {
             />
           </Stack>
         </DialogContent>
-
         <DiaolgButtonsAddress
           onClose={onClose}
           handleAddAddress={handleAddAddress}
