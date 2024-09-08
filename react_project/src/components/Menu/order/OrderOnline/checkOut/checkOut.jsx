@@ -28,8 +28,6 @@ import axios from "axios";
 import Coupun from "./Coupon/Coupun";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedAddress } from "../../../../../rtk/slices/adderssSlice";
-import Pickup from "../Pickup/Pickup";
-import Address from "../../adderess/Address";
 import { BASE_URL } from "../../../apis&fetchData/ApiLinks";
 function CheckOut({
   handleRemoveItem,
@@ -39,7 +37,7 @@ function CheckOut({
   totalPrices,
   handleCounterChange,
 }) {
-  const api_token = localStorage.getItem("token"); // استرجاع التوكن من localStorage
+  const api_token = localStorage.getItem("token");
 
   const handleCashPayment = async () => {
     try {
@@ -69,70 +67,6 @@ function CheckOut({
       console.log("Selected Address:", selectedAddress);
     }
   }, [selectedAddress]);
-  const [orders, setOrders] = useState([]);
-
-  // const handleCheckout = () => {
-  //   // تحقق من العنوان الحالي
-  //   if (addressData.length === 1 && !selectedAddress) {
-  //     dispatch(setSelectedAddress(addressData[0]));
-  //   }
-
-  //   const currentSelectedAddress = selectedAddress || addressData[0];
-
-  //   if (
-  //     (addressData.length > 1 && !selectedAddress) ||
-  //     !currentSelectedAddress
-  //   ) {
-  //     alert("Please select an address before placing the order.");
-  //     return;
-  //   }
-
-  //   // تحقق من طريقة الدفع إذا كانت "credit card"
-  //   if (payment === 2) {
-  //     // فتح الديالوج الخاص بالـ credit card
-  //     openCreditCardDialog();
-  //     return; // إيقاف تنفيذ باقي الكود
-  //   }
-
-  //   // بناء الطلب بناءً على العناصر الموجودة في سلة المشتريات
-  //   const orders = cartItems.map((item) => ({
-  //     id: item.id,
-  //     special: item.specialNote || "",
-  //     extras: item.extras || [],
-  //     count: item.count || 1,
-  //     choices: item.choices || [],
-  //   }));
-
-  //   const dataToSend = {
-  //     delivery_type: 1,
-  //     payment: paymentMethod === "cash" ? 1 : 2,
-  //     lat: currentSelectedAddress.lat,
-  //     lng: currentSelectedAddress.lng,
-  //     address: currentSelectedAddress.id,
-  //     area: 1,
-  //     branch: 1,
-  //     api_token: api_token,
-  //     items: { items: orders },
-  //     device_id: "",
-  //     notes: "",
-  //     time: "2024-08-20 14:07:07",
-  //     car_model: "",
-  //     car_color: "",
-  //     gift_cards: "",
-  //     coins: "00.00",
-  //   };
-
-  //   console.log("Checkout data:", dataToSend);
-
-  //   axios
-  //     .post("http://myres.me/chilis-dev/orders/create", dataToSend)
-  //     .then((response) => {
-  //       console.log("Order placed successfully:", response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error placing order:", error);
-  //     });
-  // };
 
   const handleCheckout = () => {
     if (addressData.length === 1 && !selectedAddress) {
@@ -255,9 +189,6 @@ function CheckOut({
   // 
   const [deliveryType, setDeliveryType] = useState('Delivery'); 
 
-  const handleChange = (event) => {
-    setDeliveryType(event.target.value);
-  };
 
   return (
 <>
@@ -475,42 +406,6 @@ function CheckOut({
       </Container>
       {/* coupon */}
       <Coupun api_token={api_token} />
-      {/* <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
-      <FormControl
-          component="fieldset"
-          sx={{ mt: "2rem", textAlign: "center" }}
-        >
-          <FormLabel
-            component="legend"
-            sx={{ fontSize: "1.6rem", fontWeight: "600", textAlign: "center" }}
-          >
-            Select delivery type
-          </FormLabel>
-          <RadioGroup
-            aria-label="payment-method"
-            name="payment-method"
-            value={paymentMethod}
-            onChange={(e) => setPaymentMethod(e.target.value)}
-            sx={{
-              justifyContent: "center",
-              flexDirection: "row",
-              alignItems: "center",
-            }}
-          >
-            <FormControlLabel
-              value="cash"
-              control={<Radio />}
-              label="Packup"
-            />
-            <FormControlLabel
-            sx={{fontSize:"1.5rem"}}
-              value="credit"
-              control={<Radio />}
-              label="Delivery"
-            />
-          </RadioGroup>
-        </FormControl>
-      </Stack> */}
       <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
         <FormControl
           component="fieldset"

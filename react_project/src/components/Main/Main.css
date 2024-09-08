@@ -11,7 +11,7 @@
     background-color: #ff0000;
     width: 52px;
     height: 3px;
-    margin-top: 30px;
+    /* margin-top: 6px; */
   }
   .imgMain {
     width: 500px !important;
@@ -30,7 +30,7 @@
       height: 300px;
     }
   }
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     .MuiContainer-root {
       flex-direction: column;
       text-align: center;

@@ -58,12 +58,13 @@
 // }
 
 // export default AddAdderssFromProfile;
+
 import { useState } from "react";
 import { Typography, Stack, Dialog, DialogContent } from "@mui/material";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import Address from "../../../Menu/order/adderess/Address";
 
-function AddAdderssFromProfile() {
+function AdderssInProfile() {
   const [openAddressListDialog, setOpenAddressListDialog] = useState(false);
 
   const handleOpenAddressListDialog = () => {
@@ -134,7 +135,6 @@ function AddAdderssFromProfile() {
         fullWidth
         maxWidth="sm"
       >
-        {/* <DialogTitle>My Addresses</DialogTitle> */}
         <DialogContent>
           <Stack spacing={2}>
             <Address />
@@ -145,4 +145,4 @@ function AddAdderssFromProfile() {
   );
 }
 
-export default AddAdderssFromProfile;
+export default AdderssInProfile;

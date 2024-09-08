@@ -50,7 +50,7 @@ import { Card, Stack } from "@mui/material";
 
 import AddressDialog from "../../../Menu/order/adderess/addressDaiolg/DialogAdderss.jsx";
 import InfoUserCard from "./InfoUserCard.jsx";
-import AddAdderssFromProfile from "./AddAdderssFromProfile.jsx";
+import AddAdderssFromProfile from "./AdderssInProfile.jsx";
 import Address from "../../../Menu/order/adderess/Address"; // تأكد من استيراد مكون Address
 import { useState } from "react";
 
@@ -96,7 +96,6 @@ function UserCard({
 
         <AddAdderssFromProfile handleClickOpen1={handleClickOpen1} />
 
-        {/* الديالوج الذي سيتغير محتواه بناءً على showAddress */}
         <AddressDialog open={openDialog1} onClose={handleClose1}>
           {showAddress ? (
             <Address /> 

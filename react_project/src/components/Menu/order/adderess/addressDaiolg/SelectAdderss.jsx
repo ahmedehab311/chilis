@@ -17,7 +17,7 @@ function SelectAdderss({
   areas,
   setAreas,
   loadingAreas,
-  setSelectedArea = () => {}, // قيمة افتراضية
+  setSelectedArea = () => {}, 
 }) {
   const handleCityChange = (event) => {
     setSelectedCity(event.target.value);

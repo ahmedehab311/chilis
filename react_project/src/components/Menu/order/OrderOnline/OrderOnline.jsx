@@ -47,11 +47,13 @@ function OrderOnline() {
   const [loadingAreas, setLoadingAreas] = useState(false);
   const API_CITIES = `${BASE_URL}/cities`;
   const API_ARIA = (cityId) => `${BASE_URL}/areas/?city=${cityId}`;
-  const [bageCount, setBadgeCount] = useState(0);
   const api_token = localStorage.getItem("token");
-  // const handleRemoveItem = (index) => {
-  //   dispatch(removeItemFromCart(index));
-  // };
+  const [tax, setTax] = useState(0);
+  const [totalWithTax, setTotalWithTax] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState("cash"); // New state for payment method
+  const [openDialog, setOpenDialog] = useState(false);
+  const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
+
   useEffect(() => {
     const updatedPrices = {};
     cartItems.forEach((item, index) => {
@@ -120,6 +122,7 @@ function OrderOnline() {
     deliveryCity: "",
     deliveryArea: "",
   });
+
   useEffect(() => {
     const fetchCities = async () => {
       setLoadingCities(true);
@@ -180,14 +183,7 @@ function OrderOnline() {
   }, [addressData]);
 
   // تخزين activeIndex
-  const handleCardClick = (index) => {
-    if (Number.isInteger(index)) {
-      setActiveIndex(index);
-      setSelectedAddress(addressData[index]);
-    } else {
-      console.error("Invalid index:", index);
-    }
-  };
+
 
   useEffect(() => {
     if (activeIndex !== null && !isNaN(activeIndex)) {
@@ -195,9 +191,7 @@ function OrderOnline() {
     }
   }, [activeIndex]);
 
-  const handleSelectLabel = (label) => {
-    setCurrentAddress((prev) => ({ ...prev, label }));
-  };
+
 
   const [user, setUser] = useState(null);
 
@@ -209,20 +203,8 @@ function OrderOnline() {
   }, []);
 
   // في OrderOnline
-  const handlePlaceOrder = () => {
-    const orderData = {
-      items: cartItems,
-      total: totalToPay,
-      user: user,
-      address: addressData[activeIndex],
-    };
-  };
-  const [quantity, setQuantity] = useState(1);
 
-  // console.log("Cart items in checkout:", cartItems);
-  // const handleQuantityChange = (itemId, newQuantity) => {
-  //   dispatch(updateItemQuantity({ itemId, quantity: newQuantity }));
-  // };
+
   useEffect(() => {
     const initialPrices = cartItems.map((item) => item.price * item.quantity);
     setTotalPrices(initialPrices);
@@ -249,15 +231,23 @@ function OrderOnline() {
 
   // checkout
 
-  const selectedAddress = useSelector(
-    (state) => state.addresses.selectedAddress
-  );
-  useEffect(() => {
-    // Log the selected address to the console whenever it changes
-    if (selectedAddress) {
-      console.log("Selected Address:", selectedAddress);
-    }
-  }, [selectedAddress]);
+const addresses = useSelector((state) => state.addresses.items);
+console.log("addresses",addresses);
+
+const [address, setAddress] = useState(null);
+console.log("address",address);
+
+useEffect(() => {
+  // استرجاع الكائن الكامل من localStorage
+  const storedAddress = localStorage.getItem("selectedAddress");
+
+  if (storedAddress) {
+    const parsedAddress = JSON.parse(storedAddress); // استرجاع الكائن الكامل
+    setAddress(parsedAddress);
+    dispatch(setSelectedAddress(parsedAddress)); // تعيين الكائن الكامل في Redux
+  }
+}, [dispatch]);
+
 
   const selectedOption = useSelector((state) => state.info.selectedOption);
   const idInfo = useSelector((state) => state.info.idInfo);
@@ -288,100 +278,17 @@ function OrderOnline() {
     }
   }, []);
 
-  // const handleCheckout = () => {
-  //   console.log("addressData", addressData);
-
-  //   if (addressData.length === 1 && !selectedAddress) {
-  //     dispatch(setSelectedAddress(addressData[activeIndex]));
-  //   }
-
-  //   console.log("selectedAddress", selectedAddress);
-
-  //   if (paymentMethod === "credit card") {
-  //     setOpenCreditCardDialog(true);
-  //     return;
-  //   }
-  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  //   const ids = cart.map((item) => item.id);
-
-  //   // const getIdInfo = localStorage.getItem("idInfo");
-  //   const orders = cartItems.map((item) => ({
-  //     id: item.id,
-  //     special: specialNotes[item.id] || "",
-  //     extras: Array.isArray(item.extras)
-  //       ? item.extras.map((extra) => extra.id)
-  //       : [],
-  //     count: item.count || 1,
-  //     choices: [],
-  //     options: item.option ? [item.option.id] : [],
-  //   }));
-  //   const dataToSend = {
-  //     delivery_type: 1,
-  //     payment: paymentMethod === "cash" ? 1 : 2,
-  //     lat: deliveryType === 1 ? selectedAddress.lat : 0,
-  //     lng: deliveryType === 1 ? selectedAddress.lng : 0,
-  //     address: selectedAddress,
-  //     area: deliveryType === 1 ? selectedAddress.area : 10,
-  //     branch: selectedBranchId || null,
-  //     api_token: api_token,
-  //     items: JSON.stringify({ items: orders }),
-  //     device_id: "",
-  //     notes: "",
-  //     time: "2024-08-20 14:07:07",
-  //     car_model: "",
-  //     car_color: "",
-  //     gift_cards: "",
-  //     coins: "00.00",
-  //   };
-
-  //   // console.log("selectedBranchId", selectedBranchId);
-  //   console.log("Checkout data:", dataToSend);
-  //   const params = new URLSearchParams(dataToSend);
-  //   axios
-  //   .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
-  //   .then((response) => {
-  //     if (response.data.response) {
-  //       // console.log(response.data);
-  //       localStorage.setItem("orderSuccess", "true");
-  //       localStorage.removeItem("idInfo");
-
-  //       toast.success(
-  //         "Your order has been placed successfully. It will be delivered as soon as possible."
-  //       );
-
-  //       dispatch(clearCart());
-  //     } else {
-  //       toast.error(
-  //         "An error occurred while processing your order. Please try again."
-  //       );
-  //     }
-  //   })
-  //   .then((response) => {
-  //     console.log("Order placed successfully:",response.data.response);
-  //   })
-  //   .catch((error) => {
-  //     // Log full error details to the console
-  //     if (error.response) {
-  //       // Request made and server responded
-  //       console.error("Error response:", error);
-  //     }
-  //     toast.error("Error placing order. Please try again.");
-  //   });
-
-  // };
-
   const handleCheckout = () => {
     console.log("addressData", addressData);
-    if (!selectedAddress || selectedAddress === null) {
+    if (!address.id || address.id === null) {
       toast.error("Please select a delivery address before proceeding.");
       return;
     }
-    if (addressData.length === 1 && !selectedAddress) {
+    if (addressData.length === 1 && !address.id) {
       dispatch(setSelectedAddress(addressData[activeIndex]));
     }
 
-    console.log("selectedAddress", selectedAddress);
+    console.log("selectedAddress", address.id);
 
     if (paymentMethod === "credit card") {
       setOpenCreditCardDialog(true);
@@ -405,11 +312,11 @@ function OrderOnline() {
     const dataToSend = {
       delivery_type: 1,
       payment: paymentMethod === "cash" ? 1 : 2,
-      lat: deliveryType === 1 ? selectedAddress.lat : 0,
-      lng: deliveryType === 1 ? selectedAddress.lng : 0,
-      address: selectedAddress,
-      area: deliveryType === 1 ? selectedAddress.area : 10,
-      branch: selectedBranchId || null,
+      lat: deliveryType === 1 ? address.lat : 0,
+      lng: deliveryType === 1 ? address.lng : 0,
+      address: address.id,
+      area:  address.area.id ,
+      branch: address.branches[0].id ,
       api_token: api_token,
       items: JSON.stringify({ items: orders }),
       device_id: "",
@@ -420,72 +327,52 @@ function OrderOnline() {
       gift_cards: "",
       coins: "00.00",
     };
-
-    // console.log("selectedBranchId", selectedBranchId);
+console.log("area from checkout" , address.area.id)
+console.log("branches from checkout" , address.branches.id)
     console.log("Checkout data:", dataToSend);
     const params = new URLSearchParams(dataToSend);
-
     axios
-      .post(`http://myres.me/chilis-dev/api/orders/create?${params.toString()}`)
-      .then((response) => {
-        if (response.data.response) {
-          console.log(response.data);
-          localStorage.setItem("orderSuccess", "true");
-          localStorage.removeItem("idInfo");
-
-          // إعادة تحميل الصفحة
-          // window.location.reload();
-
-          toast.success(
-            "Your order has been placed successfully. It will be delivered as soon as possible."
-          );
-
-          dispatch(clearCart());
-        } else {
-          toast.error(
-            "An error occurred while processing your order. Please try again."
-          );
-        }
-      })
-      .catch((error) => {
-        if (error) {
-          console.error("Error response:", error);
-        }
-
-        toast.error("Error placing order. Please try again.");
-      });
+    .post(`${BASE_URL}/orders/create?${params.toString()}`)
+    .then((response) => {
+      if (response.data.response) {
+        console.log(response.data);
+        localStorage.setItem("orderSuccess", "true");
+        localStorage.removeItem("idInfo");
+  
+        toast.success(
+          "Your order has been placed successfully. It will be delivered as soon as possible."
+        );
+  
+        dispatch(clearCart());
+      } else {
+        toast.error(
+          "An error occurred while processing your order. Please try again."
+        );
+      }
+    })
+    .catch((error) => {
+      if (error.response) {
+        // طباعة جميع تفاصيل الـ response
+        console.error("Error response data:", error.response.data);
+        console.error("Error response status:", error.response.status);
+        console.error("Error response headers:", error.response.headers);
+      } else if (error.request) {
+        // إذا تم إرسال الطلب لكن لم يتلقَ الرد
+        console.error("Error request:", error.request);
+      } else {
+        // خطأ حدث أثناء إعداد الطلب
+        console.error("Error message:", error.message);
+      }
+      console.error("Error config:", error.config);
+  
+      toast.error("Error placing order. Please try again.");
+    });
   };
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
   const handleCloseCreditCardDialog = () => {
     setOpenCreditCardDialog(false);
   };
-
-  const [tax, setTax] = useState(0);
-  const [totalWithTax, setTotalWithTax] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState("cash"); // New state for payment method
-  const [openDialog, setOpenDialog] = useState(false);
-  // const subtotalWithExtras = calculateSubtotalWithExtras();
-  // const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
-
-  // useEffect(() => {
-  //   const newSubtotalWithExtras = calculateSubtotalWithExtras();
-  //   setSubtotalWithExtras(newSubtotalWithExtras);
-  // }, [cartItems, totalPrices]);
-
-  // const calculateSubtotalWithExtras = () => {
-  //   return cartItems.reduce((accumulator, item, index) => {
-  //     const itemTotal =
-  //       parseFloat(totalPrices[index]) || parseFloat(item.price);
-
-  //     const extrasTotal = item.extras
-  //       ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
-  //       : 0;
-
-  //     return accumulator + itemTotal + extrasTotal;
-  //   }, 0);
-  // };
-  const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
 
   const calculateSubtotalWithExtras = () => {
     return cartItems.reduce((accumulator, item, index) => {
@@ -505,7 +392,6 @@ function OrderOnline() {
     setSubtotalWithExtras(newSubtotalWithExtras);
   }, [cartItems, totalPrices]);
 
-  // const subtotalWithExtras = calculateSubtotalWithExtras();
   useEffect(() => {
     const fetchTax = async () => {
       try {
@@ -540,6 +426,21 @@ function OrderOnline() {
   const handleBranchStatusChange = (isClosed) => {
     setBranchClosed(isClosed);
   };
+  const selectedAddress = useSelector((state) => state.addresses.selectedAddress);
+  useEffect(() => {
+    const storedAddress = localStorage.getItem("selectedAddress");
+    if (storedAddress) {
+      setCurrentAddress(JSON.parse(storedAddress));
+    } else if (selectedAddress) {
+      setCurrentAddress(setCurrentAddress);
+    }
+  }, [selectedAddress]); // Listen for changes to selectedAddress
+
+const handleOpenDialog = () => {
+  setOpenDialog(true);
+};
+
+
   return (
     <Stack
       className={"orderOnline"}
@@ -562,11 +463,111 @@ function OrderOnline() {
         {deliveryType === "pickup" ? (
           <Pickup onBranchStatusChange={handleBranchStatusChange} />
         ) : (
-          <Address
-            handlePlaceOrder={handlePlaceOrder}
-            handleCardClick={handleCardClick}
-            handleSelectLabel={handleSelectLabel}
-          />
+          <Stack spacing={3} sx={{ margin: "1rem" }}>
+            <Stack>
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  textAlign: "left",
+                  fontFamily: "cairo",
+                }}
+              >
+                Selected Delivery Address
+              </Typography>
+            </Stack>
+            {currentAddress ? (
+              <Card
+                sx={{
+                  mb: 3,
+                  // border: "2px solid #d32f2f", 
+                  backgroundColor: "#fff", 
+                }}
+              >
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  sx={{
+                    justifyContent: "space-between",
+                    background: "#f8f9fa!important",
+                    p: 2,
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "1.4rem",
+                      fontWeight: "500",
+                      lineHeight: "1.2",
+                    }}
+                  >
+                    {currentAddress.address_name}
+                  </Typography>
+                </Stack>
+
+                <Stack
+                  sx={{
+                    display: "flex",
+                    p: ".5rem",
+                    justifyContent: "space-between",
+                  }}
+                  direction={"row"}
+                  alignItems={"center"}
+                >
+                  <Stack sx={{ p: "1.5rem" }}>
+                    <Typography
+                      sx={{
+                        display: "flex",
+                        color: "#6c757d!important",
+                        fontSize: "1.3rem",
+                        fontWeight: "500",
+                        lineHeight: "1.2",
+                        textTransform: "capitalize",
+                      }}
+                    >
+                      {/* عرض بيانات العنوان بشكل ديناميكي */}
+                      {currentAddress.building ? `${currentAddress.building}, ` : ""}
+                      {currentAddress.street ? `${currentAddress.street}, ` : ""}
+                      {currentAddress.area?.area_name_en
+                        ? `${currentAddress.area.area_name_en}, `
+                        : ""}
+                      {currentAddress.city?.name_en ? `${currentAddress.city.name_en}, ` : ""}
+                      {currentAddress.building
+                        ? `Building: ${currentAddress.building} - `
+                        : ""}
+                      {currentAddress.floor ? `Floor: ${currentAddress.floor}` : ""}
+                    </Typography>
+                  </Stack>
+                </Stack>
+              </Card>
+            ) : (
+              <Typography>No address selected</Typography>
+            )}
+
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#d32f2f",
+                "&:hover": { backgroundColor: "#d32f2f" },
+              }}
+              onClick={handleOpenDialog}
+              // يمكنك اضافة الدالة الخاصة بتغيير العنوان هنا
+              // onClick={handleChangeAddress}
+            >
+              Change Address
+            </Button>
+            <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogContent>
+          <Stack spacing={2}>
+            <Address />
+          </Stack>
+        </DialogContent>
+      </Dialog>
+          </Stack>
         )}
       </div>
 
@@ -909,7 +910,6 @@ function OrderOnline() {
             </Stack>
           </Stack>
 
-
           <Stack
             sx={{
               display: "flex",
@@ -972,26 +972,26 @@ function OrderOnline() {
           </FormControl>
 
           <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleCheckout}
-          disabled={cartItems.length === 0 || branchClosed}
-          sx={{
-            mt: "1.5rem",
-            p: "1rem",
-            fontSize: "1.5rem",
-            backgroundColor:
-              cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
-            textTransform: "capitalize",
-            "&:hover": {
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleCheckout}
+            disabled={cartItems.length === 0 || branchClosed}
+            sx={{
+              mt: "1.5rem",
+              p: "1rem",
+              fontSize: "1.5rem",
               backgroundColor:
                 cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
-            },
-          }}
-        >
-          Place Order
-        </Button>
+              textTransform: "capitalize",
+              "&:hover": {
+                backgroundColor:
+                  cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
+              },
+            }}
+          >
+            Place Order
+          </Button>
           <Dialog
             open={openCreditCardDialog}
             onClose={handleCloseCreditCardDialog}
