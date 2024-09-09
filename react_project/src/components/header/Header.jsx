@@ -229,6 +229,7 @@ function Header({ token, handleLogout }) {
     "*",
     "/error",
     "/change-password",
+    "/locations"
   ].includes(location.pathname);
 
   const handleCartClick = () => {

@@ -27,6 +27,7 @@ import { useDispatch } from "react-redux";
 import { setTotalItems } from "./rtk/slices/orderSlice";
 import MyOrders from "./components/Menu/order/MyOrders/MyOrders";
 import { Dialog } from "@mui/material";
+import Locations from "./components/Locations/Locations";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = [
@@ -74,6 +75,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
           element={<ForgetPass setToken={setToken} />}
         />
         <Route path="/profile" element={<Profile userData={userData} />} />
+        <Route path="/Locations" element={<Locations userData={userData} />} />
         <Route
           path="/change-password"
           element={<ChangePasswordFromProfile />}

@@ -24,7 +24,7 @@ function Email() {
             fontWeight: "bold",
           }}
         >
-          E-mail.info@chilis.eg.com
+          chilis@eliteline-eg.com
         </Typography>
       </Stack>
     </Stack>

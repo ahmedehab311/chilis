@@ -50,7 +50,7 @@ function OrderOnline() {
   const api_token = localStorage.getItem("token");
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState("cash"); // New state for payment method
+  const [paymentMethod, setPaymentMethod] = useState("cash"); 
   const [openDialog, setOpenDialog] = useState(false);
   const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
 
@@ -63,7 +63,7 @@ function OrderOnline() {
   }, [cartItems]);
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    dispatch(updateCartItems(savedCart)); // تحديث السلة في Redux
+    dispatch(updateCartItems(savedCart)); 
   }, [dispatch]);
   const handleCounterChange = (index, newTotalPrice) => {
     // تأكد من أن `totalPrices` هو array
@@ -74,9 +74,9 @@ function OrderOnline() {
 
     const updatedPrices = [...totalPrices];
     updatedPrices[index] = newTotalPrice;
-    setTotalPrices(updatedPrices); // تحديث السعر الإجمالي في حالة state
+    setTotalPrices(updatedPrices); 
   };
-  // const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
+
 
   const handleRemoveItem = (index) => {
     console.log("Removing item at index:", index);

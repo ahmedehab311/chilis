@@ -38,19 +38,18 @@ function LinksHeader({ handleNavigation }) {
           About Us
         </Typography>
       </Link>
-      <Link href="#footer">
-        <Typography
-          sx={{
-            color: "#fff",
-            fontSize: "2.2rem",
-            fontFamily: "cairo",
-            fontWeight: "bold",
-          }}
-          onClick={() => handleNavigation("footer")}
-        >
-          Locations
-        </Typography>
-      </Link>
+      <Link component={RouterLink} to="/locations">
+  <Typography
+    sx={{
+      color: "#fff",
+      fontSize: "2.2rem",
+      fontFamily: "cairo",
+      fontWeight: "bold",
+    }}
+  >
+    Locations
+  </Typography>
+</Link>
       <Link href="#footer">
         <Typography
           sx={{
