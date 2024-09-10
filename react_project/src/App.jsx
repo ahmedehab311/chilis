@@ -28,6 +28,7 @@ import { setTotalItems } from "./rtk/slices/orderSlice";
 import MyOrders from "./components/Menu/order/MyOrders/MyOrders";
 import { Dialog } from "@mui/material";
 import Locations from "./components/Locations/Locations";
+import AboutUs from "./components/AboutUs/AboutUs";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = [
@@ -75,7 +76,8 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
           element={<ForgetPass setToken={setToken} />}
         />
         <Route path="/profile" element={<Profile userData={userData} />} />
-        <Route path="/Locations" element={<Locations userData={userData} />} />
+        <Route path="/locations" element={<Locations userData={userData} />} />
+        <Route path="/about-us" element={<AboutUs userData={userData} />} />
         <Route
           path="/change-password"
           element={<ChangePasswordFromProfile />}

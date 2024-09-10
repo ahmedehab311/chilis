@@ -25,7 +25,7 @@ function LinksHeader({ handleNavigation }) {
           Menu
         </Typography>
       </Link>{" "}
-      <Link href="#about">
+      <Link  component={RouterLink} to="/about-us">
         <Typography
           sx={{
             color: "#fff",

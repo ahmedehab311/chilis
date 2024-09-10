@@ -4,7 +4,7 @@
 // import { toast } from "react-toastify";
 
 // const ChangePassword = () => {
-//   const BASE_URL = "https://myres.me/chilis/api";
+
 //   const [form, setForm] = useState({
 //     email: "",
 //     old_password: "",

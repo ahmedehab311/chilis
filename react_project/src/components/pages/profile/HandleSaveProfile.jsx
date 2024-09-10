@@ -33,7 +33,7 @@ export const handleSave = async (user) => {
 // import axios from "axios";
 // import { toast } from "react-toastify";
 
-// const BASE_URL = "https://myres.me/chilis/api";
+
 
 // export const handleSave = async (user) => {
 //   // استرجاع التوكن من localStorage

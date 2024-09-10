@@ -602,6 +602,4 @@ function CheckOut({
 
 export default CheckOut;
 
-// https://myres.me/chilis/api/coupon/validation?coupon=chi2022&api_token={{api_token}}
-// items={"items":[{"id":26,"choices":[],"extras":[],"options":[],"count":1,"special":""}]
-// http://myres.me/chilis-dev
+

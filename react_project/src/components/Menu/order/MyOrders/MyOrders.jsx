@@ -23,12 +23,12 @@ function MyOrders({ currentStatus }) {
   const [activeSection, setActiveSection] = useState("Pending");
   const dispatch = useDispatch();
   const orderDetails = useSelector((state) => state.orderDetails.orderDetails);
-  console.log("Order Details from Redux:", orderDetails);
+  // console.log("Order Details from Redux:", orderDetails);
 
   const { orders, status, error } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    console.log("Selected Order ID:", selectedOrderId);
+    // console.log("Selected Order ID:", selectedOrderId);
     if (selectedOrderId) {
       dispatch(
         fetchOrderDetails({
@@ -52,9 +52,9 @@ function MyOrders({ currentStatus }) {
   };
 
   const filterOrdersByStatus = (status) => {
-    console.log("Filtering by status:", status);
+    // console.log("Filtering by status:", status);
     return orders.filter((order) => {
-      console.log("Order Status:", order.status);
+      // console.log("Order Status:", order.status);
       return order.status.toLowerCase() === status.toLowerCase();
     });
   };
@@ -773,7 +773,7 @@ function OrderCard({ order, onViewDetailsClick }) {
                 >
                   {order.order_id}
                 </Typography>
-                <Typography
+                {/* <Typography
                   sx={{
                     fontSize: "2rem",
                     fontWeight: "600",
@@ -782,7 +782,7 @@ function OrderCard({ order, onViewDetailsClick }) {
                   }}
                 >
                   {order.status}
-                </Typography>
+                </Typography> */}
               </Stack>
               <Typography
                 onClick={() => onViewDetailsClick(order)}

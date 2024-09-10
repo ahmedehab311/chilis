@@ -323,7 +323,9 @@ function SmallMediaQuery({
                 Menu
               </Typography>
             </Link>
-            <Link href="#about" onClick={() => handleNavigation("about")}>
+            <Link component={RouterLink}
+                  to="/about-us"
+                  onClick={closeDrawer}>
               <Typography
                 sx={{
                   color: "#fff",
@@ -335,7 +337,11 @@ function SmallMediaQuery({
                 About Us
               </Typography>
             </Link>
-            <Link href="#footer" onClick={() => handleNavigation("footer")}>
+            <Link
+              component={RouterLink}
+                  to="/locations"
+                  onClick={closeDrawer}
+              >
               <Typography
                 sx={{
                   color: "#fff",
