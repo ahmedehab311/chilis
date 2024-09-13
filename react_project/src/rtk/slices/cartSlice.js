@@ -1,54 +1,344 @@
+// // // import { createSlice } from "@reduxjs/toolkit";
+
+// // // const initialState = {
+// // //   items: [],
+// // //   totalItems: 0,
+// // // };
+
+// // // const cartSlice = createSlice({
+// // //   name: "cart",
+// // //   initialState,
+// // //   reducers: {
+// // //     addItemToCart(state, action) {
+// // //       state.items.push(action.payload);
+// // //       localStorage.setItem("cart", JSON.stringify(state.items));
+// // //       state.totalItems = state.items.length;
+// // //     },
+// // //     removeItemFromCart(state, action) {
+// // //       state.items.splice(action.payload, 1);
+// // //       state.totalItems = state.items.length;
+// // //     },
+// // //     updateCartItems: (state, action) => {
+// // //       if (Array.isArray(action.payload)) {
+// // //         state.items = action.payload;
+// // //         state.totalItems = action.payload.reduce(
+// // //           (total, item) => total + item.quantity,
+// // //           0
+// // //         );
+// // //       } else {
+// // //         // console.error("Payload is not an array:", action.payload);
+// // //       }
+// // //     },
+// // //     clearCart(state) {
+// // //       localStorage.removeItem("cart");
+// // //       state.items = [];
+// // //       state.totalItems = 0;
+// // //     },
+// // //     updateItemQuantity: (state, action) => {
+// // //       const { index, quantity } = action.payload;
+// // //       if (index >= 0 && index < state.items.length) {
+// // //         state.items[index].quantity = quantity;
+// // //         state.totalItems = state.items.reduce(
+// // //           (total, item) => total + item.quantity,
+// // //           0
+// // //         );
+// // //         localStorage.setItem("cart", JSON.stringify(state.items));
+// // //       }
+// // //     },
+
+// // //   },
+// // // });
+
+// // // export const {
+// // //   addItemToCart,
+// // //   removeItemFromCart,
+// // //   clearCart,
+// // //   updateCartItems,
+// // //   updateItemQuantity,
+// // // } = cartSlice.actions;
+// // // export default cartSlice.reducer;
+
+// // import { createSlice } from "@reduxjs/toolkit";
+
+// // const initialState = {
+// //   items: [],
+// //   totalItems: 0,
+// // };
+
+// // const cartSlice = createSlice({
+// //   name: "cart",
+// //   initialState,
+// //   reducers: {
+// //     addItemToCart(state, action) {
+// //       state.items.push(action.payload);
+// //       state.totalItems = state.items.reduce(
+// //         (total, item) => total + item.quantity,
+// //         0
+// //       );
+// //     },
+// //     removeItemFromCart(state, action) {
+// //       state.items.splice(action.payload, 1);
+// //       state.totalItems = state.items.reduce(
+// //         (total, item) => total + item.quantity,
+// //         0
+// //       );
+// //     },
+// //     updateCartItems: (state, action) => {
+// //       if (Array.isArray(action.payload)) {
+// //         state.items = action.payload;
+// //         state.totalItems = action.payload.reduce(
+// //           (total, item) => total + item.quantity,
+// //           0
+// //         );
+// //       }
+// //     },
+// //     clearCart(state) {
+// //       state.items = [];
+// //       state.totalItems = 0;
+// //     },
+// //     updateItemQuantity(state, action) {
+// //       const { index, quantity } = action.payload;
+// //       if (index >= 0 && index < state.items.length) {
+// //         state.items[index].quantity = quantity;
+// //         state.totalItems = state.items.reduce(
+// //           (total, item) => total + item.quantity,
+// //           0
+// //         );
+// //       }
+// //     }
+
+// //   },
+// // });
+// // export const {
+// //   addItemToCart,
+// //   removeItemFromCart,
+// //   clearCart,
+// //   updateCartItems,
+// //   updateItemQuantity,
+// // } = cartSlice.actions;
+// // export default cartSlice.reducer;
+
+// import { createSlice } from "@reduxjs/toolkit";
+
+// const initialState = {
+//   items: [],
+//   totalItems: 0,
+// };
+
+// const cartSlice = createSlice({
+//   name: "cart",
+//   initialState,
+//   reducers: {
+//     addItemToCart(state, action) {
+//       console.log("Item added to cart:", action.payload); // Debugging line
+//       state.items.push(action.payload);
+//       state.totalItems = state.items.reduce(
+//         (total, item) => total + item.quantity,
+//         0
+//       );
+//     },
+//     removeItemFromCart(state, action) {
+//       state.items.splice(action.payload, 1);
+//       state.totalItems = state.items.reduce(
+//         (total, item) => total + item.quantity,
+//         0
+//       );
+//     },
+//     updateCartItems: (state, action) => {
+//       if (Array.isArray(action.payload)) {
+//         state.items = action.payload;
+//         state.totalItems = action.payload.reduce(
+//           (total, item) => total + item.quantity,
+//           0
+//         );
+//       }
+//     },
+//     clearCart(state) {
+//       state.items = [];
+//       state.totalItems = 0;
+//     },
+//     updateItemQuantity(state, action) {
+//       const { index, quantity } = action.payload;
+//       if (index >= 0 && index < state.items.length) {
+//         state.items[index].quantity = quantity;
+//         state.totalItems = state.items.reduce(
+//           (total, item) => total + item.quantity,
+//           0
+//         );
+//       }
+//     },
+//   },
+// });
+
+// export const {
+//   addItemToCart,
+//   removeItemFromCart,
+//   clearCart,
+//   updateCartItems,
+//   updateItemQuantity,
+// } = cartSlice.actions;
+
+// export default cartSlice.reducer;
+
+// import { createSlice } from "@reduxjs/toolkit";
+
+// const initialState = {
+//   items: JSON.parse(localStorage.getItem("cart")) || [],
+//   totalItems: 0,
+// };
+// const cartSlice = createSlice({
+//   name: "cart",
+//   initialState,
+//   reducers: {
+//     addItemToCart(state, action) {
+//       state.items.push(action.payload);
+//       state.totalItems = state.items.reduce(
+//         (total, item) => total + item.quantity,
+//         0
+//       );
+
+//       // تحديث localStorage
+//       localStorage.setItem("cart", JSON.stringify(state.items));
+//     },
+//     updateCartItems: (state, action) => {
+//       if (Array.isArray(action.payload)) {
+//         state.items = action.payload;
+//         state.totalItems = action.payload.reduce(
+//           (total, item) => total + item.quantity,
+//           0
+//         );
+//       }
+
+//       // تحديث localStorage
+//       localStorage.setItem("cart", JSON.stringify(state.items));
+//     },
+//     removeItemFromCart(state, action) {
+//       state.items.splice(action.payload, 1);
+//       state.totalItems = state.items.reduce(
+//         (total, item) => total + item.quantity,
+//         0
+//       );
+
+//       // تحديث localStorage
+//       localStorage.setItem("cart", JSON.stringify(state.items));
+//     },
+//     clearCart(state) {
+//       state.items = [];
+//       state.totalItems = 0;
+
+//       // مسح localStorage
+//       localStorage.removeItem("cart");
+//     }
+//   }
+// });
+
+// export const {
+//   addItemToCart,
+//   removeItemFromCart,
+//   clearCart,
+//   updateCartItems,
+//   updateItemQuantity,
+// } = cartSlice.actions;
+
+// export default cartSlice.reducer;
+
 import { createSlice } from "@reduxjs/toolkit";
 
+// const initialState = {
+//   items: JSON.parse(localStorage.getItem("cart")) || [],
+//   totalItems: (JSON.parse(localStorage.getItem("cart")) || []).reduce(
+//     (total, item) => total + item.quantity,
+//     0
+//   ),
+// };
 const initialState = {
-  items: [],
-  totalItems: 0,
+  items: JSON.parse(localStorage.getItem("cart")) || [],
+  totalItems: (JSON.parse(localStorage.getItem("cart")) || []).reduce(
+    (total, item) => total + item.quantity,
+    0
+  ),
 };
-
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
-    addItemToCart(state, action) {
-      state.items.push(action.payload);
-      localStorage.setItem("cart", JSON.stringify(state.items));
-      state.totalItems = state.items.length;
-    },
-    removeItemFromCart(state, action) {
-      state.items.splice(action.payload, 1);
-      state.totalItems = state.items.length;
-    },
-    // updateCartItems: (state, action) => {
-    //   state.totalItems = action.payload;
+    // addItemToCart(state, action) {
+    //   state.items.push(action.payload);
+    //   state.totalItems = state.items.reduce(
+    //     (total, item) => total + item.quantity,
+    //     0
+    //   );
+    //   localStorage.setItem("cart", JSON.stringify(state.items));
     // },
-    updateCartItems: (state, action) => {
+    addItemToCart(state, action) {
+      const newItem = action.payload;
+      const existingItemIndex = state.items.findIndex(
+        (item) =>
+          item.id === newItem.id &&
+          JSON.stringify(item.option) === JSON.stringify(newItem.option) &&
+          JSON.stringify(item.extras) === JSON.stringify(newItem.extras)
+      );
+
+      if (existingItemIndex !== -1) {
+        // إذا كان العنصر موجودًا، قم بزيادة الكمية فقط
+        state.items[existingItemIndex].quantity += newItem.quantity;
+      } else {
+        // إذا لم يكن موجودًا، أضف العنصر كعنصر جديد
+        state.items.push(newItem);
+      }
+
+      state.totalItems = state.items.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+      localStorage.setItem("cart", JSON.stringify(state.items));
+    },
+
+    updateCartItems(state, action) {
       if (Array.isArray(action.payload)) {
         state.items = action.payload;
         state.totalItems = action.payload.reduce(
           (total, item) => total + item.quantity,
           0
         );
-      } else {
-        // console.error("Payload is not an array:", action.payload);
       }
+      localStorage.setItem("cart", JSON.stringify(state.items));
     },
-    clearCart(state) {
-      localStorage.removeItem("cart");
-      state.items = [];
-      state.totalItems = 0;
+    removeItemFromCart(state, action) {
+      state.items.splice(action.payload, 1);
+      state.totalItems = state.items.reduce(
+        (total, item) => total + item.quantity,
+        0
+      );
+      localStorage.setItem("cart", JSON.stringify(state.items));
     },
+
     updateItemQuantity: (state, action) => {
-      const { index, quantity } = action.payload;
-      if (index >= 0 && index < state.items.length) {
-        state.items[index].quantity = quantity;
+      const { itemId, quantity } = action.payload;
+      const item = state.items.find((item) => item.id === itemId);
+      if (item) {
+        item.quantity = quantity;
         state.totalItems = state.items.reduce(
           (total, item) => total + item.quantity,
           0
         );
+        console.log("Item updated:", itemId, "Quantity:", quantity);
         localStorage.setItem("cart", JSON.stringify(state.items));
       }
     },
-    
+
+
+    clearCart(state) {
+      state.items = [];
+      state.totalItems = 0;
+
+      // إزالة الكارت من localStorage
+      localStorage.removeItem("cart");
+
+      // تحقق أن الـ Redux تم تحديثه
+      console.log("Redux cleared:", state.items);
+      console.log("localStorage cleared:", localStorage.getItem("cart"));
+    },
   },
 });
 
@@ -59,4 +349,5 @@ export const {
   updateCartItems,
   updateItemQuantity,
 } = cartSlice.actions;
+
 export default cartSlice.reducer;

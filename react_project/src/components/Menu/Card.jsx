@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Box, Stack } from "@mui/material";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -28,13 +29,13 @@ function CardContent() {
   const [orderDetails, setOrderDetails] = useState(null);
   const [price, setPrice] = useState(null);
   const [dataExtra, setDataExtra] = useState([]);
-
+  // const [quantity, setQuantity] = useState(1);
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {
         const data = await fetchData();
         setMenuItems(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.error("Error fetching data: ", error);
       } finally {
@@ -60,7 +61,7 @@ function CardContent() {
 
   const handleCardClick = (index) => {
     setSelectedItem(menuItems[index]);
-    console.log("menuItems", menuItems[index]);
+    // console.log("menuItems", menuItems[index]);
     setShowCards(false);
   };
 
@@ -88,8 +89,14 @@ function CardContent() {
   };
   const handleCloseDialog = () => {
     setOpenDialog(false);
+    // setQuantity(1);
   };
+  const location = useLocation();
 
+useEffect(() => {
+  // عندما يتغير المسار، أغلق الـ Dialog وأعد تعيين العنصر المحدد
+  setOpenDialog(false);
+}, [location.pathname]);
   // مثال على كيفية تعيين selectedExtras و selectedOption عند اختيارها
 
   return (

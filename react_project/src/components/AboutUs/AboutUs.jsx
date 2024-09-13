@@ -59,7 +59,7 @@ function AboutUs() {
         />
         <Typography
           sx={{
-            fontSize: { xs: "1.2rem", md: "1.6rem" },
+            fontSize: { xs: "1.5rem", md: "1.8rem" },
             color: "#333",
             fontWeight: "bold",
             lineHeight: "1.6",

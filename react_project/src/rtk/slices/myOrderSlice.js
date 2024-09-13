@@ -8,7 +8,7 @@ export const fetchOrderHistory = createAsyncThunk(
 
   async () => {
     const getApiToken = () => localStorage.getItem("token");
-    console.log(getApiToken());
+    // console.log(getApiToken());
     try {
       const apiToken = getApiToken();
       if (!apiToken) {

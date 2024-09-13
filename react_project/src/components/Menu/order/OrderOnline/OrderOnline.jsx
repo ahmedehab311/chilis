@@ -28,7 +28,10 @@ import { API_TAX } from "../../apis&fetchData/ApiLinks";
 import PaymentPage from "../OrderOnline/checkOut/PaymentPage";
 import axios from "axios";
 import Coupun from "./checkOut/Coupon/Coupun";
-import { setSelectedAddress } from "../../../../rtk/slices/adderssSlice";
+import {
+  setSelectedAddress,
+  fetchAddresses,
+} from "../../../../rtk/slices/adderssSlice";
 import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
 import {
   clearCart,
@@ -50,10 +53,16 @@ function OrderOnline() {
   const api_token = localStorage.getItem("token");
   const [tax, setTax] = useState(0);
   const [totalWithTax, setTotalWithTax] = useState(0);
-  const [paymentMethod, setPaymentMethod] = useState("cash"); 
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [openDialog, setOpenDialog] = useState(false);
   const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
-
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [selectedCity, setSelectedCity] = useState("");
+  const [currentAddress, setCurrentAddress] = useState({
+    deliveryCity: "",
+    deliveryArea: "",
+  });
+  
   useEffect(() => {
     const updatedPrices = {};
     cartItems.forEach((item, index) => {
@@ -62,8 +71,13 @@ function OrderOnline() {
     setTotalPrices(updatedPrices);
   }, [cartItems]);
   useEffect(() => {
+    // استرجاع السلة من localStorage
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
-    dispatch(updateCartItems(savedCart)); 
+
+    // تحديث Redux بالسلة المحفوظة إذا كانت موجودة
+    if (savedCart.length > 0) {
+      dispatch(updateCartItems(savedCart));
+    }
   }, [dispatch]);
   const handleCounterChange = (index, newTotalPrice) => {
     // تأكد من أن `totalPrices` هو array
@@ -74,29 +88,23 @@ function OrderOnline() {
 
     const updatedPrices = [...totalPrices];
     updatedPrices[index] = newTotalPrice;
-    setTotalPrices(updatedPrices); 
+    setTotalPrices(updatedPrices);
   };
 
-
   const handleRemoveItem = (index) => {
-    console.log("Removing item at index:", index);
-
     // حذف العنصر من Redux store
     dispatch(removeItemFromCart(index));
 
     // قراءة السلة من localStorage
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    console.log("Cart before removal:", cart);
+    // console.log("Cart before removal:", cart);
 
     if (index >= 0 && index < cart.length) {
       // حذف العنصر من localStorage
       cart.splice(index, 1);
       localStorage.setItem("cart", JSON.stringify(cart));
-      console.log("Cart after removal:", cart);
+   
     }
-
-    // تحديث عدد العناصر في البادج بعد التحديث
-    console.log("Updated badge count:", cart.length);
 
     // تحديث الأسعار بعد حذف العنصر
     const updatedPrices = {};
@@ -105,9 +113,8 @@ function OrderOnline() {
     });
 
     setTotalPrices(updatedPrices);
-    console.log("Prices after removal:", updatedPrices);
+    // console.log("Prices after removal:", updatedPrices);
   };
-  0;
 
   const subtotal = Object.values(totalPrices).reduce(
     (acc, price) => acc + price,
@@ -116,12 +123,53 @@ function OrderOnline() {
   const deliveryFee = 50;
   const totalToPay = subtotal + deliveryFee;
 
-  // diolg
-  const [selectedCity, setSelectedCity] = useState("");
-  const [currentAddress, setCurrentAddress] = useState({
-    deliveryCity: "",
-    deliveryArea: "",
-  });
+  
+
+  // تخزين activeIndex
+
+  useEffect(() => {
+    if (activeIndex !== null && !isNaN(activeIndex)) {
+      localStorage.setItem("activeIndex", activeIndex.toString());
+    }
+  }, [activeIndex]);
+
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+  // في OrderOnline
+
+  useEffect(() => {
+    const initialPrices = cartItems.map((item) => item.price * item.quantity);
+    setTotalPrices(initialPrices);
+  }, [cartItems]);
+  const handleQuantityChange = (itemId, newQuantity) => {
+    // تحديث الكمية في Redux أو الحالة المناسبة
+    dispatch(updateItemQuantity({ itemId, quantity: newQuantity }));
+
+    // تحديث totalPrices بناءً على الكمية الجديدة
+    setTotalPrices((prevPrices) => {
+      if (!Array.isArray(prevPrices)) {
+        // ضمان أن prevPrices هو مصفوفة
+        return [];
+      }
+      const updatedPrices = [...prevPrices];
+      const itemIndex = cartItems.findIndex((item) => item.id === itemId);
+      if (itemIndex > -1) {
+        const item = cartItems[itemIndex];
+        updatedPrices[itemIndex] = item.price * newQuantity;
+      }
+      return updatedPrices;
+    });
+  };
+
+  // checkout
+
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -160,9 +208,10 @@ function OrderOnline() {
     }
   }, [selectedCity]);
 
+
   const [addressData, setAddressData] = useState([]);
 
-  const [activeIndex, setActiveIndex] = useState(null);
+ 
 
   useEffect(() => {
     const savedAddresses = localStorage.getItem("addresses");
@@ -182,72 +231,60 @@ function OrderOnline() {
     }
   }, [addressData]);
 
-  // تخزين activeIndex
 
+  const addresses = useSelector((state) => state.addresses.items);
 
   useEffect(() => {
-    if (activeIndex !== null && !isNaN(activeIndex)) {
-      localStorage.setItem("activeIndex", activeIndex.toString());
+    // استرجاع العنوان من localStorage عند تحميل الصفحة
+    const savedAddress = JSON.parse(localStorage.getItem("selectedAddress"));
+    if (savedAddress) {
+      dispatch(setSelectedAddress(savedAddress));
     }
-  }, [activeIndex]);
+  }, [dispatch]);
+  const address = useSelector((state) => state.addresses.selectedAddress);
 
-
-
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser) {
-      setUser(storedUser);
+    dispatch(fetchAddresses());
+  }, [dispatch]);
+  useEffect(() => {
+    const savedAddress = localStorage.getItem("selectedAddress");
+    if (savedAddress) {
+      dispatch(setSelectedAddress(JSON.parse(savedAddress)));
+    } else if (addresses.length > 0) {
+      localStorage.setItem("selectedAddress", JSON.stringify(addresses[0]));
+      dispatch(setSelectedAddress(addresses[0]));
     }
-  }, []);
-
-  // في OrderOnline
-
+  }, [addresses, dispatch]);
 
   useEffect(() => {
-    const initialPrices = cartItems.map((item) => item.price * item.quantity);
-    setTotalPrices(initialPrices);
-  }, [cartItems]);
-  const handleQuantityChange = (itemId, newQuantity) => {
-    // تحديث الكمية في Redux أو الحالة المناسبة
-    dispatch(updateItemQuantity({ itemId, quantity: newQuantity }));
+    const storedAddress = localStorage.getItem("selectedAddress");
+  
+    if (storedAddress) {
+      const parsedAddress = JSON.parse(storedAddress);
+  
+      // طباعة العنوان الذي تم تحميله
+      // console.log("Address loaded from localStorage:", parsedAddress);
+  
+      // تحديث الحالة في Redux
+      dispatch(setSelectedAddress(parsedAddress));
+    }
+  }, [dispatch]);
+  
 
-    // تحديث totalPrices بناءً على الكمية الجديدة
-    setTotalPrices((prevPrices) => {
-      if (!Array.isArray(prevPrices)) {
-        // ضمان أن prevPrices هو مصفوفة
-        return [];
-      }
-      const updatedPrices = [...prevPrices];
-      const itemIndex = cartItems.findIndex((item) => item.id === itemId);
-      if (itemIndex > -1) {
-        const item = cartItems[itemIndex];
-        updatedPrices[itemIndex] = item.price * newQuantity;
-      }
-      return updatedPrices;
-    });
-  };
+  useEffect(() => {
+    if (user) {
+      // إذا كان هناك مستخدم مخزن
+      // console.log("Current logged in user:", user);
 
-  // checkout
+      // عند تسجيل دخول مستخدم جديد، إزالة العنوان المخزن
+      localStorage.removeItem("selectedAddress");
+      localStorage.removeItem("selectedAddressId");
 
-const addresses = useSelector((state) => state.addresses.items);
-console.log("addresses",addresses);
-
-const [address, setAddress] = useState(null);
-console.log("address",address);
-
-useEffect(() => {
-  // استرجاع الكائن الكامل من localStorage
-  const storedAddress = localStorage.getItem("selectedAddress");
-
-  if (storedAddress) {
-    const parsedAddress = JSON.parse(storedAddress); // استرجاع الكائن الكامل
-    setAddress(parsedAddress);
-    dispatch(setSelectedAddress(parsedAddress)); // تعيين الكائن الكامل في Redux
-  }
-}, [dispatch]);
-
+      // تحديث Redux لإعادة تعيين العنوان
+      dispatch(setSelectedAddress(null));
+    }
+  }, [user, dispatch]);
 
   const selectedOption = useSelector((state) => state.info.selectedOption);
   const idInfo = useSelector((state) => state.info.idInfo);
@@ -278,12 +315,17 @@ useEffect(() => {
     }
   }, []);
 
+
+  
   const handleCheckout = () => {
     console.log("addressData", addressData);
-    if (!address.id || address.id === null) {
+    console.log("address.id", address?.id); // استخدم `?.` للتأكد من وجود `address`
+
+    if (!address?.id) {
       toast.error("Please select a delivery address before proceeding.");
       return;
     }
+
     if (addressData.length === 1 && !address.id) {
       dispatch(setSelectedAddress(addressData[activeIndex]));
     }
@@ -294,11 +336,10 @@ useEffect(() => {
       setOpenCreditCardDialog(true);
       return;
     }
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const ids = cart.map((item) => item.id);
 
-    // const getIdInfo = localStorage.getItem("idInfo");
     const orders = cartItems.map((item) => ({
       id: item.id,
       special: specialNotes[item.id] || "",
@@ -309,16 +350,23 @@ useEffect(() => {
       choices: [],
       options: item.option ? [item.option.id] : [],
     }));
+
+    // تحقق من وجود `area` و `branches` قبل الوصول إليها
+    if (!address?.area?.id || !address?.branches?.[0]?.id) {
+      toast.error("Please select a valid area and branch.");
+      return;
+    }
+
     const dataToSend = {
       delivery_type: 1,
       payment: paymentMethod === "cash" ? 1 : 2,
       lat: deliveryType === 1 ? address.lat : 0,
       lng: deliveryType === 1 ? address.lng : 0,
-      address: address.id,
-      area:  address.area.id ,
-      branch: address.branches[0].id ,
+      address: currentAddress.id,
+      area: address.area?.id, // تأكد من وجود `area.id`
+      branch: address.branches?.[0]?.id, // تأكد من وجود `branches[0].id`
       api_token: api_token,
-      items: JSON.stringify({ items: orders }),
+   items: JSON.stringify({ items: orders }),
       device_id: "",
       notes: "",
       time: "2024-08-20 14:07:07",
@@ -327,47 +375,46 @@ useEffect(() => {
       gift_cards: "",
       coins: "00.00",
     };
-console.log("area from checkout" , address.area.id)
-console.log("branches from checkout" , address.branches.id)
+
     console.log("Checkout data:", dataToSend);
+
     const params = new URLSearchParams(dataToSend);
     axios
-    .post(`${BASE_URL}/orders/create?${params.toString()}`)
-    .then((response) => {
-      if (response.data.response) {
-        console.log(response.data);
-        localStorage.setItem("orderSuccess", "true");
-        localStorage.removeItem("idInfo");
-  
-        toast.success(
-          "Your order has been placed successfully. It will be delivered as soon as possible."
-        );
-  
-        dispatch(clearCart());
-      } else {
-        toast.error(
-          "An error occurred while processing your order. Please try again."
-        );
-      }
-    })
-    .catch((error) => {
-      if (error.response) {
-        // طباعة جميع تفاصيل الـ response
-        console.error("Error response data:", error.response.data);
-        console.error("Error response status:", error.response.status);
-        console.error("Error response headers:", error.response.headers);
-      } else if (error.request) {
-        // إذا تم إرسال الطلب لكن لم يتلقَ الرد
-        console.error("Error request:", error.request);
-      } else {
-        // خطأ حدث أثناء إعداد الطلب
-        console.error("Error message:", error.message);
-      }
-      console.error("Error config:", error.config);
-  
-      toast.error("Error placing order. Please try again.");
-    });
+      .post(`${BASE_URL}/orders/create?${params.toString()}`)
+      .then((response) => {
+        if (response.data.response) {
+          console.log(response.data);
+          localStorage.setItem("orderSuccess", "true");
+          localStorage.removeItem("idInfo");
+
+          toast.success(
+            "Your order has been placed successfully. It will be delivered as soon as possible."
+          );
+
+          dispatch(clearCart());
+        } else {
+          toast.error(
+            "An error occurred while processing your order. Please try again."
+          );
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error("Error response data:", error.response.data);
+          console.error("Error response status:", error.response.status);
+          console.error("Error response headers:", error.response.headers);
+          toast.error(`Error placing order: ${error.response.data.message || 'Please try again.'}`);
+        } else if (error.request) {
+          console.error("Error request:", error.request);
+          toast.error("Error placing order: No response from server.");
+        } else {
+          console.error("Error message:", error.message);
+          toast.error(`Error placing order: ${error.message}`);
+        }
+        console.error("Error config:", error.config);
+      });
   };
+
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
   const handleCloseCreditCardDialog = () => {
@@ -426,7 +473,9 @@ console.log("branches from checkout" , address.branches.id)
   const handleBranchStatusChange = (isClosed) => {
     setBranchClosed(isClosed);
   };
-  const selectedAddress = useSelector((state) => state.addresses.selectedAddress);
+  const selectedAddress = useSelector(
+    (state) => state.addresses.selectedAddress
+  );
   useEffect(() => {
     const storedAddress = localStorage.getItem("selectedAddress");
     if (storedAddress) {
@@ -436,10 +485,9 @@ console.log("branches from checkout" , address.branches.id)
     }
   }, [selectedAddress]); // Listen for changes to selectedAddress
 
-const handleOpenDialog = () => {
-  setOpenDialog(true);
-};
-
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
 
   return (
     <Stack
@@ -473,15 +521,16 @@ const handleOpenDialog = () => {
                   fontFamily: "cairo",
                 }}
               >
-                Selected Delivery Address
+                Delivery Address
               </Typography>
             </Stack>
-            {currentAddress ? (
+
+            {/* تحقق من حالة العنوان */}
+            {currentAddress && currentAddress.address_name ? (
               <Card
                 sx={{
                   mb: 3,
-                  // border: "2px solid #d32f2f", 
-                  backgroundColor: "#fff", 
+                  backgroundColor: "#fff",
                 }}
               >
                 <Stack
@@ -525,16 +574,24 @@ const handleOpenDialog = () => {
                       }}
                     >
                       {/* عرض بيانات العنوان بشكل ديناميكي */}
-                      {currentAddress.building ? `${currentAddress.building}, ` : ""}
-                      {currentAddress.street ? `${currentAddress.street}, ` : ""}
+                      {currentAddress.building
+                        ? `${currentAddress.building}, `
+                        : ""}
+                      {currentAddress.street
+                        ? `${currentAddress.street}, `
+                        : ""}
                       {currentAddress.area?.area_name_en
                         ? `${currentAddress.area.area_name_en}, `
                         : ""}
-                      {currentAddress.city?.name_en ? `${currentAddress.city.name_en}, ` : ""}
+                      {currentAddress.city?.name_en
+                        ? `${currentAddress.city.name_en}, `
+                        : ""}
                       {currentAddress.building
                         ? `Building: ${currentAddress.building} - `
                         : ""}
-                      {currentAddress.floor ? `Floor: ${currentAddress.floor}` : ""}
+                      {currentAddress.floor
+                        ? `Floor: ${currentAddress.floor}`
+                        : ""}
                     </Typography>
                   </Stack>
                 </Stack>
@@ -550,23 +607,21 @@ const handleOpenDialog = () => {
                 "&:hover": { backgroundColor: "#d32f2f" },
               }}
               onClick={handleOpenDialog}
-              // يمكنك اضافة الدالة الخاصة بتغيير العنوان هنا
-              // onClick={handleChangeAddress}
             >
-              Change Address
+              change delivery address
             </Button>
             <Dialog
-        open={openDialog}
-        onClose={handleCloseDialog}
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogContent>
-          <Stack spacing={2}>
-            <Address />
-          </Stack>
-        </DialogContent>
-      </Dialog>
+              open={openDialog}
+              onClose={handleCloseDialog}
+              fullWidth
+              maxWidth="sm"
+            >
+              <DialogContent>
+                <Stack spacing={2}>
+                  <Address />
+                </Stack>
+              </DialogContent>
+            </Dialog>
           </Stack>
         )}
       </div>

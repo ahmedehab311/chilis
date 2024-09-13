@@ -17,7 +17,11 @@ import {
   Checkbox,
 } from "@mui/material";
 import { CounterDiaolgButton, AddToCardButton } from "../index";
-import { addItemToCart,updateItemQuantity } from '../../../rtk/slices/cartSlice.js'; 
+import {
+  addItemToCart,
+  updateItemQuantity,
+  updateCartItems
+} from "../../../rtk/slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 function DialogItem({
@@ -37,49 +41,315 @@ function DialogItem({
 
   const [selectedExtras, setSelectedExtras] = useState([]);
   const [selectedOption, setSelectedOption] = useState("");
-  const totalItems = useSelector((state) => state.cart.totalItems);
+  // const totalItems = useSelector((state) => state.cart.totalItems);
 
 
+
+  // const handleAddToCart = () => {
+
+  //   handleCloseDialog();
+
+  //   const itemDetailsToAdd = {
+  //     id: itemDetails?.id || "default-id",
+  //     name: itemDetails?.name_en || "Default Name",
+  //     price: parseFloat(price) || 0,
+  //     quantity: quantity,
+  //     extras: Array.isArray(selectedExtras)
+  //       ? selectedExtras.map((extra) => ({
+  //           id: extra.id,
+  //           name: extra.description_en,
+  //           price: parseFloat(extra.price_en),
+  //         }))
+  //       : [],
+  //     option: selectedOption
+  //       ? {
+  //           id: selectedOption.id,
+  //           name: selectedOption.name_en,
+  //         }
+  //       : null,
+  //     totalPrice:
+  //       (parseFloat(price) || 0) +
+  //       selectedExtras.reduce(
+  //         (sum, extra) => sum + parseFloat(extra.price_en),
+  //         0
+  //       ),
+  //   };
+
+  //   dispatch(addItemToCart(itemDetailsToAdd));
+
+  // };
+
+
+  // const handleAddToCart = () => {
+  //   handleCloseDialog();
   
-  const [quantity, setQuantity] = useState(1); 
+   
+  //   const quantityToAdd = quantity || 1;  
+  //   const itemDetailsToAdd = {
+  //     id: itemDetails?.id || "default-id",
+  //     name: itemDetails?.name_en || "Default Name",
+  //     price: parseFloat(price) || 0,
+  //     quantity: quantityToAdd,  // استخدم الكمية الحالية أو الافتراضية
+  //     extras: Array.isArray(selectedExtras)
+  //       ? selectedExtras.map((extra) => ({
+  //           id: extra.id,
+  //           name: extra.description_en,
+  //           price: parseFloat(extra.price_en),
+  //         }))
+  //       : [],
+  //     option: selectedOption
+  //       ? {
+  //           id: selectedOption.id,
+  //           name: selectedOption.name_en,
+  //         }
+  //       : null,
+  //     totalPrice:
+  //       (parseFloat(price) || 0) +
+  //       selectedExtras.reduce(
+  //         (sum, extra) => sum + parseFloat(extra.price_en),
+  //         0
+  //       ),
+  //   };
+  
+  //   console.log("Adding item to cart:", itemDetailsToAdd);
+  
+  //   // إضافة العنصر إلى السلة
+  //   dispatch(addItemToCart(itemDetailsToAdd));
+  //   setQuantity(1);
+  // };
+  
+  // const handleAddToCart = () => {
+  //   handleCloseDialog();
+  
+  //   const quantityToAdd = quantity || 1;
+  
+  //   const itemDetailsToAdd = {
+  //     id: itemDetails?.id || "default-id",
+  //     name: itemDetails?.name_en || "Default Name",
+  //     price: parseFloat(price) || 0,
+  //     quantity: quantityToAdd,  // استخدم الكمية الحالية أو الافتراضية
+  //     extras: Array.isArray(selectedExtras)
+  //       ? selectedExtras.map((extra) => ({
+  //           id: extra.id,
+  //           name: extra.description_en,
+  //           price: parseFloat(extra.price_en),
+  //         }))
+  //       : [],
+  //     option: selectedOption
+  //       ? {
+  //           id: selectedOption.id,
+  //           name: selectedOption.name_en,
+  //         }
+  //       : null,
+  //     totalPrice:
+  //       (parseFloat(price) || 0) +
+  //       selectedExtras.reduce(
+  //         (sum, extra) => sum + parseFloat(extra.price_en),
+  //         0
+  //       ),
+  //   };
+  
+  //   // عرض معلومات العنصر في الـ console للمساعدة في التصحيح
+  //   console.log("Adding item to cart:", itemDetailsToAdd);
+  
+  //   // إضافة العنصر إلى السلة
+  //   dispatch(addItemToCart(itemDetailsToAdd));
+  
+  //   // إعادة تعيين الكمية إلى 1 بعد إضافة العنصر
+  //   setQuantity(1);
+  // };
+
+  // const handleAddToCart = () => {
+  //   handleCloseDialog();
+  
+  //   const quantityToAdd = quantity || 1;
+  //   const itemDetailsToAdd = {
+  //     id: itemDetails?.id || "default-id",
+  //     name: itemDetails?.name_en || "Default Name",
+  //     price: parseFloat(price) || 0,
+  //     quantity: quantityToAdd,
+  //     extras: Array.isArray(selectedExtras)
+  //       ? selectedExtras.map((extra) => ({
+  //           id: extra.id,
+  //           name: extra.description_en,
+  //           price: parseFloat(extra.price_en),
+  //         }))
+  //       : [],
+  //     option: selectedOption
+  //       ? {
+  //           id: selectedOption.id,
+  //           name: selectedOption.name_en,
+  //         }
+  //       : null,
+  //     totalPrice:
+  //       (parseFloat(price) || 0) +
+  //       selectedExtras.reduce((sum, extra) => sum + parseFloat(extra.price_en), 0),
+  //   };
+  
+  //   // تسجيل بيانات العنصر الذي سيتم إضافته
+  //   console.log("Item to Add:", itemDetailsToAdd);
+  
+  //   // تحقق مما إذا كان العنصر موجود بالفعل في السلة
+  //   const existingItemIndex = cartItems.findIndex(
+  //     (item) =>
+  //       item.id === itemDetailsToAdd.id &&
+  //       JSON.stringify(item.option) === JSON.stringify(itemDetailsToAdd.option) &&
+  //       JSON.stringify(item.extras) === JSON.stringify(itemDetailsToAdd.extras)
+  //   );
+  
+  //   // تسجيل نتيجة findIndex للتحقق من العنصر الموجود
+  //   console.log("Existing Item Index:", existingItemIndex);
+  //   console.log("Cart Items Before Update:", cartItems);
+  
+  //   if (existingItemIndex !== -1) {
+  //     // إذا كان العنصر موجودًا، نقوم بزيادة الكمية فقط
+  //     const updatedCartItems = cartItems.map((item, index) => {
+  //       if (index === existingItemIndex) {
+  //         return {
+  //           ...item,
+  //           quantity: item.quantity + quantityToAdd,
+  //         };
+  //       }
+  //       return item;
+  //     });
+  
+  //     // تسجيل حالة السلة بعد التحديث
+  //     console.log("Updated Cart Items:", updatedCartItems);
+  
+  //     dispatch(updateCartItems(updatedCartItems)); // استخدم الديسباتش لتحديث السلة
+  //   } else {
+  //     // إذا لم يكن موجودًا، أضف العنصر كعنصر جديد
+  //     console.log("Adding New Item to Cart");
+  //     dispatch(addItemToCart(itemDetailsToAdd));
+  //   }
+  
+  //   setQuantity(1); // إعادة تعيين الكمية بعد إضافة العنصر
+  
+  //   // تسجيل حالة السلة بعد إضافة العنصر
+  //   console.log("Cart Items After Add:", cartItems);
+  // };
+ 
+  // const [quantity, setQuantity] = useState(1);
+
+  // const handleQuantityChange = (newQuantity) => {
+  //   setQuantity(newQuantity);
+  //   dispatch(updateItemQuantity({ itemId: itemDetails.id, newQuantity }));
+  //   console.log("Updated quantity:", newQuantity);
+
+  // };
+
+  // const cartItems = useSelector((state) => state.cart.cartItems) || [];
+  // const handleAddToCart = () => {
+  //   handleCloseDialog();
+  
+  //   const quantityToAdd = quantity || 1; // الكمية التي يتم إضافتها إلى السلة
+  //   const itemDetailsToAdd = {
+  //     id: itemDetails?.id || "default-id",
+  //     name: itemDetails?.name_en || "Default Name",
+  //     price: parseFloat(price) || 0,
+  //     quantity: quantityToAdd,
+  //     extras: Array.isArray(selectedExtras)
+  //       ? selectedExtras.map((extra) => ({
+  //           id: extra.id,
+  //           name: extra.description_en,
+  //           price: parseFloat(extra.price_en),
+  //         }))
+  //       : [],
+  //     option: selectedOption
+  //       ? {
+  //           id: selectedOption.id,
+  //           name: selectedOption.name_en,
+  //         }
+  //       : null,
+  //     totalPrice:
+  //       (parseFloat(price) || 0) +
+  //       selectedExtras.reduce((sum, extra) => sum + parseFloat(extra.price_en), 0),
+  //   };
+  
+  //   // تحقق مما إذا كان العنصر موجود بالفعل في السلة
+  //   const existingItemIndex = cartItems.findIndex(
+  //     (item) =>
+  //       item.id === itemDetailsToAdd.id &&
+  //       JSON.stringify(item.option) === JSON.stringify(itemDetailsToAdd.option) &&
+  //       JSON.stringify(item.extras) === JSON.stringify(itemDetailsToAdd.extras)
+  //   );
+  
+  //   if (existingItemIndex !== -1) {
+  //     // إذا كان العنصر موجودًا، قم بزيادة الكمية فقط
+  //     const updatedCartItems = cartItems.map((item, index) => {
+  //       if (index === existingItemIndex) {
+  //         return {
+  //           ...item,
+  //           quantity: item.quantity + quantityToAdd, // زيادة الكمية
+  //         };
+  //       }
+  //       return item;
+  //     });
+  //     dispatch(updateCartItems(updatedCartItems)); // استخدم الديسباتش لتحديث السلة
+  //   } else {
+  //     // إذا لم يكن موجودًا، أضف العنصر كعنصر جديد
+  //     dispatch(addItemToCart(itemDetailsToAdd));
+  //   }
+  
+  //   setQuantity(1); // إعادة تعيين الكمية بعد إضافة العنصر
+  // };
+  const [quantity, setQuantity] = useState(1);
+  const cartItems = useSelector((state) => state.cart.items);
 
   const handleQuantityChange = (newQuantity) => {
     setQuantity(newQuantity);
-    dispatch(updateItemQuantity({ itemId: itemDetails.id, newQuantity }));
   };
 
-    const handleAddToCart = () => {
-      handleCloseDialog();
-    
-      const itemDetailsToAdd = {
-        id: itemDetails?.id || "default-id",
-        name: itemDetails?.name_en || "Default Name",
-        price: parseFloat(price) || 0,
-        quantity: quantity, 
-        extras: Array.isArray(selectedExtras)
-          ? selectedExtras.map((extra) => ({
-              id: extra.id,
-              name: extra.description_en,
-              price: parseFloat(extra.price_en),
-            }))
-          : [],
-        option: selectedOption
-          ? {
-              id: selectedOption.id,
-              name: selectedOption.name_en,
-            }
-          : null,
-        totalPrice:
-          (parseFloat(price) || 0) +
-          selectedExtras.reduce(
-            (sum, extra) => sum + parseFloat(extra.price_en),
-            0
-          ),
-      };
-    
-      dispatch(addItemToCart(itemDetailsToAdd));
-
+  const handleAddToCart = () => {
+    handleCloseDialog();
+  
+    const itemDetailsToAdd = {
+      id: itemDetails.id,
+      name: itemDetails.name_en,
+      price: parseFloat(price),
+      quantity: quantity,  // استخدم الكمية المحددة
+      extras: selectedExtras.map(extra => ({
+        id: extra.id,
+        name: extra.description_en,
+        price: parseFloat(extra.price_en),
+      })),
+      option: selectedOption ? {
+        id: selectedOption.id,
+        name: selectedOption.name_en,
+      } : null,
+      totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
+        (sum, extra) => sum + parseFloat(extra.price_en),
+        0
+      ),
     };
+
+    const existingItemIndex = cartItems.findIndex(
+      (item) =>
+        item.id === itemDetailsToAdd.id &&
+        JSON.stringify(item.option) === JSON.stringify(itemDetailsToAdd.option) &&
+        JSON.stringify(item.extras) === JSON.stringify(itemDetailsToAdd.extras)
+    );
+
+    if (existingItemIndex !== -1) {
+      const updatedCartItems = cartItems.map((item, index) => {
+        if (index === existingItemIndex) {
+          return {
+            ...item,
+            quantity: item.quantity + itemDetailsToAdd.quantity, // زيادة الكمية
+          };
+        }
+        return item;
+      });
+      dispatch(updateCartItems(updatedCartItems));
+    } else {
+      dispatch(addItemToCart(itemDetailsToAdd));
+    }
+  
+    setQuantity(1); // إعادة تعيين الكمية بعد الإضافة
+  };
+
+  
+  
 
   const [totalPrice, setTotalPrice] = useState(0);
   const handlePriceChange = (price) => {
@@ -94,7 +364,6 @@ function DialogItem({
     }
   };
 
-
   const handleOptionChange = (event) => {
     const selectedOption = dataOptions.find(
       (option) => option.name_en === event.target.value
@@ -102,6 +371,8 @@ function DialogItem({
     setSelectedOption(selectedOption);
   };
 
+
+  
   return (
     <Dialog
       open={openDialog}
@@ -139,10 +410,12 @@ function DialogItem({
               </DialogTitle>
               <Stack direction={"row"} alignItems={"center"}>
                 <CounterDiaolgButton
-                  itemId={itemDetails.id} 
+                  itemId={itemDetails.id}
                   basePrice={parseFloat(price)}
                   onChange={handlePriceChange}
-                  onQuantityChange={(newQuantity) => handleQuantityChange(newQuantity)}
+                  onQuantityChange={(newQuantity) =>
+                    handleQuantityChange(newQuantity)
+                  }
                 />
 
                 <span style={{ color: "#000", fontSize: "12px" }}>
@@ -180,7 +453,6 @@ function DialogItem({
 
             {dataExtra && dataExtra.length > 0 && (
               <FormControl component="fieldset">
-            
                 <Typography variant="h6" sx={{ color: "#000" }}>
                   Extras
                 </Typography>

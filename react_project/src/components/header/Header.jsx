@@ -164,17 +164,23 @@ import {
 } from "./index";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { useLocation } from "react-router-dom";
-import { updateCartItems } from '../../rtk/slices/cartSlice.js'
+import { updateCartItems } from "../../rtk/slices/cartSlice.js";
 function Header({ token, handleLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   // const totalItems = useSelector((state) => state.cart.totalItems);
-  const totalItems = useSelector((state) => state.cart.totalItems); // التأكد من المسار الصحيح
-
+  // const totalItems = useSelector((state) => state.cart.totalItems); // التأكد من المسار الصحيح
+  // const totalItems = useSelector((state) => state.cart.items.reduce((total, item) => total + item.quantity, 0));
+  // const totalItems = useSelector((state) =>
+  //   state.cart.items.reduce((total, item) => total + item.quantity, 0)
+  // );
+  const totalItems = useSelector((state) =>
+    state.cart.items.reduce((total, item) => total + item.quantity, 0)
+  );
   useEffect(() => {
     // عند تحميل الصفحة، قراءة السلة من localStorage وتحديث Redux store
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
     dispatch(updateCartItems(cart.length));
   }, [dispatch]);
 
@@ -210,7 +216,6 @@ function Header({ token, handleLogout }) {
 
   const isLargeScreen = useMediaQuery("(min-width:1000px)");
 
-
   const handleNavigation = (sectionId) => {
     if (location.pathname !== "/") {
       navigate("/", { state: { scrollTo: sectionId } });
@@ -230,7 +235,7 @@ function Header({ token, handleLogout }) {
     "/error",
     "/change-password",
     "/locations",
-    "/about-us"
+    "/about-us",
   ].includes(location.pathname);
 
   const handleCartClick = () => {
