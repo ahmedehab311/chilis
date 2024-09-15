@@ -155,8 +155,6 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
-
 import {
   SmallMediaQuary,
   Hero,
@@ -165,6 +163,7 @@ import {
   LogoHeader,
 } from "./index";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import { useLocation } from "react-router-dom";
 import { updateCartItems } from "../../rtk/slices/cartSlice.js";
 function Header({ token, handleLogout }) {
   const location = useLocation();
@@ -212,29 +211,13 @@ function Header({ token, handleLogout }) {
 
   const isLargeScreen = useMediaQuery("(min-width:1000px)");
 
-  // const handleNavigation = (sectionId) => {
-  //   if (location.pathname !== "/") {
-  //     navigate("/", { state: { scrollTo: sectionId } });
-  //   } else {
-  //     document
-  //       .getElementById(sectionId)
-  //       ?.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // };
-  // const location = useLocation();
-  // const navigate = useNavigate();
   const handleNavigation = (sectionId) => {
-  
-    // إذا كانت الصفحة الحالية هي الصفحة الرئيسية
-    if (location.pathname === "/") {
-      // التمرير إلى العنصر إذا كان موجوداً
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    } else {
-      // التنقل إلى الصفحة الرئيسية وإرسال الحالة (state) للتنقل إلى القسم المطلوب
+    if (location.pathname !== "/") {
       navigate("/", { state: { scrollTo: sectionId } });
+    } else {
+      document
+        .getElementById(sectionId)
+        ?.scrollIntoView({ behavior: "smooth" });
     }
   };
 

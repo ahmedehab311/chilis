@@ -93,7 +93,7 @@ function CardContent() {
   const location = useLocation();
 
 useEffect(() => {
-
+  // عندما يتغير المسار، أغلق الـ Dialog وأعد تعيين العنصر المحدد
   setOpenDialog(false);
 }, [location.pathname]);
   // مثال على كيفية تعيين selectedExtras و selectedOption عند اختيارها
