@@ -2,26 +2,27 @@
 import { Grid, Typography, Card, CardMedia } from "@mui/material";
 import { BASE_URL_images, OrderButton } from "../index";
 const ItemCard = ({ handleItemClick, selectedItem }) => {
-  // const truncateText = (text, length) => {
-  //   if (text.length > length) {
-  //     return text.slice(0, length) + '... Read More';
-  //   }
-  //   return text;
-  // };
   const truncateText = (text, length) => {
     if (text.length > length) {
       return (
         <>
           {text.slice(0, length)}
-          <span style={{  cursor: "pointer", textDecoration: "underline", textTransform:"capitalize",color:"#d32f2f" }} >
-           Read More
+          <span
+            style={{
+              cursor: "pointer",
+              textDecoration: "underline",
+              textTransform: "capitalize",
+              color: "#d32f2f",
+            }}
+          >
+            Read More
           </span>
         </>
       );
     }
     return text;
   };
-  
+
   return (
     <>
       <Typography
@@ -101,8 +102,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                     fontFamily: "uniform !important",
                   }}
                 >
-                                  {truncateText (item.description_en, 60)}
-
+                  {truncateText(item.description_en, 60)}
                 </Typography>
                 <Typography sx={{ fontSize: "18px", color: "#777" }}>
                   {item.price}

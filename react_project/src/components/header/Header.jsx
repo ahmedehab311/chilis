@@ -155,6 +155,8 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+
 import {
   SmallMediaQuary,
   Hero,
@@ -163,18 +165,12 @@ import {
   LogoHeader,
 } from "./index";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import { useLocation } from "react-router-dom";
 import { updateCartItems } from "../../rtk/slices/cartSlice.js";
 function Header({ token, handleLogout }) {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const totalItems = useSelector((state) => state.cart.totalItems);
-  // const totalItems = useSelector((state) => state.cart.totalItems); // التأكد من المسار الصحيح
-  // const totalItems = useSelector((state) => state.cart.items.reduce((total, item) => total + item.quantity, 0));
-  // const totalItems = useSelector((state) =>
-  //   state.cart.items.reduce((total, item) => total + item.quantity, 0)
-  // );
+
   const totalItems = useSelector((state) =>
     state.cart.items.reduce((total, item) => total + item.quantity, 0)
   );
@@ -216,13 +212,29 @@ function Header({ token, handleLogout }) {
 
   const isLargeScreen = useMediaQuery("(min-width:1000px)");
 
+  // const handleNavigation = (sectionId) => {
+  //   if (location.pathname !== "/") {
+  //     navigate("/", { state: { scrollTo: sectionId } });
+  //   } else {
+  //     document
+  //       .getElementById(sectionId)
+  //       ?.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // };
+  // const location = useLocation();
+  // const navigate = useNavigate();
   const handleNavigation = (sectionId) => {
-    if (location.pathname !== "/") {
-      navigate("/", { state: { scrollTo: sectionId } });
+  
+    // إذا كانت الصفحة الحالية هي الصفحة الرئيسية
+    if (location.pathname === "/") {
+      // التمرير إلى العنصر إذا كان موجوداً
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     } else {
-      document
-        .getElementById(sectionId)
-        ?.scrollIntoView({ behavior: "smooth" });
+      // التنقل إلى الصفحة الرئيسية وإرسال الحالة (state) للتنقل إلى القسم المطلوب
+      navigate("/", { state: { scrollTo: sectionId } });
     }
   };
 

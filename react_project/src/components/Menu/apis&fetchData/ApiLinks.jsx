@@ -5,7 +5,7 @@ import { BASE_URL } from "../../setting.jsx";
 const APIURL = `${BASE_URL}/menu/2/1`;
 
 
-const API_PRICE = `${BASE_URL}/item/1/1`;
+const API_ITEMS = `${BASE_URL}/item/1/1`;
 
 const API_TAX = `${BASE_URL}/settings`;
-export { APIURL, BASE_URL, API_PRICE, API_TAX,BASE_URL_images };
+export { APIURL, BASE_URL, API_ITEMS, API_TAX,BASE_URL_images };

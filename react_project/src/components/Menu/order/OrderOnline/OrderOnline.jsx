@@ -91,31 +91,92 @@ function OrderOnline() {
     setTotalPrices(updatedPrices);
   };
 
+  // const handleRemoveItem = (index) => {
+    
+  //   // حذف العنصر من Redux store
+  //   dispatch(removeItemFromCart(index));
+
+  //   // قراءة السلة من localStorage
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   // console.log("Cart before removal:", cart);
+
+  //   if (index >= 0 && index < cart.length) {
+  //     // حذف العنصر من localStorage
+  //     cart.splice(index, 1);
+  //     localStorage.setItem("cart", JSON.stringify(cart));
+   
+  //   }
+
+  //   // تحديث الأسعار بعد حذف العنصر
+  //   const updatedPrices = {};
+  //   cart.forEach((item, idx) => {
+  //     updatedPrices[idx] = item.price * item.quantity;
+  //   });
+
+  //   setTotalPrices(updatedPrices);
+  //   // console.log("Prices after removal:", updatedPrices);
+  // };
+
+  // const handleRemoveItem = (index) => {
+  //   // قراءة السلة من localStorage
+  //   let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  
+  //   // التحقق من أن الفهرس صالح
+  //   if (index >= 0 && index < cart.length) {
+  //     // حذف العنصر من Redux store
+  //     dispatch(removeItemFromCart(cart[index].id));
+  
+  //     // حذف العنصر من localStorage
+  //     cart.splice(index, 1);
+  //     localStorage.setItem("cart", JSON.stringify(cart));
+  //   }
+  
+  //   // تحديث الأسعار بعد الحذف بناءً على الكميات المتبقية في `cart`
+  //   const updatedPrices = {};
+  //   cart.forEach((item, idx) => {
+  //     // استخدام السعر والكميات الحالية للعناصر المتبقية
+  //     updatedPrices[item.id] = item.price * item.quantity;
+  //   });
+  
+  //   // تحديث الأسعار في state
+  //   setTotalPrices(updatedPrices);
+  
+  //   // التأكد من أن Redux و localStorage متزامنين
+  //   console.log("Updated cart:", cart);
+  //   console.log("Prices after removal:", updatedPrices);
+  // };
   const handleRemoveItem = (index) => {
     // حذف العنصر من Redux store
     dispatch(removeItemFromCart(index));
-
+  
     // قراءة السلة من localStorage
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    // console.log("Cart before removal:", cart);
-
+  
     if (index >= 0 && index < cart.length) {
       // حذف العنصر من localStorage
       cart.splice(index, 1);
       localStorage.setItem("cart", JSON.stringify(cart));
-   
+  
+      // تحديث الكونترات بعد الحذف
+      cart.forEach((item, idx) => {
+        const updatedQuantity = item.quantity;
+        // استخدم هذه الكمية لتحديث الكونترات في واجهة المستخدم
+        // يمكنك تحديث الكونترات باستخدام setQuantity هنا أو من خلال Redux
+      });
     }
-
-    // تحديث الأسعار بعد حذف العنصر
+  
+    // إعادة حساب الأسعار بعد الحذف
     const updatedPrices = {};
     cart.forEach((item, idx) => {
       updatedPrices[idx] = item.price * item.quantity;
     });
-
+  
     setTotalPrices(updatedPrices);
-    // console.log("Prices after removal:", updatedPrices);
   };
+  
 
+  
+  
   const subtotal = Object.values(totalPrices).reduce(
     (acc, price) => acc + price,
     0

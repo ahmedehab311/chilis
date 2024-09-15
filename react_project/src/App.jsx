@@ -111,11 +111,7 @@ function App() {
     }
   }, [dispatch]);
 
-  //  useEffect(() => {
-  //   // Reset the badge count to zero
-  //   localStorage.setItem('totalItems', '0');
-  //   dispatch(setTotalItems(0));
-  // }, [dispatch]);
+
 
   const location = useLocation();
 
