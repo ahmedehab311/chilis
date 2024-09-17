@@ -40,29 +40,40 @@ import {
 } from "../../../../rtk/slices/cartSlice";
 import Pickup from "./Pickup/Pickup";
 import { BASE_URL } from "../../apis&fetchData/ApiLinks";
+import { v4 as uuidv4 } from 'uuid';
+
 function OrderOnline() {
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
-  const [totalPrices, setTotalPrices] = useState([]);
+  const api_token = localStorage.getItem("token");
+  const API_CITIES = `${BASE_URL}/cities`;
+  const API_ARIA = (cityId) => `${BASE_URL}/areas/?city=${cityId}`;
+
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingAreas, setLoadingAreas] = useState(false);
-  const API_CITIES = `${BASE_URL}/cities`;
-  const API_ARIA = (cityId) => `${BASE_URL}/areas/?city=${cityId}`;
-  const api_token = localStorage.getItem("token");
   const [tax, setTax] = useState(0);
+  const [specialNotes, setSpecialNotes] = useState({});
+  const [addressData, setAddressData] = useState([]);
   const [totalWithTax, setTotalWithTax] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [openDialog, setOpenDialog] = useState(false);
   const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+  const [totalPrices, setTotalPrices] = useState([]);
   const [activeIndex, setActiveIndex] = useState(null);
   const [selectedCity, setSelectedCity] = useState("");
   const [currentAddress, setCurrentAddress] = useState({
     deliveryCity: "",
     deliveryArea: "",
   });
-  
+  const subtotal = Object.values(totalPrices).reduce(
+    (acc, price) => acc + price,
+    0
+  );
+  const deliveryFee = 50;
+  const totalToPay = subtotal + deliveryFee;
+
   useEffect(() => {
     const updatedPrices = {};
     cartItems.forEach((item, index) => {
@@ -79,115 +90,87 @@ function OrderOnline() {
       dispatch(updateCartItems(savedCart));
     }
   }, [dispatch]);
+  // const handleCounterChange = (index, newTotalPrice) => {
+  //   // تأكد من أن `totalPrices` هو array
+  //   if (!Array.isArray(totalPrices)) {
+  //     setTotalPrices([]);
+  //     return;
+  //   }
+
+  //   const updatedPrices = [...totalPrices];
+  //   updatedPrices[index] = newTotalPrice;
+  //   setTotalPrices(updatedPrices);
+  // };
+
   const handleCounterChange = (index, newTotalPrice) => {
-    // تأكد من أن `totalPrices` هو array
-    if (!Array.isArray(totalPrices)) {
-      setTotalPrices([]);
+    // تأكد من أن totalPrices هو كائن وليس مصفوفة
+    if (typeof totalPrices !== 'object') {
+      setTotalPrices({});
       return;
     }
-
-    const updatedPrices = [...totalPrices];
-    updatedPrices[index] = newTotalPrice;
-    setTotalPrices(updatedPrices);
+  
+    // تحديث الأسعار بناءً على الفهرس
+    setTotalPrices((prevPrices) => ({
+      ...prevPrices,
+      [index]: newTotalPrice,
+    }));
   };
+  
 
+ 
   // const handleRemoveItem = (index) => {
-    
   //   // حذف العنصر من Redux store
   //   dispatch(removeItemFromCart(index));
-
+  
   //   // قراءة السلة من localStorage
   //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  //   // console.log("Cart before removal:", cart);
-
+  
   //   if (index >= 0 && index < cart.length) {
   //     // حذف العنصر من localStorage
   //     cart.splice(index, 1);
   //     localStorage.setItem("cart", JSON.stringify(cart));
-   
+  
+  //     // تحديث الكونترات بعد الحذف
+  //     cart.forEach((item, idx) => {
+  //       const updatedQuantity = item.quantity;
+  //       // استخدم هذه الكمية لتحديث الكونترات في واجهة المستخدم
+  //       // يمكنك تحديث الكونترات باستخدام setQuantity هنا أو من خلال Redux
+  //     });
   //   }
-
-  //   // تحديث الأسعار بعد حذف العنصر
+  
+  //   // إعادة حساب الأسعار بعد الحذف
   //   const updatedPrices = {};
   //   cart.forEach((item, idx) => {
   //     updatedPrices[idx] = item.price * item.quantity;
   //   });
-
+  
   //   setTotalPrices(updatedPrices);
-  //   // console.log("Prices after removal:", updatedPrices);
   // };
+  
 
-  // const handleRemoveItem = (index) => {
-  //   // قراءة السلة من localStorage
-  //   let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  // تخزين activeIndex
+
   
-  //   // التحقق من أن الفهرس صالح
-  //   if (index >= 0 && index < cart.length) {
-  //     // حذف العنصر من Redux store
-  //     dispatch(removeItemFromCart(cart[index].id));
-  
-  //     // حذف العنصر من localStorage
-  //     cart.splice(index, 1);
-  //     localStorage.setItem("cart", JSON.stringify(cart));
-  //   }
-  
-  //   // تحديث الأسعار بعد الحذف بناءً على الكميات المتبقية في `cart`
-  //   const updatedPrices = {};
-  //   cart.forEach((item, idx) => {
-  //     // استخدام السعر والكميات الحالية للعناصر المتبقية
-  //     updatedPrices[item.id] = item.price * item.quantity;
-  //   });
-  
-  //   // تحديث الأسعار في state
-  //   setTotalPrices(updatedPrices);
-  
-  //   // التأكد من أن Redux و localStorage متزامنين
-  //   console.log("Updated cart:", cart);
-  //   console.log("Prices after removal:", updatedPrices);
-  // };
   const handleRemoveItem = (index) => {
-    // حذف العنصر من Redux store
+    // حذف العنصر من Redux
     dispatch(removeItemFromCart(index));
   
-    // قراءة السلة من localStorage
+    // تحديث localStorage
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  
     if (index >= 0 && index < cart.length) {
-      // حذف العنصر من localStorage
       cart.splice(index, 1);
       localStorage.setItem("cart", JSON.stringify(cart));
-  
-      // تحديث الكونترات بعد الحذف
-      cart.forEach((item, idx) => {
-        const updatedQuantity = item.quantity;
-        // استخدم هذه الكمية لتحديث الكونترات في واجهة المستخدم
-        // يمكنك تحديث الكونترات باستخدام setQuantity هنا أو من خلال Redux
-      });
     }
   
-    // إعادة حساب الأسعار بعد الحذف
+    // تحديث الأسعار بعد الحذف
     const updatedPrices = {};
     cart.forEach((item, idx) => {
       updatedPrices[idx] = item.price * item.quantity;
     });
-  
     setTotalPrices(updatedPrices);
   };
   
-
-  
-  
-  const subtotal = Object.values(totalPrices).reduce(
-    (acc, price) => acc + price,
-    0
-  );
-  const deliveryFee = 50;
-  const totalToPay = subtotal + deliveryFee;
-
-  
-
-  // تخزين activeIndex
-
   useEffect(() => {
     if (activeIndex !== null && !isNaN(activeIndex)) {
       localStorage.setItem("activeIndex", activeIndex.toString());
@@ -209,17 +192,33 @@ function OrderOnline() {
     const initialPrices = cartItems.map((item) => item.price * item.quantity);
     setTotalPrices(initialPrices);
   }, [cartItems]);
-  const handleQuantityChange = (itemId, newQuantity) => {
-    // تحديث الكمية في Redux أو الحالة المناسبة
-    dispatch(updateItemQuantity({ itemId, quantity: newQuantity }));
+  // const handleQuantityChange = (itemId, newQuantity) => {
+  //   // تحديث الكمية في Redux أو الحالة المناسبة
+  //   dispatch(updateItemQuantity({ itemId, quantity: newQuantity }));
 
-    // تحديث totalPrices بناءً على الكمية الجديدة
+  //   // تحديث totalPrices بناءً على الكمية الجديدة
+  //   setTotalPrices((prevPrices) => {
+  //     if (!Array.isArray(prevPrices)) {
+  //       // ضمان أن prevPrices هو مصفوفة
+  //       return [];
+  //     }
+  //     const updatedPrices = [...prevPrices];
+  //     const itemIndex = cartItems.findIndex((item) => item.id === itemId);
+  //     if (itemIndex > -1) {
+  //       const item = cartItems[itemIndex];
+  //       updatedPrices[itemIndex] = item.price * newQuantity;
+  //     }
+  //     return updatedPrices;
+  //   });
+  // };
+
+  const handleQuantityChange = (itemId, newQuantity) => {
+    // تحديث الكمية في Redux
+    dispatch(updateItemQuantity({ uniqueId: itemId, quantity: newQuantity }));
+  
+    // تحديث الأسعار بناءً على الكمية الجديدة
     setTotalPrices((prevPrices) => {
-      if (!Array.isArray(prevPrices)) {
-        // ضمان أن prevPrices هو مصفوفة
-        return [];
-      }
-      const updatedPrices = [...prevPrices];
+      const updatedPrices = { ...prevPrices };
       const itemIndex = cartItems.findIndex((item) => item.id === itemId);
       if (itemIndex > -1) {
         const item = cartItems[itemIndex];
@@ -228,7 +227,53 @@ function OrderOnline() {
       return updatedPrices;
     });
   };
+  
+  const handleCloseCreditCardDialog = () => {
+    setOpenCreditCardDialog(false);
+  };
 
+  const calculateSubtotalWithExtras = () => {
+    return cartItems.reduce((accumulator, item, index) => {
+      const itemTotal =
+        parseFloat(totalPrices[index]) || parseFloat(item.price);
+
+      const extrasTotal = item.extras
+        ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
+        : 0;
+
+      return accumulator + itemTotal + extrasTotal;
+    }, 0);
+  };
+
+  useEffect(() => {
+    const newSubtotalWithExtras = calculateSubtotalWithExtras();
+    setSubtotalWithExtras(newSubtotalWithExtras);
+  }, [cartItems, totalPrices]);
+
+  useEffect(() => {
+    const fetchTax = async () => {
+      try {
+        const response = await axios.get(API_TAX);
+        const taxValue = response.data.data.settings.tax;
+        setTax(taxValue);
+
+        const subtotalWithDelivery = subtotalWithExtras + deliveryFee;
+
+        const calculatedTax = (subtotalWithDelivery * (taxValue / 100)).toFixed(
+          2
+        );
+
+        const newTotalWithTax =
+          parseFloat(subtotalWithDelivery) + parseFloat(calculatedTax);
+
+        setTotalWithTax(newTotalWithTax);
+      } catch (error) {
+        console.error("Error fetching tax data:", error);
+      }
+    };
+
+    fetchTax();
+  }, [subtotalWithExtras, deliveryFee]);
   // checkout
 
 
@@ -270,9 +315,6 @@ function OrderOnline() {
   }, [selectedCity]);
 
 
-  const [addressData, setAddressData] = useState([]);
-
- 
 
   useEffect(() => {
     const savedAddresses = localStorage.getItem("addresses");
@@ -359,7 +401,7 @@ function OrderOnline() {
     (state) => state.branches.selectedBranchId
   );
 
-  const [specialNotes, setSpecialNotes] = useState({});
+
 
   const handleSpecialNoteChange = (itemId, note) => {
     setSpecialNotes((prevNotes) => ({
@@ -478,52 +520,6 @@ function OrderOnline() {
 
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
-  const handleCloseCreditCardDialog = () => {
-    setOpenCreditCardDialog(false);
-  };
-
-  const calculateSubtotalWithExtras = () => {
-    return cartItems.reduce((accumulator, item, index) => {
-      const itemTotal =
-        parseFloat(totalPrices[index]) || parseFloat(item.price);
-
-      const extrasTotal = item.extras
-        ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
-        : 0;
-
-      return accumulator + itemTotal + extrasTotal;
-    }, 0);
-  };
-
-  useEffect(() => {
-    const newSubtotalWithExtras = calculateSubtotalWithExtras();
-    setSubtotalWithExtras(newSubtotalWithExtras);
-  }, [cartItems, totalPrices]);
-
-  useEffect(() => {
-    const fetchTax = async () => {
-      try {
-        const response = await axios.get(API_TAX);
-        const taxValue = response.data.data.settings.tax;
-        setTax(taxValue);
-
-        const subtotalWithDelivery = subtotalWithExtras + deliveryFee;
-
-        const calculatedTax = (subtotalWithDelivery * (taxValue / 100)).toFixed(
-          2
-        );
-
-        const newTotalWithTax =
-          parseFloat(subtotalWithDelivery) + parseFloat(calculatedTax);
-
-        setTotalWithTax(newTotalWithTax);
-      } catch (error) {
-        console.error("Error fetching tax data:", error);
-      }
-    };
-
-    fetchTax();
-  }, [subtotalWithExtras, deliveryFee]);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -738,7 +734,7 @@ function OrderOnline() {
             {cartItems.length === 0
               ? null
               : cartItems.map((item, index) => (
-                  <Card key={index} sx={{ p: 2, my: 3 }}>
+                  <Card key={uuidv4()} sx={{ p: 2, my: 3 }}>
                     <Stack sx={{ position: "relative" }}>
                       <Stack
                         direction={"row"}
@@ -802,7 +798,7 @@ function OrderOnline() {
                         >
                           {item.price} EGP
                         </Typography>
-                        <Counter
+                        {/* <Counter
                           basePrice={item.price}
                           onChange={(newTotalPrice) =>
                             handleCounterChange(index, newTotalPrice)
@@ -811,7 +807,17 @@ function OrderOnline() {
                             handleQuantityChange(item.id, newQuantity)
                           }
                           initialQuantity={item.quantity}
-                        />
+                        /> */}
+                        <Counter
+  basePrice={item.price}
+  onChange={(newTotalPrice) =>
+    handleCounterChange(index, newTotalPrice)
+  }
+  onQuantityChange={(newQuantity) =>
+    handleQuantityChange(item.uniqueId, newQuantity)  // استخدم uniqueId
+  }
+  initialQuantity={item.quantity}
+/>
                       </Stack>
 
                       <Stack

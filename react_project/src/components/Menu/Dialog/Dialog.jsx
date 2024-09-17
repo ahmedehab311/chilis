@@ -23,6 +23,8 @@ import {
 } from "../../../rtk/slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
+ import { v4 as uuidv4 } from 'uuid'; // استخدم uuid لإنشاء قيم فريدة
+
 function DialogItem({
   openDialog,
   handleCloseDialog,
@@ -47,54 +49,115 @@ function DialogItem({
     setQuantity(newQuantity);
   };
 
-  const handleAddToCart = () => {
-    handleCloseDialog();
+  // const handleAddToCart = () => {
+  //   handleCloseDialog();
   
-    const itemDetailsToAdd = {
-      id: itemDetails.id,
-      name: itemDetails.name_en,
-      price: parseFloat(price),
-      quantity: quantity,  // استخدم الكمية المحددة
-      extras: selectedExtras.map(extra => ({
-        id: extra.id,
-        name: extra.description_en,
-        price: parseFloat(extra.price_en),
-      })),
-      option: selectedOption ? {
-        id: selectedOption.id,
-        name: selectedOption.name_en,
-      } : null,
-      totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
-        (sum, extra) => sum + parseFloat(extra.price_en),
-        0
-      ),
-    };
+  //   const itemDetailsToAdd = {
+  //     id: itemDetails.id,
+  //     name: itemDetails.name_en,
+  //     price: parseFloat(price),
+  //     quantity: quantity,  
+  //     extras: selectedExtras.map(extra => ({
+  //       id: extra.id,
+  //       name: extra.description_en,
+  //       price: parseFloat(extra.price_en),
+  //     })),
+  //     option: selectedOption ? {
+  //       id: selectedOption.id,
+  //       name: selectedOption.name_en,
+  //     } : null,
+  //     totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
+  //       (sum, extra) => sum + parseFloat(extra.price_en),
+  //       0
+  //     ),
+  //   };
 
-    const existingItemIndex = cartItems.findIndex(
-      (item) =>
-        item.id === itemDetailsToAdd.id &&
-        JSON.stringify(item.option) === JSON.stringify(itemDetailsToAdd.option) &&
-        JSON.stringify(item.extras) === JSON.stringify(itemDetailsToAdd.extras)
-    );
+  //   const existingItemIndex = cartItems.findIndex(
+  //     (item) =>
+  //       item.id === itemDetailsToAdd.id &&
+  //       JSON.stringify(item.option) === JSON.stringify(itemDetailsToAdd.option) &&
+  //       JSON.stringify(item.extras) === JSON.stringify(itemDetailsToAdd.extras)
+  //   );
 
-    if (existingItemIndex !== -1) {
-      const updatedCartItems = cartItems.map((item, index) => {
-        if (index === existingItemIndex) {
-          return {
-            ...item,
-            quantity: item.quantity + itemDetailsToAdd.quantity, // زيادة الكمية
-          };
-        }
-        return item;
-      });
-      dispatch(updateCartItems(updatedCartItems));
-    } else {
-      dispatch(addItemToCart(itemDetailsToAdd));
-    }
+  //   if (existingItemIndex !== -1) {
+  //     const updatedCartItems = cartItems.map((item, index) => {
+  //       if (index === existingItemIndex) {
+  //         return {
+  //           ...item,
+  //           quantity: item.quantity + itemDetailsToAdd.quantity, 
+  //         };
+  //       }
+  //       return item;
+  //     });
+  //     dispatch(updateCartItems(updatedCartItems));
+  //   } else {
+  //     dispatch(addItemToCart(itemDetailsToAdd));
+  //   }
   
-    setQuantity(1); // إعادة تعيين الكمية بعد الإضافة
+  //   setQuantity(1); 
+  // };
+
+  // const handleAddToCart = () => {
+  //   handleCloseDialog();
+    
+  //   const itemDetailsToAdd = {
+  //     id: itemDetails.id,
+  //     name: itemDetails.name_en,
+  //     price: parseFloat(price),
+  //     quantity: quantity,
+  //     extras: selectedExtras.map(extra => ({
+  //       id: extra.id,
+  //       name: extra.description_en,
+  //       price: parseFloat(extra.price_en),
+  //     })),
+  //     option: selectedOption ? {
+  //       id: selectedOption.id,
+  //       name: selectedOption.name_en,
+  //     } : null,
+  //     totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
+  //       (sum, extra) => sum + parseFloat(extra.price_en),
+  //       0
+  //     ),
+  //   };
+  
+  //   // مباشرة إضافة العنصر للسلة بدون التحقق
+  //   dispatch(addItemToCart(itemDetailsToAdd));
+  
+  //   // إعادة تعيين الكمية
+  //   setQuantity(1); 
+  // };
+ 
+const handleAddToCart = () => {
+  handleCloseDialog();
+
+  const itemDetailsToAdd = {
+    uniqueId: uuidv4(), // إنشاء معرف فريد لكل عنصر جديد
+    id: itemDetails.id,
+    name: itemDetails.name_en,
+    price: parseFloat(price),
+    quantity: quantity,
+    extras: selectedExtras.map(extra => ({
+      id: extra.id,
+      name: extra.description_en,
+      price: parseFloat(extra.price_en),
+    })),
+    option: selectedOption ? {
+      id: selectedOption.id,
+      name: selectedOption.name_en,
+    } : null,
+    totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
+      (sum, extra) => sum + parseFloat(extra.price_en),
+      0
+    ),
   };
 
+  // إضافة العنصر الجديد للسلة بشكل مباشر
+  dispatch(addItemToCart(itemDetailsToAdd));
+
+  setQuantity(1); 
+};
+
+  
   
   
 
