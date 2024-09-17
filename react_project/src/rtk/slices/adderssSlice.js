@@ -125,31 +125,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { API_ADDRESS, API_ADD_ADDRESS, API_DELETE_ADDRESS } from "../../components/Menu/order/adderess/apiAdderss.jsx";
 
-// export const fetchAddresses = createAsyncThunk(
-//   "addresses/fetchAddresses",
-//   async () => {
-//     try {
-//       const response = await axios.get(API_ADDRESS());
-//       if (response.data.data.address) {
-//         return response.data.data.address;
-//       } else {
-//         throw new Error("Address data is missing in the API response");
-//       }
-//     } catch (error) {
-//       console.error("Error in fetchAddresses thunk:", error);
-//       throw error;
-//     }
-//   }
-// );
 export const fetchAddresses = createAsyncThunk(
   "addresses/fetchAddresses",
   async () => {
     try {
       const response = await axios.get(API_ADDRESS());
-      if (response.data && response.data.data && response.data.data.address) {
+      if (response.data.data.address) {
         return response.data.data.address;
       } else {
-        throw new Error("Address data is missing or malformed in the API response");
+        throw new Error("Address data is missing in the API response");
       }
     } catch (error) {
       console.error("Error in fetchAddresses thunk:", error);
@@ -157,7 +141,6 @@ export const fetchAddresses = createAsyncThunk(
     }
   }
 );
-
 
 export const addAddress = createAsyncThunk(
   "addresses/addAddress",

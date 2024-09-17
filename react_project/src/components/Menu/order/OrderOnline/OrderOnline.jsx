@@ -276,119 +276,6 @@ function OrderOnline() {
   }, [subtotalWithExtras, deliveryFee]);
   // checkout
 
-
-  useEffect(() => {
-    const fetchCities = async () => {
-      setLoadingCities(true);
-      try {
-        const response = await fetch(API_CITIES);
-        const data = await response.json();
-        setCities(data.data.cities);
-        // console.log(data.data.cities)
-      } catch (error) {
-        console.error("Error fetching cities:", error);
-      } finally {
-        setLoadingCities(false);
-      }
-    };
-
-    fetchCities();
-  }, []);
-
-  useEffect(() => {
-    if (selectedCity) {
-      const fetchAreas = async () => {
-        setLoadingAreas(true);
-        try {
-          const response = await fetch(API_ARIA(selectedCity));
-          const data = await response.json();
-          setAreas(data.data.areas);
-        } catch (error) {
-          console.error("Error fetching areas:", error);
-        } finally {
-          setLoadingAreas(false);
-        }
-      };
-
-      fetchAreas();
-    }
-  }, [selectedCity]);
-
-
-
-  useEffect(() => {
-    const savedAddresses = localStorage.getItem("addresses");
-    if (savedAddresses) {
-      setAddressData(JSON.parse(savedAddresses));
-    }
-
-    const savedActiveIndex = localStorage.getItem("activeIndex");
-    if (savedActiveIndex) {
-      setActiveIndex(Number(savedActiveIndex));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (addressData.length > 0) {
-      localStorage.setItem("addresses", JSON.stringify(addressData));
-    }
-  }, [addressData]);
-
-
-  const addresses = useSelector((state) => state.addresses.items);
-
-  useEffect(() => {
-    // استرجاع العنوان من localStorage عند تحميل الصفحة
-    const savedAddress = JSON.parse(localStorage.getItem("selectedAddress"));
-    if (savedAddress) {
-      dispatch(setSelectedAddress(savedAddress));
-    }
-  }, [dispatch]);
-  const address = useSelector((state) => state.addresses.selectedAddress);
-
-
-  useEffect(() => {
-    dispatch(fetchAddresses());
-  }, [dispatch]);
-  useEffect(() => {
-    const savedAddress = localStorage.getItem("selectedAddress");
-    if (savedAddress) {
-      dispatch(setSelectedAddress(JSON.parse(savedAddress)));
-    } else if (addresses.length > 0) {
-      localStorage.setItem("selectedAddress", JSON.stringify(addresses[0]));
-      dispatch(setSelectedAddress(addresses[0]));
-    }
-  }, [addresses, dispatch]);
-
-  useEffect(() => {
-    const storedAddress = localStorage.getItem("selectedAddress");
-  
-    if (storedAddress) {
-      const parsedAddress = JSON.parse(storedAddress);
-  
-      // طباعة العنوان الذي تم تحميله
-      // console.log("Address loaded from localStorage:", parsedAddress);
-  
-      // تحديث الحالة في Redux
-      dispatch(setSelectedAddress(parsedAddress));
-    }
-  }, [dispatch]);
-  
-
-  useEffect(() => {
-    if (user) {
-      // إذا كان هناك مستخدم مخزن
-      // console.log("Current logged in user:", user);
-
-      // عند تسجيل دخول مستخدم جديد، إزالة العنوان المخزن
-      localStorage.removeItem("selectedAddress");
-      localStorage.removeItem("selectedAddressId");
-
-      // تحديث Redux لإعادة تعيين العنوان
-      dispatch(setSelectedAddress(null));
-    }
-  }, [user, dispatch]);
-
   const selectedOption = useSelector((state) => state.info.selectedOption);
   const idInfo = useSelector((state) => state.info.idInfo);
   useEffect(() => {
@@ -397,6 +284,8 @@ function OrderOnline() {
       localStorage.setItem("idInfo", idInfo);
     }
   }, [idInfo]);
+
+
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
@@ -467,7 +356,7 @@ function OrderOnline() {
       lng: deliveryType === 1 ? address.lng : 0,
       address: currentAddress.id,
       area: address.area?.id, // تأكد من وجود `area.id`
-      branch: address.branches?.[0]?.id, // تأكد من وجود `branches[0].id`
+      branch: address.branches?.[0]?.id, 
       api_token: api_token,
    items: JSON.stringify({ items: orders }),
       device_id: "",
@@ -524,23 +413,201 @@ function OrderOnline() {
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
+//  address
+
+  const selectedAddress = useSelector(
+    (state) => state.addresses.selectedAddress
+  );
+  useEffect(() => {
+    const fetchCities = async () => {
+      setLoadingCities(true);
+      try {
+        const response = await fetch(API_CITIES);
+        const data = await response.json();
+        setCities(data.data.cities);
+        // console.log(data.data.cities)
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+      } finally {
+        setLoadingCities(false);
+      }
+    };
+
+    fetchCities();
+  }, []);
+
+  useEffect(() => {
+    if (selectedCity) {
+      const fetchAreas = async () => {
+        setLoadingAreas(true);
+        try {
+          const response = await fetch(API_ARIA(selectedCity));
+          const data = await response.json();
+          setAreas(data.data.areas);
+        } catch (error) {
+          console.error("Error fetching areas:", error);
+        } finally {
+          setLoadingAreas(false);
+        }
+      };
+
+      fetchAreas();
+    }
+  }, [selectedCity]);
+
+
+
+  // useEffect(() => {
+  //   const savedAddresses = localStorage.getItem("addresses");
+  //   if (savedAddresses) {
+  //     setAddressData(JSON.parse(savedAddresses));
+  //   }
+
+  //   const savedActiveIndex = localStorage.getItem("activeIndex");
+  //   if (savedActiveIndex) {
+  //     setActiveIndex(Number(savedActiveIndex));
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    if (addressData.length > 0) {
+      localStorage.setItem("addresses", JSON.stringify(addressData));
+    }
+  }, [addressData]);
+
+
+  const addresses = useSelector((state) => state.addresses.items);
+
+  // useEffect(() => {
+  //   // استرجاع العنوان من localStorage عند تحميل الصفحة
+  //   const savedAddress = JSON.parse(localStorage.getItem("selectedAddress"));
+  //   if (savedAddress) {
+  //     dispatch(setSelectedAddress(savedAddress));
+  //   }
+  // }, [dispatch]);
+//   useEffect(() => {
+//   const savedAddress = localStorage.getItem("selectedAddress");
+//   if (savedAddress) {
+//     const parsedAddress = JSON.parse(savedAddress);
+//     if (!selectedAddress || (selectedAddress && selectedAddress.id !== parsedAddress.id)) {
+//       dispatch(setSelectedAddress(parsedAddress));
+//       setCurrentAddress(parsedAddress);
+//     }
+//   }
+// }, [dispatch, selectedAddress]);
+useEffect(() => {
+  const savedAddress = localStorage.getItem("selectedAddress");
+  if (savedAddress) {
+    const parsedAddress = JSON.parse(savedAddress);
+
+    // تحقق من توفر العنوان
+    if (parsedAddress.isAvailable) {
+      dispatch(setSelectedAddress(parsedAddress));
+      setCurrentAddress(parsedAddress);
+    } else {
+      // إذا لم يكن العنوان متاحًا، قم بإزالته أو إخفائه
+      dispatch(setSelectedAddress(null));
+      setCurrentAddress(null);
+      console.warn("The saved address is no longer available.");
+    }
+  }
+}, [dispatch]);
+
+
+
+
+  const address = useSelector((state) => state.addresses.selectedAddress);
+
+
+  useEffect(() => {
+    dispatch(fetchAddresses());
+  }, [dispatch]);
+  // useEffect(() => {
+  //   const savedAddress = localStorage.getItem("selectedAddress");
+  //   if (savedAddress) {
+  //     dispatch(setSelectedAddress(JSON.parse(savedAddress)));
+  //   } else if (addresses.length > 0) {
+  //     localStorage.setItem("selectedAddress", JSON.stringify(addresses[0]));
+  //     dispatch(setSelectedAddress(addresses[0]));
+  //   }
+  // }, [addresses, dispatch]);
+
+  useEffect(() => {
+    const storedAddress = localStorage.getItem("selectedAddress");
+  
+    if (storedAddress) {
+      const parsedAddress = JSON.parse(storedAddress);
+  
+      // طباعة العنوان الذي تم تحميله
+      // console.log("Address loaded from localStorage:", parsedAddress);
+  
+      // تحديث الحالة في Redux
+      dispatch(setSelectedAddress(parsedAddress));
+    }
+  }, [dispatch]);
+  
+
+  // useEffect(() => {
+  //   if (user) {
+  //     // إذا كان هناك مستخدم مخزن
+  //     // console.log("Current logged in user:", user);
+
+  //     // عند تسجيل دخول مستخدم جديد، إزالة العنوان المخزن
+  //     localStorage.removeItem("selectedAddress");
+  //     localStorage.removeItem("selectedAddressId");
+
+  //     // تحديث Redux لإعادة تعيين العنوان
+  //     dispatch(setSelectedAddress(null));
+  //   }
+  // }, [user, dispatch]);
+  useEffect(() => {
+  if (!user) {
+    localStorage.removeItem("selectedAddress");
+    dispatch(setSelectedAddress(null));
+    setCurrentAddress(null);
+  }
+}, [user, dispatch]);
+
 
   const [deliveryType, setDeliveryType] = useState("delivery");
   const [branchClosed, setBranchClosed] = useState(false);
   const handleBranchStatusChange = (isClosed) => {
     setBranchClosed(isClosed);
   };
-  const selectedAddress = useSelector(
-    (state) => state.addresses.selectedAddress
-  );
+
+
+
+  // useEffect(() => {
+  //   const storedAddress = localStorage.getItem("selectedAddress");
+  //   if (storedAddress) {
+  //     setCurrentAddress(JSON.parse(storedAddress));
+  //   } else if (selectedAddress) {
+  //     setCurrentAddress(setCurrentAddress);
+  //   }
+  // }, [selectedAddress]); // Listen for changes to selectedAddress
+  useEffect(() => {
+    if (selectedAddress) {
+      localStorage.setItem("selectedAddress", JSON.stringify(selectedAddress));
+      setCurrentAddress(selectedAddress); // التأكد من تحديث العنوان الحالي
+    }
+  }, [selectedAddress]);
+
+
   useEffect(() => {
     const storedAddress = localStorage.getItem("selectedAddress");
-    if (storedAddress) {
-      setCurrentAddress(JSON.parse(storedAddress));
-    } else if (selectedAddress) {
-      setCurrentAddress(setCurrentAddress);
+    
+    if (address) {
+      // إذا كان هناك عنوان في Redux، استخدمه
+      setCurrentAddress(address);
+    } else if (storedAddress) {
+      // إذا لم يكن في Redux، تحقق من localStorage
+      const parsedAddress = JSON.parse(storedAddress);
+      setCurrentAddress(parsedAddress);
+      dispatch(setSelectedAddress(parsedAddress)); // تحديث Redux
     }
-  }, [selectedAddress]); // Listen for changes to selectedAddress
+  }, [address, dispatch]);
+  
+
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -583,7 +650,8 @@ function OrderOnline() {
             </Stack>
 
             {/* تحقق من حالة العنوان */}
-            {currentAddress && currentAddress.address_name ? (
+            {currentAddress && currentAddress.address_name 
+            && currentAddress.isAvailable  ? (
               <Card
                 sx={{
                   mb: 3,

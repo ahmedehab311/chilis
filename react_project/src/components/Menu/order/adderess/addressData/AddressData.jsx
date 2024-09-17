@@ -669,6 +669,8 @@
 // }
 
 // export default AddressData;
+
+
 import { Card, Stack, Typography } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useState, useEffect, useMemo } from "react";
@@ -685,10 +687,15 @@ function AddressData({
     return savedId !== null ? parseInt(savedId, 10) : null;
   });
 
+
+  
+  
   useEffect(() => {
     const savedId = localStorage.getItem("activeIndex");
-
+  
+    // التأكد من أن العناوين متوفرة وأن هناك عناوين في القائمة
     if (addressData.length > 0) {
+      // التحقق إذا كان هناك عنوان محفوظ في localStorage
       if (savedId && addressData.some((address) => address.id === parseInt(savedId, 10))) {
         setActiveIndex(parseInt(savedId, 10));
         const selectedAddress = addressData.find(
@@ -697,12 +704,16 @@ function AddressData({
         if (selectedAddress) {
           onAddressSelect(selectedAddress);
         }
-      } else if (addressData.length === 1 && activeIndex === null) {
+      } 
+      // إذا كانت القائمة تحتوي على عنوان واحد ولم يتم تحديد عنوان من قبل
+      else if (addressData.length === 1 && activeIndex === null) {
         const firstAddress = addressData[0];
         setActiveIndex(firstAddress.id);
         localStorage.setItem("activeIndex", firstAddress.id.toString());
         onAddressSelect(firstAddress);
-      } else if (
+      } 
+      // التحقق من أن activeIndex الحالي متوافق مع العناوين الحالية
+      else if (
         activeIndex !== null &&
         addressData.some((address) => address.id === activeIndex)
       ) {
@@ -714,10 +725,14 @@ function AddressData({
         }
       }
     } else {
+      // إذا لم يكن هناك أي عناوين، إعادة تعيين العنوان المختار
       setActiveIndex(null);
       localStorage.removeItem("activeIndex");
     }
   }, [addressData, activeIndex, onAddressSelect]);
+  
+
+
   const isAddressAvailable = (address) => {
     const now = new Date();
     const hours = now.getHours();
@@ -799,8 +814,8 @@ function AddressData({
             key={index}
             sx={{
               mb: 3,
-              border: activeIndex === address.id ? "2px solid #d32f2f" : "none",
-              backgroundColor: address.isAvailable ? "#fff" : "#f8d7da",
+           border: activeIndex === address.id && address.isAvailable ? "2px solid #d32f2f" : "none",
+    backgroundColor: address.isAvailable ? "#fff" : "#f8d7da",
             }}
             onClick={handleClick(index)}
           >

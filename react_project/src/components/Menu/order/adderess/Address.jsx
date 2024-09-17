@@ -582,10 +582,6 @@ function Address() {
   const unavailableAddresses = useSelector(
     (state) => state.addresses.unavailableAddresses
   );
-  // const addresses = useSelector((state) => state.addresses.items);
-  // const selectedAddressId = useSelector(
-  //   (state) => state.addresses.selectedAddress?.id
-  // ); // افترض أن الـ Redux store يحتوي على selectedAddress
 
   const addresses = useSelector((state) => state.addresses.items);
   const selectedAddressId = useSelector(
@@ -593,41 +589,6 @@ function Address() {
   );
 
   const selectedAddress = useSelector((state) => state.addresses.selectedAddress);
-  // useEffect(() => {
-  //   if (addresses.length > 0) {
-  //     localStorage.setItem("addresses", JSON.stringify(addresses));
-
-  //     // تعيين العنوان الأول كعنوان محدد إذا لم يكن هناك عنوان محدد
-  //     if (!selectedAddressId) {
-  //       const firstAddress = addresses[0];
-  //       dispatch(setSelectedAddress(firstAddress));
-  //       localStorage.setItem("selectedAddress", JSON.stringify(firstAddress));
-  //     }
-  //   } else {
-  //     // لا يوجد عناوين، يجب تعيين selectedAddress إلى null
-  //     dispatch(setSelectedAddress(null));
-  //     localStorage.removeItem("selectedAddress");
-  //   }
-  // }, [addresses, dispatch, selectedAddressId]);
-
-  // useEffect(() => {
-  //   // استرجاع العنوان المحدد من localStorage
-  //   const savedAddress = JSON.parse(localStorage.getItem("selectedAddress"));
-
-  //   // تحقق من أن العنوان المخزن موجود في قائمة العناوين
-  //   if (savedAddress && addresses.some((addr) => addr.id === savedAddress.id)) {
-  //     dispatch(setSelectedAddress(savedAddress));
-  //   } else if (addresses.length > 0) {
-  //     // تعيين العنوان الأول كعنوان محدد فقط إذا كانت قائمة العناوين غير فارغة
-  //     const firstAddress = addresses[0];
-  //     dispatch(setSelectedAddress(firstAddress));
-  //     localStorage.setItem("selectedAddress", JSON.stringify(firstAddress));
-  //   } else {
-  //     // لا يوجد عناوين، تعيين selectedAddress إلى null
-  //     dispatch(setSelectedAddress(null));
-  //     localStorage.removeItem("selectedAddress");
-  //   }
-  // }, [addresses, dispatch,selectedAddressId]);
   useEffect(() => {
     if (addresses.length > 0) {
       const savedAddress = JSON.parse(localStorage.getItem("selectedAddress"));
@@ -750,14 +711,7 @@ function Address() {
     setOpenDialog2(false);
   };
 
-  // useEffect(() => {
-  //   const storedAddress = localStorage.getItem("selectedAddress");
 
-  //   if (storedAddress) {
-  //     const parsedAddress = JSON.parse(storedAddress);
-  //     dispatch(setSelectedAddress(parsedAddress));
-  //   }
-  // }, [dispatch]);
   useEffect(() => {
     const storedAddress = localStorage.getItem("selectedAddress");
   
@@ -783,15 +737,7 @@ function Address() {
     }
   }, [dispatch, selectedAddress]);
   
-  // const handleAddressSelect = (address) => {
-  //   if (typeof address === 'object' && address.id) {
-  //     dispatch(setSelectedAddress(address));
-  //     localStorage.setItem("selectedAddress", JSON.stringify(address));
-  //     console.log("Selected Address from profile:", address);
-  //   } else {
-  //     console.error("Address is not an object or is missing required properties.");
-  //   }
-  // };
+
   // const handleAddressSelect = (address) => {
   //   if (typeof address === 'object' && address.id) {
   //     // تحديث الحالة في Redux
@@ -801,7 +747,21 @@ function Address() {
   //     localStorage.setItem("selectedAddress", JSON.stringify(address));
   
   //     // طباعة العنوان الجديد
-  //     console.log("Address saved in localStorage:", address);
+  //     // console.log("Address saved in localStorage:", address);
+  //   } else {
+  //     console.error("Address is not an object or is missing required properties.");
+  //   }
+  // };
+  // const handleAddressSelect = (address) => {
+  //   if (typeof address === 'object' && address.id) {
+  //     // تحديث الحالة في Redux
+  //     dispatch(setSelectedAddress(address));
+    
+  //     // تحديث localStorage
+  //     localStorage.setItem("selectedAddress", JSON.stringify(address));
+    
+  //     // طباعة العنوان الجديد
+  //     // console.log("Address saved in localStorage:", address);
   //   } else {
   //     console.error("Address is not an object or is missing required properties.");
   //   }
@@ -809,18 +769,17 @@ function Address() {
   
   const handleAddressSelect = (address) => {
     if (typeof address === 'object' && address.id) {
-      // تحديث الحالة في Redux
-      dispatch(setSelectedAddress(address));
-  
-      // تحديث localStorage
-      localStorage.setItem("selectedAddress", JSON.stringify(address));
-  
-      // طباعة العنوان الجديد
-      // console.log("Address saved in localStorage:", address);
+      if (address.isAvailable) { // Assuming there's a property that indicates availability
+        dispatch(setSelectedAddress(address));
+        localStorage.setItem("selectedAddress", JSON.stringify(address));
+      } else {
+        console.warn("Selected address is not available.");
+      }
     } else {
       console.error("Address is not an object or is missing required properties.");
     }
   };
+  
   
   
 
