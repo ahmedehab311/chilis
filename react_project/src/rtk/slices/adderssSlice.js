@@ -179,8 +179,12 @@ const addressSlice = createSlice({
         localStorage.setItem("selectedAddress", JSON.stringify(payload)); // تخزين العنوان في localStorage
       } else {
         state.selectedAddress = null;
-        console.error("Payload is not an object or is missing required properties.");
+        // console.error("Payload is not an object or is missing required properties.");
       }
+    },
+    clearSelectedAddress: (state) => {
+      state.selectedAddress = null;
+      localStorage.removeItem("selectedAddress"); 
     },
     setUnavailableAddresses: (state, action) => {
       state.unavailableAddresses = action.payload;
@@ -205,6 +209,6 @@ const addressSlice = createSlice({
   },
 });
 
-export const { setSelectedAddress, setUnavailableAddresses } = addressSlice.actions;
+export const { setSelectedAddress, setUnavailableAddresses,clearSelectedAddress } = addressSlice.actions;
 
 export default addressSlice.reducer;

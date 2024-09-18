@@ -718,18 +718,18 @@ function Address() {
     if (storedAddress) {
       const parsedAddress = JSON.parse(storedAddress);
       dispatch(setSelectedAddress(parsedAddress));
-      console.log("Address loaded from localStorage:", parsedAddress);
+      // console.log("Address loaded from localStorage:", parsedAddress);
     }
   }, [dispatch]);
   
   
   useEffect(() => {
-    console.log("Current selectedAddress in Redux:", selectedAddress);
+    // console.log("Current selectedAddress in Redux:", selectedAddress);
     const storedAddress = localStorage.getItem("selectedAddress");
   
     if (storedAddress) {
       const parsedAddress = JSON.parse(storedAddress);
-      console.log("Address loaded from localStorage:", parsedAddress);
+      // console.log("Address loaded from localStorage:", parsedAddress);
   
       if (parsedAddress.id !== selectedAddress?.id) {
         dispatch(setSelectedAddress(parsedAddress));
@@ -738,42 +738,14 @@ function Address() {
   }, [dispatch, selectedAddress]);
   
 
-  // const handleAddressSelect = (address) => {
-  //   if (typeof address === 'object' && address.id) {
-  //     // تحديث الحالة في Redux
-  //     dispatch(setSelectedAddress(address));
-  
-  //     // تحديث localStorage
-  //     localStorage.setItem("selectedAddress", JSON.stringify(address));
-  
-  //     // طباعة العنوان الجديد
-  //     // console.log("Address saved in localStorage:", address);
-  //   } else {
-  //     console.error("Address is not an object or is missing required properties.");
-  //   }
-  // };
-  // const handleAddressSelect = (address) => {
-  //   if (typeof address === 'object' && address.id) {
-  //     // تحديث الحالة في Redux
-  //     dispatch(setSelectedAddress(address));
-    
-  //     // تحديث localStorage
-  //     localStorage.setItem("selectedAddress", JSON.stringify(address));
-    
-  //     // طباعة العنوان الجديد
-  //     // console.log("Address saved in localStorage:", address);
-  //   } else {
-  //     console.error("Address is not an object or is missing required properties.");
-  //   }
-  // };
-  
+
   const handleAddressSelect = (address) => {
     if (typeof address === 'object' && address.id) {
       if (address.isAvailable) { // Assuming there's a property that indicates availability
         dispatch(setSelectedAddress(address));
         localStorage.setItem("selectedAddress", JSON.stringify(address));
       } else {
-        console.warn("Selected address is not available.");
+        // console.warn("Selected address is not available.");
       }
     } else {
       console.error("Address is not an object or is missing required properties.");

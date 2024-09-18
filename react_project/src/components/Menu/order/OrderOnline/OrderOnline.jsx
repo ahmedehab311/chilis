@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useRef } from "react";
 import { Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import "./OrderOnline.css";
@@ -31,6 +31,7 @@ import Coupun from "./checkOut/Coupon/Coupun";
 import {
   setSelectedAddress,
   fetchAddresses,
+  clearSelectedAddress
 } from "../../../../rtk/slices/adderssSlice";
 import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
 import {
@@ -41,19 +42,21 @@ import {
 import Pickup from "./Pickup/Pickup";
 import { BASE_URL } from "../../apis&fetchData/ApiLinks";
 import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
+
 
 function OrderOnline() {
   const api_token = localStorage.getItem("token");
   const API_CITIES = `${BASE_URL}/cities`;
   const API_ARIA = (cityId) => `${BASE_URL}/areas/?city=${cityId}`;
-
+  const navigate = useNavigate();
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingAreas, setLoadingAreas] = useState(false);
   const [tax, setTax] = useState(0);
   const [specialNotes, setSpecialNotes] = useState({});
-  const [addressData, setAddressData] = useState([]);
+  // const [addressData, setAddressData] = useState([]);
   const [totalWithTax, setTotalWithTax] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cash");
   const [openDialog, setOpenDialog] = useState(false);
@@ -307,48 +310,233 @@ function OrderOnline() {
     }
   }, []);
 
-
+  const addressData = useSelector((state) => state.addresses.items || []);
   
-  const handleCheckout = () => {
-    console.log("addressData", addressData);
-    console.log("address.id", address?.id); // استخدم `?.` للتأكد من وجود `address`
+  useEffect(() => {
+    if (addressData.length === 0) {
+      // قم بجلب العناوين هنا إذا كانت addressData فارغة
+      dispatch(fetchAddresses());
+    }
+  }, [addressData, dispatch]);
 
-    if (!address?.id) {
-      toast.error("Please select a delivery address before proceeding.");
+
+  // const handleCheckout = () => {
+  //   console.log("addressData", addressData);
+  //   console.log("address.id", address?.id); // استخدم `?.` للتأكد من وجود `address`
+
+  //   if (!address?.id) {
+  //     toast.error("Please select a delivery address before proceeding.");
+  //     return;
+  //   }
+
+  //   if (addressData.length === 1 && !address.id) {
+  //     dispatch(setSelectedAddress(addressData[activeIndex]));
+  //   }
+
+  //   console.log("selectedAddress", address.id);
+
+  //   if (paymentMethod === "credit card") {
+  //     setOpenCreditCardDialog(true);
+  //     return;
+  //   }
+
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   const ids = cart.map((item) => item.id);
+
+  //   const orders = cartItems.map((item) => ({
+  //     id: item.id,
+  //     special: specialNotes[item.id] || "",
+  //     extras: Array.isArray(item.extras)
+  //       ? item.extras.map((extra) => extra.id)
+  //       : [],
+  //     count: item.quantity,
+  //     choices: [],
+  //     options: item.option ? [item.option.id] : [],
+  //   }));
+
+  //   // تحقق من وجود `area` و `branches` قبل الوصول إليها
+  //   if (!address?.area?.id || !address?.branches?.[0]?.id) {
+  //     toast.error("Please select a valid area and branch.");
+  //     return;
+  //   }
+
+  //   const dataToSend = {
+  //     delivery_type: 1,
+  //     payment: paymentMethod === "cash" ? 1 : 2,
+  //     lat: deliveryType === 1 ? address.lat : 0,
+  //     lng: deliveryType === 1 ? address.lng : 0,
+  //     address: currentAddress.id,
+  //     area: address.area?.id, // تأكد من وجود `area.id`
+  //     branch: address.branches?.[0]?.id, 
+  //     api_token: api_token,
+  //  items: JSON.stringify({ items: orders }),
+  //     device_id: "",
+  //     notes: "",
+  //     time: "2024-08-20 14:07:07",
+  //     car_model: "",
+  //     car_color: "",
+  //     gift_cards: "",
+  //     coins: "00.00",
+  //   };
+
+  //   console.log("Checkout data:", dataToSend);
+
+  //   const params = new URLSearchParams(dataToSend);
+  //   axios
+  //     .post(`${BASE_URL}/orders/create?${params.toString()}`)
+  //     .then((response) => {
+  //       if (response.data.response) {
+  //         console.log(response.data);
+  //         localStorage.setItem("orderSuccess", "true");
+  //         localStorage.removeItem("idInfo");
+
+  //         toast.success(
+  //           "Your order has been placed successfully. It will be delivered as soon as possible."
+  //         );
+
+  //         dispatch(clearCart());
+  //       } else {
+  //         toast.error(
+  //           "An error occurred while processing your order. Please try again."
+  //         );
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       if (error.response) {
+  //         console.error("Error response data:", error.response.data);
+  //         console.error("Error response status:", error.response.status);
+  //         console.error("Error response headers:", error.response.headers);
+  //         toast.error(`Error placing order: ${error.response.data.message || 'Please try again.'}`);
+  //       } else if (error.request) {
+  //         console.error("Error request:", error.request);
+  //         toast.error("Error placing order: No response from server.");
+  //       } else {
+  //         console.error("Error message:", error.message);
+  //         toast.error(`Error placing order: ${error.message}`);
+  //       }
+  //       console.error("Error config:", error.config);
+  //     });
+  // };
+
+  const isAddressAvailable = (address) => {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+  
+    const currentTimeMinutes = hours * 60 + minutes;
+  
+    let isAvailable = false;
+    if (address && Array.isArray(address.branches)) {
+      address.branches.forEach((branch) => {
+        const [openHour, openMinute] = branch.open.split(":").map(Number);
+        const [deliveryHour, deliveryMinute] = branch.last_delivery
+          .split(":")
+          .map(Number);
+  
+        const branchOpenMinutes = openHour * 60 + openMinute;
+        const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
+  
+        if (branchLastDeliveryMinutes < branchOpenMinutes) {
+          if (
+            currentTimeMinutes >= branchOpenMinutes ||
+            currentTimeMinutes <= branchLastDeliveryMinutes
+          ) {
+            isAvailable = true;
+          }
+        } else {
+          if (
+            currentTimeMinutes >= branchOpenMinutes &&
+            currentTimeMinutes <= branchLastDeliveryMinutes
+          ) {
+            isAvailable = true;
+          }
+        }
+      });
+    } else {
+      console.error("Branches data is missing or invalid.");
+    }
+  
+    return isAvailable;
+  };
+  const handleCheckout = () => {
+    const token = localStorage.getItem("token"); // الحصول على التوكن من localStorage
+
+    if (!token) {
+      navigate('/login'); // توجيه المستخدم إلى صفحة تسجيل الدخول إذا لم يكن هناك توكن
       return;
     }
-
+    console.log("addressData", addressData);
+    console.log("address.id", address?.id); 
+  
+    // التحقق من وجود العنوان في القائمة وفي حالة توفره
+    const selectedAddress = addressData.find((addr) => addr.id === address?.id);
+  
+    if (!selectedAddress) {
+      toast.error("Please select a valid delivery address before proceeding.");
+      return;
+    }
+  
+    if (!isAddressAvailable(selectedAddress)) {
+      toast.error("The selected address is no longer available for delivery.");
+      return;
+    }
+  
     if (addressData.length === 1 && !address.id) {
       dispatch(setSelectedAddress(addressData[activeIndex]));
     }
-
+  
+    console.log("Proceeding with address:", address.id);
+  
+    // متابعة خطوات الدفع والطلب كما في الكود السابق
+  
+  
     console.log("selectedAddress", address.id);
-
+  
     if (paymentMethod === "credit card") {
       setOpenCreditCardDialog(true);
       return;
     }
-
+  
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     const ids = cart.map((item) => item.id);
-
-    const orders = cartItems.map((item) => ({
-      id: item.id,
-      special: specialNotes[item.id] || "",
-      extras: Array.isArray(item.extras)
-        ? item.extras.map((extra) => extra.id)
-        : [],
-      count: item.quantity,
-      choices: [],
-      options: item.option ? [item.option.id] : [],
-    }));
-
+  
+    // const orders = cartItems.map((item) => ({
+    //   id: item.id,
+    //   special: specialNotes[item.id] || "",
+    //   extras: Array.isArray(item.extras)
+    //     ? item.extras.map((extra) => extra.id)
+    //     : [],
+    //   count: item.quantity,
+    //   choices: [],
+    //   options: item.option ? [item.option.id] : [],
+    // }));
+  
+    const orders = cartItems.map((item) => {
+      if (item.quantity <= 0) {
+        console.error(`Item ${item.id} quantity is invalid: ${item.quantity}`);
+        toast.error("Order quantities must be greater than 0.");
+        return null;
+      }
+      return {
+        id: item.id,
+        special: specialNotes[item.id] || "",
+        extras: Array.isArray(item.extras) ? item.extras.map((extra) => extra.id) : [],
+        count: item.quantity,
+        choices: [],
+        options: item.option ? [item.option.id] : [],
+      };
+    }).filter(order => order !== null);
+  
+    if (orders.length === 0) {
+      return;
+    }
+  
     // تحقق من وجود `area` و `branches` قبل الوصول إليها
     if (!address?.area?.id || !address?.branches?.[0]?.id) {
       toast.error("Please select a valid area and branch.");
       return;
     }
-
+  
     const dataToSend = {
       delivery_type: 1,
       payment: paymentMethod === "cash" ? 1 : 2,
@@ -356,9 +544,9 @@ function OrderOnline() {
       lng: deliveryType === 1 ? address.lng : 0,
       address: currentAddress.id,
       area: address.area?.id, // تأكد من وجود `area.id`
-      branch: address.branches?.[0]?.id, 
+      branch: address.branches?.[0]?.id, // تأكد من وجود `branches[0].id`
       api_token: api_token,
-   items: JSON.stringify({ items: orders }),
+      items: JSON.stringify({ items: orders }),
       device_id: "",
       notes: "",
       time: "2024-08-20 14:07:07",
@@ -367,48 +555,177 @@ function OrderOnline() {
       gift_cards: "",
       coins: "00.00",
     };
-
+  
     console.log("Checkout data:", dataToSend);
-
+    console.log("branches:",  address.branches?.[0]?.id);
+  
     const params = new URLSearchParams(dataToSend);
     axios
-      .post(`${BASE_URL}/orders/create?${params.toString()}`)
-      .then((response) => {
-        if (response.data.response) {
-          console.log(response.data);
-          localStorage.setItem("orderSuccess", "true");
-          localStorage.removeItem("idInfo");
+  .post(`${BASE_URL}/orders/create?${params.toString()}`)
+  .then((response) => {
+    if (response.data.response) {
+      console.log(response.data);
+      localStorage.setItem("orderSuccess", "true");
+      localStorage.removeItem("idInfo");
 
-          toast.success(
-            "Your order has been placed successfully. It will be delivered as soon as possible."
-          );
+      toast.success(
+        "Your order has been placed successfully. It will be delivered as soon as possible."
+      );
 
-          dispatch(clearCart());
-        } else {
-          toast.error(
-            "An error occurred while processing your order. Please try again."
-          );
-        }
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.error("Error response data:", error.response.data);
-          console.error("Error response status:", error.response.status);
-          console.error("Error response headers:", error.response.headers);
-          toast.error(`Error placing order: ${error.response.data.message || 'Please try again.'}`);
-        } else if (error.request) {
-          console.error("Error request:", error.request);
-          toast.error("Error placing order: No response from server.");
-        } else {
-          console.error("Error message:", error.message);
-          toast.error(`Error placing order: ${error.message}`);
-        }
-        console.error("Error config:", error.config);
-      });
+      dispatch(clearCart());
+    } else {
+      console.error("Response error data:", response.data);
+      toast.error(
+        "An error occurred while processing your order. Please try again."
+      );
+    }
+  })
+  .catch((error) => {
+    // عرض تفاصيل الخطأ في الكونسول
+    console.error("Error details:", error);
+
+    // إعداد رسالة الخطأ للمستخدم
+    let errorMessage = "An error occurred while processing your order. Please try again.";
+
+    if (error.response) {
+      // استجابة من الخادم
+      console.error("Error response data:", error.response.data);
+      console.error("Error response status:", error.response.status);
+      console.error("Error response headers:", error.response.headers);
+      
+      // استخدام رسالة الخطأ من الخادم إذا كانت موجودة
+      errorMessage = error.response.data.message || errorMessage;
+    } else if (error.request) {
+      // لم يتم تلقي استجابة من الخادم
+      console.error("Error request:", error.request);
+      errorMessage = "Error placing order: No response from server.";
+    } else {
+      // خطأ أثناء إعداد الطلب
+      console.error("Error message:", error.message);
+      errorMessage = `Error placing order: ${error.message}`;
+    }
+    
+    // عرض رسالة الخطأ للمستخدم
+    toast.error(errorMessage);
+  });
+
   };
+//   const handleCheckout = () => {
+//   console.log("addressData:", addressData);
+//   console.log("Cart Items before sending request:", cartItems); // تحقق من البيانات قبل الإرسال
 
+//   // التحقق من وجود العنوان في القائمة وفي حالة توفره
+//   const selectedAddress = addressData.find((addr) => addr.id === address?.id);
+
+//   if (!selectedAddress) {
+//     toast.error("Please select a valid delivery address before proceeding.");
+//     return;
+//   }
+
+//   if (!isAddressAvailable(selectedAddress)) {
+//     toast.error("The selected address is no longer available for delivery.");
+//     return;
+//   }
+
+//   if (addressData.length === 1 && !address.id) {
+//     dispatch(setSelectedAddress(addressData[activeIndex]));
+//   }
+
+//   console.log("Proceeding with address:", address.id);
+
+//   // تحقق من وجود `area` و `branches` قبل الوصول إليها
+//   if (!address?.area?.id || !address?.branches?.[0]?.id) {
+//     toast.error("Please select a valid area and branch.");
+//     return;
+//   }
+
+//   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+//   const ids = cart.map((item) => item.id);
+
+//   const orders = cartItems.map((item) => ({
+//     id: item.id,
+//     special: specialNotes[item.id] || "",
+//     extras: Array.isArray(item.extras) ? item.extras.map((extra) => extra.id) : [],
+//     count: item.quantity,
+//     choices: [],
+//     options: item.option ? [item.option.id] : [],
+//   }));
+
+//   console.log("Orders to be sent:", orders); // تحقق من البيانات قبل الإرسال
+// console.log("Cart Items before sending request:", cartItems);
+// console.log("Orders to be sent:", orders);~
+//   const dataToSend = {
+//     delivery_type: 1,
+//     payment: paymentMethod === "cash" ? 1 : 2,
+//     lat: deliveryType === 1 ? address.lat : 0,
+//     lng: deliveryType === 1 ? address.lng : 0,
+//     address: currentAddress.id,
+//     area: address.area?.id,
+//     branch: address.branches?.[0]?.id,
+//     api_token: api_token,
+//     items: JSON.stringify({ items: orders }),
+//     device_id: "",
+//     notes: "",
+//     time: "2024-08-20 14:07:07",
+//     car_model: "",
+//     car_color: "",
+//     gift_cards: "",
+//     coins: "00.00",
+//   };
+
+//   console.log("Checkout data:", dataToSend);
+
+//   const params = new URLSearchParams(dataToSend);
+//   axios
+//   .post(`${BASE_URL}/orders/create?${params.toString()}`)
+//   .then((response) => {
+//     if (response.data.response) {
+//       console.log(response.data);
+//       localStorage.setItem("orderSuccess", "true");
+//       localStorage.removeItem("idInfo");
+
+//       toast.success(
+//         "Your order has been placed successfully. It will be delivered as soon as possible."
+//       );
+
+//       dispatch(clearCart());
+//     } else {
+//       console.error("Response error data:", response.data);
+//       toast.error(
+//         "An error occurred while processing your order. Please try again."
+//       );
+//     }
+//   })
+//   .catch((error) => {
+//     console.error("Full error object:", error);
+    
+//     let errorMessage = "An error occurred while processing your order. Please try again.";
+
+//     if (error.response) {
+//       console.error("Error response data:", error.response.data);
+//       console.error("Error response status:", error.response.status);
+//       console.error("Error response headers:", error.response.headers);
+//       errorMessage = error.response.data.message || errorMessage;
+//     } else if (error.request) {
+//       console.error("Error request:", error.request);
+//       errorMessage = "Error placing order: No response from server.";
+//     } else {
+//       console.error("Error message:", error.message);
+//       errorMessage = `Error placing order: ${error.message}`;
+//     }
+
+//     toast.error(errorMessage);
+//   });
+
+// };
+
+
+  
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
+  const addressCleared = useRef(false);
+
+  const address = useSelector((state) => state.addresses.selectedAddress) ;
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
@@ -418,6 +735,7 @@ function OrderOnline() {
   const selectedAddress = useSelector(
     (state) => state.addresses.selectedAddress
   );
+  
   useEffect(() => {
     const fetchCities = async () => {
       setLoadingCities(true);
@@ -457,17 +775,6 @@ function OrderOnline() {
 
 
 
-  // useEffect(() => {
-  //   const savedAddresses = localStorage.getItem("addresses");
-  //   if (savedAddresses) {
-  //     setAddressData(JSON.parse(savedAddresses));
-  //   }
-
-  //   const savedActiveIndex = localStorage.getItem("activeIndex");
-  //   if (savedActiveIndex) {
-  //     setActiveIndex(Number(savedActiveIndex));
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (addressData.length > 0) {
@@ -476,61 +783,28 @@ function OrderOnline() {
   }, [addressData]);
 
 
-  const addresses = useSelector((state) => state.addresses.items);
-
-  // useEffect(() => {
-  //   // استرجاع العنوان من localStorage عند تحميل الصفحة
-  //   const savedAddress = JSON.parse(localStorage.getItem("selectedAddress"));
-  //   if (savedAddress) {
-  //     dispatch(setSelectedAddress(savedAddress));
-  //   }
-  // }, [dispatch]);
-//   useEffect(() => {
-//   const savedAddress = localStorage.getItem("selectedAddress");
-//   if (savedAddress) {
-//     const parsedAddress = JSON.parse(savedAddress);
-//     if (!selectedAddress || (selectedAddress && selectedAddress.id !== parsedAddress.id)) {
-//       dispatch(setSelectedAddress(parsedAddress));
-//       setCurrentAddress(parsedAddress);
-//     }
-//   }
-// }, [dispatch, selectedAddress]);
 useEffect(() => {
-  const savedAddress = localStorage.getItem("selectedAddress");
-  if (savedAddress) {
-    const parsedAddress = JSON.parse(savedAddress);
-
-    // تحقق من توفر العنوان
-    if (parsedAddress.isAvailable) {
-      dispatch(setSelectedAddress(parsedAddress));
-      setCurrentAddress(parsedAddress);
-    } else {
-      // إذا لم يكن العنوان متاحًا، قم بإزالته أو إخفائه
-      dispatch(setSelectedAddress(null));
-      setCurrentAddress(null);
-      console.warn("The saved address is no longer available.");
+  // تحقق إذا كان العنوان موجودًا وغير متاح
+  if (address && !isAddressAvailable(address)) {
+    if (!addressCleared.current) {
+      // إذا كان العنوان غير متاح، قم بإلغاء اختياره مرة واحدة فقط
+      dispatch(clearSelectedAddress());
+      // toast.error("The selected address is no longer available for delivery.");
+      addressCleared.current = true; // تعيين الفلاج لتجنب التحديث المتكرر
     }
+  } else if (address && isAddressAvailable(address)) {
+    // إذا أصبح العنوان متاحًا، قم بإعادة تعيين الفلاج
+    addressCleared.current = false;
   }
-}, [dispatch]);
+}, [address, dispatch]); // تأكد من أن الهوكات هنا لا تتغير
+ 
 
-
-
-
-  const address = useSelector((state) => state.addresses.selectedAddress);
-
+  
 
   useEffect(() => {
     dispatch(fetchAddresses());
   }, [dispatch]);
-  // useEffect(() => {
-  //   const savedAddress = localStorage.getItem("selectedAddress");
-  //   if (savedAddress) {
-  //     dispatch(setSelectedAddress(JSON.parse(savedAddress)));
-  //   } else if (addresses.length > 0) {
-  //     localStorage.setItem("selectedAddress", JSON.stringify(addresses[0]));
-  //     dispatch(setSelectedAddress(addresses[0]));
-  //   }
-  // }, [addresses, dispatch]);
+
 
   useEffect(() => {
     const storedAddress = localStorage.getItem("selectedAddress");
@@ -547,19 +821,7 @@ useEffect(() => {
   }, [dispatch]);
   
 
-  // useEffect(() => {
-  //   if (user) {
-  //     // إذا كان هناك مستخدم مخزن
-  //     // console.log("Current logged in user:", user);
 
-  //     // عند تسجيل دخول مستخدم جديد، إزالة العنوان المخزن
-  //     localStorage.removeItem("selectedAddress");
-  //     localStorage.removeItem("selectedAddressId");
-
-  //     // تحديث Redux لإعادة تعيين العنوان
-  //     dispatch(setSelectedAddress(null));
-  //   }
-  // }, [user, dispatch]);
   useEffect(() => {
   if (!user) {
     localStorage.removeItem("selectedAddress");
@@ -576,15 +838,6 @@ useEffect(() => {
   };
 
 
-
-  // useEffect(() => {
-  //   const storedAddress = localStorage.getItem("selectedAddress");
-  //   if (storedAddress) {
-  //     setCurrentAddress(JSON.parse(storedAddress));
-  //   } else if (selectedAddress) {
-  //     setCurrentAddress(setCurrentAddress);
-  //   }
-  // }, [selectedAddress]); // Listen for changes to selectedAddress
   useEffect(() => {
     if (selectedAddress) {
       localStorage.setItem("selectedAddress", JSON.stringify(selectedAddress));
@@ -608,9 +861,15 @@ useEffect(() => {
   }, [address, dispatch]);
   
 
-
+  const isLoggedIn = Boolean(localStorage.getItem('token'));
   const handleOpenDialog = () => {
-    setOpenDialog(true);
+    if (!isLoggedIn) {
+      // إذا كان غير مسجل دخول، توجهه إلى صفحة تسجيل الدخول
+      navigate('/login');
+    } else {
+      // إذا كان مسجل دخول، يتم فتح الديالوج بشكل طبيعي
+      setOpenDialog(true);
+    }
   };
 
   return (
@@ -796,11 +1055,21 @@ useEffect(() => {
             chilis
           </Typography>
         </Box>
-
-        <Container sx={{ margin: "0 auto" }}>
+        <Container sx={{ margin: "0 auto",borderBottom: "2px solid #ececec"}}>
           <Box className="orderNow" sx={{ borderRadius: "8px" }}>
             {cartItems.length === 0
-              ? null
+              ?  <Typography
+            sx={{
+              textAlign: "center",
+              fontSize: "1.8rem",
+              color: "gray",
+              fontFamily: "cairo",
+              my: 4,
+              fontWeight: "bold",
+            }}
+          >
+The cart is empty
+          </Typography>
               : cartItems.map((item, index) => (
                   <Card key={uuidv4()} sx={{ p: 2, my: 3 }}>
                     <Stack sx={{ position: "relative" }}>
@@ -866,23 +1135,13 @@ useEffect(() => {
                         >
                           {item.price} EGP
                         </Typography>
-                        {/* <Counter
-                          basePrice={item.price}
-                          onChange={(newTotalPrice) =>
-                            handleCounterChange(index, newTotalPrice)
-                          }
-                          onQuantityChange={(newQuantity) =>
-                            handleQuantityChange(item.id, newQuantity)
-                          }
-                          initialQuantity={item.quantity}
-                        /> */}
                         <Counter
   basePrice={item.price}
   onChange={(newTotalPrice) =>
     handleCounterChange(index, newTotalPrice)
   }
   onQuantityChange={(newQuantity) =>
-    handleQuantityChange(item.uniqueId, newQuantity)  // استخدم uniqueId
+    handleQuantityChange(item.uniqueId, newQuantity)  
   }
   initialQuantity={item.quantity}
 />

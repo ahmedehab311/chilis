@@ -29,7 +29,6 @@ function CardContent() {
   const [orderDetails, setOrderDetails] = useState(null);
   const [price, setPrice] = useState(null);
   const [dataExtra, setDataExtra] = useState([]);
-  // const [quantity, setQuantity] = useState(1);
   useEffect(() => {
     const fetchDataAsync = async () => {
       try {

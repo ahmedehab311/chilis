@@ -45,6 +45,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     localStorage.removeItem("api_token");
     localStorage.removeItem("user");
     localStorage.removeItem("counter");
+    // localStorage.removeItem("selectedAddress");
     window.location.href = "/";
   };
 

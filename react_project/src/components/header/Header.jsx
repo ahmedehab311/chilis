@@ -234,11 +234,7 @@ function Header({ token, handleLogout }) {
   ].includes(location.pathname);
 
   const handleCartClick = () => {
-    if (!token) {
-      navigate("/login");
-    } else {
-      navigate("/order-online");
-    }
+    navigate("/order-online");
   };
 
   return (
