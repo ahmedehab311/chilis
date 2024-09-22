@@ -19,147 +19,97 @@ import { CounterDiaolgButton, AddToCardButton } from "../index";
 import {
   addItemToCart,
   updateItemQuantity,
-  updateCartItems
+  updateCartItems,
 } from "../../../rtk/slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
- import { v4 as uuidv4 } from 'uuid'; // استخدم uuid لإنشاء قيم فريدة
+import { v4 as uuidv4 } from "uuid";
 
 function DialogItem({
   openDialog,
   handleCloseDialog,
-  tempSelectedItemImage,
-  tempSelectedItemName,
-  tempSelectedItemPrice,
-  tempSelectedItemDescription,
   itemDetails,
   price,
   dataExtra,
   dataOptions,
   BASE_URL_images,
+  selectedExtras,
+  setSelectedExtras,
+  selectedOption,
+  setSelectedOption,
+  quantity,
+  setQuantity,
+  selectedOptionName,
+  setSelectedOptionName,
+  ...props
 }) {
   const dispatch = useDispatch();
 
-  const [selectedExtras, setSelectedExtras] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("");
-  const [quantity, setQuantity] = useState(1);
+  // const [selectedExtras, setSelectedExtras] = useState([]);
+  // const [selectedOption, setSelectedOption] = useState("");
+  // const [quantity, setQuantity] = useState(1);
   const cartItems = useSelector((state) => state.cart.items);
 
   const handleQuantityChange = (newQuantity) => {
     setQuantity(newQuantity);
   };
 
-  // const handleAddToCart = () => {
-  //   handleCloseDialog();
-  
-  //   const itemDetailsToAdd = {
-  //     id: itemDetails.id,
-  //     name: itemDetails.name_en,
-  //     price: parseFloat(price),
-  //     quantity: quantity,  
-  //     extras: selectedExtras.map(extra => ({
-  //       id: extra.id,
-  //       name: extra.description_en,
-  //       price: parseFloat(extra.price_en),
-  //     })),
-  //     option: selectedOption ? {
-  //       id: selectedOption.id,
-  //       name: selectedOption.name_en,
-  //     } : null,
-  //     totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
-  //       (sum, extra) => sum + parseFloat(extra.price_en),
-  //       0
-  //     ),
-  //   };
+  const handleAddToCart = () => {
+    handleCloseDialog();
 
-  //   const existingItemIndex = cartItems.findIndex(
-  //     (item) =>
-  //       item.id === itemDetailsToAdd.id &&
-  //       JSON.stringify(item.option) === JSON.stringify(itemDetailsToAdd.option) &&
-  //       JSON.stringify(item.extras) === JSON.stringify(itemDetailsToAdd.extras)
-  //   );
+    // const itemDetailsToAdd = {
+    //   uniqueId: uuidv4(),
+    //   id: itemDetails.id,
+    //   name: itemDetails.name_en,
+    //   price: parseFloat(price),
+    //   quantity: quantity,
+    //   extras: selectedExtras.map(extra => ({
+    //     id: extra.id,
+    //     name: extra.description_en,
+    //     price: parseFloat(extra.price_en),
+    //   })),
+    //   option: selectedOption ? {
+    //     id: selectedOption.id,
+    //     name: selectedOption.name_en,
+    //   } : null,
+    //   totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
+    //     (sum, extra) => sum + parseFloat(extra.price_en),
+    //     0
+    //   ),
+    // };
 
-  //   if (existingItemIndex !== -1) {
-  //     const updatedCartItems = cartItems.map((item, index) => {
-  //       if (index === existingItemIndex) {
-  //         return {
-  //           ...item,
-  //           quantity: item.quantity + itemDetailsToAdd.quantity, 
-  //         };
-  //       }
-  //       return item;
-  //     });
-  //     dispatch(updateCartItems(updatedCartItems));
-  //   } else {
-  //     dispatch(addItemToCart(itemDetailsToAdd));
-  //   }
-  
-  //   setQuantity(1); 
-  // };
+    const itemDetailsToAdd = {
+      uniqueId: uuidv4(),
+      id: itemDetails.id,
+      name: itemDetails.name_en,
+      price: parseFloat(price),
+      quantity: quantity,
+      extras: selectedExtras.map((extra) => ({
+        id: extra.id,
+        name: extra.description_en,
+        price: parseFloat(extra.price_en),
+      })),
+      option: selectedOption
+        ? {
+            id: selectedOption.id,
+            name: selectedOption.name_en,
+          }
+        : null,
+      totalPrice:
+        (parseFloat(price) || 0) +
+        selectedExtras.reduce(
+          (sum, extra) => sum + parseFloat(extra.price_en),
+          0
+        ),
+    };
+    console.log("Item to add:", itemDetailsToAdd);
 
-  // const handleAddToCart = () => {
-  //   handleCloseDialog();
-    
-  //   const itemDetailsToAdd = {
-  //     id: itemDetails.id,
-  //     name: itemDetails.name_en,
-  //     price: parseFloat(price),
-  //     quantity: quantity,
-  //     extras: selectedExtras.map(extra => ({
-  //       id: extra.id,
-  //       name: extra.description_en,
-  //       price: parseFloat(extra.price_en),
-  //     })),
-  //     option: selectedOption ? {
-  //       id: selectedOption.id,
-  //       name: selectedOption.name_en,
-  //     } : null,
-  //     totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
-  //       (sum, extra) => sum + parseFloat(extra.price_en),
-  //       0
-  //     ),
-  //   };
-  
-  //   // مباشرة إضافة العنصر للسلة بدون التحقق
-  //   dispatch(addItemToCart(itemDetailsToAdd));
-  
-  //   // إعادة تعيين الكمية
-  //   setQuantity(1); 
-  // };
- 
-const handleAddToCart = () => {
-  handleCloseDialog();
+    console.log(" selectedOption.name_en", selectedOption.name_en);
+    // إضافة العنصر الجديد للسلة بشكل مباشر
+    dispatch(addItemToCart(itemDetailsToAdd));
 
-  const itemDetailsToAdd = {
-    uniqueId: uuidv4(), // إنشاء معرف فريد لكل عنصر جديد
-    id: itemDetails.id,
-    name: itemDetails.name_en,
-    price: parseFloat(price),
-    quantity: quantity,
-    extras: selectedExtras.map(extra => ({
-      id: extra.id,
-      name: extra.description_en,
-      price: parseFloat(extra.price_en),
-    })),
-    option: selectedOption ? {
-      id: selectedOption.id,
-      name: selectedOption.name_en,
-    } : null,
-    totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
-      (sum, extra) => sum + parseFloat(extra.price_en),
-      0
-    ),
+    setQuantity(1);
   };
-
-  // إضافة العنصر الجديد للسلة بشكل مباشر
-  dispatch(addItemToCart(itemDetailsToAdd));
-
-  setQuantity(1); 
-};
-
-  
-  
-  
 
   const [totalPrice, setTotalPrice] = useState(0);
   const handlePriceChange = (price) => {
@@ -178,11 +128,10 @@ const handleAddToCart = () => {
     const selectedOption = dataOptions.find(
       (option) => option.name_en === event.target.value
     );
-    setSelectedOption(selectedOption);
+    setSelectedOption(selectedOption); // احتفظ بالكائن الكامل
+    setSelectedOptionName(selectedOption.name_en); // استخدم name_en فقط كقيمة للراديو جروب
   };
 
-
-  
   return (
     <Dialog
       open={openDialog}
@@ -216,7 +165,7 @@ const handleAddToCart = () => {
               justifyContent={"space-between"}
             >
               <DialogTitle id="item-dialog-title">
-                {itemDetails.name_en}
+                {itemDetails.name_en} 
               </DialogTitle>
               <Stack direction={"row"} alignItems={"center"}>
                 <CounterDiaolgButton
@@ -228,13 +177,13 @@ const handleAddToCart = () => {
                   }
                 />
 
-                <span style={{ color: "#000", fontSize: "12px" }}>
+                <span style={{ color: "#000", fontSize: "1.3rem",fontWeight:"600" }}>
                   {price} EGP
                 </span>
               </Stack>
             </Stack>
             <div className="borderItem"></div>
-            <Typography variant="body1" sx={{ mb: 2, color: "#000" }}>
+            <Typography variant="body1" sx={{ mb: 2, color: "#000",fontSize:"1.4rem" }}>
               {itemDetails.description_en}
             </Typography>
             <Stack>
@@ -244,7 +193,7 @@ const handleAddToCart = () => {
                     Options
                   </Typography>
                   <RadioGroup
-                    value={selectedOption}
+                    value={selectedOptionName} 
                     onChange={handleOptionChange}
                   >
                     {dataOptions.map((option, index) => (

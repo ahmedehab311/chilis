@@ -1,4 +1,4 @@
-import { useEffect, useState,useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Stack } from "@mui/material";
 import { toast } from "react-toastify";
 import "./OrderOnline.css";
@@ -31,7 +31,7 @@ import Coupun from "./checkOut/Coupon/Coupun";
 import {
   setSelectedAddress,
   fetchAddresses,
-  clearSelectedAddress
+  clearSelectedAddress,
 } from "../../../../rtk/slices/adderssSlice";
 import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
 import {
@@ -41,9 +41,8 @@ import {
 } from "../../../../rtk/slices/cartSlice";
 import Pickup from "./Pickup/Pickup";
 import { BASE_URL } from "../../apis&fetchData/ApiLinks";
-import { v4 as uuidv4 } from 'uuid';
-import { useNavigate } from 'react-router-dom';
-
+import { v4 as uuidv4 } from "uuid";
+import { useNavigate } from "react-router-dom";
 
 function OrderOnline() {
   const api_token = localStorage.getItem("token");
@@ -107,32 +106,30 @@ function OrderOnline() {
 
   const handleCounterChange = (index, newTotalPrice) => {
     // تأكد من أن totalPrices هو كائن وليس مصفوفة
-    if (typeof totalPrices !== 'object') {
+    if (typeof totalPrices !== "object") {
       setTotalPrices({});
       return;
     }
-  
+
     // تحديث الأسعار بناءً على الفهرس
     setTotalPrices((prevPrices) => ({
       ...prevPrices,
       [index]: newTotalPrice,
     }));
   };
-  
 
- 
   // const handleRemoveItem = (index) => {
   //   // حذف العنصر من Redux store
   //   dispatch(removeItemFromCart(index));
-  
+
   //   // قراءة السلة من localStorage
   //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-  
+
   //   if (index >= 0 && index < cart.length) {
   //     // حذف العنصر من localStorage
   //     cart.splice(index, 1);
   //     localStorage.setItem("cart", JSON.stringify(cart));
-  
+
   //     // تحديث الكونترات بعد الحذف
   //     cart.forEach((item, idx) => {
   //       const updatedQuantity = item.quantity;
@@ -140,32 +137,29 @@ function OrderOnline() {
   //       // يمكنك تحديث الكونترات باستخدام setQuantity هنا أو من خلال Redux
   //     });
   //   }
-  
+
   //   // إعادة حساب الأسعار بعد الحذف
   //   const updatedPrices = {};
   //   cart.forEach((item, idx) => {
   //     updatedPrices[idx] = item.price * item.quantity;
   //   });
-  
+
   //   setTotalPrices(updatedPrices);
   // };
-  
-
 
   // تخزين activeIndex
 
-  
   const handleRemoveItem = (index) => {
     // حذف العنصر من Redux
     dispatch(removeItemFromCart(index));
-  
+
     // تحديث localStorage
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     if (index >= 0 && index < cart.length) {
       cart.splice(index, 1);
       localStorage.setItem("cart", JSON.stringify(cart));
     }
-  
+
     // تحديث الأسعار بعد الحذف
     const updatedPrices = {};
     cart.forEach((item, idx) => {
@@ -173,7 +167,7 @@ function OrderOnline() {
     });
     setTotalPrices(updatedPrices);
   };
-  
+
   useEffect(() => {
     if (activeIndex !== null && !isNaN(activeIndex)) {
       localStorage.setItem("activeIndex", activeIndex.toString());
@@ -218,7 +212,7 @@ function OrderOnline() {
   const handleQuantityChange = (itemId, newQuantity) => {
     // تحديث الكمية في Redux
     dispatch(updateItemQuantity({ uniqueId: itemId, quantity: newQuantity }));
-  
+
     // تحديث الأسعار بناءً على الكمية الجديدة
     setTotalPrices((prevPrices) => {
       const updatedPrices = { ...prevPrices };
@@ -230,7 +224,7 @@ function OrderOnline() {
       return updatedPrices;
     });
   };
-  
+
   const handleCloseCreditCardDialog = () => {
     setOpenCreditCardDialog(false);
   };
@@ -288,12 +282,9 @@ function OrderOnline() {
     }
   }, [idInfo]);
 
-
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
-
-
 
   const handleSpecialNoteChange = (itemId, note) => {
     setSpecialNotes((prevNotes) => ({
@@ -311,14 +302,13 @@ function OrderOnline() {
   }, []);
 
   const addressData = useSelector((state) => state.addresses.items || []);
-  
+
   useEffect(() => {
     if (addressData.length === 0) {
       // قم بجلب العناوين هنا إذا كانت addressData فارغة
       dispatch(fetchAddresses());
     }
   }, [addressData, dispatch]);
-
 
   // const handleCheckout = () => {
   //   console.log("addressData", addressData);
@@ -367,7 +357,7 @@ function OrderOnline() {
   //     lng: deliveryType === 1 ? address.lng : 0,
   //     address: currentAddress.id,
   //     area: address.area?.id, // تأكد من وجود `area.id`
-  //     branch: address.branches?.[0]?.id, 
+  //     branch: address.branches?.[0]?.id,
   //     api_token: api_token,
   //  items: JSON.stringify({ items: orders }),
   //     device_id: "",
@@ -422,9 +412,9 @@ function OrderOnline() {
     const now = new Date();
     const hours = now.getHours();
     const minutes = now.getMinutes();
-  
+
     const currentTimeMinutes = hours * 60 + minutes;
-  
+
     let isAvailable = false;
     if (address && Array.isArray(address.branches)) {
       address.branches.forEach((branch) => {
@@ -432,10 +422,10 @@ function OrderOnline() {
         const [deliveryHour, deliveryMinute] = branch.last_delivery
           .split(":")
           .map(Number);
-  
+
         const branchOpenMinutes = openHour * 60 + openMinute;
         const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
-  
+
         if (branchLastDeliveryMinutes < branchOpenMinutes) {
           if (
             currentTimeMinutes >= branchOpenMinutes ||
@@ -455,287 +445,475 @@ function OrderOnline() {
     } else {
       console.error("Branches data is missing or invalid.");
     }
-  
+
     return isAvailable;
   };
+
+  // const handleCheckout = () => {
+  //   const token = localStorage.getItem("token");
+
+  //   if (!token) {
+  //     navigate('/login');
+  //     return;
+  //   }
+
+  //   console.log("addressData", addressData);
+  //   console.log("address.id", address?.id);
+
+  //   const selectedAddress = addressData.find((addr) => addr.id === address?.id);
+
+  //   if (!selectedAddress) {
+  //     toast.error("Please select a valid delivery address before proceeding.");
+  //     return;
+  //   }
+
+  //   if (!isAddressAvailable(selectedAddress)) {
+  //     toast.error("The selected address is no longer available for delivery.");
+  //     return;
+  //   }
+
+  //   if (addressData.length === 1 && !address.id) {
+  //     dispatch(setSelectedAddress(addressData[activeIndex]));
+  //   }
+
+  //   console.log("Proceeding with address:", address.id);
+
+  //   if (paymentMethod === "credit card") {
+  //     setOpenCreditCardDialog(true);
+  //     return;
+  //   }
+
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   const orders = cartItems
+  //     .map((item) => {
+  //       if (item.quantity <= 0) {
+  //         console.error(`Item ${item.id} quantity is invalid: ${item.quantity}`);
+  //         toast.error("Order quantities must be greater than 0.");
+  //         return null;
+  //       }
+  //       return {
+  //         id: item.id,
+  //         special: specialNotes[item.id] || "",
+  //         extras: Array.isArray(item.extras) ? item.extras.map((extra) => extra.id) : [],
+  //         count: item.quantity,
+  //         choices: [],
+  //         options: item.option ? [item.option.id] : [],
+  //       };
+  //     })
+  //     .filter((order) => order !== null);
+
+  //   if (orders.length === 0) {
+  //     return;
+  //   }
+
+  //   // تحديد delivery_type بناءً على نوع الطلب
+  //   const delivery_type = deliveryType === "pickup" ? 2 : 1;
+
+  //   // إعداد قيم area و branch بناءً على نوع الطلب
+  //   let areaId, branchId;
+  //   if (delivery_type === 1) { // دليفري
+  //     areaId = address.area?.id;
+  //     branchId = address.branches?.[0]?.id;
+  //     if (!areaId || !branchId) {
+  //       toast.error("Please select a valid area and branch.");
+  //       return;
+  //     }
+  //   } else if (delivery_type === 2) { // بيك آب
+  //     const selectedBranch = selectedBranchId; // اختر الفرع المختار من الـ branchSlice
+  //     if (!selectedBranch) {
+  //       toast.error("Please select a valid branch for pickup.");
+  //       return;
+  //     }
+  //     branchId = selectedBranch;
+  //     areaId = 0; // لا يوجد منطقة مطلوبة في حالة البيك آب
+  //   }
+
+  //   const dataToSend = {
+  //     delivery_type: delivery_type,
+  //     payment: paymentMethod === "cash" ? 1 : 2,
+  //     lat: delivery_type === 1 ? address.lat : 0,
+  //     lng: delivery_type === 1 ? address.lng : 0,
+  //     address: currentAddress.id,
+  //     area: address.area?.id,
+  //     // area: areaId,
+  //     branch: branchId,
+  //     api_token: api_token,
+  //     items: JSON.stringify({ items: orders }),
+  //     device_id: "",
+  //     notes: "",
+  //     time: "2024-08-20 14:07:07",
+  //     car_model: "",
+  //     car_color: "",
+  //     gift_cards: "",
+  //     coins: "00.00",
+  //   };
+
+  //   console.log("Checkout data:", dataToSend);
+
+  //   const params = new URLSearchParams(dataToSend);
+  //   axios
+  //     .post(`${BASE_URL}/orders/create?${params.toString()}`)
+  //     .then((response) => {
+  //       if (response.data.response) {
+  //         console.log(response.data);
+  //         localStorage.setItem("orderSuccess", "true");
+  //         localStorage.removeItem("idInfo");
+
+  //         toast.success(
+  //           "Your order has been placed successfully. It will be delivered as soon as possible."
+  //         );
+
+  //         dispatch(clearCart());
+  //       } else {
+  //         console.error("Response error data:", response.data);
+  //         toast.error(
+  //           "An error occurred while processing your order. Please try again."
+  //         );
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error details:", error);
+  //       let errorMessage = "An error occurred while processing your order. Please try again.";
+
+  //       if (error.response) {
+  //         console.error("Error response data:", error.response.data);
+  //         console.error("Error response status:", error.response.status);
+  //         console.error("Error response headers:", error.response.headers);
+  //         errorMessage = error.response.data.message || errorMessage;
+  //       } else if (error.request) {
+  //         console.error("Error request:", error.request);
+  //         errorMessage = "Error placing order: No response from server.";
+  //       } else {
+  //         console.error("Error message:", error.message);
+  //         errorMessage = `Error placing order: ${error.message}`;
+  //       }
+
+  //       toast.error("An error occurred while processing your order. Please try again");
+  //     });
+  // };
+  // const selectedBranch = useSelector((state) => state.branch.selectedBranchId);
+  // const handleCheckout = () => {
+  //   const token = localStorage.getItem("token");
+
+  //   if (!token) {
+  //     navigate('/login');
+  //     return;
+  //   }
+
+  //   console.log("addressData", addressData);
+  //   console.log("address.id", address?.id);
+
+  //   const selectedAddress = addressData.find((addr) => addr.id === address?.id);
+
+  //   if (!selectedAddress) {
+  //     toast.error("Please select a valid delivery address before proceeding.");
+  //     return;
+  //   }
+
+  //   if (!isAddressAvailable(selectedAddress)) {
+  //     toast.error("The selected address is no longer available for delivery.");
+  //     return;
+  //   }
+
+  //   if (addressData.length === 1 && !address.id) {
+  //     dispatch(setSelectedAddress(addressData[activeIndex]));
+  //   }
+
+  //   console.log("Proceeding with address:", address.id);
+
+  //   if (paymentMethod === "credit card") {
+  //     setOpenCreditCardDialog(true);
+  //     return;
+  //   }
+
+  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  //   const orders = cartItems
+  //     .map((item) => {
+  //       if (item.quantity <= 0) {
+  //         console.error(`Item ${item.id} quantity is invalid: ${item.quantity}`);
+  //         toast.error("Order quantities must be greater than 0.");
+  //         return null;
+  //       }
+  //       return {
+  //         id: item.id,
+  //         special: specialNotes[item.id] || "",
+  //         extras: Array.isArray(item.extras) ? item.extras.map((extra) => extra.id) : [],
+  //         count: item.quantity,
+  //         choices: [],
+  //         options: item.option ? [item.option.id] : [],
+  //       };
+  //     })
+  //     .filter((order) => order !== null);
+
+  //   if (orders.length === 0) {
+  //     return;
+  //   }
+
+  //   // تحديد delivery_type بناءً على نوع الطلب
+  //   const delivery_type = deliveryType === "pickup" ? 2 : 1;
+
+  //   // استيراد `selectedBranchId` من الـ Redux أو الحصول عليه من مكانه المناسب
+
+  //   // إعداد قيم area و branch بناءً على نوع الطلب
+  //   let areaId, branchId;
+  //   if (delivery_type === 1) { // دليفري
+  //     areaId = address.area?.id;
+  //     branchId = address.branches?.[0]?.id;
+  //     if (!areaId || !branchId) {
+  //       toast.error("Please select a valid area and branch.");
+  //       return;
+  //     }
+  //   } else if (delivery_type === 2) { // بيك آب
+  //     if (!selectedBranchId) {
+  //       toast.error("Please select a valid branch for pickup.");
+  //       return;
+  //     }
+  //     branchId = selectedBranchId;
+  //     areaId = 0; // لا يوجد منطقة مطلوبة في حالة البيك آب
+  //   }
+
+  //   const dataToSend = {
+  //     delivery_type: delivery_type,
+  //     payment: paymentMethod === "cash" ? 1 : 2,
+  //     lat: delivery_type === 1 ? address.lat : 0,
+  //     lng: delivery_type === 1 ? address.lng : 0,
+  //     address: delivery_type === 1 ? address.id : null,
+  //     // area: delivery_type === 1 ? address.area?.id : null,
+  //     area:address.area?.id,
+  //     branch: branchId,
+  //     api_token: api_token,
+  //     items: JSON.stringify({ items: orders }),
+  //     device_id: "",
+  //     notes: "",
+  //     time: "2024-08-20 14:07:07",
+  //     car_model: "",
+  //     car_color: "",
+  //     gift_cards: "",
+  //     coins: "00.00",
+  //   };
+
+  //   console.log("Checkout data:", dataToSend);
+
+  //   const params = new URLSearchParams(dataToSend);
+  //   axios
+  //     .post(`${BASE_URL}/orders/create?${params.toString()}`)
+  //     .then((response) => {
+  //       if (response.data.response) {
+  //         console.log(response.data);
+  //         localStorage.setItem("orderSuccess", "true");
+  //         localStorage.removeItem("idInfo");
+
+  //         toast.success(
+  //           "Your order has been placed successfully. It will be delivered as soon as possible."
+  //         );
+
+  //         dispatch(clearCart());
+  //       } else {
+  //         console.error("Response error data:", response.data);
+  //         toast.error(
+  //           "An error occurred while processing your order. Please try again."
+  //         );
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error details:", error);
+  //       let errorMessage = "An error occurred while processing your order. Please try again.";
+
+  //       if (error.response) {
+  //         console.error("Error response data:", error.response.data);
+  //         console.error("Error response status:", error.response.status);
+  //         console.error("Error response headers:", error.response.headers);
+  //         errorMessage = error.response.data.message || errorMessage;
+  //       } else if (error.request) {
+  //         console.error("Error request:", error.request);
+  //         errorMessage = "Error placing order: No response from server.";
+  //       } else {
+  //         console.error("Error message:", error.message);
+  //         errorMessage = `Error placing order: ${error.message}`;
+  //       }
+
+  //       toast.error("An error occurred while processing your order. Please try again");
+  //     });
+  // };
+
   const handleCheckout = () => {
-    const token = localStorage.getItem("token"); // الحصول على التوكن من localStorage
+    const token = localStorage.getItem("token");
 
     if (!token) {
-      navigate('/login'); // توجيه المستخدم إلى صفحة تسجيل الدخول إذا لم يكن هناك توكن
+      navigate("/login");
       return;
     }
-    console.log("addressData", addressData);
-    console.log("address.id", address?.id); 
-  
-    // التحقق من وجود العنوان في القائمة وفي حالة توفره
-    const selectedAddress = addressData.find((addr) => addr.id === address?.id);
-  
-    if (!selectedAddress) {
-      toast.error("Please select a valid delivery address before proceeding.");
-      return;
-    }
-  
-    if (!isAddressAvailable(selectedAddress)) {
-      toast.error("The selected address is no longer available for delivery.");
-      return;
-    }
-  
-    if (addressData.length === 1 && !address.id) {
-      dispatch(setSelectedAddress(addressData[activeIndex]));
-    }
-  
-    console.log("Proceeding with address:", address.id);
-  
-    // متابعة خطوات الدفع والطلب كما في الكود السابق
-  
-  
-    console.log("selectedAddress", address.id);
-  
-    if (paymentMethod === "credit card") {
-      setOpenCreditCardDialog(true);
-      return;
-    }
-  
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const ids = cart.map((item) => item.id);
-  
-    // const orders = cartItems.map((item) => ({
-    //   id: item.id,
-    //   special: specialNotes[item.id] || "",
-    //   extras: Array.isArray(item.extras)
-    //     ? item.extras.map((extra) => extra.id)
-    //     : [],
-    //   count: item.quantity,
-    //   choices: [],
-    //   options: item.option ? [item.option.id] : [],
-    // }));
-  
-    const orders = cartItems.map((item) => {
-      if (item.quantity <= 0) {
-        console.error(`Item ${item.id} quantity is invalid: ${item.quantity}`);
-        toast.error("Order quantities must be greater than 0.");
-        return null;
+
+    // التحقق من اختيار العنوان فقط في حالة الدليفري
+    if (deliveryType === "delivery") {
+      const selectedAddress = addressData.find(
+        (addr) => addr.id === address?.id
+      );
+
+      if (!selectedAddress) {
+        toast.error(
+          "Please select a valid delivery address before proceeding."
+        );
+        return;
       }
-      return {
-        id: item.id,
-        special: specialNotes[item.id] || "",
-        extras: Array.isArray(item.extras) ? item.extras.map((extra) => extra.id) : [],
-        count: item.quantity,
-        choices: [],
-        options: item.option ? [item.option.id] : [],
-      };
-    }).filter(order => order !== null);
-  
+
+      if (!isAddressAvailable(selectedAddress)) {
+        toast.error(
+          "The selected address is no longer available for delivery."
+        );
+        return;
+      }
+    }
+
+    // التحقق من اختيار الفرع في حالة البيك آب
+    if (deliveryType === "pickup") {
+      if (!selectedBranchId) {
+        toast.error("Please select a branch for pickup.");
+        return;
+      }
+    }
+
+    // إعداد قيم area و branch بناءً على نوع الطلب
+    let areaId, branchId;
+    const delivery_type = deliveryType === "pickup" ? 2 : 1;
+
+    if (delivery_type === 1) {
+      // دليفري
+      areaId = address.area?.id;
+      branchId = address.branches?.[0]?.id;
+
+      if (!areaId || !branchId) {
+        toast.error("Please select a valid area and branch.");
+        return;
+      }
+    } else if (delivery_type === 2) {
+      // بيك آب
+      branchId = selectedBranchId;
+      areaId = null;
+    }
+
+    const orders = cartItems
+      .map((item) => {
+        if (item.quantity <= 0) {
+          console.error(
+            `Item ${item.id} quantity is invalid: ${item.quantity}`
+          );
+          console.error("Order quantities must be greater than 0.");
+          return null;
+        }
+        return {
+          id: item.id,
+          special: specialNotes[item.id] || "",
+          extras: Array.isArray(item.extras)
+            ? item.extras.map((extra) => extra.id)
+            : [],
+          count: item.quantity,
+          choices: [],
+          options: item.option ? [item.option.id] : [],
+        };
+      })
+      .filter((order) => order !== null);
+
     if (orders.length === 0) {
       return;
     }
-  
-    // تحقق من وجود `area` و `branches` قبل الوصول إليها
-    if (!address?.area?.id || !address?.branches?.[0]?.id) {
-      toast.error("Please select a valid area and branch.");
-      return;
-    }
-  
+
+    const currentDateTime = new Date();
+
+    // تنسيق التاريخ والوقت
+    const formatDateTime = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      const seconds = String(date.getSeconds()).padStart(2, "0");
+
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    };
+
+    const formattedTime = formatDateTime(currentDateTime);
+
+    // إذا كان delivery_type = 2، أرسل null للعنوان
     const dataToSend = {
-      delivery_type: 1,
+      delivery_type: delivery_type,
       payment: paymentMethod === "cash" ? 1 : 2,
-      lat: deliveryType === 1 ? address.lat : 0,
-      lng: deliveryType === 1 ? address.lng : 0,
-      address: currentAddress.id,
-      area: address.area?.id, // تأكد من وجود `area.id`
-      branch: address.branches?.[0]?.id, // تأكد من وجود `branches[0].id`
+      lat: delivery_type === 1 ? address.lat : 0,
+      lng: delivery_type === 1 ? address.lng : 0,
+      address: delivery_type === 1 ? currentAddress.id : null,
+      area: delivery_type === 1 ? address.area?.id : areaId,
+      // area:address.area?.id,
+      branch: branchId,
       api_token: api_token,
       items: JSON.stringify({ items: orders }),
       device_id: "",
       notes: "",
-      time: "2024-08-20 14:07:07",
+      time: formattedTime,
       car_model: "",
       car_color: "",
       gift_cards: "",
       coins: "00.00",
     };
-  
+
     console.log("Checkout data:", dataToSend);
-    console.log("branches:",  address.branches?.[0]?.id);
-  
+
     const params = new URLSearchParams(dataToSend);
     axios
-  .post(`${BASE_URL}/orders/create?${params.toString()}`)
-  .then((response) => {
-    if (response.data.response) {
-      console.log(response.data);
-      localStorage.setItem("orderSuccess", "true");
-      localStorage.removeItem("idInfo");
+      .post(`${BASE_URL}/orders/create?${params.toString()}`)
+      .then((response) => {
+        if (response.data.response) {
+          console.log(response.data);
+          localStorage.setItem("orderSuccess", "true");
+          localStorage.removeItem("idInfo");
 
-      toast.success(
-        "Your order has been placed successfully. It will be delivered as soon as possible."
-      );
+          toast.success(
+            "Your order has been placed successfully. It will be delivered as soon as possible."
+          );
 
-      dispatch(clearCart());
-    } else {
-      console.error("Response error data:", response.data);
-      toast.error(
-        "An error occurred while processing your order. Please try again."
-      );
-    }
-  })
-  .catch((error) => {
-    // عرض تفاصيل الخطأ في الكونسول
-    console.error("Error details:", error);
+          dispatch(clearCart());
+        } else {
+          console.error("Response error data:", response.data);
+          toast.error(
+            "An error occurred while processing your order. Please try again."
+          );
+        }
+      })
+      .catch((error) => {
+        console.error("Error details:", error);
+        let errorMessage =
+          "An error occurred while processing your order. Please try again.";
 
-    // إعداد رسالة الخطأ للمستخدم
-    let errorMessage = "An error occurred while processing your order. Please try again.";
+        if (error.response) {
+          console.error("Error response data:", error.response.data);
+          console.error("Error response status:", error.response.status);
+          console.error("Error response headers:", error.response.headers);
+          errorMessage = error.response.data.message || errorMessage;
+        } else if (error.request) {
+          console.error("Error request:", error.request);
+          errorMessage = "Error placing order: No response from server.";
+        } else {
+          console.error("Error message:", error.message);
+        }
 
-    if (error.response) {
-      // استجابة من الخادم
-      console.error("Error response data:", error.response.data);
-      console.error("Error response status:", error.response.status);
-      console.error("Error response headers:", error.response.headers);
-      
-      // استخدام رسالة الخطأ من الخادم إذا كانت موجودة
-      errorMessage = error.response.data.message || errorMessage;
-    } else if (error.request) {
-      // لم يتم تلقي استجابة من الخادم
-      console.error("Error request:", error.request);
-      errorMessage = "Error placing order: No response from server.";
-    } else {
-      // خطأ أثناء إعداد الطلب
-      console.error("Error message:", error.message);
-      errorMessage = `Error placing order: ${error.message}`;
-    }
-    
-    // عرض رسالة الخطأ للمستخدم
-    toast.error(errorMessage);
-  });
-
+        toast.error(errorMessage);
+      });
   };
-//   const handleCheckout = () => {
-//   console.log("addressData:", addressData);
-//   console.log("Cart Items before sending request:", cartItems); // تحقق من البيانات قبل الإرسال
 
-//   // التحقق من وجود العنوان في القائمة وفي حالة توفره
-//   const selectedAddress = addressData.find((addr) => addr.id === address?.id);
-
-//   if (!selectedAddress) {
-//     toast.error("Please select a valid delivery address before proceeding.");
-//     return;
-//   }
-
-//   if (!isAddressAvailable(selectedAddress)) {
-//     toast.error("The selected address is no longer available for delivery.");
-//     return;
-//   }
-
-//   if (addressData.length === 1 && !address.id) {
-//     dispatch(setSelectedAddress(addressData[activeIndex]));
-//   }
-
-//   console.log("Proceeding with address:", address.id);
-
-//   // تحقق من وجود `area` و `branches` قبل الوصول إليها
-//   if (!address?.area?.id || !address?.branches?.[0]?.id) {
-//     toast.error("Please select a valid area and branch.");
-//     return;
-//   }
-
-//   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-//   const ids = cart.map((item) => item.id);
-
-//   const orders = cartItems.map((item) => ({
-//     id: item.id,
-//     special: specialNotes[item.id] || "",
-//     extras: Array.isArray(item.extras) ? item.extras.map((extra) => extra.id) : [],
-//     count: item.quantity,
-//     choices: [],
-//     options: item.option ? [item.option.id] : [],
-//   }));
-
-//   console.log("Orders to be sent:", orders); // تحقق من البيانات قبل الإرسال
-// console.log("Cart Items before sending request:", cartItems);
-// console.log("Orders to be sent:", orders);~
-//   const dataToSend = {
-//     delivery_type: 1,
-//     payment: paymentMethod === "cash" ? 1 : 2,
-//     lat: deliveryType === 1 ? address.lat : 0,
-//     lng: deliveryType === 1 ? address.lng : 0,
-//     address: currentAddress.id,
-//     area: address.area?.id,
-//     branch: address.branches?.[0]?.id,
-//     api_token: api_token,
-//     items: JSON.stringify({ items: orders }),
-//     device_id: "",
-//     notes: "",
-//     time: "2024-08-20 14:07:07",
-//     car_model: "",
-//     car_color: "",
-//     gift_cards: "",
-//     coins: "00.00",
-//   };
-
-//   console.log("Checkout data:", dataToSend);
-
-//   const params = new URLSearchParams(dataToSend);
-//   axios
-//   .post(`${BASE_URL}/orders/create?${params.toString()}`)
-//   .then((response) => {
-//     if (response.data.response) {
-//       console.log(response.data);
-//       localStorage.setItem("orderSuccess", "true");
-//       localStorage.removeItem("idInfo");
-
-//       toast.success(
-//         "Your order has been placed successfully. It will be delivered as soon as possible."
-//       );
-
-//       dispatch(clearCart());
-//     } else {
-//       console.error("Response error data:", response.data);
-//       toast.error(
-//         "An error occurred while processing your order. Please try again."
-//       );
-//     }
-//   })
-//   .catch((error) => {
-//     console.error("Full error object:", error);
-    
-//     let errorMessage = "An error occurred while processing your order. Please try again.";
-
-//     if (error.response) {
-//       console.error("Error response data:", error.response.data);
-//       console.error("Error response status:", error.response.status);
-//       console.error("Error response headers:", error.response.headers);
-//       errorMessage = error.response.data.message || errorMessage;
-//     } else if (error.request) {
-//       console.error("Error request:", error.request);
-//       errorMessage = "Error placing order: No response from server.";
-//     } else {
-//       console.error("Error message:", error.message);
-//       errorMessage = `Error placing order: ${error.message}`;
-//     }
-
-//     toast.error(errorMessage);
-//   });
-
-// };
-
-
-  
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
   const addressCleared = useRef(false);
 
-  const address = useSelector((state) => state.addresses.selectedAddress) ;
+  const address = useSelector((state) => state.addresses.selectedAddress);
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
-//  address
+  //  address
 
   const selectedAddress = useSelector(
     (state) => state.addresses.selectedAddress
   );
-  
+
   useEffect(() => {
     const fetchCities = async () => {
       setLoadingCities(true);
@@ -773,70 +951,58 @@ function OrderOnline() {
     }
   }, [selectedCity]);
 
-
-
-
   useEffect(() => {
     if (addressData.length > 0) {
       localStorage.setItem("addresses", JSON.stringify(addressData));
     }
   }, [addressData]);
 
-
-useEffect(() => {
-  // تحقق إذا كان العنوان موجودًا وغير متاح
-  if (address && !isAddressAvailable(address)) {
-    if (!addressCleared.current) {
-      // إذا كان العنوان غير متاح، قم بإلغاء اختياره مرة واحدة فقط
-      dispatch(clearSelectedAddress());
-      // toast.error("The selected address is no longer available for delivery.");
-      addressCleared.current = true; // تعيين الفلاج لتجنب التحديث المتكرر
+  useEffect(() => {
+    // تحقق إذا كان العنوان موجودًا وغير متاح
+    if (address && !isAddressAvailable(address)) {
+      if (!addressCleared.current) {
+        // إذا كان العنوان غير متاح، قم بإلغاء اختياره مرة واحدة فقط
+        dispatch(clearSelectedAddress());
+        // toast.error("The selected address is no longer available for delivery.");
+        addressCleared.current = true; // تعيين الفلاج لتجنب التحديث المتكرر
+      }
+    } else if (address && isAddressAvailable(address)) {
+      // إذا أصبح العنوان متاحًا، قم بإعادة تعيين الفلاج
+      addressCleared.current = false;
     }
-  } else if (address && isAddressAvailable(address)) {
-    // إذا أصبح العنوان متاحًا، قم بإعادة تعيين الفلاج
-    addressCleared.current = false;
-  }
-}, [address, dispatch]); // تأكد من أن الهوكات هنا لا تتغير
- 
-
-  
+  }, [address, dispatch]); // تأكد من أن الهوكات هنا لا تتغير
 
   useEffect(() => {
     dispatch(fetchAddresses());
   }, [dispatch]);
 
-
   useEffect(() => {
     const storedAddress = localStorage.getItem("selectedAddress");
-  
+
     if (storedAddress) {
       const parsedAddress = JSON.parse(storedAddress);
-  
+
       // طباعة العنوان الذي تم تحميله
       // console.log("Address loaded from localStorage:", parsedAddress);
-  
+
       // تحديث الحالة في Redux
       dispatch(setSelectedAddress(parsedAddress));
     }
   }, [dispatch]);
-  
-
 
   useEffect(() => {
-  if (!user) {
-    localStorage.removeItem("selectedAddress");
-    dispatch(setSelectedAddress(null));
-    setCurrentAddress(null);
-  }
-}, [user, dispatch]);
-
+    if (!user) {
+      localStorage.removeItem("selectedAddress");
+      dispatch(setSelectedAddress(null));
+      setCurrentAddress(null);
+    }
+  }, [user, dispatch]);
 
   const [deliveryType, setDeliveryType] = useState("delivery");
   const [branchClosed, setBranchClosed] = useState(false);
   const handleBranchStatusChange = (isClosed) => {
     setBranchClosed(isClosed);
   };
-
 
   useEffect(() => {
     if (selectedAddress) {
@@ -845,10 +1011,9 @@ useEffect(() => {
     }
   }, [selectedAddress]);
 
-
   useEffect(() => {
     const storedAddress = localStorage.getItem("selectedAddress");
-    
+
     if (address) {
       // إذا كان هناك عنوان في Redux، استخدمه
       setCurrentAddress(address);
@@ -859,13 +1024,12 @@ useEffect(() => {
       dispatch(setSelectedAddress(parsedAddress)); // تحديث Redux
     }
   }, [address, dispatch]);
-  
 
-  const isLoggedIn = Boolean(localStorage.getItem('token'));
+  const isLoggedIn = Boolean(localStorage.getItem("token"));
   const handleOpenDialog = () => {
     if (!isLoggedIn) {
       // إذا كان غير مسجل دخول، توجهه إلى صفحة تسجيل الدخول
-      navigate('/login');
+      navigate("/login");
     } else {
       // إذا كان مسجل دخول، يتم فتح الديالوج بشكل طبيعي
       setOpenDialog(true);
@@ -909,8 +1073,9 @@ useEffect(() => {
             </Stack>
 
             {/* تحقق من حالة العنوان */}
-            {currentAddress && currentAddress.address_name 
-            && currentAddress.isAvailable  ? (
+            {currentAddress &&
+            currentAddress.address_name &&
+            currentAddress.isAvailable ? (
               <Card
                 sx={{
                   mb: 3,
@@ -1055,197 +1220,210 @@ useEffect(() => {
             chilis
           </Typography>
         </Box>
-        <Container sx={{ margin: "0 auto",borderBottom: "2px solid #ececec"}}>
+        <Container sx={{ margin: "0 auto", borderBottom: "2px solid #ececec" }}>
           <Box className="orderNow" sx={{ borderRadius: "8px" }}>
-            {cartItems.length === 0
-              ?  <Typography
-            sx={{
-              textAlign: "center",
-              fontSize: "1.8rem",
-              color: "gray",
-              fontFamily: "cairo",
-              my: 4,
-              fontWeight: "bold",
-            }}
-          >
-The cart is empty
-          </Typography>
-              : cartItems.map((item, index) => (
-                  <Card key={uuidv4()} sx={{ p: 2, my: 3 }}>
-                    <Stack sx={{ position: "relative" }}>
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        sx={{ display: "flex" }}
-                      >
-                        <Typography
-                          sx={{
-                            color: "#000",
-                            fontSize: "1.8rem",
-                            fontWeight: "bold",
-                            fontFamily: "cairo",
-                          }}
-                        >
-                          {item.name}
-                        </Typography>
-                        <Typography
-                          onClick={() => handleRemoveItem(index)}
-                          sx={{
-                            color: "red",
-                            position: "absolute",
-                            right: "-11px",
-                            top: "-13px",
-                            cursor: "pointer",
-                            fontSize: "1.8rem",
-                            fontWeight: "bold",
-                            fontFamily: "cairo",
-                            "&:hover": { color: "#e31616!important" },
-                          }}
-                        >
-                          X
-                        </Typography>
-                      </Stack>
-
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
+            {cartItems.length === 0 ? (
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  fontSize: "1.8rem",
+                  color: "gray",
+                  fontFamily: "cairo",
+                  my: 4,
+                  fontWeight: "bold",
+                }}
+              >
+                The cart is empty
+              </Typography>
+            ) : (
+              cartItems.map((item, index) => (
+                <Card key={uuidv4()} sx={{ p: 2, my: 3 }}>
+                  <Stack sx={{ position: "relative" }}>
+                    <Stack
+                      direction={"row"}
+                      alignItems={"center"}
+                      sx={{ display: "flex" }}
+                    >
+                      <Typography
                         sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          m: "10px 0",
+                          color: "#000",
+                          fontSize: "1.8rem",
+                          fontWeight: "bold",
+                          fontFamily: "cairo",
                         }}
                       >
-                        <Typography
-                          sx={{
-                            color: "#17a2b8!important",
-                            fontSize: "1.3rem",
-                            fontWeight: "bold",
-                            fontFamily: "cairo",
-                          }}
-                        >
-                          {item.name}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            color: "#17a2b8!important",
-                            fontSize: "1.3rem",
-                            fontWeight: "bold",
-                            fontFamily: "cairo",
-                          }}
-                        >
-                          {item.price} EGP
-                        </Typography>
-                        <Counter
-  basePrice={item.price}
-  onChange={(newTotalPrice) =>
-    handleCounterChange(index, newTotalPrice)
-  }
-  onQuantityChange={(newQuantity) =>
-    handleQuantityChange(item.uniqueId, newQuantity)  
-  }
-  initialQuantity={item.quantity}
-/>
-                      </Stack>
+                        {item.name}
+                      </Typography>
+                      <Typography
+                        onClick={() => handleRemoveItem(index)}
+                        sx={{
+                          color: "red",
+                          position: "absolute",
+                          right: "-11px",
+                          top: "-13px",
+                          cursor: "pointer",
+                          fontSize: "1.8rem",
+                          fontWeight: "bold",
+                          fontFamily: "cairo",
+                          "&:hover": { color: "#e31616!important" },
+                        }}
+                      >
+                        X
+                      </Typography>
+                    </Stack>
 
+                    <Stack
+                      direction={"row"}
+                      alignItems={"center"}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        m: "10px 0",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: "#17a2b8!important",
+                          fontSize: "1.3rem",
+                          fontWeight: "bold",
+                          fontFamily: "cairo",
+                        }}
+                      >
+                        {item.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: "#17a2b8!important",
+                          fontSize: "1.3rem",
+                          fontWeight: "bold",
+                          fontFamily: "cairo",
+                        }}
+                      >
+                        {item.price} EGP
+                      </Typography>
+                      <Counter
+                        basePrice={item.price}
+                        onChange={(newTotalPrice) =>
+                          handleCounterChange(index, newTotalPrice)
+                        }
+                        onQuantityChange={(newQuantity) =>
+                          handleQuantityChange(item.uniqueId, newQuantity)
+                        }
+                        initialQuantity={item.quantity}
+                      />
+                    </Stack>
+
+                    <Stack
+                      direction={"row"}
+                      alignItems={"center"}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          color: "#424242 !important",
+                          fontSize: "1.5rem",
+                          fontWeight: 500,
+                        }}
+                      >
+                        Regular
+                      </Typography>
+                      <Typography sx={{ fontSize: "1.5rem", fontWeight: 500 }}>
+                        {(
+                          totalPrices[index] || item.price * item.quantity
+                        ).toFixed(2)}{" "}
+                        EGP
+                      </Typography>
+                    </Stack>
+                    {item.option && (
                       <Stack
                         direction={"row"}
                         alignItems={"center"}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
+                        sx={{ justifyContent: "space-between"}}
                       >
                         <Typography
+                          variant="body1"
                           sx={{
-                            color: "#424242 !important",
+                                color: "#000!important",
+                                fontSize: "1.5rem",
+                                fontFamily: "cairo",
+                                fontWeight: 500,
+                              }}
+                            
+                        >
+                          Option
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{
+                            color: "#000!important",
                             fontSize: "1.5rem",
+                            fontFamily: "cairo",
                             fontWeight: 500,
                           }}
                         >
-                          Regular
-                        </Typography>
-                        <Typography
-                          sx={{ fontSize: "1.5rem", fontWeight: 500 }}
-                        >
-                          {(
-                            totalPrices[index] || item.price * item.quantity
-                          ).toFixed(2)}{" "}
-                          EGP
+                          {item.option.name} {/* استخدم الاسم الصحيح هنا */}
                         </Typography>
                       </Stack>
-
-                      {item.extras && item.extras.length > 0 && (
-                        <Stack sx={{ mt: 2 }}>
-                          {item.extras.map((extra, i) => (
-                            <Stack
-                              key={i}
-                              direction={"row"}
-                              alignItems={"center"}
-                              sx={{ justifyContent: "space-between", mb: 1 }}
+                    )}
+                    {item.extras && item.extras.length > 0 && (
+                      <Stack >
+                        {item.extras.map((extra, i) => (
+                          <Stack
+                            key={i}
+                            direction={"row"}
+                            alignItems={"center"}
+                            sx={{ justifyContent: "space-between"}}
+                          >
+                            <Typography
+                              sx={{
+                                color: "#000!important",
+                                fontSize: "1.5rem",
+                                fontFamily: "cairo",
+                                fontWeight: 500,
+                              }}
                             >
-                              <Typography
-                                sx={{
-                                  color: "#000!important",
-                                  fontSize: "1.5rem",
-                                  fontFamily: "cairo",
-                                  fontWeight: 500,
-                                }}
-                              >
-                                {extra.name}
-                              </Typography>
-                              <Typography
-                                sx={{
-                                  color: "#000!important",
-                                  fontSize: "1.5rem",
-                                  fontFamily: "cairo",
-                                  fontWeight: 500,
-                                }}
-                              >
-                                {extra.price} EGP
-                              </Typography>
-                            </Stack>
-                          ))}
+                              {extra.name}
+                            </Typography>
+                            <Typography
+                              sx={{
+                                color: "#000!important",
+                                fontSize: "1.5rem",
+                                fontFamily: "cairo",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {extra.price} EGP
+                            </Typography>
+                          </Stack>
+                        ))}
+                      </Stack>
+                    )}
 
-                          {selectedOption && (
-                            <Stack sx={{ mb: 2 }}>
-                              <Typography
-                                variant="body1"
-                                sx={{ fontWeight: "bold", color: "red" }}
-                              >
-                                option
-                              </Typography>
-                              <Typography
-                                variant="body2"
-                                sx={{ marginLeft: 2 }}
-                              >
-                                {selectedOption.name_en}
-                              </Typography>
-                            </Stack>
-                          )}
-                        </Stack>
-                      )}
-
-                      <TextField
-                        placeholder="Enter any special request note"
-                        value={specialNotes[item.id] || ""} // ربط الحقل النصي مع الحالة
-                        onChange={(e) =>
-                          handleSpecialNoteChange(item.id, e.target.value)
-                        }
-                        sx={{
-                          transition: "1s",
-                          "& .MuiInputBase-input": {
-                            fontSize: "1.3rem",
-                            color: "gray",
-                          },
-                          "& .MuiInputBase-input::placeholder": {
-                            color: "#000",
-                            fontSize: "1.3rem",
-                          },
-                        }}
-                      />
-                    </Stack>
-                  </Card>
-                ))}
+                    <TextField
+                      placeholder="Enter any special request note"
+                      value={specialNotes[item.id] || ""} // ربط الحقل النصي مع الحالة
+                      onChange={(e) =>
+                        handleSpecialNoteChange(item.id, e.target.value)
+                      }
+                      sx={{
+                        transition: "1s",
+                        "& .MuiInputBase-input": {
+                          fontSize: "1.3rem",
+                          color: "gray",
+                        },
+                        "& .MuiInputBase-input::placeholder": {
+                          color: "#000",
+                          fontSize: "1.3rem",
+                        },
+                      }}
+                    />
+                  </Stack>
+                </Card>
+              ))
+            )}
           </Box>
         </Container>
 

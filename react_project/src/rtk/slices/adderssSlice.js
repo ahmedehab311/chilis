@@ -147,6 +147,7 @@ export const addAddress = createAsyncThunk(
   async (newAddress) => {
     const queryParams = new URLSearchParams(newAddress);
     const response = await axios.post(`${API_ADD_ADDRESS}?${queryParams.toString()}`);
+    console.log("response",response)
     if (response.data.response) {
       return response.data.data;
     }

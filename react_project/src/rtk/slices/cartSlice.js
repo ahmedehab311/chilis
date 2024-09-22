@@ -31,8 +31,6 @@ const cartSlice = createSlice({
     },
 
     
-    
-    
     updateCartItems(state, action) {
       if (Array.isArray(action.payload)) {
         state.items = action.payload;
@@ -52,19 +50,7 @@ const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(state.items));
     },
 
-    // updateItemQuantity: (state, action) => {
-    //   const { itemId, quantity } = action.payload;
-    //   const item = state.items.find((item) => item.id === itemId);
-    //   if (item) {
-    //     item.quantity = quantity;
-    //     state.totalItems = state.items.reduce(
-    //       (total, item) => total + item.quantity,
-    //       0
-    //     );
-    //     console.log("Item updated:", itemId, "Quantity:", quantity);
-    //     localStorage.setItem("cart", JSON.stringify(state.items));
-    //   }
-    // },
+
     updateItemQuantity: (state, action) => {
       const { uniqueId, quantity } = action.payload;
     
@@ -97,10 +83,6 @@ const cartSlice = createSlice({
       state.items = [];
       state.totalItems = 0;
       localStorage.removeItem("cart");
-
-      // تحقق أن الـ Redux تم تحديثه
-      console.log("Redux cleared:", state.items);
-      console.log("localStorage cleared:", localStorage.getItem("cart"));
     },
   },
 });
