@@ -109,8 +109,13 @@ function LinksHeader({ handleNavigation }) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+<<<<<<< HEAD
         <MenuItem onClick={() => changeLanguage('en')}>English</MenuItem>
         {/* <MenuItem onClick={() => changeLanguage('ar')}>العربية</MenuItem> */}
+=======
+        {/* <MenuItem onClick={() => changeLanguage('en')}>English</MenuItem> */}
+        <MenuItem onClick={() => changeLanguage('ar')}>العربية</MenuItem>
+>>>>>>> cb997ce43512aaa2ba454a8bc3c497ab6235c7c4
       </Menu>
       <Link href="#menu">
         <Typography
