@@ -102,9 +102,8 @@ function DialogItem({
           0
         ),
     };
-    console.log("Item to add:", itemDetailsToAdd);
+    // console.log("Item to add:", itemDetailsToAdd);
 
-    console.log(" selectedOption.name_en", selectedOption.name_en);
     // إضافة العنصر الجديد للسلة بشكل مباشر
     dispatch(addItemToCart(itemDetailsToAdd));
 

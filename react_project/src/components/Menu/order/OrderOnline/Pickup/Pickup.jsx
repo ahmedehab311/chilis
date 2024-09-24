@@ -24,7 +24,7 @@ function Pickup({ onBranchStatusChange }) {
   const [branchClosed, setBranchClosed] = useState(false);
 
   useEffect(() => {
-    console.log("Fetching branches from API...");
+    // console.log("Fetching branches from API...");
     dispatch(fetchBranches());
   }, [dispatch]);
 
@@ -32,7 +32,6 @@ function Pickup({ onBranchStatusChange }) {
     const now = new Date();
     const openTime = new Date();
     const closeTime = new Date();
-    console.log("now", now);
 
     const [openHour, openMinute, openSecond] = branch.open
       .split(":")
@@ -47,12 +46,6 @@ function Pickup({ onBranchStatusChange }) {
     if (closeHour < openHour) {
       closeTime.setDate(closeTime.getDate() + 1);
     }
-    // console.log("openTime", openTime);
-    // console.log("closeTime", closeTime);
-    // console.log(`Branch selected: ${branch.name_en}`);
-    // console.log(`Current time: ${now.toTimeString().split(" ")[0]}`);
-    // console.log(`Branch open time: ${branch.open}`);
-    // console.log(`Branch close time: ${branch.close}`);
 
     const closed = now < openTime || now > closeTime;
     if (closed) {

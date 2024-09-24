@@ -35,7 +35,6 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     "/login",
     "/register",
     "/forgot-password",
-    // "/change-password",
     "*"
   ];
 
@@ -46,6 +45,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     localStorage.removeItem("user");
     localStorage.removeItem("counter");
     localStorage.removeItem("selectedAddress");
+    localStorage.removeItem("activeIndex");
     window.location.href = "/";
   };
 
