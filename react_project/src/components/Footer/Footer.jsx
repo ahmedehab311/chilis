@@ -1,50 +1,30 @@
-import { Stack, Box, Typography } from "@mui/material";
-import { ContactUs, Location, Email } from "./index.jsx";
-import "./Footer.css";
+import { Stack, Box } from "@mui/material";
+import { Box1, Box2, Box3 } from "./index.jsx";
 function Footer() {
   return (
     <div id="footer">
-      <Stack>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-around",
-            borderTop: "3px solid #fff",
-            background: "#e72323",
-            position: "relative",
-            p: 1,
-            "@media (max-width: 700px)": {
-              flexDirection: "column"
-            },
-          }}
-          gap={2}
-        >
-          <Stack>
-            <ContactUs />
-          </Stack>
-          <Stack>
-            {/* <Location /> */}
-            <Typography
-              sx={{
-                color: "#fff",
-                background: "#e72323",
-                fontWight: "600",
-                fontSize: "16px",
-                textAlign: "center",
-                textTransform: "uppercase",
-                pb: 2,
-              }}
-            >
-              all rights reserved to chilis egypt
-            </Typography>
-          </Stack>
-
-          <Stack>
-            <Email />
-          </Stack>
-        </Box>
-      </Stack>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderTop: "3px solid #fff",
+          background: "#e72323",
+          position: "relative",
+          p: 1,
+        }}
+        gap={2}
+      >
+        <Stack>
+          <Box1 />
+        </Stack>
+        <Stack>
+          <Box2 />
+        </Stack>
+        <Stack>
+          <Box3 />
+        </Stack>
+      </Box>
     </div>
   );
 }
