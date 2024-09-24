@@ -1,0 +1,66 @@
+.box {
+    background: url(../../Hero/images/test2.jpg) 50% / cover no-repeat !important;
+    margin-top: 10px;
+    max-width: 100% !important;
+    color: #fff !important;
+    padding: 8px;
+    display: inline !important;
+  }
+  .css-nhhtsc{
+    max-width: 228px !important;
+    padding: 11px 15px !important;
+  }
+.swiper-button-next,
+.swiper-button-prev {
+  color: white;
+  width: 30px;
+  height: 30px;
+}
+
+.swiper-button-next {
+  right: 10px;
+}
+
+.swiper-button-prev {
+  left: 10px;
+}
+.css-14t339x-MuiPaper-root-MuiCard-root {
+  padding-right: 15px !important;
+  padding-left: 15px !important;
+}
+/* .css-p6dri1{
+  font-size: 1.6rem !important;
+} */
+.css-g2ee9{
+  margin: -50px 0px 16px;
+}
+.swiper-button-next, .swiper-button-prev{
+
+}
+
+@media (max-width: 600px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+  }
+}
+
+
+@media (min-width: 600px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+@media (min-width: 900px) {
+  .swiper-button-next,
+  .swiper-button-prev {
+    width:0 !important;
+    height: 40px;
+  }
+}

@@ -1,4 +1,4 @@
-import Box1 from "./Box1.jsx";
-import Box2 from "./Box2.jsx";
-import Box3 from "./Box3.jsx";
-export {Box1,Box2,Box3}
+import ContactUs from "./ContactUs.jsx";
+import Location from "./Location.jsx";
+import Email from "./Email.jsx";
+export {ContactUs,Location,Email}

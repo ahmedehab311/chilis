@@ -1,0 +1,43 @@
+
+/* box */
+.custom-input {
+    width: 200px;
+    margin: 10px 0;
+  }
+  
+  .css-sgbe1q-MuiPaper-root-MuiCard-root {
+    background-color: #000 !important;
+    color: #fff !important;
+  }
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+    padding: 9.5px 5px;
+  }
+  .inputFooter {
+    background-color: transparent;
+    border: 1px solid #fff;
+  }
+  
+  /* footer box2 */
+  .css-k008qs {
+    flex-direction: column;
+  }
+  .css-4940io-MuiStack-root {
+    flex-direction: row !important;
+  }
+  /* footer box3 */
+  .css-821wyw-MuiSvgIcon-root {
+    color: #fff !important;
+    font-size: 20px;
+    margin-right: 6px;
+  }
+  
+  /* media footer  */
+  
+  @media (max-width: 900px) {
+    .css-1059fn5 {
+      flex-direction: column;
+      padding: 20px !important;
+    }
+  }
+  
+  

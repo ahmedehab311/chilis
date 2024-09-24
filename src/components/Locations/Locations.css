@@ -1,0 +1,27 @@
+.responsive-map {
+    width: 100%; /* تأخذ كامل العرض المتاح */
+    max-width: 600px; /* الحد الأقصى لعرض الخريطة */
+    height: 450px; /* الارتفاع الطبيعي */
+  }
+  
+  @media (max-width: 1000px) {
+    .responsive-map {
+      width: 500px; /* تصغير العرض */
+      height: 375px; /* تصغير الارتفاع بما يتناسب */
+    }
+  }
+  
+  @media (max-width: 800px) {
+    .responsive-map {
+      width: 400px; /* حجم أصغر للشاشات الصغيرة */
+      height: 300px; /* تقليل الارتفاع */
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .responsive-map {
+      width: 300px; /* حجم أصغر للشاشات الصغيرة جدًا */
+      height: 225px; /* تقليل الارتفاع */
+    }
+  }
+  
