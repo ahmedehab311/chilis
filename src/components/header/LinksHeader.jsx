@@ -151,7 +151,7 @@ function LinksHeader({ handleNavigation }) {
         </Typography>
       </Link>
       <Link href="#footer">
-        {/* <Typography
+        <Typography
           sx={{
             color: "#fff",
             fontSize: "2.2rem",
@@ -161,7 +161,7 @@ function LinksHeader({ handleNavigation }) {
           onClick={() => handleNavigation("footer")}
         >
           {t('contactUs')}
-        </Typography> */}
+        </Typography>
       </Link>
     </>
   );
