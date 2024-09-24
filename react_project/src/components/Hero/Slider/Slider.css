@@ -1,56 +1,30 @@
 .hero {
-  background: url(../images/bigBackground.png) 50% / cover no-repeat;
+  background: url(../images/test2.jpg) 50% / cover no-repeat;
   /* position: relative; */
 }
 .img-fluid {
-  width: 352px !important;
+  width: 387px !important;
   /* height: 229px !important; */
 }
-
 @media (max-width: 700px) {
   .img-fluid {
     width: 200px !important;
     height: 200px !important;
   }
 }
-@media (max-width: 500px) {
-  .img-fluid {
-    width: 115px !important;
-    /* height: 200px !important; */
-  }
-}
 .logoImg {
   display: block;
   position: absolute;
-  width: 220px;
+  width: 150px;
   height: 100px;
   top: 4%;
-  left: 18%;
+  left: 5px;
 }
 
-@media (max-width: 1200px) {
-  .logoImg {
-    width: 148px;
-    height: 81px;
-    top: 4%;
-    left: 15%;
-  }
-}
-@media (max-width: 900px) {
-  .logoImg {
-    width: 137px;
-    height: 81px;
-    top: 4%;
-    left: 8%;
-  }
-}
 @media (max-width: 700px) {
   .logoImg {
-    width: 109px;
-    height: 72px;
-    top: 2%;
-    left: 2%;
-
+    width: 67px;
+    height: 39px;
   }
 }
 /* slider style */
