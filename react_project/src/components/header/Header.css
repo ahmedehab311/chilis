@@ -1,5 +1,4 @@
 .headerMenu {
-  /* display: flex; */
   align-items: center;
   justify-content: space-around;
   padding: 10px 10px;
@@ -11,12 +10,12 @@
   justify-content: space-around;
   padding: 10px 10px;
 }
-.headerMenuflex li a {
+/* .headerMenuflex li a {
   color: #fff;
   font-size: 20px;
   font-weight: 500;
-  font-family: "Open Sans";
-}
+  font-family: "cairo";
+} */
 .headerMenu li {
   margin: 25px;
 }
@@ -25,7 +24,7 @@
   color: #fff;
   font-size: 20px;
   font-weight: 500;
-  font-family: "Open Sans";
+  font-family: "cairo";
 }
 
 .css-i4bv87-MuiSvgIcon-root {
@@ -34,36 +33,88 @@
 .css-78trlr-MuiButtonBase-root-MuiIconButton-root {
   color: #fff !important;
 }
-.css-1160xiw-MuiPaper-root-MuiDrawer-paper {
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper, .css-1ab2xsx{
   background-color: #000 !important;
   width: 25% !important;
 }
-.css-1160xiw-MuiPaper-root-MuiDrawer-paper {
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper,.css-1ab2xsx {
   padding: 15px !important;
 }
-.css-1160xiw-MuiPaper-root-MuiDrawer-paper a {
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper a,.css-1ab2xsx a {
   color: #fff !important;
-  padding: 6px !important;
+  padding: 12px !important;
   font-size: 20px !important;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper a:not(:last-child) ,
+.css-1ab2xsx a:not(:last-child) {
+  border-bottom: 1px solid #333;
+}
+.header-empty-cart {
+  display: flex;
+  justify-content: center; /* Center align items when cart is empty */
+}
+
+.header-with-cart {
+  display: flex;
+  justify-content: space-between; /* Regular layout when cart is not empty */
 }
 @media (max-width: 690px) {
   .headerMenu li a {
     font-size: 13px;
     font-weight: 400;
   }
-  .css-1160xiw-MuiPaper-root-MuiDrawer-paper {
+  .css-1160xiw-MuiPaper-root-MuiDrawer-paper,
+  .css-1ab2xsx {
     background-color: #000 !important;
     width: 50% !important;
   }
 }
 
 /* icon button */
-.css-atxwc0-MuiSvgIcon-root {
+.headerMenu {
+  display: flex;
+  align-items: center;
+}
+
+.headerMenu .login-link {
+  margin-left: auto;
+  font-size: 16px;
   color: #fff;
 }
-.css-1m716pe-MuiSvgIcon-root {
-  color: #fff;
+
+.headerMenu .login-link:hover {
+  text-decoration: underline;
+}
+/* burger icon */
+.css-1wt6jp7-MuiSvgIcon-root,.css-n75onm {
+  z-index: 10;
+}
+.css-1gmef3o:hover{
+  background-color: transparent !important;
+}
+.css-1gmef3o{
+  background-color: transparent !important;
+
+}
+.css-1wt6jp7-MuiSvgIcon-root:hover{
+  background-color: transparent !important;
+  
+}
+.css-ze299u-MuiButtonBase-root-MuiIconButton-root{
+  background-color: transparent !important;
+
+}
+
+/* backGround for burger icon  */
+@media (max-width: 1000px) {
+  .css-1uiy4ox-MuiStack-root,.css-1qin6wc {
+    background-color: transparent !important;
+  }
+}
+/* icon login */
+.css-ze299u-MuiButtonBase-root-MuiIconButton-root {
+  padding: 5px !important;
 }
