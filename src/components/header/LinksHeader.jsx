@@ -111,6 +111,7 @@ function LinksHeader({ handleNavigation }) {
       >
         {/* <MenuItem onClick={() => changeLanguage('en')}>English</MenuItem> */}
         {/* <MenuItem onClick={() => changeLmanguage('ar')}>العربية</MenuItem> */}
+        {/* <MenuItem onClick={() => changeLmanguage('ar')}>العربية</MenuItem> */}
       </Menu>
       <Link href="#menu">
         <Typography
