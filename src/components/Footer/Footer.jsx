@@ -1,7 +1,9 @@
-import { Stack, Box, Typography } from "@mui/material";
-import { ContactUs, Location, Email } from "./index.jsx";
 import "./Footer.css";
+import { Stack, Box, Typography } from "@mui/material";
+import { ContactUs, Email } from "./index.jsx";
+import { useTranslation } from "react-i18next";
 function Footer() {
+  const { t } = useTranslation();
   return (
     <div id="footer">
       <Stack>
@@ -36,7 +38,7 @@ function Footer() {
                 pb: 2,
               }}
             >
-              all rights reserved to chilis egypt
+             {t("all rights chilis")}
             </Typography>
           </Stack>
 

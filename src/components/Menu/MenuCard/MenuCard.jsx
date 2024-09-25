@@ -14,9 +14,10 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "../sliderMenu.css";
 import { BASE_URL_images } from "../apis&fetchData/ApiLinks";
-
-
+import { useTranslation } from "react-i18next";
 function MenuCard({ handleCardClick, menuItems, loading }) {
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   return (
     <>
       <Typography
@@ -29,7 +30,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
         }}
         variant="h2"
       >
-        MENU
+        {t("menu")}
       </Typography>
       <Container sx={{ maxWidth: "100% !important" }}>
         {loading ? (
@@ -88,7 +89,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
                         fontFamily: "cairo",
                       }}
                     >
-                      {menuItem.name_en}
+                      {isArabic ? menuItem.name_ar : menuItem.name_en}
                     </Typography>
                     <CardMedia
                       component="img"
@@ -107,7 +108,9 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
                         lineHeight: 1.3,
                       }}
                     >
-                      {menuItem.description_en}
+                      {isArabic
+                        ? menuItem.description_ar
+                        : menuItem.description_en}
                     </Typography>
                   </Card>
                 </SwiperSlide>

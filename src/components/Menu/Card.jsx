@@ -42,7 +42,7 @@ function CardContent() {
       try {
         const data = await fetchData();
         setMenuItems(data);
-        // console.log(data);
+        // console.log(data);  
       } catch (error) {
         console.error("Error fetching data: ", error);
       } finally {
@@ -74,22 +74,22 @@ function CardContent() {
     setOpenDialog(false);
   };
 
-  const handleAddToCart = () => {
-    if (itemDetails) {
-      onAddToCart({
-        name_en: itemDetails.name_en,
-        price: price,
-        extras: dataExtra,
-      });
-      setOrderDetails({
-        name: itemDetails.name_en,
-        price: price,
-        extras: dataExtra,
-      });
-      setShowOrderNow(true);
-      setOpenDialog(false);
-    }
-  };
+  // const handleAddToCart = () => {
+  //   if (itemDetails) {
+  //     onAddToCart({
+  //       name_en: itemDetails.name_en,
+  //       price: price,
+  //       extras: dataExtra,
+  //     });
+  //     setOrderDetails({
+  //       name: itemDetails.name_en,
+  //       price: price,
+  //       extras: dataExtra,
+  //     });
+  //     setShowOrderNow(true);
+  //     setOpenDialog(false);
+  //   }
+  // };
   const handleCloseDialog = () => {
     setOpenDialog(false);
     resetSelections();

@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Grid, Typography, Card, CardMedia } from "@mui/material";
 import { BASE_URL_images, OrderButton } from "../index";
+import { useTranslation } from "react-i18next";
 const ItemCard = ({ handleItemClick, selectedItem }) => {
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const truncateText = (text, length) => {
     if (text.length > length) {
       return (
@@ -15,7 +18,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
               color: "#d32f2f",
             }}
           >
-            Read More
+            {t(" readMore..")}
           </span>
         </>
       );
@@ -34,7 +37,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
           color: "#fff",
         }}
       >
-        {selectedItem ? selectedItem.name_en : ""}
+        {isArabic ? selectedItem.name_ar : selectedItem.name_en}
       </Typography>
       <Grid container spacing={2} justifyContent="center">
         {Array.isArray(selectedItem?.items) &&
@@ -67,14 +70,14 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                     fontFamily: "cairo",
                   }}
                 >
-                  {item.name_en}
+                  {isArabic ? item.name_ar : item.name_en}
                 </Typography>
 
                 <CardMedia
                   component="img"
                   height="140"
                   image={`${BASE_URL_images}${item.image}`}
-                  alt={item.description_ar}
+                  alt={isArabic ? item.description_ar : item.description_en}
                   sx={{ objectFit: "cover", width: "100%" }}
                 />
                 <Typography
@@ -90,7 +93,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                     fontFamily: "Brother  !important",
                   }}
                 >
-                  {item.name_en}
+                  {isArabic ? item.name_ar : item.name_en}
                 </Typography>
                 <Typography
                   variant="h5"
@@ -102,10 +105,13 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                     fontFamily: "uniform !important",
                   }}
                 >
-                  {truncateText(item.description_en, 60)}
+                  {truncateText(
+                    isArabic ? item.description_ar : item.description_en,
+                    60
+                  )}
                 </Typography>
                 <Typography sx={{ fontSize: "18px", color: "#777" }}>
-                  {item.price}
+                  {isArabic ? item.name_ar : item.name_en}
                 </Typography>
                 <OrderButton handleItemClick={handleItemClick} />
               </Card>
