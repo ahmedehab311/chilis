@@ -3,9 +3,10 @@ import Button from "@mui/material/Button";
 import img from "./main.jpg";
 import "./Main.css";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 function Main() {
   const navigate = useNavigate(); // استخدام navigate للتنقل
-
+  const { t, i18n } = useTranslation();
   const handleReadMore = () => {
     navigate("/about-us"); // الانتقال إلى صفحة "about-us"
   };
@@ -19,7 +20,6 @@ function Main() {
             height="400px"
             alt="img"
             className="imgMain"
-            
           />
         </Box>
         <Box sx={{ ml: 2 }}>
@@ -42,49 +42,43 @@ function Main() {
                 fontFamily: "cairo",
               }}
             >
-              chilis{" "}
-              <span style={{ color: "red", fontFamily: "cairo" }}>Egypt</span>
+              {t("chilis")}{" "}
+              <span style={{ color: "red", fontFamily: "cairo" }}>
+                {t("egypt")}
+              </span>
             </div>
-            for getting real transparent
+            {t("forGetting")}
           </Typography>
           <Typography
             sx={{
               color: "#555",
-              // mt: "1.5rem",
-              letterSpacing: 5,
+
+              letterSpacing: i18n.language === "ar" ? 0 : 5,
               fontSize: "18px",
               textTransform: "uppercase",
-              my:"1rem"
+              my: "1rem",
             }}
             fontFamily={"Baskervville SC"}
           >
-            discover our food
+            {t("discoverOurFood")}
           </Typography>
           <div className="borderMain"></div>
           <Typography
- sx={{
+            sx={{
               mt: "1.1rem",
               mb: 2,
               fontSize: { xs: "1.2rem", md: "1.5rem" },
               fontWeight: "600",
               color: "#333",
-        
+
               fontFamily: "Uniform",
-              lineHeight: 1.8, 
-              maxWidth: "100%", 
+              lineHeight: 1.8,
+              maxWidth: "100%",
             }}
-
           >
-            As one of the country's longest-standing international restaurant
-            chains, Chili's has been part of the Egyptian dining scene for over
-            30 years. In addition to serving American and Tex-Mex cuisine,
-            Chili's has become a cherished part of the community, known for its
-            warm atmosphere and memorable moments. Having been in business for
-            three decades, Chili's hasn't only provided quality food but has
-            also become a cherished part of the community. 
-
+            {t("aboutText")}
           </Typography>
-       
+
           <Button
             variant="outlined"
             color="error"
@@ -96,7 +90,7 @@ function Main() {
             onClick={handleReadMore}
             className="btn"
           >
-            read more
+            {t("readMore")}
           </Button>
           {/* <Stack> */}
         </Box>
@@ -172,7 +166,7 @@ export default Main;
 //             <span style={{ color: "red", fontFamily: "Cairo" }}>Egypt</span> for
 //             getting real transparent
 //           </Typography>
-          
+
 //           <Typography
 //             sx={{
 //               color: "#555",

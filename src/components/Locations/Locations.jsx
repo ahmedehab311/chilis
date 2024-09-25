@@ -22,64 +22,7 @@ function Locations() {
   const theme = useTheme();
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"));
   return (
-    // <Stack
-    //   style={{
-    //     display: "flex",
-    //     p: "1rem",
-    //   }}
-    // >
-    //   <Typography sx={{ textAlign: "center", fontSize: "3rem", my: "2rem" }}>
-    //     Our Locations
-    //   </Typography>
-    //   <Stack
-    //     direction={"row"}
-    //     alignItems={"center"}
-    //     sx={{
-    //       "@media (max-width: 1000px)": {
-    //         flexDirection: "column !important",
-    //       },
-    //     }}
-    //   >
-    //     <div
-    //       style={{
-    //         width: "20%",
-    //         paddingRight: "20px",
-    //         textAlign: "left",
-    //         marginLeft: "5rem",
-    //       }}
-    //     >
-    //       <h3>Select Location</h3>
-    //       {locations.map((location, index) => (
-    //         <div key={index}>
-    //           <input
-    //             type="radio"
-    //             id={location.name}
-    //             name="location"
-    //             value={location.value}
-    //             onChange={handleLocationChange}
-    //             defaultChecked={index === 0}
-    //           />
-    //           <label htmlFor={location.name} style={{ marginLeft: "10px" }}>
-    //             {location.name}
-    //           </label>
-    //         </div>
-    //       ))}
-    //     </div>
 
-    //     {/* Map Section */}
-    //     <div style={{ width: "80%", textAlign: "center" }}>
-    //       <iframe
-    //         src={mapSrc}
-    //         width="600"
-    //         height="450"
-    //         style={{ border: "0" }}
-    //         allowFullScreen=""
-    //         loading="lazy"
-    //         referrerPolicy="no-referrer-when-downgrade"
-    //       ></iframe>
-    //     </div>
-    //   </Stack>
-    // </Stack>
     <Stack
       sx={{
         p: "1rem",
