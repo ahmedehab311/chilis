@@ -18,7 +18,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
               color: "#d32f2f",
             }}
           >
-            {t(" readMore..")}
+            {t("readMore" ) }
           </span>
         </>
       );
