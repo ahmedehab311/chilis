@@ -43,7 +43,7 @@ import { Stack, Typography, Box } from "@mui/material";
 import img from "../Main/main.jpg";
 import { useTranslation } from "react-i18next";
 function AboutUs() {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   return (
     <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", p: "2rem" }}>
       <Stack direction={{ xs: "column", md: "row" }} alignItems="center" spacing={4}>
@@ -60,7 +60,7 @@ function AboutUs() {
         />
         <Typography
           sx={{
-            fontSize: { xs: "1.5rem", md: "1.8rem" },
+            fontSize: { xs: "1.5rem", md: "1.9rem" },
             color: "#333",
             fontWeight: "bold",
             lineHeight: "1.6",

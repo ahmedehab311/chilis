@@ -1,6 +1,8 @@
 import { Box, Stack } from "@mui/material";
 import WifiCalling3Icon from "@mui/icons-material/WifiCalling3";
+import { useTranslation } from "react-i18next";
 function ContactUs() {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -14,7 +16,20 @@ function ContactUs() {
       <Stack>
         <WifiCalling3Icon fontSize="25px" />
       </Stack>
-      <Stack>19002</Stack>
+      <Stack
+        sx={{
+          color: "#fff",
+          background: "#e72323",
+          fontWight: "600",
+          fontSize: "2.5rem",
+          textAlign: "center",
+          textTransform: "uppercase",
+          letterSpacing:2,
+        }}
+      >
+        {" "}
+        {t("callus")}
+      </Stack>
     </Box>
   );
 }

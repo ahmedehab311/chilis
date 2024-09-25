@@ -165,16 +165,17 @@ import {
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { useLocation } from "react-router-dom";
 import { updateCartItems } from "../../rtk/slices/cartSlice.js";
+import { useTranslation } from "react-i18next";
 function Header({ token, handleLogout }) {
+  const { t,i18n } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+const isArabic = i18n.language === "ar";
   const totalItems = useSelector((state) =>
     state.cart.items.reduce((total, item) => total + item.quantity, 0)
   );
   useEffect(() => {
-    // عند تحميل الصفحة، قراءة السلة من localStorage وتحديث Redux store
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     dispatch(updateCartItems(cart.length));
   }, [dispatch]);
@@ -282,12 +283,12 @@ function Header({ token, handleLogout }) {
                     <Typography
                       sx={{
                         color: "#fff",
-                        fontSize: "2.2rem",
+                        fontSize: isArabic === "ar" ? "2.2rem" : "1.9rem",
                         fontFamily: "cairo",
                         fontWeight: "bold",
                       }}
                     >
-                      Login
+                      {t("login")} 
                     </Typography>
                   </Link>
                 )}

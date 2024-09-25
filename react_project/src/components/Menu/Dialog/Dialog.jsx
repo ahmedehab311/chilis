@@ -24,7 +24,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-
+import i18n from "../../Translation/i18n.js";
+import { useTranslation } from "react-i18next";
 function DialogItem({
   openDialog,
   handleCloseDialog,
@@ -41,14 +42,12 @@ function DialogItem({
   setQuantity,
   selectedOptionName,
   setSelectedOptionName,
-  ...props
 }) {
   const dispatch = useDispatch();
-
-  // const [selectedExtras, setSelectedExtras] = useState([]);
-  // const [selectedOption, setSelectedOption] = useState("");
-  // const [quantity, setQuantity] = useState(1);
   const cartItems = useSelector((state) => state.cart.items);
+
+  const { t } = useTranslation();
+  const isArabic = i18n.language === "ar";
 
   const handleQuantityChange = (newQuantity) => {
     setQuantity(newQuantity);
@@ -56,27 +55,6 @@ function DialogItem({
 
   const handleAddToCart = () => {
     handleCloseDialog();
-
-    // const itemDetailsToAdd = {
-    //   uniqueId: uuidv4(),
-    //   id: itemDetails.id,
-    //   name: itemDetails.name_en,
-    //   price: parseFloat(price),
-    //   quantity: quantity,
-    //   extras: selectedExtras.map(extra => ({
-    //     id: extra.id,
-    //     name: extra.description_en,
-    //     price: parseFloat(extra.price_en),
-    //   })),
-    //   option: selectedOption ? {
-    //     id: selectedOption.id,
-    //     name: selectedOption.name_en,
-    //   } : null,
-    //   totalPrice: (parseFloat(price) || 0) + selectedExtras.reduce(
-    //     (sum, extra) => sum + parseFloat(extra.price_en),
-    //     0
-    //   ),
-    // };
 
     const itemDetailsToAdd = {
       uniqueId: uuidv4(),
@@ -104,7 +82,6 @@ function DialogItem({
     };
     // console.log("Item to add:", itemDetailsToAdd);
 
-    // إضافة العنصر الجديد للسلة بشكل مباشر
     dispatch(addItemToCart(itemDetailsToAdd));
 
     setQuantity(1);
@@ -127,8 +104,8 @@ function DialogItem({
     const selectedOption = dataOptions.find(
       (option) => option.name_en === event.target.value
     );
-    setSelectedOption(selectedOption); // احتفظ بالكائن الكامل
-    setSelectedOptionName(selectedOption.name_en); // استخدم name_en فقط كقيمة للراديو جروب
+    setSelectedOption(selectedOption); 
+    setSelectedOptionName(selectedOption.name_en); 
   };
 
   return (
@@ -164,7 +141,7 @@ function DialogItem({
               justifyContent={"space-between"}
             >
               <DialogTitle id="item-dialog-title">
-                {itemDetails.name_en} 
+                {isArabic ? itemDetails.name_ar : itemDetails.name_en}
               </DialogTitle>
               <Stack direction={"row"} alignItems={"center"}>
                 <CounterDiaolgButton
@@ -176,14 +153,25 @@ function DialogItem({
                   }
                 />
 
-                <span style={{ color: "#000", fontSize: "1.3rem",fontWeight:"600" }}>
-                  {price} EGP
+                <span
+                  style={{
+                    color: "#000",
+                    fontSize: "1.3rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  {price} {isArabic ? 'ج.م' : "EGP"}
                 </span>
               </Stack>
             </Stack>
             <div className="borderItem"></div>
-            <Typography variant="body1" sx={{ mb: 2, color: "#000",fontSize:"1.4rem" }}>
-              {itemDetails.description_en}
+            <Typography
+              variant="body1"
+              sx={{ mb: 2, color: "#000", fontSize: "1.4rem" }}
+            >
+              {isArabic
+                ? itemDetails.description_ar
+                : itemDetails.description_en}
             </Typography>
             <Stack>
               {dataOptions && dataOptions.length > 0 && (
@@ -192,15 +180,15 @@ function DialogItem({
                     Options
                   </Typography>
                   <RadioGroup
-                    value={selectedOptionName} 
+                    value={selectedOptionName}
                     onChange={handleOptionChange}
                   >
                     {dataOptions.map((option, index) => (
                       <FormControlLabel
                         key={index}
-                        value={option.name_en}
+                        value={isArabic ? option.name_ar : option.name_en}
                         control={<Radio sx={{ color: "#000" }} />}
-                        label={`${option.name_en}`}
+                        label={isArabic ? option.name_ar : option.name_en}
                         sx={{ color: "#000" }}
                       />
                     ))}
@@ -247,7 +235,10 @@ function DialogItem({
                           onChange={handleCheckboxChange(extra)}
                         />
                       }
-                      label={`${extra.description_en} - ${extra.price_en} EGP`}
+                      // label={`${extra.description_en} - ${extra.price_en} EGP`}
+                      // label={`${isArabic ? itemDetails.name_ar : extra.description_en}- ${extra.price_en} EGP`}
+                      label={`${isArabic ? itemDetails.name_ar : extra.description_en} - ${extra[isArabic ? 'price_ar' : 'price_en']} ${isArabic ? 'ج.م' : 'EGP'}`}
+
                     />
                   ))}
                 </RadioGroup>
