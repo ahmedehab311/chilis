@@ -28,11 +28,16 @@
   "all rights chilis": "all rights reserved to chilis egypt",
   "callus": "19002",
 
-    "AddtoCart":"Add to Cart",
-  "order":"order",
-  "back":"back",
-  "Profile":"Profile",
-  "My Orders":"My Orders",
-  "Logout":"Logout",
-  "login":"Login"
+  "AddtoCart": "Add to Cart",
+  "order": "order",
+  "back": "back",
+  "Profile": "Profile",
+  "My Orders": "My Orders",
+  "Logout": "Logout",
+  "login": "Login",
+  "egp": "EGP",
+  "extras": "Extras",
+  "options": "Options",
+  "The cart is empty": "The cart is empty",
+  "Enter any special request note": "Enter any special request note"
 }

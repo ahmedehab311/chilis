@@ -33,5 +33,11 @@
   "MyOrders": "طلباتي",
   "Logout": "تسجيل الخروج",
   "AddToCart": "أضف إلى السلة",
-  "login": "تسجيل الدخول"
+  "login": "تسجيل الدخول",
+  "egp": "ج.م",
+  "extras": "الاضافات",
+  "options": "الاختيارات",
+  "The cart is empty": "العربة فارغة",
+  "Enter any special request note": "أدخل أي ملاحظة خاصة"
+
 }
