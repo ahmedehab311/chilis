@@ -167,11 +167,15 @@ import { useLocation } from "react-router-dom";
 import { updateCartItems } from "../../rtk/slices/cartSlice.js";
 import { useTranslation } from "react-i18next";
 function Header({ token, handleLogout }) {
-  const { t,i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-const isArabic = i18n.language === "ar";
+  const convertNumberToArabic = (number) => {
+    const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
+  };
+  const isArabic = i18n.language === "ar";
   const totalItems = useSelector((state) =>
     state.cart.items.reduce((total, item) => total + item.quantity, 0)
   );
@@ -261,7 +265,20 @@ const isArabic = i18n.language === "ar";
                   onClick={handleCartClick}
                 >
                   <Badge
-                    badgeContent={totalItems}
+                    // badgeContent={totalItems}
+                    badgeContent={
+                      <Typography
+                        sx={{
+                          fontSize: ".9rem",
+                          color: "#fff",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {i18n.language === "ar"
+                          ? convertNumberToArabic(totalItems)
+                          : totalItems}
+                      </Typography>
+                    }
                     color="error"
                     invisible={totalItems === 0}
                   >
@@ -288,7 +305,7 @@ const isArabic = i18n.language === "ar";
                         fontWeight: "bold",
                       }}
                     >
-                      {t("login")} 
+                      {t("login")}
                     </Typography>
                   </Link>
                 )}

@@ -481,6 +481,137 @@ function OrderOnline() {
       });
   };
 
+  // const handleCheckout = () => {
+  //   const token = localStorage.getItem("token");
+  
+  //   if (!token) {
+  //     navigate("/login");
+  //     return;
+  //   }
+  
+  //   // التحقق من اختيار العنوان فقط في حالة الدليفري
+  //   if (deliveryType === "delivery") {
+  //     const selectedAddress = addressData.find((addr) => addr.id === address?.id);
+  
+  //     if (!selectedAddress) {
+  //       toast.error(t("errors.select_valid_address")); // رسالة خطأ عند عدم اختيار عنوان صحيح
+  //       return;
+  //     }
+  
+  //     if (!isAddressAvailable(selectedAddress)) {
+  //       toast.error(t("errors.address not available")); // رسالة خطأ عند عدم توفر العنوان
+  //       return;
+  //     }
+  //   }
+  
+  //   // التحقق من اختيار الفرع في حالة البيك آب
+  //   if (deliveryType === "pickup") {
+  //     if (!selectedBranchId) {
+  //       toast.error(t("errors.select_branch")); // رسالة خطأ عند عدم اختيار فرع
+  //       return;
+  //     }
+  //   }
+  
+  //   // إعداد قيم area و branch بناءً على نوع الطلب
+  //   let areaId, branchId;
+  //   const delivery_type = deliveryType === "pickup" ? 2 : 1;
+  
+  //   if (delivery_type === 1) {
+  //     // دليفري
+  //     areaId = address.area?.id;
+  //     branchId = address.branches?.[0]?.id;
+  
+  //     if (!areaId || !branchId) {
+  //       toast.error(t("errors.invalid_area_branch")); 
+  //       return;
+  //     }
+  //   } else if (delivery_type === 2) {
+  //     // بيك آب
+  //     branchId = selectedBranchId;
+  //     areaId = null;
+  //   }
+  
+  //   const orders = cartItems
+  //     .map((item) => {
+  //       if (item.quantity <= 0) {
+  //         console.error(`Item ${item.id} quantity is invalid: ${item.quantity}`);
+  //         toast.error(t("errors.order_quantity_invalid")); 
+  //         return null;
+  //       }
+  //       return {
+  //         id: item.id,
+  //         special: specialNotes[item.id] || "",
+  //         extras: Array.isArray(item.extras)
+  //           ? item.extras.map((extra) => extra.id)
+  //           : [],
+  //         count: item.quantity,
+  //         choices: [],
+  //         options: item.option ? [item.option.id] : [],
+  //       };
+  //     })
+  //     .filter((order) => order !== null);
+  
+  //   if (orders.length === 0) {
+  //     return;
+  //   }
+  //   const dataToSend = {
+  //     delivery_type: delivery_type,
+  //     payment: paymentMethod === "cash" ? 1 : 2,
+  //     lat: delivery_type === 1 ? address.lat : 0,
+  //     lng: delivery_type === 1 ? address.lng : 0,
+  //     address: delivery_type === 1 ? currentAddress.id : null,
+  //     area: address.area?.id,
+  //     branch: branchId,
+  //     api_token: api_token,
+  //     items: JSON.stringify({ items: orders }),
+  //     device_id: "",
+  //     notes: "",
+  //     // time: formattedTime,
+  //     car_model: "",
+  //     car_color: "",
+  //     gift_cards: "",
+  //     coins: "00.00",
+  //   };
+  
+  //   console.log("Checkout data:", dataToSend);
+  
+  //   const params = new URLSearchParams(dataToSend);
+  //   axios
+  //     .post(`${BASE_URL}/orders/create?${params.toString()}`)
+  //     .then((response) => {
+  //       if (response.data.response) {
+  //         console.log(response.data);
+  //         localStorage.setItem("orderSuccess", "true");
+  //         localStorage.removeItem("idInfo");
+  
+  //         toast.success(t("success.order_created")); 
+  
+  //         dispatch(clearCart());
+  //       } else {
+  //         console.error("Response error data:", response.data);
+  //         toast.error(t("errors.order_creation_error")); 
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error details:", error);
+  //       let errorMessage = t("errors.order_creation_error");
+  
+  //       if (error.response) {
+  //         console.error("Error response data:", error.response.data);
+  //         console.error("Error response status:", error.response.status);
+  //         console.error("Error response headers:", error.response.headers);
+  //         errorMessage = error.response.data.message || errorMessage;
+  //       } else if (error.request) {
+  //         console.error("Error request:", error.request);
+  //         errorMessage = t("errors.no_response");
+  //       } else {
+  //         console.error("Error message:", error.message);
+  //       }
+  
+  //       toast.error(errorMessage); 
+  //     });
+  // };
+
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
   const addressCleared = useRef(false);
@@ -546,13 +677,12 @@ function OrderOnline() {
         // إذا كان العنوان غير متاح، قم بإلغاء اختياره مرة واحدة فقط
         dispatch(clearSelectedAddress());
         // toast.error("The selected address is no longer available for delivery.");
-        addressCleared.current = true; // تعيين الفلاج لتجنب التحديث المتكرر
+        addressCleared.current = true;
       }
     } else if (address && isAddressAvailable(address)) {
-      // إذا أصبح العنوان متاحًا، قم بإعادة تعيين الفلاج
       addressCleared.current = false;
     }
-  }, [address, dispatch]); // تأكد من أن الهوكات هنا لا تتغير
+  }, [address, dispatch]);
 
   useEffect(() => {
     dispatch(fetchAddresses());
@@ -589,7 +719,7 @@ function OrderOnline() {
   useEffect(() => {
     if (selectedAddress) {
       localStorage.setItem("selectedAddress", JSON.stringify(selectedAddress));
-      setCurrentAddress(selectedAddress); // التأكد من تحديث العنوان الحالي
+      setCurrentAddress(selectedAddress);
     }
   }, [selectedAddress]);
 
@@ -627,17 +757,16 @@ function OrderOnline() {
   // };
 
   const [total, setTotal] = useState(0);
-  const [discount, setDiscount] = useState(0); // حالة الخصم
+  const [discount, setDiscount] = useState(0);
   const [couponCode, setCouponCode] = useState("");
   const [error, setError] = useState("");
-  const [couponData, setCouponData] = useState(null); // لتخزين بيانات الكوبون عند الاستجابة
+  const [couponData, setCouponData] = useState(null);
   const [originalTotal, setOriginalTotal] = useState(total);
   const [originalDeliveryFee, setOriginalDeliveryFee] = useState(deliveryFee);
-  const [isCouponApplied, setIsCouponApplied] = useState(false); // حالة لتحديد ما إذا كان الكوبون مفعلاً
+  const [isCouponApplied, setIsCouponApplied] = useState(false);
 
   const handleApplyCoupon = async () => {
     if (isCouponApplied) {
-      // إعادة القيم الأصلية إذا كان الكوبون مفعلاً بالفعل
       setTotal(originalTotal);
       setDeliveryFee(originalDeliveryFee);
       setIsCouponApplied(false);
@@ -687,6 +816,10 @@ function OrderOnline() {
     }
   };
   // console.log("cartItems",cartItems)
+  const convertNumberToArabic = (number) => {
+    const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
+  };
   return (
     <Stack
       className={"orderOnline"}
@@ -951,6 +1084,10 @@ function OrderOnline() {
                         }}
                       >
                         {item.price} {t("egp")}
+                        {/* {isArabic
+                          ? convertNumberToArabic(item.price)
+                          : item.price}{" "}
+                        {t("egp")} */}
                       </Typography>
                       <Counter
                         basePrice={item.price}
@@ -979,13 +1116,28 @@ function OrderOnline() {
                           fontWeight: 500,
                         }}
                       >
-                        Regular
+                        {t("Regular")}
                       </Typography>
                       <Typography sx={{ fontSize: "1.5rem", fontWeight: 500 }}>
                         {(
                           totalPrices[index] || item.price * item.quantity
                         ).toFixed(2)}{" "}
                         {t("egp")}
+                        {/* {convertNumberToArabic(
+                          (
+                            totalPrices[index] || item.price * item.quantity
+                          ).toFixed(2)
+                        )} */}
+                        {/* {isArabic
+                          ? convertNumberToArabic(
+                              (
+                                totalPrices[index] || item.price * item.quantity
+                              ).toFixed(2)
+                            )
+                          : (
+                              totalPrices[index] || item.price * item.quantity
+                            ).toFixed(2)}
+                        {t("egp")} */}
                       </Typography>
                     </Stack>
                     {item.option && (
@@ -1014,7 +1166,6 @@ function OrderOnline() {
                             fontWeight: 500,
                           }}
                         >
-                       
                           {isArabic ? item.option.name_ar : item.option.name_en}
                         </Typography>
                       </Stack>
@@ -1037,10 +1188,8 @@ function OrderOnline() {
                                 fontSize: "1.5rem",
                                 fontFamily: "cairo",
                                 fontWeight: 500,
-                            
                               }}
                             >
-
                               {isArabic ? extra.name_ar : extra.name_en}
                             </Typography>
                             <Typography
@@ -1052,6 +1201,10 @@ function OrderOnline() {
                               }}
                             >
                               {extra.price} {t("egp")}
+                              {/* {isArabic
+                                ? convertNumberToArabic(extra.price)
+                                : extra.price}{" "}
+                              {t("egp")} */}
                             </Typography>
                           </Stack>
                         ))}
@@ -1107,7 +1260,7 @@ function OrderOnline() {
             <Stack direction="row" alignItems="center" sx={{ mb: "1rem" }}>
               <TextField
                 id="coupon-code-input"
-                placeholder="Enter coupon code"
+                placeholder={t("Enter coupon code")}
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
                 sx={{
@@ -1141,7 +1294,7 @@ function OrderOnline() {
                   }}
                   onClick={handleApplyCoupon}
                 >
-                  {isCouponApplied ? "Cancel" : "Apply"}
+                  {isCouponApplied ? t("Cancel") : t("Apply")}
                 </Button>
               </Stack>
             </Stack>
@@ -1164,7 +1317,7 @@ function OrderOnline() {
             <TextField
               className="formControl"
               id="outlined-basic"
-              placeholder="Any notes? please enter it here."
+              placeholder={t("Any notes? please enter it here")}
               fullWidth
               multiline
               minRows={3}
@@ -1200,12 +1353,12 @@ function OrderOnline() {
             <FormLabel
               component="legend"
               sx={{
-                fontSize: "1.6rem",
+                fontSize: "1.5rem",
                 fontWeight: "600",
                 textAlign: "center",
               }}
             >
-              Select delivery type
+              {t("Select delivery type")}
             </FormLabel>
             <RadioGroup
               aria-label="delivery-type"
@@ -1221,198 +1374,39 @@ function OrderOnline() {
               <FormControlLabel
                 value="pickup"
                 control={<Radio />}
-                label="Pickup"
-                sx={{ fontSize: "1.5rem" }}
+                label={
+                  <Typography
+                    sx={{
+                      fontSize: "1.4rem",
+                      color: "#000",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {t("Pickup")}
+                  </Typography>
+                }
               />
               <FormControlLabel
                 value="delivery"
                 control={<Radio />}
-                label="Delivery"
-                sx={{ fontSize: "1.5rem" }}
+                label={
+                  <Typography
+                    sx={{
+                      fontSize: "1.4rem",
+                      color: "#000",
+                      fontWeight: "600",
+                    }}
+                  >
+                    {t("Delivery")}
+                  </Typography>
+                }
               />
             </RadioGroup>
           </FormControl>
         </Stack>
 
-        {/* <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
-          <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
-            <Stack
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mb: "5px",
-              }}
-              direction={"row"}
-              alignItems={"center"}
-            >
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                Subtotal:
-              </Typography>
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {subtotalWithExtras.toFixed(2)} EGP
-              </Typography>
-            </Stack>
-
-            {deliveryType === "delivery" && (
-              <Stack
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  mb: "5px",
-                }}
-                direction={"row"}
-                alignItems={"center"}
-              >
-                <Typography
-                  sx={{
-                    fontSize: "15px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Delivery Fee:
-                </Typography>
-                <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                  {deliveryFee.toFixed(2)} EGP
-                </Typography>
-              </Stack>
-            )}
-            <Stack
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mb: 1,
-              }}
-              direction={"row"}
-              alignItems={"center"}
-            >
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                Tax {tax} %
-              </Typography>
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {(
-                  (subtotalWithExtras +
-                    (deliveryType === "delivery" ? deliveryFee : 0)) *
-                  (tax / 100)
-                ).toFixed(2)}{" "}
-                EGP
-              </Typography>
-            </Stack>
-          </Stack>
-
-          <Stack
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-            direction={"row"}
-            alignItems={"center"}
-          >
-            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-              Total:
-            </Typography>
-            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-              {(
-                subtotalWithExtras +
-                (deliveryType === "delivery" ? deliveryFee : 0) +
-                (subtotalWithExtras +
-                  (deliveryType === "delivery" ? deliveryFee : 0)) *
-                  (tax / 100)
-              ).toFixed(2)}{" "}
-              EGP
-            </Typography>
-          </Stack>
-
-          <FormControl
-            component="fieldset"
-            sx={{ mt: "2rem", textAlign: "center" }}
-          >
-            <FormLabel
-              component="legend"
-              sx={{
-                fontSize: "1.4rem",
-                fontWeight: "600",
-                textAlign: "center",
-              }}
-            >
-              Select Payment Method
-            </FormLabel>
-            <RadioGroup
-              aria-label="payment-method"
-              name="payment-method"
-              value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-              sx={{
-                justifyContent: "center",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <FormControlLabel
-                value="cash"
-                control={<Radio />}
-                label="Cash on Delivery"
-              />
-              <FormControlLabel
-                value="credit"
-                control={<Radio />}
-                label="Credit Card"
-              />
-            </RadioGroup>
-          </FormControl>
-
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleCheckout}
-            disabled={cartItems.length === 0 || branchClosed}
-            sx={{
-              mt: "1.5rem",
-              p: "1rem",
-              fontSize: "1.5rem",
-              backgroundColor:
-                cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
-              textTransform: "capitalize",
-              "&:hover": {
-                backgroundColor:
-                  cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
-              },
-            }}
-          >
-            Place Order
-          </Button>
-          <Dialog
-            open={openCreditCardDialog}
-            onClose={handleCloseCreditCardDialog}
-            fullWidth
-            maxWidth="sm"
-          >
-            <DialogTitle
-              sx={{
-                fontSize: "1.8rem",
-                fontWeight: "600",
-                textAlign: "center",
-              }}
-            >
-              Payment Information
-            </DialogTitle>
-            <DialogContent>
-              <PaymentPage />
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={handleCloseDialog}
-                color="error"
-                sx={{ fontSize: "1.1rem", fontWeight: "500" }}
-              >
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Stack> */}
         <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
           <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
-            {/* إجمالي الطلب قبل الخصم */}
             <Stack
               sx={{
                 display: "flex",
@@ -1423,39 +1417,16 @@ function OrderOnline() {
               alignItems={"center"}
             >
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                Subtotal:
+                {t("Subtotal")}
               </Typography>
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {subtotalWithExtras.toFixed(2)} EGP
+                {/* {isArabic
+                  ? convertNumberToArabic(subtotalWithExtras.toFixed(2))
+                  : subtotalWithExtras.toFixed(2)}{" "}
+                {t("egp")} */}
+                {subtotalWithExtras.toFixed(2)} {t("egp")}
               </Typography>
             </Stack>
-
-            {discount > 0 && (
-              <Stack
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  mb: "5px",
-                }}
-                direction={"row"}
-                alignItems={"center"}
-              >
-                <Typography
-                  sx={{
-                    fontSize: "15px",
-                    fontWeight: "bold",
-                    color: "green", // لون أخضر للإشارة إلى الخصم
-                  }}
-                >
-                  Discount:
-                </Typography>
-                <Typography
-                  sx={{ fontSize: "15px", fontWeight: "bold", color: "green" }}
-                >
-                  -{discount.toFixed(2)} EGP
-                </Typography>
-              </Stack>
-            )}
 
             {deliveryType === "delivery" && (
               <Stack
@@ -1473,14 +1444,17 @@ function OrderOnline() {
                     fontWeight: "bold",
                   }}
                 >
-                  Delivery Fee:
+                  {t("Delivery Fee")}
                 </Typography>
                 <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                  {deliveryFee.toFixed(2)} EGP
+                  {deliveryFee.toFixed(2)} {t("egp")}
+                  {/* {isArabic
+                    ? convertNumberToArabic(deliveryFee.toFixed(2))
+                    : deliveryFee.toFixed(2)}{" "}
+                  {t("egp")} */}
                 </Typography>
               </Stack>
             )}
-            {/* قيمة الضريبة */}
             <Stack
               sx={{
                 display: "flex",
@@ -1491,21 +1465,36 @@ function OrderOnline() {
               alignItems={"center"}
             >
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                Tax {tax} %
+                {/* {t('Tax')}:  {tax} %    */}
+                {t("Tax")} % {isArabic ? convertNumberToArabic(tax) : tax}
               </Typography>
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
                 {(
                   (subtotalWithExtras -
-                    discount + // إضافة الخصم هنا
+                    discount +
                     (deliveryType === "delivery" ? deliveryFee : 0)) *
                   (tax / 100)
                 ).toFixed(2)}{" "}
-                EGP
+                {/* {isArabic
+                  ? convertNumberToArabic(
+                      (
+                        (subtotalWithExtras -
+                          discount +
+                          (deliveryType === "delivery" ? deliveryFee : 0)) *
+                        (tax / 100)
+                      ).toFixed(2)
+                    )
+                  : (
+                      (subtotalWithExtras -
+                        discount +
+                        (deliveryType === "delivery" ? deliveryFee : 0)) *
+                      (tax / 100)
+                    ).toFixed(2)} */}
+                {t("egp")}
               </Typography>
             </Stack>
           </Stack>
 
-          {/* المجموع النهائي */}
           <Stack
             sx={{
               display: "flex",
@@ -1515,7 +1504,7 @@ function OrderOnline() {
             alignItems={"center"}
           >
             <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-              Total:
+              {t("Total")}
             </Typography>
             <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
               {(
@@ -1527,11 +1516,34 @@ function OrderOnline() {
                   (deliveryType === "delivery" ? deliveryFee : 0)) *
                   (tax / 100)
               ).toFixed(2)}{" "}
-              EGP
+              {t("egp")}
             </Typography>
+            {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              {isArabic
+                ? convertNumberToArabic(
+                    (
+                      subtotalWithExtras -
+                      discount + // إضافة الخصم هنا
+                      (deliveryType === "delivery" ? deliveryFee : 0) +
+                      (subtotalWithExtras -
+                        discount + // إضافة الخصم هنا
+                        (deliveryType === "delivery" ? deliveryFee : 0)) *
+                        (tax / 100)
+                    ).toFixed(2)
+                  )
+                : (
+                    subtotalWithExtras -
+                    discount + // إضافة الخصم هنا
+                    (deliveryType === "delivery" ? deliveryFee : 0) +
+                    (subtotalWithExtras -
+                      discount + // إضافة الخصم هنا
+                      (deliveryType === "delivery" ? deliveryFee : 0)) *
+                      (tax / 100)
+                  ).toFixed(2)}{" "}
+              {t("egp")}
+            </Typography> */}
           </Stack>
 
-          {/* طريقة الدفع */}
           <FormControl
             component="fieldset"
             sx={{ mt: "2rem", textAlign: "center" }}
@@ -1539,12 +1551,12 @@ function OrderOnline() {
             <FormLabel
               component="legend"
               sx={{
-                fontSize: "1.4rem",
+                fontSize: "1.5rem",
                 fontWeight: "600",
                 textAlign: "center",
               }}
             >
-              Select Payment Method
+              {t("Select Payment Method")}
             </FormLabel>
             <RadioGroup
               aria-label="payment-method"
@@ -1560,17 +1572,32 @@ function OrderOnline() {
               <FormControlLabel
                 value="cash"
                 control={<Radio />}
-                label="Cash on Delivery"
+                label=<Typography
+                  sx={{
+                    fontSize: "1.4rem",
+                    color: "#000",
+                    fontWeight: "600",
+                  }}
+                >
+                  {t("Cash on Delivery")}
+                </Typography>
               />
               <FormControlLabel
                 value="credit"
                 control={<Radio />}
-                label="Credit Card"
+                label=<Typography
+                  sx={{
+                    fontSize: "1.4rem",
+                    color: "#000",
+                    fontWeight: "600",
+                  }}
+                >
+                  {t("Credit Card")}
+                </Typography>
               />
             </RadioGroup>
           </FormControl>
 
-          {/* زر الطلب */}
           <Button
             variant="contained"
             color="primary"
@@ -1590,7 +1617,7 @@ function OrderOnline() {
               },
             }}
           >
-            Place Order
+            {t("Place Order")}
           </Button>
           <Dialog
             open={openCreditCardDialog}
@@ -1621,6 +1648,10 @@ function OrderOnline() {
             </DialogActions>
           </Dialog>
         </Stack>
+
+        {/*  */}
+        {/*  */}
+        {/*  */}
       </Container>
     </Stack>
   );

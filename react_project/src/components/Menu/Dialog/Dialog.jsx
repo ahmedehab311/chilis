@@ -119,7 +119,11 @@ function DialogItem({
       setSelectedOptionName(defaultOption.name_en);
     }
   }, [dataOptions]);
-
+  const convertNumberToArabic = (number) => {
+    const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
+  };
+  
   return (
     <Dialog
       open={openDialog}
@@ -178,6 +182,7 @@ function DialogItem({
                   }}
                 >
                   {price} {t("egp")}
+                  {/* {isArabic ? convertNumberToArabic(price) : price} {t("egp")} */}
                 </span>
               </Stack>
             </Stack>
@@ -225,55 +230,6 @@ function DialogItem({
               )}
             </Stack>
 
-            {/* {dataExtra && dataExtra.length > 0 && (
-              <FormControl component="fieldset">
-                <Typography variant="h6" sx={{ color: "#000",fontSize:"1.5rem" }}>
-                  {t("extras")}
-                </Typography>
-                <RadioGroup
-                  onChange={(e) => {
-                    const selectedExtra = dataExtra.find(
-                      (extra) => extra.description_en === e.target.value
-                    );
-                    if (selectedExtra) {
-                      if (
-                        !selectedExtras.some(
-                          (extra) =>
-                            extra.description_en ===
-                            selectedExtra.description_en
-                        )
-                      ) {
-                        setSelectedExtras([...selectedExtras, selectedExtra]);
-                      }
-                    }
-                  }}
-                >
-                  {dataExtra.map((extra, index) => (
-                    <FormControlLabel
-                      key={index}
-                      sx={{ color: "#000", fontSize: "3rem" }}
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: "#000",
-                            transform: "scale(0.8)",
-                            padding: "4px",
-                           
-                          }}
-                          checked={selectedExtras.includes(extra)}
-                          onChange={handleCheckboxChange(extra)}
-                        />
-                      }
-                      label={`${
-                        isArabic ? extra.name_ar : extra.name_en
-                      } - ${extra[isArabic ? "price_ar" : "price_en"]} ${t(
-                        "egp"
-                      )}`}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            )} */}
             {dataExtra && dataExtra.length > 0 && (
               <FormControl component="fieldset">
                 <Typography
@@ -320,19 +276,35 @@ function DialogItem({
                           onChange={handleCheckboxChange(extra)}
                         />
                       }
+                      
                       label={
                         <Typography
                           sx={{
                             fontSize: "1.3rem",
                             color: "#000",
                             fontWeight: "500",
-                          }} // تكبير الخط داخل الـ label
+                          }}
                         >
                           {`${isArabic ? extra.name_ar : extra.name_en} - ${
                             extra[isArabic ? "price_ar" : "price_en"]
                           } ${t("egp")}`}
                         </Typography>
                       }
+                      // label={
+                      //   <Typography
+                      //     sx={{
+                      //       fontSize: "1.3rem",
+                      //       color: "#000",
+                      //       fontWeight: "500",
+                      //     }}
+                      //   >
+                      //     {`${isArabic ? extra.name_ar : extra.name_en} - ${
+                      //       isArabic
+                      //         ? convertNumberToArabic(extra.price_ar)
+                      //         : extra.price_en
+                      //     } ${t("egp")}`}
+                      //   </Typography>
+                      // }
                     />
                   ))}
                 </RadioGroup>
