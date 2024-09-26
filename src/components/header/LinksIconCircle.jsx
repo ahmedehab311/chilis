@@ -42,7 +42,7 @@ function LinksIconCircle({
         sx={{ mt: 1 }}
       >
         <MenuItem onClick={handleClose} component={RouterLink} to="/profile">
-          <Typography sx={{ fontSize: "1.2rem" }}> {t('Profile')}</Typography>
+          <Typography sx={{ fontSize: "1.2rem" }}>{t('Profile')}</Typography>
         </MenuItem>
         <MenuItem onClick={handleClose} component={RouterLink} to="/my_orders">
           <Typography sx={{ fontSize: "1.2rem" }}>{t('MyOrders')}</Typography>
@@ -53,7 +53,7 @@ function LinksIconCircle({
             handleClose();
           }}
         >
-          <Typography sx={{ fontSize: "1.2rem" }}> {t('Logout')}</Typography>
+          <Typography sx={{ fontSize: "1.2rem" }}>{t('Logout')}</Typography>
         </MenuItem>
       </Menu>
     </>

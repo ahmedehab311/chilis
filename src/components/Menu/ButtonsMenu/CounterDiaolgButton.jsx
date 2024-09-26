@@ -160,8 +160,7 @@
 
 // export default Counter;
 
-import { Stack } from "@mui/material";
-import { useState, useEffect } from "react";
+
 
 // function Counter({
 //   itemId,
@@ -241,15 +240,20 @@ import { useState, useEffect } from "react";
 //     </Stack>
 //   );
 // }
+import { Stack } from "@mui/material";
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 function Counter({
   itemId,
   basePrice,
   onChange,
   onQuantityChange,
   initialQuantity,
-}) {
+})
+ {
   const [quantity, setQuantity] = useState(initialQuantity || 1);
-
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   // لمزامنة الكمية الأولية عند تغييرها
   useEffect(() => {
     if (initialQuantity !== undefined) {
@@ -271,10 +275,14 @@ function Counter({
       setQuantity(newQuantity);
       console.log(`Decrease quantity to: ${newQuantity}`);
       onQuantityChange(newQuantity, itemId);
-      onChange(basePrice * newQuantity); // تحديث السعر بناءً على الكمية الجديدة
+      onChange(basePrice * newQuantity);
     }
   };
-
+  const convertNumberToArabic = (number) => {
+    const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
+  };
+  
   return (
     <Stack
       direction={"row"}
@@ -305,7 +313,7 @@ function Counter({
           fontSize: "12px",
         }}
       >
-        {quantity}
+        {isArabic ? convertNumberToArabic(quantity) : quantity}
       </Stack>
       <button
         style={{

@@ -42,7 +42,7 @@ function CardContent() {
       try {
         const data = await fetchData();
         setMenuItems(data);
-        // console.log(data);  
+        console.log(data);  
       } catch (error) {
         console.error("Error fetching data: ", error);
       } finally {
@@ -64,7 +64,7 @@ function CardContent() {
   };
   const handleCardClick = (index) => {
     setSelectedItem(menuItems[index]);
-    // console.log("menuItems", menuItems[index]);
+    console.log("menuItems", menuItems[index]);
     setShowCards(false);
   };
 

@@ -25,7 +25,7 @@ function LinksHeader({ handleNavigation }) {
     const savedLanguage = localStorage.getItem("lan") || "en";
     i18n.changeLanguage(savedLanguage);
     setActiveLanguage(savedLanguage);
-  }, [i18n]); 
+  }, [i18n]);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -36,45 +36,6 @@ function LinksHeader({ handleNavigation }) {
 
   return (
     <>
-      {/* <LanguageOutlinedIcon
-        sx={{
-          fontSize: "30px",
-          cursor: "pointer",
-          color: "#777",
-          mr: 5,
-        }}
-        onClick={handleClick}
-      />
-      <Menu
-        id="menu-appbar"
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        sx={{ mt: 1, top: "1.3rem !important" }}
-      >
-
-        <MenuItem
-        onClick={() => changeLanguage("en")}
-        sx={{ fontSize: "1.2rem", fontWeight: activeLanguage === "en" ? "bold" : "normal" }}
-      >
-        English
-      </MenuItem>
-      <MenuItem
-        onClick={() => changeLanguage("ar")}
-        sx={{ fontSize: "1.2rem", fontWeight: activeLanguage === "ar" ? "bold" : "normal" }}
-      >
-        العربية
-      </MenuItem>
-      </Menu> */}
       <LanguageOutlinedIcon
         sx={{
           fontSize: "30px",
@@ -102,13 +63,19 @@ function LinksHeader({ handleNavigation }) {
       >
         <MenuItem
           onClick={() => changeLanguage("en")}
-          sx={{ fontSize: "1.2rem", fontWeight: activeLanguage === "en" ? "bold" : "normal" }}
+          sx={{
+            fontSize: "1.2rem",
+            fontWeight: activeLanguage === "en" ? "bold" : "normal",
+          }}
         >
           English
         </MenuItem>
         <MenuItem
           onClick={() => changeLanguage("ar")}
-          sx={{ fontSize: "1.2rem", fontWeight: activeLanguage === "ar" ? "bold" : "normal" }}
+          sx={{
+            fontSize: "1.2rem",
+            fontWeight: activeLanguage === "ar" ? "bold" : "normal",
+          }}
         >
           العربية
         </MenuItem>

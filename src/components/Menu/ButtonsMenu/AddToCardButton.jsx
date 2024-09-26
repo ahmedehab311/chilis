@@ -7,7 +7,7 @@ function AddToCardButton({ onClick }) {
   return (
     <Stack className="AddToCardBtn">
       <Button variant="contained" color="error" onClick={onClick} sx={{fontSize:"1.3rem"}}>
-        {t('AddToCart')}
+        {t('Add to Cart')}
       </Button>
     </Stack>
   );

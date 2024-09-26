@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
+import { useState, useEffect } from "react";
 import "./Dialog.css";
 import {
   Dialog,
@@ -22,7 +23,6 @@ import {
   updateCartItems,
 } from "../../../rtk/slices/cartSlice.js";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import i18n from "../../Translation/i18n.js";
 import { useTranslation } from "react-i18next";
@@ -45,7 +45,8 @@ function DialogItem({
 }) {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
-
+  console.log("dataExtra", dataExtra);
+  console.log("dataOptions", dataOptions);
   const { t } = useTranslation();
   const isArabic = i18n.language === "ar";
 
@@ -59,18 +60,21 @@ function DialogItem({
     const itemDetailsToAdd = {
       uniqueId: uuidv4(),
       id: itemDetails.id,
-      name: itemDetails.name_en,
+      name_en: itemDetails.name_en,
+      name_ar: itemDetails.name_ar,
       price: parseFloat(price),
       quantity: quantity,
       extras: selectedExtras.map((extra) => ({
         id: extra.id,
-        name: extra.description_en,
+        name_en: extra.name_en,
+        name_ar: extra.name_ar,
         price: parseFloat(extra.price_en),
       })),
       option: selectedOption
         ? {
             id: selectedOption.id,
-            name: selectedOption.name_en,
+            name_en: selectedOption.name_en,
+            name_ar: selectedOption.name_ar,
           }
         : null,
       totalPrice:
@@ -95,6 +99,7 @@ function DialogItem({
   const handleCheckboxChange = (extra) => (event) => {
     if (event.target.checked) {
       setSelectedExtras([...selectedExtras, extra]);
+      console.log("setSelectedExtras", setSelectedExtras);
     } else {
       setSelectedExtras(selectedExtras.filter((item) => item !== extra));
     }
@@ -104,10 +109,21 @@ function DialogItem({
     const selectedOption = dataOptions.find(
       (option) => option.name_en === event.target.value
     );
-    setSelectedOption(selectedOption); 
-    setSelectedOptionName(selectedOption.name_en); 
+    setSelectedOption(selectedOption);
+    setSelectedOptionName(selectedOption.name_en);
   };
-
+  useEffect(() => {
+    if (dataOptions && dataOptions.length > 0) {
+      const defaultOption = dataOptions[0];
+      setSelectedOption(defaultOption);
+      setSelectedOptionName(defaultOption.name_en);
+    }
+  }, [dataOptions]);
+  const convertNumberToArabic = (number) => {
+    const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
+  };
+  
   return (
     <Dialog
       open={openDialog}
@@ -140,8 +156,13 @@ function DialogItem({
               alignItems={"center"}
               justifyContent={"space-between"}
             >
-              <DialogTitle id="item-dialog-title">
-                {isArabic ? itemDetails.name_ar : itemDetails.name_en}
+              <DialogTitle
+                id="item-dialog-title"
+                sx={{ fontSize: "1.5rem", fontWeight: "bold" }}
+              >
+                <Typography sx={{ fontWeight: "bold", fontSize: "1.7rem" }}>
+                  {isArabic ? itemDetails.name_ar : itemDetails.name_en}
+                </Typography>
               </DialogTitle>
               <Stack direction={"row"} alignItems={"center"}>
                 <CounterDiaolgButton
@@ -156,18 +177,19 @@ function DialogItem({
                 <span
                   style={{
                     color: "#000",
-                    fontSize: "1.3rem",
+                    fontSize: "1.7rem",
                     fontWeight: "600",
                   }}
                 >
-                  {price} {isArabic ? 'ج.م' : "EGP"}
+                  {price} {t("egp")}
+                  {/* {isArabic ? convertNumberToArabic(price) : price} {t("egp")} */}
                 </span>
               </Stack>
             </Stack>
             <div className="borderItem"></div>
             <Typography
               variant="body1"
-              sx={{ mb: 2, color: "#000", fontSize: "1.4rem" }}
+              sx={{ color: "#000", fontSize: "1.4rem", fontWeight: "600" }}
             >
               {isArabic
                 ? itemDetails.description_ar
@@ -175,9 +197,12 @@ function DialogItem({
             </Typography>
             <Stack>
               {dataOptions && dataOptions.length > 0 && (
-                <FormControl component="fieldset" sx={{ mt: 2 }}>
-                  <Typography variant="h6" sx={{ color: "#000" }}>
-                    Options
+                <FormControl component="fieldset" sx={{ mt: ".7rem" }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "#000", fontSize: "1.5rem" }}
+                  >
+                    {t("options")}
                   </Typography>
                   <RadioGroup
                     value={selectedOptionName}
@@ -186,9 +211,17 @@ function DialogItem({
                     {dataOptions.map((option, index) => (
                       <FormControlLabel
                         key={index}
-                        value={isArabic ? option.name_ar : option.name_en}
+                        value={option.name_en}
                         control={<Radio sx={{ color: "#000" }} />}
-                        label={isArabic ? option.name_ar : option.name_en}
+                        label=<Typography
+                          sx={{
+                            fontSize: "1.5rem",
+                            color: "#000",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {`${isArabic ? option.name_ar : option.name_en}`}
+                        </Typography>
                         sx={{ color: "#000" }}
                       />
                     ))}
@@ -199,8 +232,16 @@ function DialogItem({
 
             {dataExtra && dataExtra.length > 0 && (
               <FormControl component="fieldset">
-                <Typography variant="h6" sx={{ color: "#000" }}>
-                  Extras
+                <Typography
+                  variant="h5"
+                  sx={{
+                    color: "#000",
+                    fontSize: "1.8rem",
+                    my: ".6rem",
+                    fontWeight: "600",
+                  }}
+                >
+                  {t("extras")}
                 </Typography>
                 <RadioGroup
                   onChange={(e) => {
@@ -223,22 +264,47 @@ function DialogItem({
                   {dataExtra.map((extra, index) => (
                     <FormControlLabel
                       key={index}
-                      sx={{ color: "#000", fontSize: "8px" }}
                       control={
                         <Checkbox
                           sx={{
                             color: "#000",
                             transform: "scale(0.8)",
                             padding: "4px",
+                            mt: 0,
                           }}
                           checked={selectedExtras.includes(extra)}
                           onChange={handleCheckboxChange(extra)}
                         />
                       }
-                      // label={`${extra.description_en} - ${extra.price_en} EGP`}
-                      // label={`${isArabic ? itemDetails.name_ar : extra.description_en}- ${extra.price_en} EGP`}
-                      label={`${isArabic ? itemDetails.name_ar : extra.description_en} - ${extra[isArabic ? 'price_ar' : 'price_en']} ${isArabic ? 'ج.م' : 'EGP'}`}
-
+                      
+                      label={
+                        <Typography
+                          sx={{
+                            fontSize: "1.3rem",
+                            color: "#000",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {`${isArabic ? extra.name_ar : extra.name_en} - ${
+                            extra[isArabic ? "price_ar" : "price_en"]
+                          } ${t("egp")}`}
+                        </Typography>
+                      }
+                      // label={
+                      //   <Typography
+                      //     sx={{
+                      //       fontSize: "1.3rem",
+                      //       color: "#000",
+                      //       fontWeight: "500",
+                      //     }}
+                      //   >
+                      //     {`${isArabic ? extra.name_ar : extra.name_en} - ${
+                      //       isArabic
+                      //         ? convertNumberToArabic(extra.price_ar)
+                      //         : extra.price_en
+                      //     } ${t("egp")}`}
+                      //   </Typography>
+                      // }
                     />
                   ))}
                 </RadioGroup>
