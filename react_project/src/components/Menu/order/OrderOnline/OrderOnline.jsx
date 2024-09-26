@@ -1014,7 +1014,7 @@ function OrderOnline() {
                             fontWeight: 500,
                           }}
                         >
-                          {/* {item.option.name}  */}
+                       
                           {isArabic ? item.option.name_ar : item.option.name_en}
                         </Typography>
                       </Stack>
@@ -1037,10 +1037,10 @@ function OrderOnline() {
                                 fontSize: "1.5rem",
                                 fontFamily: "cairo",
                                 fontWeight: 500,
-                                // mb: i === item.extras.length - 1 ? ".6rem" : 0,
+                            
                               }}
                             >
-                              {/* {extra.name_en} */}
+
                               {isArabic ? extra.name_ar : extra.name_en}
                             </Typography>
                             <Typography
