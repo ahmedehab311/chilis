@@ -7,9 +7,10 @@ import { toast } from "react-toastify";
 import { useCheckEmailAvailability, signUpSchema } from "../../../header/index";
 import RegisterContent from "./RegisterContent";
 import { BASE_URL } from "../../../setting";
-
+import { useTranslation } from "react-i18next"; 
 
 const Register = ({ setToken }) => {
+  const { t } = useTranslation();
   const [first_name, setFirst_name] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -30,10 +31,10 @@ const Register = ({ setToken }) => {
 
         setToken(token);
         localStorage.setItem("user", JSON.stringify(userData));
-        toast.success("Register successful!");
+        toast.success(t("regsterPage.success"));
         navigate("/login");
       } else {
-        throw new Error("Register failed");
+        throw new Error(t("regsterPage.error"));
       }
     } catch (error) {
       toast.error("The email or phone has already been taken.");
@@ -42,7 +43,6 @@ const Register = ({ setToken }) => {
   };
   const {
     register,
-    handleSubmit,
     getFieldState,
     trigger,
     formState: { errors },

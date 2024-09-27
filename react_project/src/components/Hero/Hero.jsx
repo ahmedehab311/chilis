@@ -1,18 +1,25 @@
 import logo from "./images/logo.png";
-import {Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import "swiper/css";
 import "swiper/css/navigation";
 import "./Slider/Slider.css";
 import "./Slider/Slider.css";
 import SwiperHero from "./Slider/SwiperHero";
-import "./hero.css"
+import "./hero.css";
+import { useLocation } from "react-router-dom";
 function Hero() {
+  const location = useLocation();
+
+  const isHomePage = location.pathname === "/";
+
+  if (!isHomePage) {
+    return null;
+  }
   return (
     <>
       <Stack
         sx={{
           display: "flex",
-          // mt: 2.5,
           mb: 2.5,
           alignItems: "center",
           position: "relative",
@@ -23,7 +30,7 @@ function Hero() {
           <img src={logo} className="logoImg" alt="logo" />
         </Stack>
 
-        <SwiperHero className="swiper-hero"/>
+        <SwiperHero className="swiper-hero" />
       </Stack>
     </>
   );

@@ -3,14 +3,9 @@
 /* eslint-disable react/no-unescaped-entities */
 import { Box, Button, TextField, Typography, Stack } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
-function LoginContent({
-  login,
-  phone,
-  password,
-  handleLogout,
-  setPassword,
-  setPhone,
-}) {
+import { useTranslation } from "react-i18next";
+function LoginContent({ login, phone, password, setPassword, setPhone }) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -46,19 +41,22 @@ function LoginContent({
             variant="h6"
             sx={{ fontSize: "1.8rem", fontWeight: "bold" }}
           >
-            Welcome Back
+            {t("loginPage.welcomeBack")}
           </Typography>
 
           <Typography
             variant="h6"
             sx={{ fontSize: "1.4rem", fontWeight: "600" }}
           >
-            Sign in to continue
+            {t("loginPage.signInToContinue")}
+            {/* Sign in to continue */}
           </Typography>
           <Stack>
-            <Typography variant="h6">Email</Typography>
+            <Typography variant="h6" gutterBottom>
+              {t("loginPage.email")}
+            </Typography>
             <TextField
-              placeholder="Enter Email"
+              placeholder={t("loginPage.enterEmail")}
               variant="outlined"
               fullWidth
               required
@@ -77,10 +75,11 @@ function LoginContent({
           </Stack>
           <Stack>
             <Typography variant="h6" gutterBottom>
-              Password
+              {/* Password */}
+              {t("loginPage.password")}
             </Typography>
             <TextField
-              placeholder="Enter Password "
+              placeholder={t("loginPage.enterPassword")}
               type="password"
               variant="outlined"
               fullWidth
@@ -105,16 +104,17 @@ function LoginContent({
             color="error"
             sx={{ fontSize: "1.2rem", fontWeight: "600" }}
           >
-            Login
+            {/* Login */}
+            {t("loginPage.loginButton")}
           </Button>
           <Typography variant="body2" align="center" sx={{ mt: 1 }}>
             <RouterLink to="/forgot-password">
               <Typography
                 variant="h6"
-                
                 sx={{ fontSize: "1.5rem", fontWeight: "600" }}
               >
-                Forgot Your Password?
+                {/* Forgot Your Password? */}
+                {t("loginPage.forgotPassword")}
               </Typography>
             </RouterLink>
           </Typography>
@@ -125,7 +125,8 @@ function LoginContent({
                 sx={{ fontSize: "1.5rem", fontWeight: "600" }}
               >
                 {" "}
-                Don't have an account? Sign up
+                {t("loginPage.noAccount")}
+                {/* Don't have an account? Sign up */}
               </Typography>
             </RouterLink>
           </Typography>

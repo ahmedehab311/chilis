@@ -2,6 +2,7 @@
 // // /* eslint-disable react/prop-types */
 import { Box, Button, TextField, Typography, Link, Stack } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 function RegisterContent({
   registerUser,
   register,
@@ -13,8 +14,9 @@ function RegisterContent({
   setPassword,
   setPhone,
   handleEmailBlur,
-  onChangeEmail
+  onChangeEmail,
 }) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -50,19 +52,20 @@ function RegisterContent({
             variant="h6"
             sx={{ fontSize: "1.5rem", fontWeight: "bold", textAlign: "center" }}
           >
-            Sign Up
+            {t("regsterPage.title")}
           </Typography>
           <Stack>
             <Typography
               variant="h6"
               sx={{ fontSize: "1.3rem", fontWeight: "600" }}
+              gutterBottom
             >
-              First Name
+              {/* First Name */}
+              {t("regsterPage.firstName")}
             </Typography>
             <TextField
-              placeholder="Enter Name"
+              placeholder={t("regsterPage.enterName")}
               {...register("firstName")}
-          
               variant="outlined"
               onBlur={emailOnBlurHandler}
               fullWidth
@@ -83,11 +86,13 @@ function RegisterContent({
             <Typography
               variant="h6"
               sx={{ fontSize: "1.3rem", fontWeight: "600" }}
+              gutterBottom
             >
-              Email Address
+              {/* Email Address */}
+              {t("regsterPage.email")}
             </Typography>
             <TextField
-              placeholder="Enter Your Email Address"
+              placeholder={t("regsterPage.enterEmail")}
               {...register("email")}
               onBlur={emailOnBlurHandler}
               // error={!!errors.email}
@@ -111,7 +116,7 @@ function RegisterContent({
               // variant="outlined"
               // fullWidth
               // required
-           
+
               // sx={{
               //   "& .MuiInputBase-input": {
               //     fontSize: "1.3rem",
@@ -121,8 +126,8 @@ function RegisterContent({
               //     fontSize: "1.2rem",
               //   },
               //   "& .MuiFormHelperText-root": {
-              //     fontSize: "1.1rem", 
-              //     color: "red", 
+              //     fontSize: "1.1rem",
+              //     color: "red",
               //   },
               // }}
             />
@@ -131,14 +136,15 @@ function RegisterContent({
             <Typography
               variant="h6"
               sx={{ fontSize: "1.3rem", fontWeight: "600" }}
+              gutterBottom
             >
-              Password
+              {/* Password */}
+              {t("regsterPage.password")}
             </Typography>
             <TextField
-              placeholder="Enter Password"
+              placeholder={t("regsterPage.enterPassword")}
               type="password"
               {...register("password")}
-          
               variant="outlined"
               fullWidth
               required
@@ -158,11 +164,13 @@ function RegisterContent({
             <Typography
               variant="h6"
               sx={{ fontSize: "1.3rem", fontWeight: "600" }}
+              gutterBottom
             >
-              Phone
+              {/* Phone */}
+              {t("regsterPage.phone")}
             </Typography>
             <TextField
-              placeholder="Enter Your Phone Number"
+              placeholder={t("regsterPage.enterPhone")}
               type="text"
               {...register("phone")}
               variant="outlined"
@@ -187,7 +195,8 @@ function RegisterContent({
             color="error"
             sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
           >
-            Sign Up
+            {/* Sign Up */}
+            {t("regsterPage.signUp")}
           </Button>
           <Typography
             variant="body2"
@@ -199,7 +208,8 @@ function RegisterContent({
                 variant="h6"
                 sx={{ fontSize: "1.5rem", fontWeight: "600" }}
               >
-                Already have an account? Sign in
+                {t("regsterPage.alreadyHaveAccount")}
+                {/* Already hav/.e an account? Sign in */}
               </Typography>
             </Link>
           </Typography>

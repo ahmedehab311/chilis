@@ -16,7 +16,6 @@ import {
   MainLayout,
   ForgetPass,
   Register,
-  Error,
   Profile,
   OrderOnline,
 } from "./components/header/index";
@@ -26,17 +25,13 @@ import ChangePasswordFromProfile from "./components/pages/ChangePassFromProfile"
 import { useDispatch } from "react-redux";
 import { setTotalItems } from "./rtk/slices/orderSlice";
 import MyOrders from "./components/Menu/order/MyOrders/MyOrders";
-import { Dialog } from "@mui/material";
+
 import Locations from "./components/Locations/Locations";
 import AboutUs from "./components/AboutUs/AboutUs";
+import NotFound from "./components/pages/NoFound";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
-  const excludedPaths = [
-    "/login",
-    "/register",
-    "/forgot-password",
-    "*"
-  ];
+  const excludedPaths = ["/*"];
 
   const handleLogout = () => {
     setToken(null);
@@ -85,8 +80,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
         />
         <Route path="/order-online" element={<OrderOnline />} />
         <Route path="/my_orders" element={<MyOrders />} />
-
-        <Route path="*" element={<Error />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
@@ -99,7 +93,6 @@ function App() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-    // const storedToken = localStorage.getItem("api_token");
     if (storedToken) {
       setToken(storedToken);
     }
@@ -112,8 +105,6 @@ function App() {
     }
   }, [dispatch]);
 
-
-
   const location = useLocation();
 
   useEffect(() => {
@@ -122,7 +113,7 @@ function App() {
         .getElementById(location.state.scrollTo)
         ?.scrollIntoView({ behavior: "smooth" });
     }
-  }, [location]); 
+  }, [location]);
 
   return (
     <>

@@ -4,7 +4,9 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { Link, Link as RouterLink } from "react-router-dom";
 import { BASE_URL } from "../../setting";
+import { useTranslation } from "react-i18next";
 function ForgetPass() {
+  const { t } = useTranslation();
   const [form, setForm] = useState({
     email: "",
   });
@@ -28,14 +30,15 @@ function ForgetPass() {
       console.log(response.data);
 
       if (response.data && response.data.response) {
-        toast.success(
-          "Password reset instructions have been sent to your email!"
-        );
+        // toast.success(
+        //   "Password reset instructions have been sent to your email!"
+        // );
+        toast.success(t("forgetPass.success"));
       } else {
         throw new Error("Password reset failed");
       }
     } catch (error) {
-      toast.error("Failed to reset password.");
+      toast.error(t("forgetPass.failed"));
       console.error("Error resetting password: ", error);
     }
   };
@@ -73,7 +76,7 @@ function ForgetPass() {
             variant="h6"
             sx={{ fontSize: "1.8rem", fontWeight: "bold", textAlign: "center" }}
           >
-            Forgot password
+            {t("forgetPass.title")}
           </Typography>
           <Typography
             variant="h6"
@@ -83,25 +86,26 @@ function ForgetPass() {
               textAlign: "center",
             }}
           >
-            Forgot password Enter your email address below and we'll send you an
-            email with instructions on how to change your password
+            {t("forgetPass.instructions")}
           </Typography>
           <Stack>
             <Typography
               variant="h6"
-              sx={{ fontSize: "1.3rem", fontWeight: "600"}}
+              sx={{ fontSize: "1.3rem", fontWeight: "600" }}
+              gutterBottom
             >
-              Email
+              {t("forgetPass.email")}
             </Typography>
             <TextField
               variant="outlined"
               fullWidth
               margin="normal"
               name="email"
+              placeholder={t("regsterPage.enterEmail")}
               value={form.email}
               required
               sx={{
-                mt:0,
+                mt: 0,
                 "& .MuiInputBase-input": {
                   fontSize: "1.3rem",
                   color: "gray",
@@ -118,7 +122,7 @@ function ForgetPass() {
             onClick={handleForgetPass}
             sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
           >
-            Send
+            {t("forgetPass.sendButton")}
           </Button>
           <Link component={RouterLink} to="/login" color={"#000"}>
             <Typography
@@ -129,7 +133,7 @@ function ForgetPass() {
                 textAlign: "center",
               }}
             >
-              Already have an account? Sign in
+              {t("regsterPage.alreadyHaveAccount")}
             </Typography>
           </Link>
         </Box>
