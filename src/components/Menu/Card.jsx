@@ -32,7 +32,7 @@ function CardContent() {
   const [price, setPrice] = useState(null);
   const [dataExtra, setDataExtra] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedOptionName, setSelectedOptionName] = useState("")
+  const [selectedOptionName, setSelectedOptionName] = useState("");
   const [selectedExtras, setSelectedExtras] = useState([]);
   const itemDetails = useSelector((state) => state.info.itemDetails);
   const [idInfo, setIdInfo] = useState([]);
@@ -42,7 +42,7 @@ function CardContent() {
       try {
         const data = await fetchData();
         setMenuItems(data);
-        console.log(data);  
+        // console.log(data);
       } catch (error) {
         console.error("Error fetching data: ", error);
       } finally {
@@ -51,7 +51,6 @@ function CardContent() {
     };
     fetchDataAsync();
   }, []);
-
 
   useEffect(() => {
     if (itemDetails) {
@@ -64,7 +63,7 @@ function CardContent() {
   };
   const handleCardClick = (index) => {
     setSelectedItem(menuItems[index]);
-    console.log("menuItems", menuItems[index]);
+    // console.log("menuItems", menuItems[index]);
     setShowCards(false);
   };
 
@@ -90,6 +89,7 @@ function CardContent() {
   //     setOpenDialog(false);
   //   }
   // };
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
     resetSelections();
@@ -97,8 +97,7 @@ function CardContent() {
   const resetSelections = () => {
     setSelectedOption("");
     setSelectedExtras([]);
-    setQuantity(1)
-    
+    setQuantity(1);
   };
   useEffect(() => {
     setOpenDialog(false);

@@ -6,16 +6,16 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../../rtk/slices/userSlice";
 import LoginContent from "./LoginContent";
-import { fetchAddresses } from "../../../../rtk/slices/adderssSlice";
+// import { fetchAddresses } from "../../../../rtk/slices/adderssSlice";
 import { BASE_URL } from "../../../setting";
-
+import { useTranslation } from "react-i18next";
 const LoginPage = ({ setToken  }) => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [userAddress, setUserAddress] = useState(null);
+  // const [userAddress, setUserAddress] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const { t } = useTranslation(); 
   const login = async (e) => {
     e.preventDefault();
 
@@ -31,21 +31,19 @@ const LoginPage = ({ setToken  }) => {
         if (token && userData) {
           setToken(token);
           localStorage.setItem("token", token);
-          localStorage.setItem("user", JSON.stringify(userData)); // تخزين بيانات المستخدم
+          localStorage.setItem("user", JSON.stringify(userData)); 
+          dispatch(setUser(userData)); 
 
-          dispatch(setUser(userData)); // تخزين بيانات المستخدم في Redux
-
-          toast.success("Login successful!");
+          toast.success(t("loginPage.loginSuccess"));
           navigate("/");
         } else {
-          throw new Error("Token or user data not found");
+          throw new Error(t("loginPage.tokenNotFound"));
         }
       } else {
-        throw new Error(response.data.messages || "Login failed");
+        throw new Error(t("loginPage.loginFailed"));
       }
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.messages || "Invalid User Name or Password";
+      const errorMessage = error.response?.data?.messages || t("loginPage.invalidCredentials");
       toast.error(errorMessage);
       console.error("Error logging in: ", errorMessage);
     }
