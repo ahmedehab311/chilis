@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
 import { IconButton, Stack, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
+import { useTranslation } from "react-i18next";
 function DiolgTitle({ onClose }) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Stack sx={{ p: 2 }} direction={"row"} alignItems={"center"}>
@@ -13,7 +15,7 @@ function DiolgTitle({ onClose }) {
             textAlign: "left",
           }}
         >
-          Add Delivery Address
+          {t("address.Add Delivery Address")}
         </Typography>
         <IconButton
           sx={{

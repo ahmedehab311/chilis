@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -15,6 +14,7 @@ import {
   DiolgTitle,
   fetchAddresses,
 } from "./index";
+import { useTranslation } from "react-i18next";
 function AddressDialog({ open, onClose }) {
   const api_token = localStorage.getItem("token");
   const dispatch = useDispatch();
@@ -36,6 +36,8 @@ function AddressDialog({ open, onClose }) {
     deliveryInstructions: "",
     label: "",
   });
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const [isAddingNewAddress, setIsAddingNewAddress] = useState(false);
   useEffect(() => {
     const fetchCities = async () => {
@@ -67,7 +69,8 @@ function AddressDialog({ open, onClose }) {
 
           const areaNames = responseData.data.areas.map((area) => ({
             id: area.id,
-            name: area.area_name_en,
+            name_en: area.area_name_en,
+            name_ar: area.area_name_ar,
           }));
 
           setAreas(areaNames);
@@ -93,9 +96,14 @@ function AddressDialog({ open, onClose }) {
     dispatch(fetchAddresses());
   }, [dispatch]);
 
+  // const handleSelectLabel = (label) => {
+  //   setCurrentAddress((prev) => ({ ...prev, label }));
+  // };
   const handleSelectLabel = (label) => {
-    setCurrentAddress((prev) => ({ ...prev, label }));
+    const translatedLabel = t(`address.labels.${label.toLowerCase()}`);
+    setCurrentAddress((prev) => ({ ...prev, label: translatedLabel }));
   };
+
   const handleAddAddress = async () => {
     const requiredFields = [
       "deliveryCity",
@@ -109,7 +117,7 @@ function AddressDialog({ open, onClose }) {
 
     requiredFields.forEach((field) => {
       if (!currentAddress[field]) {
-        newErrors[field] = "This field is required";
+        newErrors[field] = t("errors.required");
       }
     });
 
@@ -117,6 +125,11 @@ function AddressDialog({ open, onClose }) {
       setErrors(newErrors);
       return;
     }
+    const isArabic = i18n.language === "ar";
+
+    const addressName = isArabic
+      ? currentAddress.label_ar
+      : currentAddress.label_en;
 
     const queryParams = new URLSearchParams({
       area: currentAddress.deliveryArea,
@@ -135,20 +148,16 @@ function AddressDialog({ open, onClose }) {
         `${API_ADD_ADDRESS}${queryParams.toString()}`
       );
 
-      //   الشكل الفعلي للبيانات المستلمة
       const dataResponse = response.data;
       console.log("response", dataResponse);
 
-      //   الاستجابة بشكل صحيح
       if (dataResponse.response) {
         if (window.location.pathname === "/profile") {
           toast.success("Address added successfully!");
         }
         onClose();
-        //  حتى يتم إغلاق الحوار
         await new Promise((resolve) => setTimeout(resolve, 500));
 
-        // ثم تفريغ الحقول
         setCurrentAddress({
           deliveryCity: "",
           deliveryArea: "",
@@ -160,8 +169,6 @@ function AddressDialog({ open, onClose }) {
           label: "",
         });
         setErrors({});
-
-        // جلب العناوين المحدثة
         dispatch(fetchAddresses());
       } else {
         console.error(
@@ -189,7 +196,7 @@ function AddressDialog({ open, onClose }) {
     if (!value.trim()) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        [name]: "This field is required",
+        [name]: t("errors.required"),
       }));
     }
   };

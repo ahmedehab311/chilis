@@ -45,8 +45,8 @@ function DialogItem({
 }) {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart.items);
-  console.log("dataExtra", dataExtra);
-  console.log("dataOptions", dataOptions);
+  // console.log("dataExtra", dataExtra);
+  // console.log("dataOptions", dataOptions);
   const { t } = useTranslation();
   const isArabic = i18n.language === "ar";
 
@@ -98,8 +98,7 @@ function DialogItem({
 
   const handleCheckboxChange = (extra) => (event) => {
     if (event.target.checked) {
-      setSelectedExtras([...selectedExtras, extra]);
-      console.log("setSelectedExtras", setSelectedExtras);
+      setSelectedExtras([...selectedExtras, extra]);  
     } else {
       setSelectedExtras(selectedExtras.filter((item) => item !== extra));
     }

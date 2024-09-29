@@ -14,8 +14,9 @@ import {
   Alert,
   Stack,
 } from "@mui/material";
-
+import { useTranslation } from "react-i18next";
 function Pickup({ onBranchStatusChange }) {
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const { branches, loading, error } = useSelector((state) => state.branches);
   const selectedBranchId = useSelector(
@@ -98,7 +99,7 @@ function Pickup({ onBranchStatusChange }) {
             displayEmpty
           >
             <MenuItem value="" disabled>
-              Select Branch
+              {t("selectBranch")}
             </MenuItem>
             {loading && (
               <MenuItem disabled>
@@ -117,7 +118,7 @@ function Pickup({ onBranchStatusChange }) {
               !error &&
               branches.map((branch) => (
                 <MenuItem key={branch.id} value={branch.id}>
-                  {branch.name_en}
+                  {i18n.language === "ar" ? branch.name_ar : branch.name_en}
                 </MenuItem>
               ))}
           </Select>
@@ -126,13 +127,14 @@ function Pickup({ onBranchStatusChange }) {
               severity="warning"
               sx={{
                 ml: "1rem",
-                fontSize: "1.1rem",
+                fontSize: "1.3rem",
+                fontWeight: "600",
                 "@media (max-width: 700px)": {
                   mt: "1rem",
                 },
               }}
             >
-              Sorry, this branch is currently closed.
+              {t("branchClosed")}
             </Alert>
           )}
         </Stack>

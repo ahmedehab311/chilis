@@ -43,24 +43,24 @@
   "Enter coupon code": "Enter coupon code",
   "Any notes? please enter it here": "Any notes? please enter it here",
   "Select delivery type": " Select delivery type",
-  " Subtotal": " Subtotal",
+  "Subtotal": "Subtotal",
   "Delivery Fee": "Delivery Fee",
   "Tax": "Tax",
   "Total": "Total",
   "cancel": "cancel",
   "Apply": "Apply",
-  "Select Payment Method": "Select Payment Method",
-  "Cash on Delivery": "Cash on Delivery",
-  "Credit Card": "Credit Card",
-  "Place Order": "Place Order",
-  "select_valid_address": "Please select a valid delivery address before proceeding.",
-  "address_not_available": "The selected address is no longer available for delivery.",
-  "select_branch": "Please select a branch for pickup.",
-  "invalid_area_branch": "Please select a valid area and branch.",
-  "order_quantity_invalid": "Order quantities must be greater than 0.",
-  "order_creation_error": "An error occurred while processing your order. Please try again.",
-  "no_response": "Error placing order: No response from server.",
-  "order_created": "Order created successfully.",
+  "SelectPaymentMethod": "Select Payment Method",
+  "CashonDelivery": "Cash on Delivery",
+  "CreditCard": "Credit Card",
+  "PlaceOrder": "Place Order",
+  "selectValidAddress": "Please select a valid delivery address before proceeding.",
+  "addressNotAvailable": "The selected address is no longer available for delivery.",
+  "selectBranch": "Please select a branch for pickup.",
+  "invalidAreaBranch": "Please select a valid area and branch.",
+  "orderQuantityInvalid": "Order quantities must be greater than 0.",
+  "orderCreationError": "An error occurred while processing your order. Please try again.",
+  "noResponse": "Error placing order: No response from server.",
+  "orderCreated": "Order created successfully.",
   "loginPage": {
     "welcomeBack": "Welcome Back",
     "signInToContinue": "Sign in to continue",
@@ -90,16 +90,61 @@
     "phone": "Phone",
     "enterPhone": "Enter Your Phone Number",
     "signUp": "Sign Up",
-    "alreadyHaveAccount": "Already have an account? Sign in"
+    "alreadyHaveAccount": "Already have an account? Sign in",
+    "name": "Name",
+    "MyAccount": "My Account"
   },
   "forgetPass": {
-    "title": "نسيت كلمة المرور",
-    "instructions": "أدخل بريدك الإلكتروني أدناه وسنرسل لك تعليمات لتغيير كلمة المرور.",
-    "email": "البريد الإلكتروني",
-    "sendButton": "إرسال",
-    "success": "تم إرسال تعليمات إعادة تعيين كلمة المرور إلى بريدك الإلكتروني!",
-    "failed": "فشل في إعادة تعيين كلمة المرور."
+    "title": "Forgot Password",
+    "instructions": "Enter your email address below and we will send you instructions to reset your password.",
+    "email": "Email",
+    "sendButton": "Send",
+    "success": "Password reset instructions have been sent to your email!",
+    "failed": "Password reset failed."
   },
   "messageError": "Oops! The page you're looking for doesn't exist.",
-  "goHomeButton": "Go to Home"
+  "goHomeButton": "Go to Home",
+  "selectBranchForSelect": "Select Branch",
+  "branchClosed": "Sorry, this branch is currently closed",
+  "noBranchesAvailable": "No branches available",
+  "Your Delivery Address List": "Your Delivery Address List",
+  "This address is currently unavailable for delivery": "This address is currently unavailable for delivery",
+  "address": {
+    "Addresses": "Addresses",
+    "Delivery city": "Delivery city",
+    "Delivery Area": "Delivery Area",
+    "Add Delivery Address": "Add Delivery Address",
+    "street": "Street",
+    "building": "Building",
+    "floor": "Floor",
+    "apt": "Apartment",
+    "deliveryInstructions": "Delivery Instructions",
+    "noAddressSelected": "No address selected",
+    "changeDeliveryAddress": "Change delivery address",
+    "deliveryAddress": "Delivery Address",
+    "noAddressAvailable": "No Address Available",
+    "addOrRemoveAddress": " Add or remove a delivery address",
+    "labels": {
+      "home": "Home",
+      "work": "Work",
+      "other": "Other"
+    },
+    "Add Address": "Add Address"
+  },
+  "errors": {
+    "required": "This field is required"
+  },
+  "coupon": {
+    "enterCoupon": "Please enter a coupon code",
+    "invalidCoupon": "Invalid coupon code",
+    "failedApplyCoupon": "Failed to apply coupon. Please try again"
+  },
+  "profile": {
+    "confirmSave": "Are you sure you want to save these changes?",
+    "updateFailed": "Failed to update profile.",
+    "updateSuccess": "Profile updated successfully",
+    "saveChanges": "Save changes",
+    "changePassword": "Change Password"
+    
+  }
 }

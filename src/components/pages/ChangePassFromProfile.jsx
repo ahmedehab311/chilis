@@ -227,7 +227,7 @@ const ChangePassword = () => {
       }}
       
     >
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" gutterBottom >
         Change Password
       </Typography>
       <TextField

@@ -51,18 +51,18 @@
   "Total": "المجموع الكلي",
   "cancel": "الغاء",
   "Apply": "تطبيق",
-  "Select Payment Method": "اختر طريقة الدفع",
-  "Cash on Delivery": "الدفع عند الاستلام",
-  "Credit Card": "بطاقة ائتمان",
-  "Place Order": "تقديم الطلب",
-  "select valid address": "يرجى اختيار عنوان توصيل صحيح قبل المتابعة.",
-  "address not available": "العنوان المحدد لم يعد متاحًا للتوصيل.",
-  "select branch": "يرجى اختيار فرع للاستلام.",
-  "invalid area branch": "يرجى اختيار منطقة وفرع صحيحين.",
-  "order quantity invalid": "يجب أن تكون كميات الطلب أكبر من 0.",
-  "order creation error": "حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.",
-  "no response": "خطأ في تقديم الطلب: لم يتم الحصول على استجابة من الخادم.",
-  "order created": "تم إنشاء الطلب بنجاح.",
+  "SelectPaymentMethod": "اختر طريقة الدفع",
+  "CashonDelivery": "الدفع عند الاستلام",
+  "CreditCard": "بطاقة ائتمان",
+  "PlaceOrder": "تقديم الطلب",
+  "selectValidAddress": "يرجى اختيار عنوان توصيل صحيح قبل المتابعة.",
+  "addressNotAvailable": "العنوان المحدد لم يعد متاحًا للتوصيل.",
+  "selectBranch": "يرجى اختيار فرع للاستلام.",
+  "invalidAreaBranch": "يرجى اختيار منطقة وفرع صحيحين.",
+  "orderQuantityInvalid": "يجب أن تكون كميات الطلب أكبر من 0.",
+  "orderCreationError": "حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.",
+  "noResponse": "خطأ في تقديم الطلب: لم يتم الحصول على استجابة من الخادم.",
+  "orderCreated": "تم إنشاء الطلب بنجاح.",
   "loginPage": {
     "welcomeBack": "مرحبًا بعودتك",
     "signInToContinue": "سجل الدخول للمتابعة",
@@ -92,8 +92,11 @@
     "phone": "رقم الهاتف",
     "enterPhone": "أدخل رقم هاتفك",
     "signUp": "إنشاء حساب",
-    "alreadyHaveAccount": "هل لديك حساب بالفعل؟ تسجيل الدخول"
-  }, "forgetPass": {
+    "alreadyHaveAccount": "هل لديك حساب بالفعل؟ تسجيل الدخول",
+    "name": "الاسم",
+    "MyAccount": "حسابي"
+  },
+  "forgetPass": {
     "title": "نسيت كلمة المرور",
     "instructions": "أدخل بريدك الإلكتروني أدناه وسنرسل لك تعليمات لتغيير كلمة المرور.",
     "email": "البريد الإلكتروني",
@@ -102,5 +105,48 @@
     "failed": "فشل في إعادة تعيين كلمة المرور."
   },
   "messageError": "عذرًا! الصفحة التي تبحث عنها غير موجودة.",
-  "goHomeButton": "العودة إلى الصفحة الرئيسية"
+  "goHomeButton": "العودة إلى الصفحة الرئيسية",
+  "selectBranchForSelect": "اختر الفرع",
+  "branchClosed": "عذراً، هذا الفرع مغلق حالياً",
+  "noBranchesAvailable": "لا توجد فروع متاحة",
+  "Your Delivery Address List": "قائمة عناوين التوصيل الخاصة بك",
+  "This address is currently unavailable for delivery": "هذا العنوان غير متاح حاليًا للتوصيل",
+  "address": {
+    "Addresses": "العناوين",
+    "Delivery city": "مدينة التوصيل",
+    "Delivery Area": "منطقة التوصيل",
+    "Add Delivery Address": "إضافة عنوان التوصيل",
+    "street": "الشارع",
+    "building": "المبنى",
+    "floor": "الطابق",
+    "apt": "الشقة",
+    "noAddressSelected": "لم يتم تحديد عنوان",
+    "changeDeliveryAddress": "تغيير عنوان التوصيل",
+    "deliveryAddress": "عنوان التوصيل",
+    "deliveryInstructions": "تعليمات التوصيل",
+    "noAddressAvailable": "لا توجد عناوين متاحة. انقر لإضافة عنوان",
+    "addOrRemoveAddress": "إضافة أو إزالة عنوان تسليم",
+
+    "labels": {
+      "home": "منزل",
+      "work": "عمل",
+      "other": "آخر"
+    },
+    "Add Address": "اضافة عنوان"
+  },
+  "errors": {
+    "required": "هذا الحقل مطلوب"
+  },
+  "coupon": {
+    "enterCoupon": "يرجى إدخال رمز القسيمة",
+    "invalidCoupon": "رمز القسيمة غير صالح",
+    "failedApplyCoupon": "فشل في تطبيق القسيمة. حاول مرة أخرى"
+  },
+  "profile": {
+    "confirmSave": "هل أنت متأكد أنك تريد حفظ هذه التغييرات؟",
+    "updateFailed": "فشل في تحديث الملف الشخصي",
+    "updateSuccess": "تم تحديث الملف الشخصي بنجاح",
+    "saveChanges": "حفظ التغييرات",
+    "changePassword": "تغيير كلمة المرور"
+  }
 }

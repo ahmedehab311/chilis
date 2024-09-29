@@ -51,8 +51,9 @@ import { Card, Stack } from "@mui/material";
 import AddressDialog from "../../../Menu/order/adderess/addressDaiolg/DialogAdderss.jsx";
 import InfoUserCard from "./InfoUserCard.jsx";
 import AddAdderssFromProfile from "./AdderssInProfile.jsx";
-import Address from "../../../Menu/order/adderess/Address"; // تأكد من استيراد مكون Address
-import { useState } from "react";
+import Address from "../../../Menu/order/adderess/Address"; 
+import { useState } from "react";  
+import { useTranslation } from "react-i18next";
 
 function UserCard({
   displayedUser,
@@ -60,11 +61,12 @@ function UserCard({
   openDialog1,
   handleClose1,
 }) {
-  const [showAddress, setShowAddress] = useState(false); // حالة للتحكم بين عرض إضافة العنوان أو العنوان
+  const { t } = useTranslation();
+  const [showAddress, setShowAddress] = useState(false);
 
-  // دالة لتغيير الحالة بين عرض إضافة العنوان والعنوان
+
   const handleAddAddress = () => {
-    setShowAddress(true); // عند الضغط لفتح إضافة العنوان، قم بتفعيل العنوان
+    setShowAddress(true);
   };
 
   return (
@@ -101,7 +103,7 @@ function UserCard({
             <Address /> 
           ) : (
             <div>
-              <p>No address available. Click to add an address.</p>
+              <p>{t('address.noAddressAvailable')}</p>
               {/* <button onClick={handleAddAddress}>Add Address</button> */}
             </div>
           )}

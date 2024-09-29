@@ -7,6 +7,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 function SelectAdderss({
   selectedCity,
   setSelectedCity,
@@ -17,8 +18,10 @@ function SelectAdderss({
   areas,
   setAreas,
   loadingAreas,
-  setSelectedArea = () => {}, 
+  setSelectedArea = () => {},
 }) {
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const handleCityChange = (event) => {
     setSelectedCity(event.target.value);
     setCurrentAddress((prevAddress) => ({
@@ -40,13 +43,14 @@ function SelectAdderss({
     <>
       <Stack>
         <Typography
+          gutterBottom
           sx={{
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
           }}
         >
-          Delivery city
+          {t("address.Delivery city")}
         </Typography>
         <Select
           value={currentAddress.deliveryCity}
@@ -61,7 +65,7 @@ function SelectAdderss({
           ) : (
             cities.map((city) => (
               <MenuItem key={city.id} value={city.id}>
-                {city.name_en}
+                {isArabic ? city.name_ar : city.name_en}
               </MenuItem>
             ))
           )}
@@ -69,13 +73,14 @@ function SelectAdderss({
       </Stack>
       <Stack>
         <Typography
+          gutterBottom
           sx={{
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
           }}
         >
-          Delivery Area
+          {t("address.Delivery Area")}
         </Typography>
         <Select
           value={currentAddress.deliveryArea}
@@ -91,7 +96,7 @@ function SelectAdderss({
           ) : (
             areas.map((area) => (
               <MenuItem key={area.id} value={area.id}>
-                {area.name}
+                {isArabic ? area.name_ar : area.name_en} 
               </MenuItem>
             ))
           )}
