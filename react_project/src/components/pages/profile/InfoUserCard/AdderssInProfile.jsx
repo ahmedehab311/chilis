@@ -63,8 +63,11 @@ import { useState } from "react";
 import { Typography, Stack, Dialog, DialogContent } from "@mui/material";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import Address from "../../../Menu/order/adderess/Address";
+import { useTranslation } from "react-i18next";
 
 function AdderssInProfile() {
+  const { t, i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const [openAddressListDialog, setOpenAddressListDialog] = useState(false);
 
   const handleOpenAddressListDialog = () => {
@@ -95,7 +98,7 @@ function AdderssInProfile() {
             textAlign: "left",
           }}
         >
-          Address
+         {t('address.Addresses')}
         </Typography>
         <Stack direction={"row"} sx={{ justifyContent: "space-between" }}>
           <Typography
@@ -107,7 +110,7 @@ function AdderssInProfile() {
               textAlign: "left",
             }}
           >
-            Add or remove a delivery address
+             {t('address.addOrRemoveAddress')}
           </Typography>
           <ArrowForwardIosOutlinedIcon
             sx={{

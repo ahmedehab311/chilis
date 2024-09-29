@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
 import { Stack, TextField, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 function InputsAdderss({
   currentAddress,
   handleInputChange,
   handleBlur,
   errors,
 }) {
+  const { t } = useTranslation();
   return (
     <>
       <Stack>
@@ -15,8 +17,9 @@ function InputsAdderss({
             fontSize: "1.5rem",
             mb: ".8",
           }}
+          gutterBottom
         >
-          Street
+          {t("address.street")}
         </Typography>
         <TextField
           name="street"
@@ -24,8 +27,13 @@ function InputsAdderss({
           onChange={handleInputChange}
           onBlur={handleBlur}
           error={!!errors.street}
-          helperText={errors.street}
+          // helperText={errors.street}
         />
+        {errors.street && (
+          <span style={{ color: "red", fontSize: "1.1rem" }}>
+            {errors.street}
+          </span>
+        )}
       </Stack>
       <Stack>
         <Typography
@@ -34,8 +42,9 @@ function InputsAdderss({
             fontSize: "1.5rem",
             mb: ".8",
           }}
+          gutterBottom
         >
-          building
+          {t("address.building")}
         </Typography>
         <TextField
           name="building"
@@ -43,18 +52,25 @@ function InputsAdderss({
           onChange={handleInputChange}
           onBlur={handleBlur}
           error={!!errors.building}
-          helperText={errors.building}
+          // helperText={errors.building}
         />
+        {errors.building && (
+          <span style={{ color: "red", fontSize: "1.1rem" }}>
+            {errors.building}
+          </span>
+        )}
       </Stack>
       <Stack>
         <Typography
+        gutterBottom
           sx={{
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
           }}
+          
         >
-          floor
+          {t("address.floor")}
         </Typography>
         <TextField
           name="floor"
@@ -62,36 +78,48 @@ function InputsAdderss({
           onChange={handleInputChange}
           onBlur={handleBlur}
           error={!!errors.floor}
-          helperText={errors.floor}
         />
+           {errors.floor && (
+          <span style={{ color: "red", fontSize: "1.1rem" }}>
+            {errors.floor}
+          </span>
+        )}
       </Stack>
       <Stack>
         <Typography
+        gutterBottom
           sx={{
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
           }}
         >
-          Apt
+          {t("address.apt")}
         </Typography>
         <TextField
           name="apt"
           value={currentAddress.apt}
           onChange={handleInputChange}
           onBlur={handleBlur}
+          error={!!errors.apt}
         />
+          {errors.apt && (
+          <span style={{ color: "red", fontSize: "1.1rem" }}>
+            {errors.apt}
+          </span>
+        )}
       </Stack>
 
       <Stack>
         <Typography
+        gutterBottom
           sx={{
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
           }}
         >
-          delivery Instructions
+          {t("address.deliveryInstructions")}
         </Typography>
         <TextField
           name="deliveryInstructions"

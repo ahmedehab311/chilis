@@ -321,6 +321,279 @@ function OrderOnline() {
     return isAvailable;
   };
 
+  // const handleCheckout = () => {
+  //   const token = localStorage.getItem("token");
+
+  //   if (!token) {
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   // التحقق من اختيار العنوان فقط في حالة الدليفري
+  //   if (deliveryType === "delivery") {
+  //     const selectedAddress = addressData.find(
+  //       (addr) => addr.id === address?.id
+  //     );
+
+  //     if (!selectedAddress) {
+  //       toast.error(
+  //         "Please select a valid delivery address before proceeding."
+  //       );
+  //       return;
+  //     }
+
+  //     if (!isAddressAvailable(selectedAddress)) {
+  //       toast.error(
+  //         "The selected address is no longer available for delivery."
+  //       );
+  //       return;
+  //     }
+  //   }
+
+  //   // التحقق من اختيار الفرع في حالة البيك آب
+  //   if (deliveryType === "pickup") {
+  //     if (!selectedBranchId) {
+  //       toast.error("Please select a branch for pickup.");
+  //       return;
+  //     }
+  //   }
+
+  //   // إعداد قيم area و branch بناءً على نوع الطلب
+  //   let areaId, branchId;
+  //   const delivery_type = deliveryType === "pickup" ? 2 : 1;
+
+  //   if (delivery_type === 1) {
+  //     // دليفري
+  //     areaId = address.area?.id;
+  //     branchId = address.branches?.[0]?.id;
+
+  //     if (!areaId || !branchId) {
+  //       toast.error("Please select a valid area and branch.");
+  //       return;
+  //     }
+  //   } else if (delivery_type === 2) {
+  //     // بيك آب
+  //     branchId = selectedBranchId;
+  //     areaId = null;
+  //   }
+
+  //   const orders = cartItems
+  //     .map((item) => {
+  //       if (item.quantity <= 0) {
+  //         console.error(
+  //           `Item ${item.id} quantity is invalid: ${item.quantity}`
+  //         );
+  //         console.error("Order quantities must be greater than 0.");
+  //         return null;
+  //       }
+  //       return {
+  //         id: item.id,
+  //         special: specialNotes[item.id] || "",
+  //         extras: Array.isArray(item.extras)
+  //           ? item.extras.map((extra) => extra.id)
+  //           : [],
+  //         count: item.quantity,
+  //         choices: [],
+  //         options: item.option ? [item.option.id] : [],
+  //       };
+  //     })
+  //     .filter((order) => order !== null);
+
+  //   if (orders.length === 0) {
+  //     return;
+  //   }
+
+  //   const dataToSend = {
+  //     delivery_type: delivery_type,
+  //     payment: paymentMethod === "cash" ? 1 : 2,
+  //     lat: delivery_type === 1 ? address.lat : 0,
+  //     lng: delivery_type === 1 ? address.lng : 0,
+  //     address: delivery_type === 1 ? currentAddress.id : null,
+  //     area: delivery_type === 1 ? address.area?.id : areaId,
+  //     // area: address.area?.id,
+  //     branch: branchId,
+  //     api_token: api_token,
+  //     items: JSON.stringify({ items: orders }),
+  //     device_id: "",
+  //     notes: "",
+  //     car_model: "",
+  //     car_color: "",
+  //     gift_cards: "",
+  //     coins: "00.00",
+  //   };
+
+  //   console.log("Checkout data:", dataToSend);
+
+  //   const params = new URLSearchParams(dataToSend);
+  //   axios
+  //     .post(`${BASE_URL}/orders/create?${params.toString()}`)
+  //     .then((response) => {
+  //       if (response.data.response) {
+  //         console.log(response.data);
+  //         localStorage.setItem("orderSuccess", "true");
+  //         localStorage.removeItem("idInfo");
+
+  //         toast.success("Order created successfully.");
+
+  //         dispatch(clearCart());
+  //       } else {
+  //         console.error("Response error data:", response.data);
+  //         toast.error(
+  //           "An error occurred while processing your order. Please try again."
+  //         );
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error details:", error);
+  //       let errorMessage =
+  //         "An error occurred while processing your order. Please try again.";
+
+  //       if (error.response) {
+  //         console.error("Error response data:", error.response.data);
+  //         console.error("Error response status:", error.response.status);
+  //         console.error("Error response headers:", error.response.headers);
+  //         errorMessage = error.response.data.message || errorMessage;
+  //       } else if (error.request) {
+  //         console.error("Error request:", error.request);
+  //         errorMessage = "Error placing order: No response from server.";
+  //       } else {
+  //         console.error("Error message:", error.message);
+  //       }
+
+  //       toast.error(errorMessage);
+  //     });
+  // };
+
+
+  // const handleCheckout = () => {
+  //   console.log("Cart Items:", cartItems);
+
+  //   const token = localStorage.getItem("token");
+
+  //   if (!token) {
+  //     navigate("/login");
+  //     return;
+  //   }
+
+  //   // التحقق من اختيار العنوان فقط في حالة الدليفري
+  //   if (deliveryType === "delivery") {
+  //     const selectedAddress = addressData.find(
+  //       (addr) => addr.id === address?.id
+  //     );
+
+  //     if (!selectedAddress) {
+  //       toast.error(t("selectValidAddress"));
+  //       return;
+  //     }
+
+  //     if (!isAddressAvailable(selectedAddress)) {
+  //       toast.error(t("addressNotAvailable"));
+  //       return;
+  //     }
+  //   }
+
+  //   // التحقق من اختيار الفرع في حالة البيك آب
+  //   if (deliveryType === "pickup") {
+  //     if (!selectedBranchId) {
+  //       toast.error(t("selectBranch"));
+  //       return;
+  //     }
+  //   }
+
+  //   // إعداد قيم area و branch بناءً على نوع الطلب
+  //   let areaId, branchId;
+  //   const delivery_type = deliveryType === "pickup" ? 2 : 1;
+
+  //   if (delivery_type === 1) {
+  //     // دليفري
+  //     areaId = address.area?.id;
+  //     branchId = address.branches?.[0]?.id;
+
+  //     if (!areaId || !branchId) {
+  //       toast.error(t("invalidAreaBranch"));
+  //       return;
+  //     }
+  //   } else if (delivery_type === 2) {
+  //     // بيك آب
+  //     branchId = selectedBranchId;
+  //     areaId = null;
+  //   }
+  //   const orders = cartItems
+  //   .filter((item) => item.quantity > 0)  // تأكد من أن الكمية أكبر من 0
+  //   .map((item) => ({
+  //     id: item.id,
+  //     special: specialNotes[item.id] || "",
+  //     extras: Array.isArray(item.extras) ? item.extras.map((extra) => extra.id) : [],
+  //     count: item.quantity,
+  //     choices: [],
+  //     options: item.option ? [item.option.id] : [],
+  //   }));
+
+  // console.log("Filtered Orders:", orders); // إضافة سجلات هنا
+
+  // if (orders.length === 0) {
+  //   toast.error(t("noItemsInCart")); // رسالة للمستخدم إذا لم يكن هناك عناصر
+  //   return;
+  // }
+  //   const dataToSend = {
+  //     delivery_type: delivery_type,
+  //     payment: paymentMethod === "cash" ? 1 : 2,
+  //     lat: delivery_type === 1 ? address.lat : 0,
+  //     lng: delivery_type === 1 ? address.lng : 0,
+  //     address: delivery_type === 1 ? currentAddress.id : null,
+  //     area: delivery_type === 1 ? address.area?.id : areaId,
+  //     branch: branchId,
+  //     api_token: api_token,
+  //     items: JSON.stringify({ items: orders }),
+  //     device_id: "",
+  //     notes: "",
+  //     car_model: "",
+  //     car_color: "",
+  //     gift_cards: "",
+  //     coins: "00.00",
+  //   };
+
+  //   console.log("Checkout data:", dataToSend);
+  //   console.log("Checkout data:", JSON.stringify(dataToSend, null, 2));
+
+  //   const params = new URLSearchParams(dataToSend);
+  //   axios
+  //     .post(`${BASE_URL}/orders/create?${params.toString()}`)
+  //     .then((response) => {
+  //       if (response.data.response) {
+  //         console.log(response.data);
+  //         localStorage.setItem("orderSuccess", "true");
+  //         localStorage.removeItem("idInfo");
+
+  //         toast.success(t("orderCreated"));
+
+  //         dispatch(clearCart());
+  //       } else {
+  //         console.error("Response error data:", response.data);
+  //         toast.error(t("orderCreationError"));
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error details:", error);
+  //       let errorMessage = t("orderCreationError");
+
+      
+  //       if (error.response) {
+  //         console.error("Error response data:", error.response.data);
+  //         console.error("Error response status:", error.response.status);
+  //         console.error("Error response headers:", error.response.headers);
+  //         errorMessage = error.response.data.message || errorMessage;
+  //       } else if (error.request) {
+  //         console.error("Error request:", error.request);
+  //         errorMessage = t("noResponse");
+  //       } else {
+  //         console.error("Error message:", error.message);
+  //       }
+
+  //       toast.error(errorMessage);
+  //     });
+  // };
+
   const handleCheckout = () => {
     const token = localStorage.getItem("token");
 
@@ -331,21 +604,15 @@ function OrderOnline() {
 
     // التحقق من اختيار العنوان فقط في حالة الدليفري
     if (deliveryType === "delivery") {
-      const selectedAddress = addressData.find(
-        (addr) => addr.id === address?.id
-      );
+      const selectedAddress = addressData.find((addr) => addr.id === address?.id);
 
       if (!selectedAddress) {
-        toast.error(
-          "Please select a valid delivery address before proceeding."
-        );
+        toast.error(t("selectValidAddress")); // رسالة خطأ عند عدم اختيار عنوان صحيح
         return;
       }
 
       if (!isAddressAvailable(selectedAddress)) {
-        toast.error(
-          "The selected address is no longer available for delivery."
-        );
+        toast.error(t("addressNotAvailable")); // رسالة خطأ عند عدم توفر العنوان
         return;
       }
     }
@@ -353,7 +620,7 @@ function OrderOnline() {
     // التحقق من اختيار الفرع في حالة البيك آب
     if (deliveryType === "pickup") {
       if (!selectedBranchId) {
-        toast.error("Please select a branch for pickup.");
+        toast.error(t("selectBranch")); // رسالة خطأ عند عدم اختيار فرع
         return;
       }
     }
@@ -368,7 +635,7 @@ function OrderOnline() {
       branchId = address.branches?.[0]?.id;
 
       if (!areaId || !branchId) {
-        toast.error("Please select a valid area and branch.");
+        toast.error(t("invalidAreaBranch"));
         return;
       }
     } else if (delivery_type === 2) {
@@ -380,10 +647,8 @@ function OrderOnline() {
     const orders = cartItems
       .map((item) => {
         if (item.quantity <= 0) {
-          console.error(
-            `Item ${item.id} quantity is invalid: ${item.quantity}`
-          );
-          console.error("Order quantities must be greater than 0.");
+          console.error(`Item ${item.id} quantity is invalid: ${item.quantity}`);
+          toast.error(t("errors.order_quantity_invalid"));
           return null;
         }
         return {
@@ -402,37 +667,19 @@ function OrderOnline() {
     if (orders.length === 0) {
       return;
     }
-
-    const currentDateTime = new Date();
-
-    const formatDateTime = (date) => {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      const hours = String(date.getHours()).padStart(2, "0");
-      const minutes = String(date.getMinutes()).padStart(2, "0");
-      const seconds = String(date.getSeconds()).padStart(2, "0");
-
-      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-    };
-
-    const formattedTime = formatDateTime(currentDateTime);
-
-    // إذا كان delivery_type = 2، أرسل null للعنوان
     const dataToSend = {
       delivery_type: delivery_type,
       payment: paymentMethod === "cash" ? 1 : 2,
       lat: delivery_type === 1 ? address.lat : 0,
       lng: delivery_type === 1 ? address.lng : 0,
       address: delivery_type === 1 ? currentAddress.id : null,
-      // area: delivery_type === 1 ? address.area?.id : areaId,
       area: address.area?.id,
       branch: branchId,
       api_token: api_token,
       items: JSON.stringify({ items: orders }),
       device_id: "",
       notes: "",
-      time: formattedTime,
+      // time: formattedTime,
       car_model: "",
       car_color: "",
       gift_cards: "",
@@ -450,20 +697,17 @@ function OrderOnline() {
           localStorage.setItem("orderSuccess", "true");
           localStorage.removeItem("idInfo");
 
-          toast.success("Order created successfully.");
+          toast.success(t("orderCreated"));
 
           dispatch(clearCart());
         } else {
           console.error("Response error data:", response.data);
-          toast.error(
-            "An error occurred while processing your order. Please try again."
-          );
+          toast.error(t("orderCreationError"));
         }
       })
       .catch((error) => {
         console.error("Error details:", error);
-        let errorMessage =
-          "An error occurred while processing your order. Please try again.";
+        let errorMessage = t("orderCreationError");
 
         if (error.response) {
           console.error("Error response data:", error.response.data);
@@ -472,7 +716,7 @@ function OrderOnline() {
           errorMessage = error.response.data.message || errorMessage;
         } else if (error.request) {
           console.error("Error request:", error.request);
-          errorMessage = "Error placing order: No response from server.";
+          errorMessage = t("errors.no_response");
         } else {
           console.error("Error message:", error.message);
         }
@@ -480,137 +724,6 @@ function OrderOnline() {
         toast.error(errorMessage);
       });
   };
-
-  // const handleCheckout = () => {
-  //   const token = localStorage.getItem("token");
-  
-  //   if (!token) {
-  //     navigate("/login");
-  //     return;
-  //   }
-  
-  //   // التحقق من اختيار العنوان فقط في حالة الدليفري
-  //   if (deliveryType === "delivery") {
-  //     const selectedAddress = addressData.find((addr) => addr.id === address?.id);
-  
-  //     if (!selectedAddress) {
-  //       toast.error(t("errors.select_valid_address")); // رسالة خطأ عند عدم اختيار عنوان صحيح
-  //       return;
-  //     }
-  
-  //     if (!isAddressAvailable(selectedAddress)) {
-  //       toast.error(t("errors.address not available")); // رسالة خطأ عند عدم توفر العنوان
-  //       return;
-  //     }
-  //   }
-  
-  //   // التحقق من اختيار الفرع في حالة البيك آب
-  //   if (deliveryType === "pickup") {
-  //     if (!selectedBranchId) {
-  //       toast.error(t("errors.select_branch")); // رسالة خطأ عند عدم اختيار فرع
-  //       return;
-  //     }
-  //   }
-  
-  //   // إعداد قيم area و branch بناءً على نوع الطلب
-  //   let areaId, branchId;
-  //   const delivery_type = deliveryType === "pickup" ? 2 : 1;
-  
-  //   if (delivery_type === 1) {
-  //     // دليفري
-  //     areaId = address.area?.id;
-  //     branchId = address.branches?.[0]?.id;
-  
-  //     if (!areaId || !branchId) {
-  //       toast.error(t("errors.invalid_area_branch")); 
-  //       return;
-  //     }
-  //   } else if (delivery_type === 2) {
-  //     // بيك آب
-  //     branchId = selectedBranchId;
-  //     areaId = null;
-  //   }
-  
-  //   const orders = cartItems
-  //     .map((item) => {
-  //       if (item.quantity <= 0) {
-  //         console.error(`Item ${item.id} quantity is invalid: ${item.quantity}`);
-  //         toast.error(t("errors.order_quantity_invalid")); 
-  //         return null;
-  //       }
-  //       return {
-  //         id: item.id,
-  //         special: specialNotes[item.id] || "",
-  //         extras: Array.isArray(item.extras)
-  //           ? item.extras.map((extra) => extra.id)
-  //           : [],
-  //         count: item.quantity,
-  //         choices: [],
-  //         options: item.option ? [item.option.id] : [],
-  //       };
-  //     })
-  //     .filter((order) => order !== null);
-  
-  //   if (orders.length === 0) {
-  //     return;
-  //   }
-  //   const dataToSend = {
-  //     delivery_type: delivery_type,
-  //     payment: paymentMethod === "cash" ? 1 : 2,
-  //     lat: delivery_type === 1 ? address.lat : 0,
-  //     lng: delivery_type === 1 ? address.lng : 0,
-  //     address: delivery_type === 1 ? currentAddress.id : null,
-  //     area: address.area?.id,
-  //     branch: branchId,
-  //     api_token: api_token,
-  //     items: JSON.stringify({ items: orders }),
-  //     device_id: "",
-  //     notes: "",
-  //     // time: formattedTime,
-  //     car_model: "",
-  //     car_color: "",
-  //     gift_cards: "",
-  //     coins: "00.00",
-  //   };
-  
-  //   console.log("Checkout data:", dataToSend);
-  
-  //   const params = new URLSearchParams(dataToSend);
-  //   axios
-  //     .post(`${BASE_URL}/orders/create?${params.toString()}`)
-  //     .then((response) => {
-  //       if (response.data.response) {
-  //         console.log(response.data);
-  //         localStorage.setItem("orderSuccess", "true");
-  //         localStorage.removeItem("idInfo");
-  
-  //         toast.success(t("success.order_created")); 
-  
-  //         dispatch(clearCart());
-  //       } else {
-  //         console.error("Response error data:", response.data);
-  //         toast.error(t("errors.order_creation_error")); 
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error details:", error);
-  //       let errorMessage = t("errors.order_creation_error");
-  
-  //       if (error.response) {
-  //         console.error("Error response data:", error.response.data);
-  //         console.error("Error response status:", error.response.status);
-  //         console.error("Error response headers:", error.response.headers);
-  //         errorMessage = error.response.data.message || errorMessage;
-  //       } else if (error.request) {
-  //         console.error("Error request:", error.request);
-  //         errorMessage = t("errors.no_response");
-  //       } else {
-  //         console.error("Error message:", error.message);
-  //       }
-  
-  //       toast.error(errorMessage); 
-  //     });
-  // };
 
   const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
 
@@ -777,7 +890,7 @@ function OrderOnline() {
     }
 
     if (couponCode.trim() === "") {
-      setError("Please enter a coupon code.");
+      setError(t('coupon.enterCoupon'));
       return;
     }
 
@@ -809,10 +922,10 @@ function OrderOnline() {
 
         setIsCouponApplied(true);
       } else {
-        setError("Invalid coupon code.");
+        setError(t('coupon.invalidCoupon'));
       }
     } catch (error) {
-      setError("Failed to apply coupon. Please try again.");
+      setError(t('coupon.failedApplyCoupon'));
     }
   };
   // console.log("cartItems",cartItems)
@@ -852,11 +965,9 @@ function OrderOnline() {
                   fontFamily: "cairo",
                 }}
               >
-                Delivery Address
+                {t("address.deliveryAddress")}
               </Typography>
             </Stack>
-
-            {/* تحقق من حالة العنوان */}
             {currentAddress &&
             currentAddress.address_name &&
             currentAddress.isAvailable ? (
@@ -906,42 +1017,55 @@ function OrderOnline() {
                         textTransform: "capitalize",
                       }}
                     >
-                      {/* عرض بيانات العنوان بشكل ديناميكي */}
-                      {currentAddress.building
+                      {/* {currentAddress.building
                         ? `${currentAddress.building}, `
-                        : ""}
+                        : ""} */}
                       {currentAddress.street
-                        ? `${currentAddress.street}, `
+                        ? `${t("address.street")}: ${currentAddress.street}, `
                         : ""}
-                      {currentAddress.area?.area_name_en
-                        ? `${currentAddress.area.area_name_en}, `
-                        : ""}
-                      {currentAddress.city?.name_en
-                        ? `${currentAddress.city.name_en}, `
-                        : ""}
+                      {isArabic
+                        ? currentAddress.area?.area_name_ar
+                        : currentAddress.area?.area_name_en}
+                      ,
+                      {isArabic
+                        ? currentAddress.city?.name_ar
+                        : currentAddress.city?.name_en}
+                      ,
                       {currentAddress.building
-                        ? `Building: ${currentAddress.building} - `
+                        ? `${t("address.building")}: ${
+                            currentAddress.building
+                          }, `
                         : ""}
                       {currentAddress.floor
-                        ? `Floor: ${currentAddress.floor}`
+                        ? `${t("address.floor")}: ${currentAddress.floor}`
                         : ""}
                     </Typography>
                   </Stack>
                 </Stack>
               </Card>
             ) : (
-              <Typography>No address selected</Typography>
+              <Typography>{t("address.noAddressSelected")}</Typography>
             )}
 
             <Button
-              variant="contained"
+              variant="contained" color="error"
+              // sx={{
+              //   fontSize:"1.2rem",
+              //   fontWeight:"600",
+              //   backgroundColor: "#d32f2f",
+              //   "&:hover": { backgroundColor: "#d32f2f" },
+              // }}
               sx={{
-                backgroundColor: "#d32f2f",
-                "&:hover": { backgroundColor: "#d32f2f" },
-              }}
+              // mt: "1.5rem",
+              // p: ".6rem",
+              fontSize: "1.5rem",
+           
+              textTransform: "capitalize",
+              "&:hover": { backgroundColor: "#d32f2f" }
+            }}
               onClick={handleOpenDialog}
             >
-              change delivery address
+              {t("address.changeDeliveryAddress")}
             </Button>
             <Dialog
               open={openDialog}
@@ -1283,6 +1407,7 @@ function OrderOnline() {
                   variant="contained"
                   color={isCouponApplied ? "primary" : "error"}
                   sx={{
+                    // fontSize:"1rem",
                     p: "10px 16px !important",
                     height: "100%",
                     borderTopLeftRadius: 0,
@@ -1292,6 +1417,7 @@ function OrderOnline() {
                       backgroundColor: isCouponApplied ? "#1976d2" : "#d32f2f",
                     },
                   }}
+                  
                   onClick={handleApplyCoupon}
                 >
                   {isCouponApplied ? t("Cancel") : t("Apply")}
@@ -1327,6 +1453,7 @@ function OrderOnline() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                mt:".5rem",
                 "& .MuiInputBase-input": {
                   fontSize: "1.5rem",
                   color: "gray",
@@ -1556,7 +1683,7 @@ function OrderOnline() {
                 textAlign: "center",
               }}
             >
-              {t("Select Payment Method")}
+              {t("SelectPaymentMethod")}
             </FormLabel>
             <RadioGroup
               aria-label="payment-method"
@@ -1579,7 +1706,7 @@ function OrderOnline() {
                     fontWeight: "600",
                   }}
                 >
-                  {t("Cash on Delivery")}
+                  {t("CashonDelivery")}
                 </Typography>
               />
               <FormControlLabel
@@ -1592,7 +1719,7 @@ function OrderOnline() {
                     fontWeight: "600",
                   }}
                 >
-                  {t("Credit Card")}
+                  {t("CreditCard")}
                 </Typography>
               />
             </RadioGroup>
@@ -1617,7 +1744,7 @@ function OrderOnline() {
               },
             }}
           >
-            {t("Place Order")}
+            {t("PlaceOrder")}
           </Button>
           <Dialog
             open={openCreditCardDialog}

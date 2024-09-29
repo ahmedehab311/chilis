@@ -4,8 +4,10 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import UserInfo from "./userInfo";
 import UserCard from "./InfoUserCard/UserCard.jsx";
-import { handleSave } from "./HandleSaveProfile.jsx";
+import { HandleSave } from "./HandleSaveProfile.jsx";
+import { useTranslation } from "react-i18next";
 const Profile = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [user, setUser] = useState({
     user_name: "",
@@ -21,7 +23,7 @@ const Profile = () => {
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
-    
+
     if (storedUser) {
       setUser({
         user_name: storedUser.user_name,
@@ -35,28 +37,28 @@ const Profile = () => {
       });
     }
   }, []);
-useEffect(() => {
-  const storedUser = JSON.parse(localStorage.getItem("user"));
-  
-  if (storedUser) {
-    setUser(storedUser);
-    setDisplayedUser(storedUser);
-  }
-}, []);
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (storedUser) {
+      setUser(storedUser);
+      setDisplayedUser(storedUser);
+    }
+  }, []);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUser(prevState => ({
-        ...prevState,
-        [name]: value
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
     }));
-};
+  };
 
   const onSave = () => {
-    handleSave(user);
+    HandleSave(user, t);
   };
   useEffect(() => {
     if (localStorage.getItem("profileUpdateSuccess") === "true") {
-      toast.success("Profile updated successfully!");
+      toast.success(t("profile.updateSuccess"));
 
       localStorage.removeItem("profileUpdateSuccess");
     }

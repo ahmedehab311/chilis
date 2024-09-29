@@ -1,11 +1,13 @@
+/* eslint-disable react/prop-types */
 import { Box, Typography, TextField, Button, Stack } from "@mui/material";
-function userInfo({
+import { useTranslation } from "react-i18next";
+function UserInfo({
   handleInputChange,
   user,
   handleSave,
   handleChangePassword,
 }) {
-
+  const { t } = useTranslation();
   return (
     <Stack
       direction="row"
@@ -36,16 +38,15 @@ function userInfo({
         }}
       >
         <Typography
-          va
-          riant="h6"
-          gutterBottom
-          sx={{ fontSize: "2rem", fontWeight: "600" }}
+          variant="h6"
+          sx={{ fontSize: "2rem", fontWeight: "600", mb: "1.5rem" }}
         >
-          My Account
+          {t("regsterPage.MyAccount")}
         </Typography>
         <Stack sx={{ textTransform: "capitalize", fontSize: "1.5rem" }}>
-          <Typography sx={{  m: ".5rem 0 .5rem 0", fontSize: "1.6rem" }}>
-            name
+          <Typography sx={{ fontSize: "1.6rem" }} gutterBottom>
+            {/* name */}
+            {t("regsterPage.name")}
           </Typography>
           <TextField
             variant="outlined"
@@ -55,15 +56,15 @@ function userInfo({
             value={user.user_name}
             onChange={handleInputChange}
             sx={{
-             mt:0,
-             "& .MuiInputBase-input": {
-               fontSize: "1.3rem",
-               color: "gray",
-             },
-             "& .MuiInputLabel-root": {
-               fontSize: "1.2rem",
-             },
-           }}
+              mt: 0,
+              "& .MuiInputBase-input": {
+                fontSize: "1.3rem",
+                color: "gray",
+              },
+              "& .MuiInputLabel-root": {
+                fontSize: "1.2rem",
+              },
+            }}
           />
         </Stack>
         {/* <Stack>
@@ -93,38 +94,38 @@ function userInfo({
       />
         </Stack> */}
         <Stack>
-      <Typography sx={{ m: ".5rem 0", fontSize: "1.6rem" }}>
-        Phone
-      </Typography>
-      <TextField
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        name="phone"
-        value={user.phone}
-        onChange={(e) => {
-          // Ensure only numeric values are set
-          const value = e.target.value.replace(/\D/g, '');
-          handleInputChange({ target: { name: 'phone', value } });
-        }}
-        type="tel"
-        inputMode="numeric" // Use numeric mode for numeric keyboards on mobile
-        pattern="[0-9]*" // Restrict input to numbers only
-        sx={{
-          m: 0,
-          "& .MuiInputBase-input": {
-            fontSize: "1.3rem",
-            color: "gray",
-          },
-          "& .MuiInputLabel-root": {
-            fontSize: "1.2rem",
-          },
-        }}
-      />
-    </Stack>
+          <Typography sx={{ fontSize: "1.6rem" }} gutterBottom>
+            {t("regsterPage.phone")}
+          </Typography>
+          <TextField
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            name="phone"
+            value={user.phone}
+            onChange={(e) => {
+              // Ensure only numeric values are set
+              const value = e.target.value.replace(/\D/g, "");
+              handleInputChange({ target: { name: "phone", value } });
+            }}
+            type="tel"
+            inputMode="numeric" // Use numeric mode for numeric keyboards on mobile
+            pattern="[0-9]*" // Restrict input to numbers only
+            sx={{
+              m: 0,
+              "& .MuiInputBase-input": {
+                fontSize: "1.3rem",
+                color: "gray",
+              },
+              "& .MuiInputLabel-root": {
+                fontSize: "1.2rem",
+              },
+            }}
+          />
+        </Stack>
         <Stack>
           <Typography sx={{ m: ".5rem 0 .5rem 0", fontSize: "1.6rem" }}>
-            Email
+            {t("regsterPage.email")}
           </Typography>
           <TextField
             variant="outlined"
@@ -151,16 +152,21 @@ function userInfo({
           alignItems={"center"}
           sx={{ display: "flex", flexWrap: "wrap", mt: "3rem" }}
         >
-          <Button variant="contained" color="error" onClick={handleSave}>
-            Save changes
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleSave}
+            sx={{ fontSize: "1.1rem", fontWeight: "600" }}
+          >
+         {t("profile.saveChanges")}
           </Button>
           <Button
             variant="contained"
             color="error"
             onClick={handleChangePassword}
-            sx={{ marginLeft: "10px" }}
+            sx={{ marginLeft: "10px", fontSize: "1.1rem", fontWeight: "600" }}
           >
-            Change password
+          {t("profile.changePassword")}
           </Button>
         </Stack>
       </Box>
@@ -168,4 +174,4 @@ function userInfo({
   );
 }
 
-export default userInfo;
+export default UserInfo;
