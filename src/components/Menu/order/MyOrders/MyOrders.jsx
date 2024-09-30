@@ -19,7 +19,7 @@ import { BASE_URL_images } from "../../apis&fetchData/ApiLinks";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import { useTranslation } from "react-i18next";
 function MyOrders({ currentStatus }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [showCard, setShowCard] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [activeSection, setActiveSection] = useState("Pending");
@@ -87,7 +87,7 @@ function MyOrders({ currentStatus }) {
         <Typography sx={{
           fontSize: "2rem",
           color: "#666"
-        }}>{t("Loading...")}</Typography>
+        }}>{t("myOrders.Loading...")}</Typography>
       </Box>
     );
   }
@@ -104,10 +104,15 @@ function MyOrders({ currentStatus }) {
         <Typography sx={{
           fontSize: "2rem",
           color: "#666"
-        }}>{t("Please Try Again...")}</Typography>
+        }}>{t("myOrders.Please Try Again")}</Typography>
       </Box>
     );
   }
+  const convertNumberToArabic = (number) => {
+    const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
+  };
+  const isArabic = i18n.language === "ar";
   return (
     <Stack
       direction={"row"}
@@ -129,7 +134,7 @@ function MyOrders({ currentStatus }) {
         }}
       >
         <SectionButton
-          label="Progress"
+          label={t("myOrders.progress")}
           icon={
             <AccessTimeOutlinedIcon
               sx={{
@@ -154,7 +159,7 @@ function MyOrders({ currentStatus }) {
           }}
         />
         <SectionButton
-          label="Completed"
+          label={t("myOrders.completed")}
           icon={
             <DoneOutlinedIcon
               sx={{
@@ -177,7 +182,7 @@ function MyOrders({ currentStatus }) {
           onClick={() => handleSectionClick(["Delivered"])}
         />
         <SectionButton
-          label="Canceled"
+          label={t("myOrders.canceled")}
           icon={
             <CloseOutlinedIcon
               sx={{
@@ -206,7 +211,7 @@ function MyOrders({ currentStatus }) {
           <Card sx={{ backgroundColor: "white" }}>
             <CardContent>
               <Typography sx={{ textAlign: "center" }}>
-                No Orders Found in
+                {t("myOrders.noOrdersFound")}
                 {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
               </Typography>
             </CardContent>
@@ -244,104 +249,6 @@ function MyOrders({ currentStatus }) {
                   {orderDetails.created_at}
                 </Typography>
               </Stack>
-              {/* <Stack
-                sx={{ borderBottom: "1px solid #dee2e6!important", p: "1rem" }}
-              > */}
-              {/* <Typography
-                  sx={{
-                    fontSize: "1.8rem",
-                    mb: ".5rem",
-                    lineHeight: "1.2",
-                    // color:"#000",
-                    fontWeight: "600",
-                    color: "#424242",
-                    textAlign: "left",
-                  }}
-                >
-                  Order Status
-                </Typography> */}
-
-              {/* <Stack>
-  <Stack direction={"row"} alignItems={"center"}>
-    <CheckCircleOutlinedIcon
-      sx={{
-        color: orderDetails.status === "Pending" ? "#28a745!important" : "#dc3545!important",
-        fontSize: "1.5rem",
-        fontWeight: "500",
-        m: ".25rem",
-      }}
-    />
-    <Typography
-      sx={{
-        fontSize: "1.3rem",
-        fontWeight: "400",
-        textAlign: "left",
-      }}
-    >
-      Pending
-    </Typography>
-  </Stack>
-
-  <Stack direction={"row"} alignItems={"center"}>
-    <CheckCircleOutlinedIcon
-      sx={{
-        color: orderDetails.status === "Preparing Order" ? "#28a745!important" : "#dc3545!important",
-        fontSize: "1.5rem",
-        fontWeight: "500",
-        m: ".25rem",
-      }}
-    />
-    <Typography
-      sx={{
-        fontSize: "1.3rem",
-        fontWeight: "400",
-        textAlign: "left",
-      }}
-    >
-      Preparing Order
-    </Typography>
-  </Stack>
-
-  <Stack direction={"row"} alignItems={"center"}>
-    <CheckCircleOutlinedIcon
-      sx={{
-        color: orderDetails.status === "In Way" ? "#28a745!important" : "#dc3545!important",
-        fontSize: "1.5rem",
-        fontWeight: "500",
-        m: ".25rem",
-      }}
-    />
-    <Typography
-      sx={{
-        fontSize: "1.3rem",
-        fontWeight: "400",
-        textAlign: "left",
-      }}
-    >
-      In Way
-    </Typography>
-  </Stack>
-
-  <Stack direction={"row"} alignItems={"center"}>
-    <CheckCircleOutlinedIcon
-      sx={{
-        color: orderDetails.status === "Delivered" ? "#28a745!important" : "#dc3545!important",
-        fontSize: "1.5rem",
-        fontWeight: "500",
-        m: ".25rem",
-      }}
-    />
-    <Typography
-      sx={{
-        fontSize: "1.3rem",
-        fontWeight: "400",
-        textAlign: "left",
-      }}
-    >
-      Delivered
-    </Typography>
-  </Stack>
-</Stack> */}
               <Stack
                 sx={{ borderBottom: "1px solid #dee2e6!important", p: "1rem" }}
               >
@@ -369,33 +276,9 @@ function MyOrders({ currentStatus }) {
                             textAlign: "left",
                           }}
                         >
-                          Pending
+                          {t("myOrders.pending")}
                         </Typography>
                       </Stack>
-                      {/* new */}
-                      {/* <Stack direction={"row"} alignItems={"center"}>
-                    <CheckCircleOutlinedIcon
-                      sx={{
-                        color:
-                          orderDetails.status === "new"
-                            ? "#28a745!important"
-                            : "#dc3545!important",
-                        fontSize: "1.5rem",
-                        fontWeight: "500",
-                        m: ".25rem",
-                      }}
-                    />
-                    <Typography
-                      sx={{
-                        fontSize: "1.3rem",
-                        fontWeight: "400",
-                        textAlign: "left",
-                      }}
-                    >
-                     new
-                    </Typography>
-                  </Stack> */}
-
                       {/* Processing */}
                       <Stack direction={"row"} alignItems={"center"}>
                         <CheckCircleOutlinedIcon
@@ -416,7 +299,8 @@ function MyOrders({ currentStatus }) {
                             textAlign: "left",
                           }}
                         >
-                          Processing
+
+                          {t("myOrders.processing")}
                         </Typography>
                       </Stack>
 
@@ -440,7 +324,8 @@ function MyOrders({ currentStatus }) {
                             textAlign: "left",
                           }}
                         >
-                          In Way
+                          {/* In Way */}
+                          {t("myOrders.inWay")}
                         </Typography>
                       </Stack>
                     </Stack>
@@ -465,7 +350,8 @@ function MyOrders({ currentStatus }) {
                           textAlign: "left",
                         }}
                       >
-                        Delivered
+
+                        {t("myOrders.delivered")}
                       </Typography>
                     </Stack>
                   </Stack>
@@ -512,7 +398,7 @@ function MyOrders({ currentStatus }) {
                     textAlign: "left",
                   }}
                 >
-                  Destination
+                  {t("myOrders.destination")}
                 </Typography>
                 <Typography
                   sx={{
@@ -550,7 +436,9 @@ function MyOrders({ currentStatus }) {
                           ml: ".8rem",
                         }}
                       >
-                        {item.info[0].size_en}
+                        {i18n.language === "ar"
+                          ? item.info[0].size_ar
+                          : item.info[0].size_en}
                       </Typography>
                     </Stack>
                     <Stack
@@ -566,7 +454,9 @@ function MyOrders({ currentStatus }) {
                           mt: ".8rem",
                         }}
                       >
-                        {item.info[0].size_en}
+                        {i18n.language === "ar"
+                          ? item.info[0].size_ar
+                          : item.info[0].size_en}
                       </Typography>
                       <Typography
                         sx={{
@@ -576,7 +466,11 @@ function MyOrders({ currentStatus }) {
                           textAlign: "top",
                         }}
                       >
-                        {item.total_price}
+                        {isArabic
+                          ? convertNumberToArabic(item.total_price)
+                          : item.total_price}{" "}
+                        {t("egp")}
+                        {/* {item.total_price} {t("egp")} */}
                       </Typography>
                     </Stack>
                   </Stack>
@@ -597,7 +491,7 @@ function MyOrders({ currentStatus }) {
                       color: "#424242",
                     }}
                   >
-                    Subtotal
+                    {t("Subtotal")}
                   </Typography>
                   <Typography
                     sx={{
@@ -607,7 +501,11 @@ function MyOrders({ currentStatus }) {
                     }}
                   >
                     {" "}
-                    {orderDetails.sub_total}
+                    {/* {orderDetails.sub_total} {t("egp")} */}
+                    {isArabic
+                      ? convertNumberToArabic(orderDetails.sub_total)
+                      : orderDetails.sub_total}{" "}
+                    {t("egp")}
                   </Typography>
                 </Stack>
                 <Stack
@@ -622,7 +520,7 @@ function MyOrders({ currentStatus }) {
                       color: "#424242",
                     }}
                   >
-                    Discount
+                    {t("myOrders.discount")}
                   </Typography>
                   <Typography
                     sx={{
@@ -631,33 +529,11 @@ function MyOrders({ currentStatus }) {
                       color: "#424242",
                     }}
                   >
-                    {" "}
-                    {orderDetails.special_discount}
-                  </Typography>
-                </Stack>
-                <Stack
-                  direction={"row"}
-                  alignItems={"center"}
-                  sx={{ justifyContent: "space-between" }}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: "1.7rem",
-                      fontWeight: "500",
-                      color: "#424242",
-                    }}
-                  >
-                    VAT
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: "1.7rem",
-                      fontWeight: "500",
-                      color: "#424242",
-                    }}
-                  >
-                    {" "}
-                    {orderDetails.tax_fees}
+
+                    {isArabic
+                      ? convertNumberToArabic(orderDetails.special_discount)
+                      : orderDetails.special_discount}{" "}
+                    {t("egp")}
                   </Typography>
                 </Stack>
                 <Stack
@@ -672,7 +548,7 @@ function MyOrders({ currentStatus }) {
                       color: "#424242",
                     }}
                   >
-                    Delivery Fees
+                    {t("myOrders.vat")}
                   </Typography>
                   <Typography
                     sx={{
@@ -681,7 +557,41 @@ function MyOrders({ currentStatus }) {
                       color: "#424242",
                     }}
                   >
-                    {orderDetails.delivery_fees}
+                    {" "}
+                    {/* {orderDetails.tax_fees} */}
+                    {isArabic
+                      ? convertNumberToArabic(orderDetails.tax_fees)
+                      : orderDetails.tax_fees}{" "}
+                    {t("egp")}
+                  </Typography>
+                </Stack>
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  sx={{ justifyContent: "space-between" }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "1.7rem",
+                      fontWeight: "500",
+                      color: "#424242",
+                    }}
+                  >
+
+                    {t("Delivery Fee")}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "1.7rem",
+                      fontWeight: "500",
+                      color: "#424242",
+                    }}
+                  >
+                    {/* {orderDetails.delivery_fees} */}
+                    {isArabic
+                      ? convertNumberToArabic(orderDetails.delivery_fees)
+                      : orderDetails.delivery_fees}{" "}
+                    {t("egp")}
                   </Typography>
                 </Stack>
               </Stack>
@@ -702,7 +612,7 @@ function MyOrders({ currentStatus }) {
                     color: "#424242",
                   }}
                 >
-                  Total Cost
+                  {t("Total")}
                 </Typography>
                 <Typography
                   sx={{
@@ -711,7 +621,11 @@ function MyOrders({ currentStatus }) {
                     color: "#424242",
                   }}
                 >
-                  {orderDetails.total}
+                  {/* {orderDetails.total} */}
+                  {isArabic
+                    ? convertNumberToArabic(orderDetails.total)
+                    : orderDetails.total}{" "}
+                  {t("egp")}
                 </Typography>
               </Stack>
               <Typography
@@ -722,7 +636,7 @@ function MyOrders({ currentStatus }) {
                   p: "1rem",
                 }}
               >
-                You can check your order detail here, Thank you for order.
+                {t("myOrders.thankYouOrder")}
               </Typography>
             </CardContent>
           </Card>
@@ -754,7 +668,15 @@ function SectionButton({ label, icon, active, onClick }) {
   );
 }
 
+// import { useTranslation } from "react-i18next";
 function OrderCard({ order, onViewDetailsClick }) {
+
+  const { t,i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+  const convertNumberToArabic = (number) => {
+    const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
+    return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
+  };
   return (
     <Card sx={{ marginBottom: 2 }}>
       <CardContent>
@@ -835,7 +757,7 @@ function OrderCard({ order, onViewDetailsClick }) {
                   },
                 }}
               >
-                View Details
+                {t("myOrders.viewDetails")}
               </Typography>
             </Stack>
           </Stack>
@@ -877,7 +799,7 @@ function OrderCard({ order, onViewDetailsClick }) {
                   fontWeight: "600",
                 }}
               >
-                Total Payment
+                {t("myOrders.totalPayment")}
               </Typography>
               <Typography
                 sx={{
@@ -886,7 +808,11 @@ function OrderCard({ order, onViewDetailsClick }) {
                   fontWeight: "bold",
                 }}
               >
-                {order.total}
+
+                {isArabic
+                  ? convertNumberToArabic(order.total)
+                  : order.total}{" "}
+                {t("egp")}
               </Typography>
             </Stack>
           </Stack>

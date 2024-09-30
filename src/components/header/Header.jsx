@@ -83,20 +83,6 @@ function Header({ token, handleLogout }) {
     }
   };
 
-  // const showHero = ![
-  //   "/order-online",
-  //   "/my_orders",
-  //   "/profile",
-  //   "*",
-  //   "/error",
-  //   "/change-password",
-  //   "/locations",
-  //   "/about-us",
-  //   "/login",
-  //   "/register",
-  //   "/forgot-password",
-  // ].includes(location.pathname);
-
   const handleCartClick = () => {
     navigate("/order-online");
   };

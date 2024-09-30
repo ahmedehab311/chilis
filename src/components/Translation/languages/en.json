@@ -145,8 +145,23 @@
     "updateSuccess": "Profile updated successfully",
     "saveChanges": "Save changes",
     "changePassword": "Change Password"
-    
   },
-  "Loading..." :"Loading...",
-  "Please Try Again":"Please Try Again"
+  "myOrders": {
+    "Loading...": "Loading...",
+    "Please Try Again": "Please Try Again",
+    "progress": "Progress",
+    "completed": "Completed",
+    "canceled": "Canceled",
+    "noOrdersFound": "No Orders Found in",
+    "viewDetails": "View Details",
+    "totalPayment": "Total Payment",
+    "pending": "Pending",
+    "processing": "Processing",
+    "inWay": "In Way",
+    "delivered": "Delivered",
+    "destination": "destination",
+    "discount": "Discount",
+    "tax": "Tax",
+     "thankYouOrder": "You can check your order detail here,Thank you for your order."
+  }
 }

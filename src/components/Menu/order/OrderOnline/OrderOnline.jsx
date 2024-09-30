@@ -713,10 +713,10 @@ function OrderOnline() {
           console.error("Error response data:", error.response.data);
           console.error("Error response status:", error.response.status);
           console.error("Error response headers:", error.response.headers);
-          errorMessage = error.response.data.message || errorMessage;
+          // errorMessage = error.response.data.message || errorMessage;
         } else if (error.request) {
           console.error("Error request:", error.request);
-          errorMessage = t("errors.no_response");
+          // errorMessage = t("errors.no_response");
         } else {
           console.error("Error message:", error.message);
         }
@@ -1207,11 +1207,11 @@ function OrderOnline() {
                           fontFamily: "cairo",
                         }}
                       >
-                        {item.price} {t("egp")}
-                        {/* {isArabic
+                        {/* {item.price} {t("egp")} */}
+                        {isArabic
                           ? convertNumberToArabic(item.price)
                           : item.price}{" "}
-                        {t("egp")} */}
+                        {t("egp")}
                       </Typography>
                       <Counter
                         basePrice={item.price}
@@ -1243,16 +1243,16 @@ function OrderOnline() {
                         {t("Regular")}
                       </Typography>
                       <Typography sx={{ fontSize: "1.5rem", fontWeight: 500 }}>
-                        {(
+                        {/* {(
                           totalPrices[index] || item.price * item.quantity
                         ).toFixed(2)}{" "}
-                        {t("egp")}
+                        {t("egp")} */}
                         {/* {convertNumberToArabic(
                           (
                             totalPrices[index] || item.price * item.quantity
                           ).toFixed(2)
                         )} */}
-                        {/* {isArabic
+                        {isArabic
                           ? convertNumberToArabic(
                               (
                                 totalPrices[index] || item.price * item.quantity
@@ -1261,7 +1261,7 @@ function OrderOnline() {
                           : (
                               totalPrices[index] || item.price * item.quantity
                             ).toFixed(2)}
-                        {t("egp")} */}
+                        {t("egp")}
                       </Typography>
                     </Stack>
                     {item.option && (
@@ -1544,14 +1544,14 @@ function OrderOnline() {
               alignItems={"center"}
             >
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {t("Subtotal")}
+                {t("Subtotal")} 
               </Typography>
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {/* {isArabic
+                {isArabic
                   ? convertNumberToArabic(subtotalWithExtras.toFixed(2))
                   : subtotalWithExtras.toFixed(2)}{" "}
-                {t("egp")} */}
-                {subtotalWithExtras.toFixed(2)} {t("egp")}
+                {t("egp")}
+                {/* {subtotalWithExtras.toFixed(2)} {t("egp")} */}
               </Typography>
             </Stack>
 
@@ -1574,11 +1574,11 @@ function OrderOnline() {
                   {t("Delivery Fee")}
                 </Typography>
                 <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                  {deliveryFee.toFixed(2)} {t("egp")}
-                  {/* {isArabic
+                  {/* {deliveryFee.toFixed(2)} {t("egp")} */}
+                  {isArabic
                     ? convertNumberToArabic(deliveryFee.toFixed(2))
                     : deliveryFee.toFixed(2)}{" "}
-                  {t("egp")} */}
+                  {t("egp")}
                 </Typography>
               </Stack>
             )}
@@ -1596,13 +1596,13 @@ function OrderOnline() {
                 {t("Tax")} % {isArabic ? convertNumberToArabic(tax) : tax}
               </Typography>
               <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {(
+                {/* {(
                   (subtotalWithExtras -
                     discount +
                     (deliveryType === "delivery" ? deliveryFee : 0)) *
                   (tax / 100)
-                ).toFixed(2)}{" "}
-                {/* {isArabic
+                ).toFixed(2)}{" "} */}
+                {isArabic
                   ? convertNumberToArabic(
                       (
                         (subtotalWithExtras -
@@ -1616,7 +1616,7 @@ function OrderOnline() {
                         discount +
                         (deliveryType === "delivery" ? deliveryFee : 0)) *
                       (tax / 100)
-                    ).toFixed(2)} */}
+                    ).toFixed(2)}
                 {t("egp")}
               </Typography>
             </Stack>
@@ -1633,7 +1633,7 @@ function OrderOnline() {
             <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
               {t("Total")}
             </Typography>
-            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
               {(
                 subtotalWithExtras -
                 discount + // إضافة الخصم هنا
@@ -1644,8 +1644,8 @@ function OrderOnline() {
                   (tax / 100)
               ).toFixed(2)}{" "}
               {t("egp")}
-            </Typography>
-            {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            </Typography> */}
+            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
               {isArabic
                 ? convertNumberToArabic(
                     (
@@ -1668,7 +1668,7 @@ function OrderOnline() {
                       (tax / 100)
                   ).toFixed(2)}{" "}
               {t("egp")}
-            </Typography> */}
+            </Typography>
           </Stack>
 
           <FormControl

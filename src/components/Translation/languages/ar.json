@@ -148,6 +148,22 @@
     "saveChanges": "حفظ التغييرات",
     "changePassword": "تغيير كلمة المرور"
   },
-  "Loading...": "...جاري التحميل ",
-    "Please Try Again" : "برجاء المحاولة مرة اخري"
+  "myOrders": {
+    "Loading...": "...جاري التحميل ",
+    "Please Try Again": "برجاء المحاولة مرة اخري",
+    "progress": "قيد التنفيذ",
+    "completed": "مكتمل",
+    "canceled": "ملغى",
+    "noOrdersFound": "لا توجد طلبات في",
+    "viewDetails": "عرض التفاصيل",
+    "totalPayment": "إجمالي الدفع",
+    "pending": "قيد الانتظار",
+    "processing": "قيد المعالجة",
+    "inWay": "في الطريق",
+       "delivered": "تم التوصيل",
+         "destination": "العنوان",
+          "discount": "خصم",
+          "vat": "الضريبة",
+          "thankYouOrder" :"يمكنك التحقق من تفاصيل طلبك من هنا.شكرًا لك على طلبك"
+  }
 }
