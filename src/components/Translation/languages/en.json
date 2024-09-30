@@ -68,6 +68,7 @@
     "enterEmail": "Enter Email",
     "password": "Password",
     "enterPassword": "Enter Password",
+ 
     "loginButton": "Login",
     "forgotPassword": "Forgot Your Password?",
     "noAccount": "Don't have an account?",
@@ -86,7 +87,10 @@
     "email": "Email Address",
     "enterEmail": "Enter Your Email Address",
     "password": "Password",
+    "OldPassword" :"Old Password",
     "enterPassword": "Enter Password",
+    "enterNewPassword": "Enter New Password",
+    "enterOldPassword": "Enter Old Password",
     "phone": "Phone",
     "enterPhone": "Enter Your Phone Number",
     "signUp": "Sign Up",
