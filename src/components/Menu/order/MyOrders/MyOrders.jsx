@@ -17,14 +17,16 @@ import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { BASE_URL_images } from "../../apis&fetchData/ApiLinks";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
+import { useTranslation } from "react-i18next";
 function MyOrders({ currentStatus }) {
+  const { t } = useTranslation();
   const [showCard, setShowCard] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [activeSection, setActiveSection] = useState("Pending");
   const dispatch = useDispatch();
   const orderDetails = useSelector((state) => state.orderDetails.orderDetails);
   // console.log("Order Details from Redux:", orderDetails);
-
+  const api_token = localStorage.getItem("token");
   const { orders, status, error } = useSelector((state) => state.orders);
 
   useEffect(() => {
@@ -33,7 +35,7 @@ function MyOrders({ currentStatus }) {
       dispatch(
         fetchOrderDetails({
           order_id: selectedOrderId,
-          api_token: "your_api_token",
+          api_token: api_token,
         })
       );
     }
@@ -72,11 +74,39 @@ function MyOrders({ currentStatus }) {
   };
 
   if (status === "loading") {
-    return <Typography sx={{ margin: "auto 0px" }}>Loading...</Typography>;
-  }
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
 
+        }}
+      >
+        <Typography sx={{
+          fontSize: "2rem",
+          color: "#666"
+        }}>{t("Loading...")}</Typography>
+      </Box>
+    );
+  }
   if (status === "failed") {
-    return <Typography>Please Try Again</Typography>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <Typography sx={{
+          fontSize: "2rem",
+          color: "#666"
+        }}>{t("Please Try Again...")}</Typography>
+      </Box>
+    );
   }
   return (
     <Stack
@@ -318,32 +348,32 @@ function MyOrders({ currentStatus }) {
                 {["Pending", "Processing", "In Way", "new"].includes(
                   orderDetails.status
                 ) && (
-                  <Stack>
-                    {/* Pending */}
-                    <Stack direction={"row"} alignItems={"center"}>
-                      <CheckCircleOutlinedIcon
-                        sx={{
-                          color:
-                            orderDetails.status === "Pending"
-                              ? "#28a745!important"
-                              : "#dc3545!important",
-                          fontSize: "1.5rem",
-                          fontWeight: "500",
-                          m: ".25rem",
-                        }}
-                      />
-                      <Typography
-                        sx={{
-                          fontSize: "1.3rem",
-                          fontWeight: "400",
-                          textAlign: "left",
-                        }}
-                      >
-                        Pending
-                      </Typography>
-                    </Stack>
-                    {/* new */}
-                    {/* <Stack direction={"row"} alignItems={"center"}>
+                    <Stack>
+                      {/* Pending */}
+                      <Stack direction={"row"} alignItems={"center"}>
+                        <CheckCircleOutlinedIcon
+                          sx={{
+                            color:
+                              orderDetails.status === "Pending"
+                                ? "#28a745!important"
+                                : "#dc3545!important",
+                            fontSize: "1.5rem",
+                            fontWeight: "500",
+                            m: ".25rem",
+                          }}
+                        />
+                        <Typography
+                          sx={{
+                            fontSize: "1.3rem",
+                            fontWeight: "400",
+                            textAlign: "left",
+                          }}
+                        >
+                          Pending
+                        </Typography>
+                      </Stack>
+                      {/* new */}
+                      {/* <Stack direction={"row"} alignItems={"center"}>
                     <CheckCircleOutlinedIcon
                       sx={{
                         color:
@@ -366,55 +396,55 @@ function MyOrders({ currentStatus }) {
                     </Typography>
                   </Stack> */}
 
-                    {/* Processing */}
-                    <Stack direction={"row"} alignItems={"center"}>
-                      <CheckCircleOutlinedIcon
-                        sx={{
-                          color:
-                            orderDetails.status === "Processing"
-                              ? "#28a745!important"
-                              : "#dc3545!important",
-                          fontSize: "1.5rem",
-                          fontWeight: "500",
-                          m: ".25rem",
-                        }}
-                      />
-                      <Typography
-                        sx={{
-                          fontSize: "1.3rem",
-                          fontWeight: "400",
-                          textAlign: "left",
-                        }}
-                      >
-                        Processing
-                      </Typography>
-                    </Stack>
+                      {/* Processing */}
+                      <Stack direction={"row"} alignItems={"center"}>
+                        <CheckCircleOutlinedIcon
+                          sx={{
+                            color:
+                              orderDetails.status === "Processing"
+                                ? "#28a745!important"
+                                : "#dc3545!important",
+                            fontSize: "1.5rem",
+                            fontWeight: "500",
+                            m: ".25rem",
+                          }}
+                        />
+                        <Typography
+                          sx={{
+                            fontSize: "1.3rem",
+                            fontWeight: "400",
+                            textAlign: "left",
+                          }}
+                        >
+                          Processing
+                        </Typography>
+                      </Stack>
 
-                    {/* In Way */}
-                    <Stack direction={"row"} alignItems={"center"}>
-                      <CheckCircleOutlinedIcon
-                        sx={{
-                          color:
-                            orderDetails.status === "In Way"
-                              ? "#28a745!important"
-                              : "#dc3545!important",
-                          fontSize: "1.5rem",
-                          fontWeight: "500",
-                          m: ".25rem",
-                        }}
-                      />
-                      <Typography
-                        sx={{
-                          fontSize: "1.3rem",
-                          fontWeight: "400",
-                          textAlign: "left",
-                        }}
-                      >
-                        In Way
-                      </Typography>
+                      {/* In Way */}
+                      <Stack direction={"row"} alignItems={"center"}>
+                        <CheckCircleOutlinedIcon
+                          sx={{
+                            color:
+                              orderDetails.status === "In Way"
+                                ? "#28a745!important"
+                                : "#dc3545!important",
+                            fontSize: "1.5rem",
+                            fontWeight: "500",
+                            m: ".25rem",
+                          }}
+                        />
+                        <Typography
+                          sx={{
+                            fontSize: "1.3rem",
+                            fontWeight: "400",
+                            textAlign: "left",
+                          }}
+                        >
+                          In Way
+                        </Typography>
+                      </Stack>
                     </Stack>
-                  </Stack>
-                )}
+                  )}
 
                 {/* Completed Section */}
                 {orderDetails.status === "Delivered" && (

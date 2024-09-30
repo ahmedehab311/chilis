@@ -146,5 +146,7 @@
     "saveChanges": "Save changes",
     "changePassword": "Change Password"
     
-  }
+  },
+  "Loading..." :"Loading...",
+  "Please Try Again":"Please Try Again"
 }

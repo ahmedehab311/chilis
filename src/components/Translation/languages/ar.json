@@ -126,7 +126,6 @@
     "deliveryInstructions": "تعليمات التوصيل",
     "noAddressAvailable": "لا توجد عناوين متاحة. انقر لإضافة عنوان",
     "addOrRemoveAddress": "إضافة أو إزالة عنوان تسليم",
-
     "labels": {
       "home": "منزل",
       "work": "عمل",
@@ -148,5 +147,7 @@
     "updateSuccess": "تم تحديث الملف الشخصي بنجاح",
     "saveChanges": "حفظ التغييرات",
     "changePassword": "تغيير كلمة المرور"
-  }
+  },
+  "Loading...": "...جاري التحميل ",
+    "Please Try Again" : "برجاء المحاولة مرة اخري"
 }
