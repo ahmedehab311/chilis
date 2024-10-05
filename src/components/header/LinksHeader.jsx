@@ -24,7 +24,7 @@ function LinksHeader({ handleNavigation }) {
     const savedLanguage = localStorage.getItem("lan") || "en";
     i18n.changeLanguage(savedLanguage);
     setActiveLanguage(savedLanguage);
-  }, [i18n]); 
+  }, [i18n]);
 
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -35,7 +35,7 @@ function LinksHeader({ handleNavigation }) {
 
   return (
     <>
-      {/* <LanguageOutlinedIcon
+      <LanguageOutlinedIcon
         sx={{
           fontSize: "30px",
           cursor: "pointer",
@@ -60,73 +60,37 @@ function LinksHeader({ handleNavigation }) {
         onClose={handleClose}
         sx={{ mt: 1, top: "1.3rem !important" }}
       >
-
-        <MenuItem
-        onClick={() => changeLanguage("en")}
-        sx={{ fontSize: "1.2rem", fontWeight: activeLanguage === "en" ? "bold" : "normal" }}
-      >
-        English
-      </MenuItem>
-      <MenuItem
-        onClick={() => changeLanguage("ar")}
-        sx={{ fontSize: "1.2rem", fontWeight: activeLanguage === "ar" ? "bold" : "normal" }}
-      >
-        العربية
-      </MenuItem>
-      </Menu> */}
-      <LanguageOutlinedIcon
-        sx={{
-          fontSize: "30px",
-          cursor: "pointer",
-          color: "#777",
-          mr: 5,
-        }}
-        onClick={handleClick}
-      />
-      <Menu
-        id="menu-appbar"
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        keepMounted
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        sx={{ mt: 1, top: "1.3rem !important"}}
-      >
         <Typography
           onClick={() => changeLanguage("en")}
           sx={{
             fontSize: "1.2rem",
             fontWeight: activeLanguage === "en" ? "bold" : "normal",
-            p: "1rem",
+            p: "1.8rem",
             color: activeLanguage === "en" ? "primary.main" : "text.primary",
+            cursor: "pointer",
             "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.1)", 
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              borderRadius: "4px",
             },
-            borderRadius: "4px", 
-        }}  
-          
+            borderRadius: "4px",
+          }}
         >
           English
         </Typography>
-        <Typography 
+        <Typography
           onClick={() => changeLanguage("ar")}
           sx={{
             fontSize: "1.2rem",
-            fontWeight: activeLanguage === "ar" ? "bold" : "normal",
-            p: "1rem",
+            // fontWeight: activeLanguage === "ar" ? "bold" : "normal",
+            p: "1.8rem",
+            cursor: "pointer",
             color: activeLanguage === "ar" ? "primary.main" : "text.primary", // تغيير اللون بناءً على اللغة النشطة
             "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.1)", 
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
+                borderRadius: "4px",
             },
-            borderRadius: ".3rem", 
-        }}
+            borderRadius: ".3rem",
+          }}
         >
           العربية
         </Typography>

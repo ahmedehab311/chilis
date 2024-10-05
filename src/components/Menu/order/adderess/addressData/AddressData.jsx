@@ -164,7 +164,6 @@ function AddressData({
                 }}
               >
                 {address.address_name}
-                {isArabic ? address.address_name_ar : address.address_name_en}
               </Typography>
               <br />
               {!address.isAvailable && (
