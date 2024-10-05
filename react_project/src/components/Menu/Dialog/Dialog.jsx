@@ -180,8 +180,8 @@ function DialogItem({
                     fontWeight: "600",
                   }}
                 >
-                  {price} {t("egp")}
-                  {/* {isArabic ? convertNumberToArabic(price) : price} {t("egp")} */}
+                  {/* {price} {t("egp")} */}
+                  {isArabic ? convertNumberToArabic(price) : price} {t("egp")}
                 </span>
               </Stack>
             </Stack>

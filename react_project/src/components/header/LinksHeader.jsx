@@ -21,7 +21,6 @@ function LinksHeader({ handleNavigation }) {
   };
 
   useEffect(() => {
-    // استرجاع اللغة من localStorage عند تحميل المكون
     const savedLanguage = localStorage.getItem("lan") || "en";
     i18n.changeLanguage(savedLanguage);
     setActiveLanguage(savedLanguage);
@@ -61,24 +60,40 @@ function LinksHeader({ handleNavigation }) {
         onClose={handleClose}
         sx={{ mt: 1, top: "1.3rem !important" }}
       >
-        <MenuItem
+        <Typography
           onClick={() => changeLanguage("en")}
           sx={{
             fontSize: "1.2rem",
             fontWeight: activeLanguage === "en" ? "bold" : "normal",
+            p: "1.8rem",
+            color: activeLanguage === "en" ? "primary.main" : "text.primary",
+            cursor: "pointer",
+            "&:hover": {
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              borderRadius: "4px",
+            },
+            borderRadius: "4px",
           }}
         >
           English
-        </MenuItem>
-        <MenuItem
+        </Typography>
+        <Typography
           onClick={() => changeLanguage("ar")}
           sx={{
             fontSize: "1.2rem",
-            fontWeight: activeLanguage === "ar" ? "bold" : "normal",
+            // fontWeight: activeLanguage === "ar" ? "bold" : "normal",
+            p: "1.8rem",
+            cursor: "pointer",
+            color: activeLanguage === "ar" ? "primary.main" : "text.primary", // تغيير اللون بناءً على اللغة النشطة
+            "&:hover": {
+                backgroundColor: "rgba(0, 0, 0, 0.1)",
+                borderRadius: "4px",
+            },
+            borderRadius: ".3rem",
           }}
         >
           العربية
-        </MenuItem>
+        </Typography>
       </Menu>
       <Link href="#menu">
         <Typography

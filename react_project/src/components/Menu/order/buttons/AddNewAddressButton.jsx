@@ -28,8 +28,6 @@ function AddNewAddressButton({
           ...buttonStyle,
         }}
       >
-        {/* {buttonText} */}
-        {/* add new address */}
         {t('address.Add Address')}
       </Button>
     </Stack>

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Badge,
   Drawer,
@@ -24,7 +24,8 @@ import { useTranslation } from "react-i18next";
     token,
   }) {
     const dispatch = useDispatch();
-    const { t } = useTranslation();
+    const { t, i18n} = useTranslation();
+    const [selectedLanguage, setSelectedLanguage] = useState(i18n.language);
     const totalItems = useSelector((state) => state.cart.totalItems);
     useEffect(() => {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -53,7 +54,10 @@ import { useTranslation } from "react-i18next";
     const handleCartClick = () => {
       navigate("/order-online");
     };
-
+    const handleLanguageChange = (lang) => {
+      i18n.changeLanguage(lang);
+      setSelectedLanguage(lang);
+    };
     return (
       <>
         {isSmallScreen && (
@@ -231,13 +235,31 @@ import { useTranslation } from "react-i18next";
                   </Typography>
                 </Link>
               )}
-
+ <Stack
+    direction="row"
+    justifyContent="center"
+    //  sx={{ padding: "10px", marginTop: "auto" }} // إضافة المساحة في الأسفل
+  >
+    <Typography
+      onClick={() => handleLanguageChange("ar")}
+      sx={{ cursor: "pointer" , color: selectedLanguage === "ar" ? "primary.main" : "#fff", margin: "0 10px",fontSize: "1.5rem", fontWeight: selectedLanguage === "ar" ? "bold" : "normal" ,p:"1rem" }}
+    >
+      العربية
+    </Typography>
+    <Typography
+      onClick={() => handleLanguageChange("en")}
+      sx={{ cursor: "pointer" ,color: "#fff", margin: "0 10px",fontSize: "1.5rem",color: selectedLanguage === "en" ? "primary.main" : "#fff", fontWeight: selectedLanguage === "en" ? "bold" : "normal" ,p:"1rem" }}
+    >
+      English
+    </Typography>
+  </Stack>
               {location.pathname !== "/" && (
                 <Stack
                   direction="row"
                   alignItems="center"
                   sx={{ padding: "10px", justifyContent: "center" }}
                 >
+                  
                   <Link component={RouterLink} to="/" onClick={closeDrawer}>
                     <img
                       src={logo}
@@ -247,6 +269,7 @@ import { useTranslation } from "react-i18next";
                   </Link>
                 </Stack>
               )}
+               
             </Drawer>
           </>
         )}

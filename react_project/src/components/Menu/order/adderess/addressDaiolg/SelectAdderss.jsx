@@ -57,6 +57,14 @@ function SelectAdderss({
           onChange={handleCityChange}
           displayEmpty
           inputProps={{ "aria-label": "City" }}
+          sx={{ fontSize: "1.3rem", fontWeight: "500" }}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                fontSize: "1.9rem",
+              },
+            },
+          }}
         >
           {loadingCities ? (
             <MenuItem disabled>
@@ -64,7 +72,11 @@ function SelectAdderss({
             </MenuItem>
           ) : (
             cities.map((city) => (
-              <MenuItem key={city.id} value={city.id}>
+              <MenuItem
+                key={city.id}
+                value={city.id}
+                sx={{ fontSize: "1.2rem", fontWeight: "500" }}
+              >
                 {isArabic ? city.name_ar : city.name_en}
               </MenuItem>
             ))
@@ -88,6 +100,14 @@ function SelectAdderss({
           displayEmpty
           inputProps={{ "aria-label": "Area" }}
           disabled={loadingAreas || !currentAddress.deliveryCity}
+          sx={{ fontSize: "1.3rem", fontWeight: "500" }}
+          MenuProps={{
+            PaperProps: {
+              style: {
+                fontSize: "1.9rem",
+              },
+            },
+          }}
         >
           {loadingAreas ? (
             <MenuItem disabled>
@@ -95,8 +115,12 @@ function SelectAdderss({
             </MenuItem>
           ) : (
             areas.map((area) => (
-              <MenuItem key={area.id} value={area.id}>
-                {isArabic ? area.name_ar : area.name_en} 
+              <MenuItem
+                key={area.id}
+                value={area.id}
+                sx={{ fontSize: "1.2rem", fontWeight: "500" }}
+              >
+                {isArabic ? area.name_ar : area.name_en}
               </MenuItem>
             ))
           )}

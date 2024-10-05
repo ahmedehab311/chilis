@@ -6,7 +6,7 @@ export const fetchOrderDetails = createAsyncThunk(
   'orderDetails/fetchOrderDetails',
   async ({ order_id, api_token }) => {
   const response = await axios.get(`${BASE_URL}/order/details/${order_id}?api_token=${api_token}`);
-    console.log("Fetched Data:", response.data.data.order[0]);  
+    // console.log("Fetched Data:", response.data.data.order[0]);  
     return response.data.data.order[0];
   }
 );

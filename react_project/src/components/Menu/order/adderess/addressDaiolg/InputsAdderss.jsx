@@ -28,6 +28,8 @@ function InputsAdderss({
           onBlur={handleBlur}
           error={!!errors.street}
           // helperText={errors.street}
+          InputProps={{
+            style: { fontSize: '1.3rem' },}}
         />
         {errors.street && (
           <span style={{ color: "red", fontSize: "1.1rem" }}>
@@ -53,6 +55,8 @@ function InputsAdderss({
           onBlur={handleBlur}
           error={!!errors.building}
           // helperText={errors.building}
+          InputProps={{
+            style: { fontSize: '1.3rem' },}}
         />
         {errors.building && (
           <span style={{ color: "red", fontSize: "1.1rem" }}>
@@ -78,6 +82,8 @@ function InputsAdderss({
           onChange={handleInputChange}
           onBlur={handleBlur}
           error={!!errors.floor}
+          InputProps={{
+            style: { fontSize: '1.3rem' },}}
         />
            {errors.floor && (
           <span style={{ color: "red", fontSize: "1.1rem" }}>
@@ -102,6 +108,8 @@ function InputsAdderss({
           onChange={handleInputChange}
           onBlur={handleBlur}
           error={!!errors.apt}
+          InputProps={{
+            style: { fontSize: '1.3rem' },}}
         />
           {errors.apt && (
           <span style={{ color: "red", fontSize: "1.1rem" }}>
@@ -125,6 +133,8 @@ function InputsAdderss({
           name="deliveryInstructions"
           value={currentAddress.deliveryInstructions}
           onChange={handleInputChange}
+          InputProps={{
+            style: { fontSize: '1.3rem' },}}
         />
       </Stack>
     </>

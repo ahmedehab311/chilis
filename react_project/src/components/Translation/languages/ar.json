@@ -62,7 +62,7 @@
   "orderQuantityInvalid": "يجب أن تكون كميات الطلب أكبر من 0.",
   "orderCreationError": "حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.",
   "noResponse": "خطأ في تقديم الطلب: لم يتم الحصول على استجابة من الخادم.",
-  "orderCreated": "تم إنشاء الطلب بنجاح.",
+  "orderCreated": "تم إنشاء الطلب بنجاح",
   "loginPage": {
     "welcomeBack": "مرحبًا بعودتك",
     "signInToContinue": "سجل الدخول للمتابعة",
@@ -126,7 +126,6 @@
     "deliveryInstructions": "تعليمات التوصيل",
     "noAddressAvailable": "لا توجد عناوين متاحة. انقر لإضافة عنوان",
     "addOrRemoveAddress": "إضافة أو إزالة عنوان تسليم",
-
     "labels": {
       "home": "منزل",
       "work": "عمل",
@@ -148,5 +147,23 @@
     "updateSuccess": "تم تحديث الملف الشخصي بنجاح",
     "saveChanges": "حفظ التغييرات",
     "changePassword": "تغيير كلمة المرور"
+  },
+  "myOrders": {
+    "Loading...": "...جاري التحميل ",
+    "Please Try Again": "برجاء المحاولة مرة اخري",
+    "progress": "قيد التنفيذ",
+    "completed": "مكتمل",
+    "canceled": "ملغى",
+    "noOrdersFound": "لا توجد طلبات في",
+    "viewDetails": "عرض التفاصيل",
+    "totalPayment": "إجمالي الدفع",
+    "pending": "قيد الانتظار",
+    "processing": "قيد المعالجة",
+    "inWay": "في الطريق",
+    "delivered": "تم التوصيل",
+    "destination": "العنوان",
+    "discount": "خصم",
+    "vat": "الضريبة",
+    "thankYouOrder": "يمكنك التحقق من تفاصيل طلبك من هنا.شكرًا لك على طلبك"
   }
 }
