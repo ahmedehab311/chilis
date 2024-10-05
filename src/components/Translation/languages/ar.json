@@ -89,6 +89,10 @@
     "enterEmail": "أدخل بريدك الإلكتروني",
     "password": "كلمة المرور",
     "enterPassword": "أدخل كلمة المرور",
+    "oldPassword": "كلمة المرور القديمة",
+    "enterNewPassword": "أدخل كلمة المرور الجديدة",
+    "enterOldPassword": "أدخل كلمة المرور القديمة",
+    "newPassword": "كلمة المرور الجديدة",
     "phone": "رقم الهاتف",
     "enterPhone": "أدخل رقم هاتفك",
     "signUp": "إنشاء حساب",
@@ -129,7 +133,8 @@
     "labels": {
       "home": "منزل",
       "work": "عمل",
-      "other": "آخر"
+      "other": "آخر",
+      "EnterAddressName": "اضف اسم العنوان"
     },
     "Add Address": "اضافة عنوان"
   },

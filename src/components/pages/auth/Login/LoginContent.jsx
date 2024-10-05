@@ -49,7 +49,6 @@ function LoginContent({ login, phone, password, setPassword, setPhone }) {
             sx={{ fontSize: "1.4rem", fontWeight: "600" }}
           >
             {t("loginPage.signInToContinue")}
-            {/* Sign in to continue */}
           </Typography>
           <Stack>
             <Typography variant="h6" gutterBottom>
@@ -75,7 +74,6 @@ function LoginContent({ login, phone, password, setPassword, setPhone }) {
           </Stack>
           <Stack>
             <Typography variant="h6" gutterBottom>
-              {/* Password */}
               {t("loginPage.password")}
             </Typography>
             <TextField
@@ -104,7 +102,6 @@ function LoginContent({ login, phone, password, setPassword, setPhone }) {
             color="error"
             sx={{ fontSize: "1.2rem", fontWeight: "600" }}
           >
-            {/* Login */}
             {t("loginPage.loginButton")}
           </Button>
           <Typography variant="body2" align="center" sx={{ mt: 1 }}>
@@ -113,7 +110,6 @@ function LoginContent({ login, phone, password, setPassword, setPhone }) {
                 variant="h6"
                 sx={{ fontSize: "1.5rem", fontWeight: "600" }}
               >
-                {/* Forgot Your Password? */}
                 {t("loginPage.forgotPassword")}
               </Typography>
             </RouterLink>
@@ -126,7 +122,6 @@ function LoginContent({ login, phone, password, setPassword, setPhone }) {
               >
                 {" "}
                 {t("loginPage.noAccount")}
-                {/* Don't have an account? Sign up */}
               </Typography>
             </RouterLink>
           </Typography>
