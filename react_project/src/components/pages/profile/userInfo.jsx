@@ -45,7 +45,6 @@ function UserInfo({
         </Typography>
         <Stack sx={{ textTransform: "capitalize", fontSize: "1.5rem" }}>
           <Typography sx={{ fontSize: "1.6rem" }} gutterBottom>
-            {/* name */}
             {t("regsterPage.name")}
           </Typography>
           <TextField
@@ -67,32 +66,7 @@ function UserInfo({
             }}
           />
         </Stack>
-        {/* <Stack>
-          <Typography sx={{  m: ".5rem 0 .5rem 0", fontSize: "1.6rem" }}>
-            Phone
-          </Typography>
-          <TextField
-            variant="outlined"
-        fullWidth
-        margin="normal"
-        name="phone"
-        value={user.phone}
-        onChange={handleInputChange}
-        type="tel"
-        inputMode="numeric" // Use numeric mode for numeric keyboards on mobile
-        pattern="[0-9]*" // Restrict input to numbers only
-        sx={{
-          m: 0,
-          "& .MuiInputBase-input": {
-            fontSize: "1.3rem",
-            color: "gray",
-          },
-          "& .MuiInputLabel-root": {
-            fontSize: "1.2rem",
-          },
-        }}
-      />
-        </Stack> */}
+
         <Stack>
           <Typography sx={{ fontSize: "1.6rem" }} gutterBottom>
             {t("regsterPage.phone")}
@@ -104,13 +78,12 @@ function UserInfo({
             name="phone"
             value={user.phone}
             onChange={(e) => {
-              // Ensure only numeric values are set
               const value = e.target.value.replace(/\D/g, "");
               handleInputChange({ target: { name: "phone", value } });
             }}
             type="tel"
-            inputMode="numeric" // Use numeric mode for numeric keyboards on mobile
-            pattern="[0-9]*" // Restrict input to numbers only
+            inputMode="numeric"
+            pattern="[0-9]*"
             sx={{
               m: 0,
               "& .MuiInputBase-input": {
@@ -158,7 +131,7 @@ function UserInfo({
             onClick={handleSave}
             sx={{ fontSize: "1.1rem", fontWeight: "600" }}
           >
-         {t("profile.saveChanges")}
+            {t("profile.saveChanges")}
           </Button>
           <Button
             variant="contained"
@@ -166,7 +139,7 @@ function UserInfo({
             onClick={handleChangePassword}
             sx={{ marginLeft: "10px", fontSize: "1.1rem", fontWeight: "600" }}
           >
-          {t("profile.changePassword")}
+            {t("profile.changePassword")}
           </Button>
         </Stack>
       </Box>

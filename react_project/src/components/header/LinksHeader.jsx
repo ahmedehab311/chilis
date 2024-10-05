@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
-import { Link, Typography, Menu, MenuItem } from "@mui/material";
+import { Link, Typography, Menu } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import { useTranslation } from "react-i18next";
@@ -84,7 +84,7 @@ function LinksHeader({ handleNavigation }) {
             // fontWeight: activeLanguage === "ar" ? "bold" : "normal",
             p: "1.8rem",
             cursor: "pointer",
-            color: activeLanguage === "ar" ? "primary.main" : "text.primary", // تغيير اللون بناءً على اللغة النشطة
+            color: activeLanguage === "ar" ? "primary.main" : "text.primary", 
             "&:hover": {
                 backgroundColor: "rgba(0, 0, 0, 0.1)",
                 borderRadius: "4px",

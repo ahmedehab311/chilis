@@ -95,7 +95,7 @@ function DiaolgLabels({
 
       {showInput && (
         <TextField
-          placeholder="Enter address name "
+          placeholder=  {t("address.labels.EnterAddressName")}
           variant="outlined"
           value={customLabel}
           onChange={handleInputChange}
