@@ -68,7 +68,7 @@
     "enterEmail": "Enter Email",
     "password": "Password",
     "enterPassword": "Enter Password",
- 
+
     "loginButton": "Login",
     "forgotPassword": "Forgot Your Password?",
     "noAccount": "Don't have an account?",
@@ -87,7 +87,7 @@
     "email": "Email Address",
     "enterEmail": "Enter Your Email Address",
     "password": "Password",
-    "OldPassword" :"Old Password",
+    "OldPassword": "Old Password",
     "enterPassword": "Enter Password",
     "enterNewPassword": "Enter New Password",
     "enterOldPassword": "Enter Old Password",
@@ -153,10 +153,12 @@
   "myOrders": {
     "Loading...": "Loading...",
     "Please Try Again": "Please Try Again",
-    "progress": "Progress",
+   "progress": "progress",
+   "Pending":"Pending",
     "completed": "Completed",
+    "Delivered": "Delivered",
     "canceled": "Canceled",
-    "noOrdersFound": "No Orders Found in",
+    "noOrdersFound": "No Orders Found ",
     "viewDetails": "View Details",
     "totalPayment": "Total Payment",
     "pending": "Pending",
@@ -166,6 +168,6 @@
     "destination": "destination",
     "discount": "Discount",
     "tax": "Tax",
-     "thankYouOrder": "You can check your order detail here,Thank you for your order."
+    "thankYouOrder": "You can check your order detail here,Thank you for your order."
   }
 }

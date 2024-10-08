@@ -206,7 +206,7 @@ function MyOrders({ currentStatus }) {
         />
       </Stack>
 
-      <Stack className="rightSection" sx={{ width: "70%", padding: 2 }}>
+      {/* <Stack className="rightSection" sx={{ width: "70%", padding: 2 }}>
         {filterOrdersByStatus(activeSection).length === 0 && !showCard && (
           <Card sx={{ backgroundColor: "white" }}>
             <CardContent>
@@ -216,7 +216,18 @@ function MyOrders({ currentStatus }) {
               </Typography>
             </CardContent>
           </Card>
-        )}
+        )} */}
+        <Stack className="rightSection" sx={{ width: "70%", padding: 2 }}>
+  {filterOrdersByStatus(activeSection).length === 0 && !showCard && (
+    <Card sx={{ backgroundColor: "white" }}>
+      <CardContent>
+        <Typography sx={{ textAlign: "center" }}>
+          {t("myOrders.noOrdersFound")}{" "}
+          {t(`myOrders.${activeSection}`)} {/* هنا دمجنا الحالة مع النص */}
+        </Typography>
+      </CardContent>
+    </Card>
+  )}
         {filterOrdersByStatus(activeSection).map(
           (order) =>
             !showCard && (
