@@ -131,7 +131,8 @@
     "labels": {
       "home": "Home",
       "work": "Work",
-      "other": "Other"
+      "other": "Other",
+      "EnterAddressName": "Enter address name"
     },
     "Add Address": "Add Address"
   },

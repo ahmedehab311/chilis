@@ -62,7 +62,7 @@
   "orderQuantityInvalid": "يجب أن تكون كميات الطلب أكبر من 0.",
   "orderCreationError": "حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.",
   "noResponse": "خطأ في تقديم الطلب: لم يتم الحصول على استجابة من الخادم.",
-  "orderCreated": "تم إنشاء الطلب بنجاح.",
+  "orderCreated": "تم إنشاء الطلب بنجاح",
   "loginPage": {
     "welcomeBack": "مرحبًا بعودتك",
     "signInToContinue": "سجل الدخول للمتابعة",
@@ -133,7 +133,8 @@
     "labels": {
       "home": "منزل",
       "work": "عمل",
-      "other": "آخر"
+      "other": "آخر",
+      "EnterAddressName": "اضف اسم العنوان"
     },
     "Add Address": "اضافة عنوان"
   },

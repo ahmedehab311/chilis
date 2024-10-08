@@ -26,6 +26,7 @@ function AddressDialog({ open, onClose }) {
   const [selectedArea, setSelectedArea] = useState("");
   const [user, setUser] = useState(null);
   const [errors, setErrors] = useState({});
+  const [customLabel, setCustomLabel] = useState("");
   const [currentAddress, setCurrentAddress] = useState({
     deliveryCity: "",
     deliveryArea: "",
@@ -96,13 +97,87 @@ function AddressDialog({ open, onClose }) {
     dispatch(fetchAddresses());
   }, [dispatch]);
 
-  // const handleSelectLabel = (label) => {
-  //   setCurrentAddress((prev) => ({ ...prev, label }));
-  // };
   const handleSelectLabel = (label) => {
-    const translatedLabel = t(`address.labels.${label.toLowerCase()}`);
+    const translatedLabel = t(`${label.toLowerCase()}`);
     setCurrentAddress((prev) => ({ ...prev, label: translatedLabel }));
   };
+
+  // const handleAddAddress = async () => {
+  //   const requiredFields = [
+  //     "deliveryCity",
+  //     "deliveryArea",
+  //     "street",
+  //     "building",
+  //     "floor",
+  //     "apt",
+  //   ];
+  //   const newErrors = {};
+
+  //   requiredFields.forEach((field) => {
+  //     if (!currentAddress[field]) {
+  //       newErrors[field] = t("errors.required");
+  //     }
+  //   });
+
+  //   if (Object.keys(newErrors).length > 0) {
+  //     setErrors(newErrors);
+  //     return;
+  //   }
+  //   const isArabic = i18n.language === "ar";
+
+  //   const addressName = isArabic
+  //     ? currentAddress.label_ar
+  //     : currentAddress.label_en;
+
+  //   const queryParams = new URLSearchParams({
+  //     area: currentAddress.deliveryArea,
+  //     street: currentAddress.street,
+  //     building: currentAddress.building,
+  //     floor: currentAddress.floor,
+  //     apt: currentAddress.apt,
+  //     name: currentAddress.label,
+  //     lat: "0",
+  //     lng: "0",
+  //     api_token: api_token,
+  //   });
+
+  //   try {
+  //     const response = await axios.post(
+  //       `${API_ADD_ADDRESS}${queryParams.toString()}`
+  //     );
+
+  //     const dataResponse = response.data;
+  //     console.log("response", dataResponse);
+
+  //     if (dataResponse.response) {
+  //       if (window.location.pathname === "/profile") {
+  //         toast.success("Address added successfully!");
+  //       }
+  //       onClose();
+  //       await new Promise((resolve) => setTimeout(resolve, 500));
+
+  //       setCurrentAddress({
+  //         deliveryCity: "",
+  //         deliveryArea: "",
+  //         street: "",
+  //         building: "",
+  //         floor: "",
+  //         apt: "",
+  //         deliveryInstructions: "",
+  //         label: "",
+  //       });
+  //       setErrors({});
+  //       dispatch(fetchAddresses());
+  //     } else {
+  //       console.error(
+  //         "Error adding address:",
+  //         dataResponse.message || "Unknown error"
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Error adding address:", error);
+  //   }
+  // };
 
   const handleAddAddress = async () => {
     const requiredFields = [
@@ -112,7 +187,9 @@ function AddressDialog({ open, onClose }) {
       "building",
       "floor",
       "apt",
+      "label",
     ];
+
     const newErrors = {};
 
     requiredFields.forEach((field) => {
@@ -120,13 +197,15 @@ function AddressDialog({ open, onClose }) {
         newErrors[field] = t("errors.required");
       }
     });
-
+    if (currentAddress.label === t("address.labels.other") && !customLabel) {
+      newErrors.customLabel = t("errors.required");
+    } 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    const isArabic = i18n.language === "ar";
 
+    const isArabic = i18n.language === "ar";
     const addressName = isArabic
       ? currentAddress.label_ar
       : currentAddress.label_en;
@@ -137,7 +216,7 @@ function AddressDialog({ open, onClose }) {
       building: currentAddress.building,
       floor: currentAddress.floor,
       apt: currentAddress.apt,
-      name: currentAddress.label,
+      name: currentAddress.label, // استخدم label في البيانات المرسلة
       lat: "0",
       lng: "0",
       api_token: api_token,
@@ -147,17 +226,14 @@ function AddressDialog({ open, onClose }) {
       const response = await axios.post(
         `${API_ADD_ADDRESS}${queryParams.toString()}`
       );
-
       const dataResponse = response.data;
-      console.log("response", dataResponse);
 
       if (dataResponse.response) {
-        if (window.location.pathname === "/profile") {
-          toast.success("Address added successfully!");
-        }
+        toast.success("Address added successfully!");
         onClose();
         await new Promise((resolve) => setTimeout(resolve, 500));
 
+        // إعادة تعيين الحقول
         setCurrentAddress({
           deliveryCity: "",
           deliveryArea: "",
@@ -168,6 +244,7 @@ function AddressDialog({ open, onClose }) {
           deliveryInstructions: "",
           label: "",
         });
+        setCustomLabel("");
         setErrors({});
         dispatch(fetchAddresses());
       } else {
@@ -228,6 +305,10 @@ function AddressDialog({ open, onClose }) {
             <DiaolgLabels
               handleSelectLabel={handleSelectLabel}
               currentAddress={currentAddress}
+              handleBlur={handleBlur}
+              errors={errors}
+              customLabel={customLabel}
+              setCustomLabel={setCustomLabel}
             />
           </Stack>
         </DialogContent>
