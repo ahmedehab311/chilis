@@ -5,7 +5,6 @@ import { useState } from "react";
 
 function DiaolgLabels({
   handleSelectLabel,
-  currentAddress,
   handleBlur,
   errors,
   customLabel,
@@ -13,13 +12,16 @@ function DiaolgLabels({
 }) {
   const { t } = useTranslation();
   const [showInput, setShowInput] = useState(false);
+  const [selectedLabel, setSelectedLabel] = useState("");
   const handleSelect = (label) => {
     if (label === "Other") {
       setShowInput(true);
+      setSelectedLabel(label);
     } else {
       setShowInput(false);
       handleSelectLabel(label);
       setCustomLabel("");
+      setSelectedLabel(label);
     }
   };
 
@@ -31,7 +33,6 @@ function DiaolgLabels({
 
   return (
     <Stack
-      // direction="column"
       spacing={1}
       mt={2}
       sx={{
@@ -45,7 +46,7 @@ function DiaolgLabels({
         },
       }}
     >
-      <Stack direction="row" spacing={1} >
+      <Stack direction="row" spacing={1}>
         <Button
           variant="outlined"
           color="primary"
@@ -54,7 +55,7 @@ function DiaolgLabels({
             fontSize: "1.1rem",
             fontWeight: "500",
             border:
-              currentAddress.label === t("address.labels.home")
+              selectedLabel === t("address.labels.home")
                 ? "2px solid #d32f2f"
                 : "",
           }}
@@ -69,7 +70,7 @@ function DiaolgLabels({
             fontSize: "1.1rem",
             fontWeight: "500",
             border:
-              currentAddress.label === t("address.labels.work")
+              selectedLabel === t("address.labels.work")
                 ? "2px solid #d32f2f"
                 : "",
           }}
@@ -84,7 +85,7 @@ function DiaolgLabels({
             fontSize: "1.1rem",
             fontWeight: "500",
             border:
-              currentAddress.label === t("address.labels.other")
+              selectedLabel === t("address.labels.other")
                 ? "2px solid #d32f2f"
                 : "",
           }}
@@ -95,7 +96,7 @@ function DiaolgLabels({
 
       {showInput && (
         <TextField
-          placeholder=  {t("address.labels.EnterAddressName")}
+          placeholder={t("address.labels.EnterAddressName")}
           variant="outlined"
           value={customLabel}
           onChange={handleInputChange}
