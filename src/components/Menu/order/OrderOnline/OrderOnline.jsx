@@ -1340,11 +1340,11 @@ useEffect(()=>{
                                 fontWeight: 500,
                               }}
                             >
-                              {extra.price} {t("egp")}
-                              {/* {isArabic
+                              {/* {extra.price} {t("egp")} */}
+                              {isArabic
                                 ? convertNumberToArabic(extra.price)
                                 : extra.price}{" "}
-                              {t("egp")} */}
+                              {t("egp")}
                             </Typography>
                           </Stack>
                         ))}
