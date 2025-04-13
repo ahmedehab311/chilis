@@ -34,7 +34,7 @@ function Footer() {
                 fontWight: "600",
                 fontSize: "16px",
                 textAlign: "center",
-                textTransform: "uppercase",
+                textTransform: "uppercase",fontFamily: "tahoma",
                 pb: 2,
               }}
             >

@@ -25,8 +25,13 @@ function Address() {
   const unavailableAddresses = useSelector(
     (state) => state.addresses.unavailableAddresses
   );
+// console.log("unavailableAddresses",unavailableAddresses)
+const addresses = useSelector((state) => state.addresses.items);
+// console.log("addresses",addresses)
 
-  const addresses = useSelector((state) => state.addresses.items);
+useEffect(() => {
+  console.log("Unavailable Addresses from Redux:", unavailableAddresses); 
+}, [unavailableAddresses]);
   const selectedAddressId = useSelector(
     (state) => state.addresses.selectedAddress?.id
   );
@@ -34,6 +39,7 @@ function Address() {
   const selectedAddress = useSelector(
     (state) => state.addresses.selectedAddress
   );
+  
   useEffect(() => {
     if (addresses.length > 0) {
       const savedAddress = JSON.parse(localStorage.getItem("selectedAddress"));
@@ -202,7 +208,7 @@ function Address() {
       );
     }
   };
-
+  console.log("addressData",addressData); 
   return (
     <Stack spacing={3} sx={{ margin: "1rem" }}>
       <Stack>
@@ -211,10 +217,9 @@ function Address() {
             fontSize: "18px",
             fontWeight: 700,
             textAlign: "left",
-            fontFamily: "cairo",
+            fontFamily: "tahoma",
           }}
         >
-         {/* Your Delivery Address List */}
           {t("Your Delivery Address List")}
         </Typography>
       </Stack>

@@ -29,9 +29,10 @@ function Main() {
             sx={{
               mb: 2,
               textTransform: "capitalize",
-              fontFamily: "cairo",
+              fontFamily: "BlackFont",
               fontSize: "40px",
               fontWeight: "bold",
+              letterSpacing: "1px",
             }}
           >
             <div
@@ -39,11 +40,18 @@ function Main() {
                 // my: "3rem",
                 color: "#000",
                 // margin: "5px 0 5px 0 ",
-                fontFamily: "cairo",
+                fontFamily: "BlackFont",
+                letterSpacing: "1px",
               }}
             >
               {t("chilis")}{" "}
-              <span style={{ color: "red", fontFamily: "cairo" }}>
+              <span
+                style={{
+                  color: "red",
+                  fontFamily: "BlackFont",
+                  letterSpacing: "1px",
+                }}
+              >
                 {t("egypt")}
               </span>
             </div>
@@ -52,15 +60,15 @@ function Main() {
           <Typography
             sx={{
               color: "#555",
-
               letterSpacing: i18n.language === "ar" ? 0 : 5,
               fontSize: "18px",
               textTransform: "uppercase",
               my: "1rem",
+              fontFamily: "tahoma",
+              fontWeight: "bold",
             }}
-            fontFamily={"Baskervville SC"}
           >
-            {t("discoverOurFood")}
+            {t("ourStory")}
           </Typography>
           <div className="borderMain"></div>
           <Typography
@@ -68,10 +76,9 @@ function Main() {
               mt: "1.1rem",
               mb: 2,
               fontSize: { xs: "1.2rem", md: "1.5rem" },
-              fontWeight: "600",
               color: "#333",
-
-              fontFamily: "Uniform",
+              fontFamily: "tahoma",
+              fontWeight: "400",
               lineHeight: 1.8,
               maxWidth: "100%",
             }}
@@ -83,12 +90,14 @@ function Main() {
             variant="outlined"
             color="error"
             sx={{
-              textTransform: "uppercase",
+               textTransform: "capitalize",
               fontSize: "15px",
+              fontFamily: "tahoma",
               fontWeight: "bold",
             }}
             onClick={handleReadMore}
             className="btn"
+            
           >
             {t("readMore")}
           </Button>

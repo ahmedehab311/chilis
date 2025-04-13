@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 // /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
@@ -39,22 +40,22 @@ function CheckOut({
 }) {
   const api_token = localStorage.getItem("token");
 
-  const handleCashPayment = async () => {
-    try {
-      const response = await axios.post(API_CHECKOUT, {
-        // هنا ترسل البيانات الخاصة بطلب الدفع النقدي
-      });
+  // const handleCashPayment = async () => {
+  //   try {
+  //     const response = await axios.post(API_CHECKOUT, {
+  //       // هنا ترسل البيانات الخاصة بطلب الدفع النقدي
+  //     });
 
-      if (response.data.success) {
-        alert("تم الطلب بنجاح!");
-      } else {
-        alert("فشل الطلب، يرجى المحاولة مرة أخرى.");
-      }
-    } catch (error) {
-      console.error("Error processing payment:", error);
-      alert("حدث خطأ أثناء معالجة الدفع.");
-    }
-  };
+  //     if (response.data.success) {
+  //       alert("تم الطلب بنجاح!");
+  //     } else {
+  //       alert("فشل الطلب، يرجى المحاولة مرة أخرى.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error processing payment:", error);
+  //     alert("حدث خطأ أثناء معالجة الدفع.");
+  //   }
+  // };
 
   const dispatch = useDispatch();
   const addressData = useSelector((state) => state.addresses.items || []);
@@ -64,7 +65,7 @@ function CheckOut({
   useEffect(() => {
     // Log the selected address to the console whenever it changes
     if (selectedAddress) {
-      console.log("Selected Address:", selectedAddress);
+      // console.log("Selected Address:", selectedAddress);
     }
   }, [selectedAddress]);
 

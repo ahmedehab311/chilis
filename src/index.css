@@ -12,21 +12,34 @@
 }
 
 @font-face {
-  font-family: "Brother ";
-  src: url("./components/fonts/Brother 1816/Brothers\ Bold.ttf")
+  font-family: "Brother";
+  src: url("/src/components/fonts/Brother 1816/Brothers\ Bold.ttf")
     format("truetype");
 }
 
 @font-face {
   font-family: "uniform";
-  src: url("./components/fonts/uiformFont/Uniform.ttf") format("truetype");
+  src: url("/src/components/fonts/uiformFont/Uniform.ttf") format("truetype");
+}
+@font-face {
+  font-family: "BlackFont";
+  src: url("/src/components/fonts/Black.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: "tahoma";
+  src: url("/src/components/fonts/tahoma.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
 * {
   margin: 0;
   padding: 0;
   /* color: #000; */
-  font-family: "Cairo", sans-serif !important;
+  font-family: "Cairo", sans-serif ;
+  /* font-family: 'BlackFont' */
 }
 body {
   font-size: 1.6rem;

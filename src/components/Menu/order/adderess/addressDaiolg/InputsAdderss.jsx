@@ -10,12 +10,13 @@ function InputsAdderss({
   const { t } = useTranslation();
   return (
     <>
-      <Stack>
+      <Stack sx={{ fontFamily: "tahoma",}}>
         <Typography
           sx={{
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
+            fontFamily: "tahoma",
           }}
           gutterBottom
         >
@@ -29,7 +30,8 @@ function InputsAdderss({
           error={!!errors.street}
           // helperText={errors.street}
           InputProps={{
-            style: { fontSize: '1.3rem' },}}
+            style: { fontSize: "1.3rem" },
+          }}
         />
         {errors.street && (
           <span style={{ color: "red", fontSize: "1.1rem" }}>
@@ -43,6 +45,7 @@ function InputsAdderss({
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
+            fontFamily: "tahoma",
           }}
           gutterBottom
         >
@@ -56,7 +59,8 @@ function InputsAdderss({
           error={!!errors.building}
           // helperText={errors.building}
           InputProps={{
-            style: { fontSize: '1.3rem' },}}
+            style: { fontSize: "1.3rem", fontFamily: "tahoma", },
+          }}
         />
         {errors.building && (
           <span style={{ color: "red", fontSize: "1.1rem" }}>
@@ -66,13 +70,13 @@ function InputsAdderss({
       </Stack>
       <Stack>
         <Typography
-        gutterBottom
+          gutterBottom
           sx={{
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
+            fontFamily: "tahoma",
           }}
-          
         >
           {t("address.floor")}
         </Typography>
@@ -83,21 +87,23 @@ function InputsAdderss({
           onBlur={handleBlur}
           error={!!errors.floor}
           InputProps={{
-            style: { fontSize: '1.3rem' },}}
+            style: { fontSize: "1.3rem" },
+          }}
         />
-           {errors.floor && (
-          <span style={{ color: "red", fontSize: "1.1rem" }}>
+        {errors.floor && (
+          <span style={{ color: "red", fontSize: "1.1rem", fontFamily: "tahoma", }}>
             {errors.floor}
           </span>
         )}
       </Stack>
       <Stack>
         <Typography
-        gutterBottom
+          gutterBottom
           sx={{
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
+            fontFamily: "tahoma",
           }}
         >
           {t("address.apt")}
@@ -109,22 +115,22 @@ function InputsAdderss({
           onBlur={handleBlur}
           error={!!errors.apt}
           InputProps={{
-            style: { fontSize: '1.3rem' },}}
+            style: { fontSize: "1.3rem" },
+          }}
         />
-          {errors.apt && (
-          <span style={{ color: "red", fontSize: "1.1rem" }}>
-            {errors.apt}
-          </span>
+        {errors.apt && (
+          <span style={{ color: "red", fontSize: "1.1rem" }}>{errors.apt}</span>
         )}
       </Stack>
 
       <Stack>
         <Typography
-        gutterBottom
+          gutterBottom
           sx={{
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
+            fontFamily: "tahoma",
           }}
         >
           {t("address.deliveryInstructions")}
@@ -134,7 +140,8 @@ function InputsAdderss({
           value={currentAddress.deliveryInstructions}
           onChange={handleInputChange}
           InputProps={{
-            style: { fontSize: '1.3rem' },}}
+            style: { fontSize: "1.3rem", fontFamily: "tahoma", },
+          }}
         />
       </Stack>
     </>

@@ -5,7 +5,7 @@ import { Typography, Stack } from "@mui/material";
 import "./Locations.css";
 import { useTranslation } from "react-i18next";
 function Locations() {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const locations = getLocationsData(t);
   const [mapSrc, setMapSrc] = useState(
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3551.9287551324496!2d33.81933177422874!3d27.09554225221189!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x144d7fdfa1ad441f%3A0xc40143d93a5d442e!2sSenzo%20Mall!5e0!3m2!1sen!2seg!4v1725882364119!5m2!1sen!2seg"
@@ -26,9 +26,10 @@ function Locations() {
           fontSize: "3rem",
           my: "2rem",
           fontWeight: "600",
+          fontFamily: "tahoma",
         }}
       >
-       {t("locationsTitle")}
+        {t("locationsTitle")}
       </Typography>
 
       <Stack
@@ -60,9 +61,10 @@ function Locations() {
               fontSize: "3rem",
               my: "2rem",
               fontWeight: "600",
+              fontFamily: "tahoma",
             }}
           >
-             {t("selectLocation")}
+            {t("selectLocation")}
           </Typography>
           <div
             style={{
@@ -80,8 +82,11 @@ function Locations() {
                   onChange={handleLocationChange}
                   defaultChecked={index === 0}
                 />
-                <label htmlFor={location.name} style={{ marginLeft: "10px" }}>
-                {location.name}
+                <label
+                  htmlFor={location.name}
+                  style={{ marginLeft: "10px", fontFamily: "tahoma" }}
+                >
+                  {location.name}
                 </label>
               </div>
             ))}

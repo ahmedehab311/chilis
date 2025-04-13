@@ -25,8 +25,9 @@ import imgLogo from "../../../Hero/images/logo.png";
 import Counter from "../../ButtonsMenu/CounterDiaolgButton";
 import { API_TAX } from "../../apis&fetchData/ApiLinks";
 import PaymentPage from "../OrderOnline/checkOut/PaymentPage";
+import { setSelectedBranch } from "../../../../rtk/slices/BranchesSlice.js";
 import axios from "axios";
-import Coupun from "./checkOut/Coupon/Coupun";
+// import Coupun from "./checkOut/Coupon/Coupun";
 import {
   setSelectedAddress,
   fetchAddresses,
@@ -70,6 +71,8 @@ function OrderOnline() {
     deliveryCity: "",
     deliveryArea: "",
   });
+  // console.log("cartItems",cartItems);
+
   const subtotal = Object.values(totalPrices).reduce(
     (acc, price) => acc + price,
     0
@@ -464,7 +467,6 @@ function OrderOnline() {
   //     });
   // };
 
-
   // const handleCheckout = () => {
   //   console.log("Cart Items:", cartItems);
 
@@ -577,7 +579,6 @@ function OrderOnline() {
   //       console.error("Error details:", error);
   //       let errorMessage = t("orderCreationError");
 
-      
   //       if (error.response) {
   //         console.error("Error response data:", error.response.data);
   //         console.error("Error response status:", error.response.status);
@@ -593,61 +594,16 @@ function OrderOnline() {
   //       toast.error(errorMessage);
   //     });
   // };
-
+useEffect(()=>{
+  dispatch(setSelectedBranch(""));
+},[])
   const handleCheckout = () => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    // التحقق من اختيار العنوان فقط في حالة الدليفري
-    if (deliveryType === "delivery") {
-      const selectedAddress = addressData.find((addr) => addr.id === address?.id);
-
-      if (!selectedAddress) {
-        toast.error(t("selectValidAddress")); // رسالة خطأ عند عدم اختيار عنوان صحيح
-        return;
-      }
-
-      if (!isAddressAvailable(selectedAddress)) {
-        toast.error(t("addressNotAvailable")); // رسالة خطأ عند عدم توفر العنوان
-        return;
-      }
-    }
-
-    // التحقق من اختيار الفرع في حالة البيك آب
-    if (deliveryType === "pickup") {
-      if (!selectedBranchId) {
-        toast.error(t("selectBranch")); // رسالة خطأ عند عدم اختيار فرع
-        return;
-      }
-    }
-
-    // إعداد قيم area و branch بناءً على نوع الطلب
-    let areaId, branchId;
-    const delivery_type = deliveryType === "pickup" ? 2 : 1;
-
-    if (delivery_type === 1) {
-      // دليفري
-      areaId = address.area?.id;
-      branchId = address.branches?.[0]?.id;
-
-      if (!areaId || !branchId) {
-        toast.error(t("invalidAreaBranch"));
-        return;
-      }
-    } else if (delivery_type === 2) {
-      // بيك آب
-      branchId = selectedBranchId;
-      areaId = null;
-    }
-
     const orders = cartItems
       .map((item) => {
         if (item.quantity <= 0) {
-          console.error(`Item ${item.id} quantity is invalid: ${item.quantity}`);
+          console.error(
+            `Item ${item.id} quantity is invalid: ${item.quantity}`
+          );
           toast.error(t("errors.order_quantity_invalid"));
           return null;
         }
@@ -664,17 +620,71 @@ function OrderOnline() {
       })
       .filter((order) => order !== null);
 
+    // console.log("Orders before sending:", orders);
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    // التحقق من اختيار العنوان فقط في حالة الدليفري
+    if (deliveryType === "delivery") {
+      const selectedAddress = addressData.find(
+        (addr) => addr.id === address?.id
+      );
+      // console.log("selectedAddress",selectedAddress)
+
+      if (!selectedAddress) {
+        toast.error(t("selectValidAddress")); // رسالة خطأ عند عدم اختيار عنوان صحيح
+        return;
+      }
+
+      // if (!isAddressAvailable(selectedAddress)) {
+      //   toast.error(t("addressNotAvailable")); // رسالة خطأ عند عدم توفر العنوان
+      //   return;
+      // }
+    }
+    // console.log("selectedAddress",selectedAddress)
+    if (deliveryType === "pickup") {
+      if (!selectedBranchId) {
+        toast.error(t("selectBranch")); // رسالة خطأ عند عدم اختيار فرع
+        return;
+      }
+    }
+
+    // إعداد قيم area و branch بناءً على نوع الطلب
+    let areaId, branchId;
+    const delivery_type = deliveryType === "pickup" ? 2 : 1;
+
+    if (delivery_type === 1) {
+      // دليفري
+      areaId = address.area?.id;
+      branchId = address.branches?.[0]?.id;
+
+      if (!areaId) {
+        toast.error(t("invalidAreaBranch"));
+        return;
+      }
+    } else if (delivery_type === 2) {
+      // بيك آب
+      branchId = selectedBranchId;
+      areaId = null;
+    }
+
     if (orders.length === 0) {
       return;
     }
+    // console.log("address",address?.area);
+
     const dataToSend = {
       delivery_type: delivery_type,
       payment: paymentMethod === "cash" ? 1 : 2,
       lat: delivery_type === 1 ? address.lat : 0,
       lng: delivery_type === 1 ? address.lng : 0,
       address: delivery_type === 1 ? currentAddress.id : null,
-      area: address.area?.id,
-      branch: branchId,
+      area: delivery_type === 1 ? address.area?.id : "",
+      branch: delivery_type === 1 ? "" : branchId,
       api_token: api_token,
       items: JSON.stringify({ items: orders }),
       device_id: "",
@@ -686,19 +696,19 @@ function OrderOnline() {
       coins: "00.00",
     };
 
-    console.log("Checkout data:", dataToSend);
+    // console.log("Checkout data:", dataToSend);
 
     const params = new URLSearchParams(dataToSend);
     axios
       .post(`${BASE_URL}/orders/create?${params.toString()}`)
       .then((response) => {
         if (response.data.response) {
-          console.log(response.data);
+          // console.log(response.data);
           localStorage.setItem("orderSuccess", "true");
           localStorage.removeItem("idInfo");
 
           toast.success(t("orderCreated"));
-
+          dispatch(setSelectedBranch(""));
           dispatch(clearCart());
         } else {
           console.error("Response error data:", response.data);
@@ -890,7 +900,7 @@ function OrderOnline() {
     }
 
     if (couponCode.trim() === "") {
-      setError(t('coupon.enterCoupon'));
+      setError(t("coupon.enterCoupon"));
       return;
     }
 
@@ -922,10 +932,10 @@ function OrderOnline() {
 
         setIsCouponApplied(true);
       } else {
-        setError(t('coupon.invalidCoupon'));
+        setError(t("coupon.invalidCoupon"));
       }
     } catch (error) {
-      setError(t('coupon.failedApplyCoupon'));
+      setError(t("coupon.failedApplyCoupon"));
     }
   };
   // console.log("cartItems",cartItems)
@@ -962,7 +972,7 @@ function OrderOnline() {
                   fontSize: "18px",
                   fontWeight: 700,
                   textAlign: "left",
-                  fontFamily: "cairo",
+                  fontFamily: "tahoma",
                 }}
               >
                 {t("address.deliveryAddress")}
@@ -991,6 +1001,7 @@ function OrderOnline() {
                       fontSize: "1.4rem",
                       fontWeight: "500",
                       lineHeight: "1.2",
+                      fontFamily: "tahoma",
                     }}
                   >
                     {currentAddress.address_name}
@@ -1011,10 +1022,11 @@ function OrderOnline() {
                       sx={{
                         display: "flex",
                         color: "#6c757d!important",
-                        fontSize: "1.3rem",
+                        fontSize: "1.4rem",
                         fontWeight: "500",
                         lineHeight: "1.2",
                         textTransform: "capitalize",
+                        fontFamily: "tahoma",
                       }}
                     >
                       {/* {currentAddress.building
@@ -1044,11 +1056,14 @@ function OrderOnline() {
                 </Stack>
               </Card>
             ) : (
-              <Typography>{t("address.noAddressSelected")}</Typography>
+              <Typography sx={{ fontFamily: "tahoma" }}>
+                {t("address.noAddressSelected")}
+              </Typography>
             )}
 
             <Button
-              variant="contained" color="error"
+              variant="contained"
+              color="error"
               // sx={{
               //   fontSize:"1.2rem",
               //   fontWeight:"600",
@@ -1056,13 +1071,14 @@ function OrderOnline() {
               //   "&:hover": { backgroundColor: "#d32f2f" },
               // }}
               sx={{
-              // mt: "1.5rem",
-              // p: ".6rem",
-              fontSize: "1.5rem",
-           
-              textTransform: "capitalize",
-              "&:hover": { backgroundColor: "#d32f2f" }
-            }}
+                // mt: "1.5rem",
+                // p: ".6rem",
+
+                fontSize: "1.5rem",
+                fontFamily: "tahoma",
+                textTransform: "capitalize",
+                "&:hover": { backgroundColor: "#d32f2f" },
+              }}
               onClick={handleOpenDialog}
             >
               {t("address.changeDeliveryAddress")}
@@ -1122,7 +1138,7 @@ function OrderOnline() {
               fontSize: "18px",
               fontWeight: 700,
               ml: 2,
-              fontFamily: "cairo",
+              fontFamily: "tahoma",
             }}
           >
             {t("chilis")}
@@ -1417,7 +1433,6 @@ function OrderOnline() {
                       backgroundColor: isCouponApplied ? "#1976d2" : "#d32f2f",
                     },
                   }}
-                  
                   onClick={handleApplyCoupon}
                 >
                   {isCouponApplied ? t("Cancel") : t("Apply")}
@@ -1453,7 +1468,7 @@ function OrderOnline() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                mt:".5rem",
+                mt: ".5rem",
                 "& .MuiInputBase-input": {
                   fontSize: "1.5rem",
                   color: "gray",
@@ -1483,6 +1498,7 @@ function OrderOnline() {
                 fontSize: "1.5rem",
                 fontWeight: "600",
                 textAlign: "center",
+                fontFamily: "tahoma",
               }}
             >
               {t("Select delivery type")}
@@ -1543,10 +1559,24 @@ function OrderOnline() {
               direction={"row"}
               alignItems={"center"}
             >
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-                {t("Subtotal")} 
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  fontFamily: "tahoma",
+                  letterSpacing: "1px",
+                }}
+              >
+                {t("Subtotal")}
               </Typography>
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  fontFamily: "tahoma",
+                  letterSpacing: "1px",
+                }}
+              >
                 {isArabic
                   ? convertNumberToArabic(subtotalWithExtras.toFixed(2))
                   : subtotalWithExtras.toFixed(2)}{" "}
@@ -1569,11 +1599,19 @@ function OrderOnline() {
                   sx={{
                     fontSize: "15px",
                     fontWeight: "bold",
+                    fontFamily: "tahoma",
+                    letterSpacing: "1px",
                   }}
                 >
                   {t("Delivery Fee")}
                 </Typography>
-                <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+                <Typography
+                  sx={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    fontFamily: "tahoma",
+                  }}
+                >
                   {/* {deliveryFee.toFixed(2)} {t("egp")} */}
                   {isArabic
                     ? convertNumberToArabic(deliveryFee.toFixed(2))
@@ -1591,11 +1629,25 @@ function OrderOnline() {
               direction={"row"}
               alignItems={"center"}
             >
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  fontFamily: "tahoma",
+                  letterSpacing: "1px",
+                }}
+              >
                 {/* {t('Tax')}:  {tax} %    */}
                 {t("Tax")} % {isArabic ? convertNumberToArabic(tax) : tax}
               </Typography>
-              <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  fontFamily: "tahoma",
+                  letterSpacing: "1px",
+                }}
+              >
                 {/* {(
                   (subtotalWithExtras -
                     discount +
@@ -1630,7 +1682,14 @@ function OrderOnline() {
             direction={"row"}
             alignItems={"center"}
           >
-            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: "bold",
+                fontFamily: "tahoma",
+                letterSpacing: "1px",
+              }}
+            >
               {t("Total")}
             </Typography>
             {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
@@ -1645,7 +1704,14 @@ function OrderOnline() {
               ).toFixed(2)}{" "}
               {t("egp")}
             </Typography> */}
-            <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: "bold",
+                fontFamily: "tahoma",
+                letterSpacing: "1px",
+              }}
+            >
               {isArabic
                 ? convertNumberToArabic(
                     (
@@ -1681,6 +1747,8 @@ function OrderOnline() {
                 fontSize: "1.5rem",
                 fontWeight: "600",
                 textAlign: "center",
+                fontFamily: "tahoma",
+                letterSpacing: "1px",
               }}
             >
               {t("SelectPaymentMethod")}
@@ -1694,6 +1762,8 @@ function OrderOnline() {
                 justifyContent: "center",
                 flexDirection: "row",
                 alignItems: "center",
+                fontFamily: "tahoma",
+                letterSpacing: "1px",
               }}
             >
               <FormControlLabel
@@ -1704,6 +1774,8 @@ function OrderOnline() {
                     fontSize: "1.4rem",
                     color: "#000",
                     fontWeight: "600",
+                    fontFamily: "tahoma",
+                    letterSpacing: "1px",
                   }}
                 >
                   {t("CashonDelivery")}
@@ -1717,6 +1789,8 @@ function OrderOnline() {
                     fontSize: "1.4rem",
                     color: "#000",
                     fontWeight: "600",
+                    fontFamily: "tahoma",
+                    letterSpacing: "1px",
                   }}
                 >
                   {t("CreditCard")}
@@ -1735,6 +1809,8 @@ function OrderOnline() {
               mt: "1.5rem",
               p: "1rem",
               fontSize: "1.5rem",
+              fontFamily: "tahoma",
+              fontWeight: "bold",
               backgroundColor:
                 cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
               textTransform: "capitalize",

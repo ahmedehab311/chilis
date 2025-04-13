@@ -500,6 +500,7 @@ function MyOrders({ currentStatus }) {
                       fontSize: "1.7rem",
                       fontWeight: "500",
                       color: "#424242",
+                      fontFamily: "tahoma",
                     }}
                   >
                     {t("Subtotal")}
@@ -509,6 +510,7 @@ function MyOrders({ currentStatus }) {
                       fontSize: "1.7rem",
                       fontWeight: "500",
                       color: "#424242",
+                      fontFamily: "tahoma",
                     }}
                   >
                     {" "}
@@ -529,6 +531,7 @@ function MyOrders({ currentStatus }) {
                       fontSize: "1.7rem",
                       fontWeight: "500",
                       color: "#424242",
+                      fontFamily: "tahoma",
                     }}
                   >
                     {t("myOrders.discount")}
@@ -538,6 +541,7 @@ function MyOrders({ currentStatus }) {
                       fontSize: "1.7rem",
                       fontWeight: "500",
                       color: "#424242",
+                      fontFamily: "tahoma",
                     }}
                   >
 
@@ -557,6 +561,7 @@ function MyOrders({ currentStatus }) {
                       fontSize: "1.7rem",
                       fontWeight: "500",
                       color: "#424242",
+                      fontFamily: "tahoma",
                     }}
                   >
                     {t("myOrders.vat")}
@@ -566,6 +571,7 @@ function MyOrders({ currentStatus }) {
                       fontSize: "1.7rem",
                       fontWeight: "500",
                       color: "#424242",
+                      fontFamily: "tahoma",
                     }}
                   >
                     {" "}
@@ -586,6 +592,7 @@ function MyOrders({ currentStatus }) {
                       fontSize: "1.7rem",
                       fontWeight: "500",
                       color: "#424242",
+                      fontFamily: "tahoma",
                     }}
                   >
 
@@ -596,6 +603,7 @@ function MyOrders({ currentStatus }) {
                       fontSize: "1.7rem",
                       fontWeight: "500",
                       color: "#424242",
+                      fontFamily: "tahoma",
                     }}
                   >
                     {/* {orderDetails.delivery_fees} */}
@@ -621,6 +629,7 @@ function MyOrders({ currentStatus }) {
                     fontSize: "1.9rem",
                     fontWeight: "bold",
                     color: "#424242",
+                    fontFamily: "tahoma",
                   }}
                 >
                   {t("Total")}

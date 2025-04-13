@@ -22,7 +22,7 @@ const LoginPage = ({ setToken  }) => {
     const APIURL = `/login?phone=${phone}&password=${password}&email=${phone}`;
     try {
       const response = await axios.post(`${BASE_URL}${APIURL}`);
-      // console.log("Response Data:", response.data); // تحقق من استجابة API
+      // console.log("Response Data:", response.data); 
 
       if (response.data && response.data.data) {
         const token = response.data.data.token;

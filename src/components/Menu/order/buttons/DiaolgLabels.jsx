@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useState,useRef  } from "react";
+import { useState, useRef } from "react";
 
 function DiaolgLabels({
   handleSelectLabel,
@@ -21,7 +21,10 @@ function DiaolgLabels({
       setSelectedLabel(t("address.labels.other"));
       setTimeout(() => {
         if (inputRef.current) {
-          inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          inputRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
         }
       }, 0);
     } else {
@@ -92,7 +95,7 @@ function DiaolgLabels({
             sx={{
               fontSize: "1.1rem",
               fontWeight: "500",
-              
+
               border:
                 selectedLabel === t("address.labels.other")
                   ? "2px solid #d32f2f"

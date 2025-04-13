@@ -62,10 +62,11 @@ function AboutUs() {
           sx={{
             fontSize: { xs: "1.5rem", md: "1.9rem" },
             color: "#333",
-            fontWeight: "bold",
             lineHeight: "1.6",
             textAlign: { xs: "center", md: "left" },
             maxWidth: "600px",
+            fontFamily: "tahoma",
+            fontWeight: "400",
           }}
         >
          {t("aboutUsText")}

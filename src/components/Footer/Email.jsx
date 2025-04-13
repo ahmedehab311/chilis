@@ -21,7 +21,8 @@ function Email() {
             fontSize: "14px",
             width: "100%",
             color: "#fff",
-            fontWeight: "bold",
+            // fontWeight: "bold",
+            fontFamily: "tahoma",
           }}
         >
           chilis@eliteline-eg.com

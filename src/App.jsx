@@ -29,6 +29,7 @@ import MyOrders from "./components/Menu/order/MyOrders/MyOrders";
 import Locations from "./components/Locations/Locations";
 import AboutUs from "./components/AboutUs/AboutUs";
 import NotFound from "./components/pages/NoFound";
+
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = ["/*"];
@@ -47,7 +48,9 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
   return (
     <>
       {!excludedPaths.includes(location.pathname) && (
-        <Header token={token} handleLogout={handleLogout} />
+        <>
+          <Header token={token} handleLogout={handleLogout} />
+        </>
       )}
       <Routes>
         <Route path="/" element={<MainLayout />}>

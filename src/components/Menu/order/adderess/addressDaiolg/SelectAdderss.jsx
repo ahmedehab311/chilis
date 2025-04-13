@@ -48,6 +48,8 @@ function SelectAdderss({
             textTransform: "capitalize",
             fontSize: "1.5rem",
             mb: ".8",
+          // fontWeight: "bold",
+          fontFamily: "tahoma",
           }}
         >
           {t("address.Delivery city")}
@@ -57,7 +59,7 @@ function SelectAdderss({
           onChange={handleCityChange}
           displayEmpty
           inputProps={{ "aria-label": "City" }}
-          sx={{ fontSize: "1.3rem", fontWeight: "500" }}
+          sx={{ fontSize: "1.3rem", fontWeight: "500", fontFamily: "tahoma", }}
           MenuProps={{
             PaperProps: {
               style: {
@@ -66,6 +68,9 @@ function SelectAdderss({
             },
           }}
         >
+        <MenuItem value="" disabled sx={{ fontSize: "1.2rem", fontFamily: "tahoma" }}>
+    {isArabic ? "اختر المدينة" : "Select City"}
+  </MenuItem>
           {loadingCities ? (
             <MenuItem disabled>
               <CircularProgress size={24} />
@@ -75,7 +80,7 @@ function SelectAdderss({
               <MenuItem
                 key={city.id}
                 value={city.id}
-                sx={{ fontSize: "1.2rem", fontWeight: "500" }}
+                sx={{ fontSize: "1.2rem", fontWeight: "500", fontFamily: "tahoma", }}
               >
                 {isArabic ? city.name_ar : city.name_en}
               </MenuItem>
@@ -105,10 +110,14 @@ function SelectAdderss({
             PaperProps: {
               style: {
                 fontSize: "1.9rem",
+                fontFamily: "tahoma",
               },
             },
           }}
         >
+                <MenuItem value="" disabled sx={{ fontSize: "1.2rem", fontFamily: "tahoma" }}>
+    {isArabic ? "اختر المنطقة" : "Select Area"}
+  </MenuItem>
           {loadingAreas ? (
             <MenuItem disabled>
               <CircularProgress size={24} />
@@ -118,7 +127,7 @@ function SelectAdderss({
               <MenuItem
                 key={area.id}
                 value={area.id}
-                sx={{ fontSize: "1.2rem", fontWeight: "500" }}
+                sx={{ fontSize: "1.2rem", fontWeight: "500", fontFamily: "tahoma", }}
               >
                 {isArabic ? area.name_ar : area.name_en}
               </MenuItem>

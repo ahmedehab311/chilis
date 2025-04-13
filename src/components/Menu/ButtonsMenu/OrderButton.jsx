@@ -13,9 +13,10 @@ function OrderButton({ handleItemClick }) {
         variant="contained"
         color="error"
         sx={{
-          textTransform: "uppercase",
+          textTransform: "capitalize",
           fontSize: "1.2rem",
-          fontWeight: "500",
+          fontWeight: "bold",
+          fontFamily: "tahoma",
         }}
       >
         {t("order")}

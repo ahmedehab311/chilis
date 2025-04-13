@@ -9,14 +9,14 @@ function AddAddressDiaolg({ handleClose, handleAddAddress, onClose }) {
       <Button
         onClick={onClose}
         color="error"
-        sx={{ fontSize: "1.2rem", fontWeight: "600" }}
+        sx={{ fontSize: "1.2rem", fontWeight: "600",textTransform: "capitalize" }}
       >
         {t("cancel")}
       </Button>
       <Button
         onClick={handleAddAddress}
         color="error"
-        sx={{ fontSize: "1.2rem", fontWeight: "600" }}
+        sx={{ fontSize: "1.2rem", fontWeight: "600" ,  textTransform: "capitalize"}}
       >
         {t("address.Add Address")}
       </Button>

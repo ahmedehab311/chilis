@@ -6,7 +6,7 @@ function AddToCardButton({ onClick }) {
   // const isArabic = i18n.language === "ar";
   return (
     <Stack className="AddToCardBtn">
-      <Button variant="contained" color="error" onClick={onClick} sx={{fontSize:"1.3rem"}}>
+      <Button variant="contained" color="error" onClick={onClick} sx={{fontSize:"1.3rem",  textTransform: "capitalize",}}>
         {t('Add to Cart')}
       </Button>
     </Stack>

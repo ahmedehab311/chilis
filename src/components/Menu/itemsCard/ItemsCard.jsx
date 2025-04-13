@@ -7,18 +7,20 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
   const isArabic = i18n.language === "ar";
   const truncateText = (text, length) => {
     if (text.length > length) {
+      const slicedText = text.slice(0, length).trimEnd();
       return (
         <>
-          {text.slice(0, length)}
+          {slicedText}
           <span
             style={{
               cursor: "pointer",
               textDecoration: "underline",
-              textTransform: "capitalize",
+              textTransform: "uppercase",
               color: "#d32f2f",
+       
             }}
           >
-            {t("readMore" ) }
+            {t("readMore")}
           </span>
         </>
       );
@@ -35,6 +37,9 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
           mb: 2,
           textTransform: "uppercase",
           color: "#fff",
+          fontFamily: "BlackFont",
+          fontWeight: "bold",
+          letterSpacing: "2px",
         }}
       >
         {isArabic ? selectedItem.name_ar : selectedItem.name_en}
@@ -67,7 +72,8 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                     fontSize: "2.4rem",
                     fontWeight: "bold",
                     color: "#c0b56e",
-                    fontFamily: "cairo",
+                    fontFamily: "BlackFont",
+                    letterSpacing: "2px",
                   }}
                 >
                   {isArabic ? item.name_ar : item.name_en}
@@ -80,21 +86,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                   alt={isArabic ? item.description_ar : item.description_en}
                   sx={{ objectFit: "cover", width: "100%" }}
                 />
-                <Typography
-                  variant="h4"
-                  sx={{
-                    textAlign: "left",
-                    mb: 2,
-                    textTransform: "uppercase",
-                    fontSize: "1.5rem",
-                    color: "#e8d56a",
-                    marginBottom: 0,
-                    marginTop: "10px",
-                    fontFamily: "Brother  !important",
-                  }}
-                >
-                  {isArabic ? item.name_ar : item.name_en}
-                </Typography>
+
                 <Typography
                   variant="h5"
                   sx={{
@@ -102,17 +94,16 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                     my: 1,
                     color: "#fff",
                     textAlign: "left",
-                    fontFamily: "uniform !important",
+        fontFamily: "tahoma",
+                    // fontWeight: "bold",
                   }}
                 >
                   {truncateText(
-                    isArabic ? item.description_ar : item.description_en,
-                    60
-                  )}
+  (isArabic ? item.description_ar : item.description_en).trim(),
+  60
+)}
                 </Typography>
-                <Typography sx={{ fontSize: "18px", color: "#777" }}>
-                  {isArabic ? item.name_ar : item.name_en}
-                </Typography>
+
                 <OrderButton handleItemClick={handleItemClick} />
               </Card>
             </Grid>

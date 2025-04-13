@@ -53,13 +53,14 @@ function DialogItem({
   const handleQuantityChange = (newQuantity) => {
     setQuantity(newQuantity);
   };
+  console.log("itemDetails", itemDetails);
 
   const handleAddToCart = () => {
     handleCloseDialog();
 
     const itemDetailsToAdd = {
       uniqueId: uuidv4(),
-      id: itemDetails.id,
+      id: itemDetails.info[0].id,
       name_en: itemDetails.name_en,
       name_ar: itemDetails.name_ar,
       price: parseFloat(price),
@@ -98,7 +99,7 @@ function DialogItem({
 
   const handleCheckboxChange = (extra) => (event) => {
     if (event.target.checked) {
-      setSelectedExtras([...selectedExtras, extra]);  
+      setSelectedExtras([...selectedExtras, extra]);
     } else {
       setSelectedExtras(selectedExtras.filter((item) => item !== extra));
     }
@@ -122,7 +123,7 @@ function DialogItem({
     const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
     return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
   };
-  
+
   return (
     <Dialog
       open={openDialog}
@@ -159,7 +160,13 @@ function DialogItem({
                 id="item-dialog-title"
                 sx={{ fontSize: "1.5rem", fontWeight: "bold" }}
               >
-                <Typography sx={{ fontWeight: "bold", fontSize: "1.7rem" }}>
+                <Typography
+                  sx={{
+                    fontSize: "1.7rem",
+                    fontWeight: "bold",
+                    fontFamily: "tahoma",
+                  }}
+                >
                   {isArabic ? itemDetails.name_ar : itemDetails.name_en}
                 </Typography>
               </DialogTitle>
@@ -188,7 +195,13 @@ function DialogItem({
             <div className="borderItem"></div>
             <Typography
               variant="body1"
-              sx={{ color: "#000", fontSize: "1.4rem", fontWeight: "600" }}
+              sx={{
+                // fontWeight: "bold",
+                color: "#000",
+                fontSize: "1.4rem",
+                fontWeight: "400",
+                fontFamily: "tahoma",
+              }}
             >
               {isArabic
                 ? itemDetails.description_ar
@@ -275,7 +288,6 @@ function DialogItem({
                           onChange={handleCheckboxChange(extra)}
                         />
                       }
-                      
                       label={
                         <Typography
                           sx={{

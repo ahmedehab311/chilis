@@ -10,7 +10,7 @@ function BackButton({ handleBackClick }) {
         color="error"
         onClick={handleBackClick}
         sx={{
-          textTransform: "uppercase",
+          textTransform: "capitalize",  
           fontSize: "1.2rem",
           fontWeight: "500",
         }}

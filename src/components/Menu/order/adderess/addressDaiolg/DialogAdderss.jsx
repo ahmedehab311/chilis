@@ -100,7 +100,6 @@ function AddressDialog({ open, onClose }) {
     console.log("Translated Label: ", translatedLabel);
     setCurrentAddress((prev) => ({ ...prev, label: translatedLabel }));
   };
-  
 
   const handleAddAddress = async () => {
     const requiredFields = [
@@ -122,7 +121,7 @@ function AddressDialog({ open, onClose }) {
     });
     if (currentAddress.label === t("address.labels.other") && !customLabel) {
       newErrors.customLabel = t("errors.required");
-    } 
+    }
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -139,7 +138,7 @@ function AddressDialog({ open, onClose }) {
       building: currentAddress.building,
       floor: currentAddress.floor,
       apt: currentAddress.apt,
-      name: currentAddress.label, 
+      name: currentAddress.label,
       lat: "0",
       lng: "0",
       api_token: api_token,

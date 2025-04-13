@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Card, Stack, Typography } from "@mui/material";
+import { Button, Card, Stack, Typography } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -66,18 +66,34 @@ function AddressData({
     const minutes = now.getMinutes();
 
     const currentTimeMinutes = hours * 60 + minutes;
-
+    console.log("Current Time", { hours, minutes, currentTimeMinutes });
+    console.log("address", address);
     let isAvailable = false;
-    if (address && Array.isArray(address.branches)) {
-      address.branches.forEach((branch) => {
-        const [openHour, openMinute] = branch.open.split(":").map(Number);
-        const [deliveryHour, deliveryMinute] = branch.last_delivery
+    if (address && Array.isArray(address.area.area_branches)) {
+      address.area.area_branches.forEach((branch) => {
+        const [openHour, openMinute] = branch.branch.open
+          .split(":")
+          .map(Number);
+        let [deliveryHour, deliveryMinute] = branch.last_delivery
           .split(":")
           .map(Number);
 
+        // If last_delivery is "00:00:00", set it to a default value (e.g., 23:59)
+        if (deliveryHour === 0 && deliveryMinute === 0) {
+          deliveryHour = 23;
+          deliveryMinute = 59;
+        }
+
         const branchOpenMinutes = openHour * 60 + openMinute;
         const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
-
+        console.log("Branch Times", {
+          openHour,
+          openMinute,
+          deliveryHour,
+          deliveryMinute,
+          branchOpenMinutes,
+          branchLastDeliveryMinutes,
+        });
         if (branchLastDeliveryMinutes < branchOpenMinutes) {
           if (
             currentTimeMinutes >= branchOpenMinutes ||
@@ -100,6 +116,7 @@ function AddressData({
 
     return isAvailable;
   };
+
   const addressAvailability = useMemo(() => {
     return addressData.map((address) => {
       return {
@@ -125,11 +142,13 @@ function AddressData({
       console.error("Invalid address:", address);
     }
   };
+  // console.log("unavailableAddresses",unavailableAddresses)
 
   const handleClick = (index) => () => {
     const address = addressAvailability[index];
     handleCardClick(address);
   };
+  // console.log("branches",);
 
   return (
     <>
@@ -161,6 +180,7 @@ function AddressData({
                   fontSize: "1.4rem",
                   fontWeight: "500",
                   lineHeight: "1.2",
+                  fontFamily: "tahoma",
                 }}
               >
                 {address.address_name}
@@ -168,7 +188,12 @@ function AddressData({
               <br />
               {!address.isAvailable && (
                 <Typography
-                  sx={{ color: "#d32f2f", fontSize: "1.2rem", ml: "2rem" }}
+                  sx={{
+                    color: "#d32f2f",
+                    fontSize: "1.2rem",
+                    ml: "2rem",
+                    fontFamily: "tahoma",
+                  }}
                 >
                   {t("This address is currently unavailable for delivery")}
                 </Typography>
@@ -192,6 +217,7 @@ function AddressData({
                     fontWeight: "500",
                     lineHeight: "1.2",
                     textTransform: "capitalize",
+                    fontFamily: "tahoma",
                   }}
                 >
                   {address.building}, {address.street},{" "}
@@ -232,7 +258,13 @@ function AddressData({
           </Card>
         ))
       ) : (
-        <Typography>No addresses available</Typography>
+        <Typography
+          sx={{
+            fontFamily: "tahoma",
+          }}
+        >
+          No addresses available
+        </Typography>
       )}
     </>
   );

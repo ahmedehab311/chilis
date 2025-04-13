@@ -273,7 +273,7 @@ function Counter({
     if (quantity > 1) {
       const newQuantity = quantity - 1;
       setQuantity(newQuantity);
-      console.log(`Decrease quantity to: ${newQuantity}`);
+      // console.log(`Decrease quantity to: ${newQuantity}`);
       onQuantityChange(newQuantity, itemId);
       onChange(basePrice * newQuantity);
     }

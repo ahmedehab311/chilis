@@ -15,7 +15,7 @@ const cartSlice = createSlice({
     addItemToCart(state, action) {
       const newItem = {
         ...action.payload,
-        uniqueId: uuidv4(),  // استخدام UUID لإضافة معرف فريد
+        uniqueId: uuidv4(),  
       };
     
       state.items.push(newItem);

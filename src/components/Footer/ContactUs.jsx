@@ -25,6 +25,7 @@ function ContactUs() {
           textAlign: "center",
           textTransform: "uppercase",
           letterSpacing:2,
+          
         }}
       >
         {" "}

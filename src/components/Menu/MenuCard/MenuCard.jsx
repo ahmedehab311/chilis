@@ -24,9 +24,9 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
         sx={{
           textAlign: "center !important",
           fontSize: "45px",
-          fontWeight: "bold",
           my: 3,
-          fontFamily: "cairo",
+          fontWeight: "bold",
+        fontFamily: "tahoma",
         }}
         variant="h2"
       >
@@ -84,9 +84,11 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
                         mb: 2,
                         textTransform: "uppercase",
                         fontSize: " 1.8rem",
-                        fontWeight: "bold",
                         color: "#c0b56e",
-                        fontFamily: "cairo",
+                        fontFamily: "BlackFont",
+                        fontWeight: "bold",
+                        letterSpacing: "2px",
+                        
                       }}
                     >
                       {isArabic ? menuItem.name_ar : menuItem.name_en}
@@ -98,7 +100,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
                       alt={menuItem.description_ar}
                       sx={{ objectFit: "cover", width: "100%" }}
                     />
-                    <Typography
+                    {/* <Typography
                       variant="h5"
                       sx={{
                         fontSize: "20px",
@@ -111,7 +113,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
                       {isArabic
                         ? menuItem.description_ar
                         : menuItem.description_en}
-                    </Typography>
+                    </Typography> */}
                   </Card>
                 </SwiperSlide>
               ))}
