@@ -18,6 +18,8 @@ import {
   Register,
   Profile,
   OrderOnline,
+  OrderSuccessPage,
+  OrderFailPage,
 } from "./components/header/index";
 import { ToastContainer } from "react-toastify";
 import { CartProvider } from "./components/hooks/CardContext";
@@ -29,11 +31,11 @@ import MyOrders from "./components/Menu/order/MyOrders/MyOrders";
 import Locations from "./components/Locations/Locations";
 import AboutUs from "./components/AboutUs/AboutUs";
 import NotFound from "./components/pages/NoFound";
-
+import { useNavigate } from "react-router-dom";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = ["/*"];
-
+const navigate = useNavigate()
   const handleLogout = () => {
     setToken(null);
     localStorage.removeItem("token");
@@ -82,6 +84,12 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
           element={<ChangePasswordFromProfile />}
         />
         <Route path="/order-online" element={<OrderOnline />} />
+        <Route
+          path="/order-online/:orderCode/success"
+          element={<OrderSuccessPage />}
+        />
+        <Route path="/order-online/fail" element={<OrderFailPage />} />
+
         <Route path="/my_orders" element={<MyOrders />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

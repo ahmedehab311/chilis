@@ -70,7 +70,7 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
                       py: 3,
                       px: 6,
                       border: "2px solid #fff",
-                      background: "#000",
+                      background: "#22235b",
                       borderRadius: "20px",
                       mx: "auto",
                       cursor: "pointer",
@@ -84,10 +84,10 @@ function MenuCard({ handleCardClick, menuItems, loading }) {
                         mb: 2,
                         textTransform: "uppercase",
                         fontSize: " 1.8rem",
-                        color: "#c0b56e",
+                        color: "#fff",
                         fontFamily: "BlackFont",
                         fontWeight: "bold",
-                        letterSpacing: "2px",
+                        letterSpacing: "3px",
                         
                       }}
                     >

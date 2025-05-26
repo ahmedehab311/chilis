@@ -9,6 +9,8 @@ import Register from "../pages/auth/Register/Register";
 import Error from "../pages/Error";
 import Profile from "../pages/profile/profile";
 import OrderOnline from "../Menu/order/OrderOnline/OrderOnline";
+import OrderSuccessPage from "../Menu/order/OrderOnline/OrderSuccessPage";
+import OrderFailPage from "../Menu/order/OrderOnline/OrderFailPage";
 import signUpSchema from "../vaildations/signUpSchema";
 import useCheckEmailAvailability from "../hooks/useCheckEmailAvailability";
 import Header from "./Header";
@@ -29,6 +31,8 @@ export {
   Register,
   Profile,
   OrderOnline,
+  OrderSuccessPage,
+  OrderFailPage,
   Error,
   signUpSchema,
   useCheckEmailAvailability,

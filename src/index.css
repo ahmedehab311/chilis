@@ -23,7 +23,7 @@
 }
 @font-face {
   font-family: "BlackFont";
-  src: url("/src/components/fonts/Black.ttf") format("truetype");
+  src: url("/src/components/fonts/Dirk-Black.otf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

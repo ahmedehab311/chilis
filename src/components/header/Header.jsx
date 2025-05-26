@@ -89,7 +89,7 @@ function Header({ token, handleLogout }) {
 
   return (
     <Stack className="hero">
-      <Stack sx={{ bgcolor: "#050304", position: "relative" }}>
+      <Stack sx={{ bgcolor: "#22235b", position: "relative" }}>
         {isLargeScreen && (
           <>
             <Stack

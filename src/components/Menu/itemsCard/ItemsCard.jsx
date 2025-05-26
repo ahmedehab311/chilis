@@ -52,7 +52,8 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                 sx={{
                   p: 1,
                   border: "2px solid #fff",
-                  background: "#000",
+                  // background: "#000",
+                  background: "#22235b",
                   borderRadius: "20px",
                   cursor: "pointer",
                   display: "flex",
@@ -71,7 +72,7 @@ const ItemCard = ({ handleItemClick, selectedItem }) => {
                     textTransform: "uppercase",
                     fontSize: "2.4rem",
                     fontWeight: "bold",
-                    color: "#c0b56e",
+                    color: "#fff",
                     fontFamily: "BlackFont",
                     letterSpacing: "2px",
                   }}

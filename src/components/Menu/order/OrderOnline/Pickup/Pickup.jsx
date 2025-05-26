@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchBranches,
@@ -22,7 +22,10 @@ function Pickup({ onBranchStatusChange }) {
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
+
   const [branchClosed, setBranchClosed] = useState(false);
+
+  console.log("selectedBranchId", selectedBranchId);
 
   useEffect(() => {
     // console.log("Fetching branches from API...");
@@ -67,6 +70,7 @@ function Pickup({ onBranchStatusChange }) {
     if (selectedBranch) {
       const closed = isBranchClosed(selectedBranch);
       setBranchClosed(closed);
+      console.log("selectedBranch", selectedBranch);
       console.log(`Selected branch ID: ${selectedBranchId}`);
       console.log(closed ? "Branch is closed." : "Branch is open.");
 

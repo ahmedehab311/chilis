@@ -29,9 +29,9 @@ function Address() {
 const addresses = useSelector((state) => state.addresses.items);
 // console.log("addresses",addresses)
 
-useEffect(() => {
-  console.log("Unavailable Addresses from Redux:", unavailableAddresses); 
-}, [unavailableAddresses]);
+// useEffect(() => {
+//   // console.log("Unavailable Addresses from Redux:", unavailableAddresses); 
+// }, [unavailableAddresses]);
   const selectedAddressId = useSelector(
     (state) => state.addresses.selectedAddress?.id
   );
@@ -39,19 +39,18 @@ useEffect(() => {
   const selectedAddress = useSelector(
     (state) => state.addresses.selectedAddress
   );
+  // console.log("selectedAddress",selectedAddress);
   
-  useEffect(() => {
+  useEffect(() => { 
     if (addresses.length > 0) {
       const savedAddress = JSON.parse(localStorage.getItem("selectedAddress"));
 
-      // تحقق من أن العنوان المخزن موجود في قائمة العناوين
       if (
         savedAddress &&
         addresses.some((addr) => addr.id === savedAddress.id)
       ) {
         dispatch(setSelectedAddress(savedAddress));
       } else {
-        // لا تعيين العنوان الأول مباشرة إلا إذا كان لا يوجد عنوان مخزن
         if (!savedAddress) {
           const firstAddress = addresses[0];
           dispatch(setSelectedAddress(firstAddress));
@@ -208,7 +207,7 @@ useEffect(() => {
       );
     }
   };
-  console.log("addressData",addressData); 
+  // console.log("addressData",addressData); 
   return (
     <Stack spacing={3} sx={{ margin: "1rem" }}>
       <Stack>

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../../rtk/slices/userSlice";
@@ -16,6 +16,19 @@ const LoginPage = ({ setToken  }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation(); 
+
+  const token = localStorage.getItem("token");
+
+  // ✅ من البداية: لو في توكن، نروح للهوم ومنعرضش الصفحة
+  useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
+
+  // ✅ لو في توكن حالياً، مانعرضش صفحة اللوجين خالص
+  if (token) return null;
+
   const login = async (e) => {
     e.preventDefault();
 

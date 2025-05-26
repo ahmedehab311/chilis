@@ -4,11 +4,11 @@
 // export const fetchData = async () => {
 //   try {
 //     const response = await axios.get(APIURL);
-    
+
 //     return response.data.data.menu[0].sections || [];
 //   } catch (error) {
 //     console.error("Error fetching data: ", error);
-//     throw error; 
+//     throw error;
 //   }
 // };
 
@@ -27,7 +27,6 @@ import { APIURL } from "./ApiLinks";
 // });
 
 // حفظ البيانات في IndexedDB
-// const saveMenuSectionsToIndexedDB = async (sections) => {
 //   const db = await dbPromise;
 //   const tx = db.transaction('menuSections', 'readwrite');
 //   const store = tx.objectStore('menuSections');
@@ -48,23 +47,12 @@ import { APIURL } from "./ApiLinks";
 // تحديث الدالة fetchData لاستخدام IndexedDB
 export const fetchData = async () => {
   try {
-    // تحقق أولاً إذا كانت البيانات موجودة بالفعل في IndexedDB
-    // const cachedSections = await getMenuSectionsFromIndexedDB();
-    
-    // if (cachedSections) {
-    //   console.log("Data fetched from IndexedDB");
-    //   return cachedSections;
-    // }
-
     const response = await axios.get(APIURL);
     const sections = response.data.data.menu[0].sections || [];
-
-
-    // await saveMenuSectionsToIndexedDB(sections);
 
     return sections;
   } catch (error) {
     console.error("Error fetching data: ", error);
-    throw error; 
+    throw error;
   }
 };

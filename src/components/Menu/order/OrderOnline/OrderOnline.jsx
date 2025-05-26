@@ -61,6 +61,7 @@ function OrderOnline() {
   const [specialNotes, setSpecialNotes] = useState({});
   const [totalWithTax, setTotalWithTax] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cash");
+
   const [openDialog, setOpenDialog] = useState(false);
   const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
   const [totalPrices, setTotalPrices] = useState([]);
@@ -594,9 +595,605 @@ function OrderOnline() {
   //       toast.error(errorMessage);
   //     });
   // };
-useEffect(()=>{
-  dispatch(setSelectedBranch(""));
-},[])
+  useEffect(() => {
+    dispatch(setSelectedBranch(""));
+  }, []);
+  const [orderCode, setOrderCode] = useState(null);
+  const [hasedKey, setHasedKey] = useState(null);
+
+  const [openFawaterkDialog, setOpenFawaterkDialog] = useState(false);
+  // useEffect(() => {
+  //   if (openFawaterkDialog && window.fawaterkPlugin) {
+  //     const pluginConfig = {
+  //       envType: "test",
+  //       hashKey:hasedKey,
+  //       style: { listing: "horizontal" },
+  //       version: "0",
+  //       requestBody: {
+  //         cartTotal: "100",
+  //         currency: "EGP",
+  //         customer: {
+  //           first_name: "Test",
+  //           last_name: "User",
+  //           email: "test@example.com",
+  //           phone: "01000000000",
+  //           address: "Test Street",
+  //         },
+  //         redirectionUrls: {
+  //           successUrl: `${window.location.origin}/order-online/${orderCode}/success`,
+  //           failUrl: `${window.location.origin}/order-online/${orderCode}/fail`,
+  //           pendingUrl: `${window.location.origin}/order-online/${orderCode}/failpending`,
+  //         },
+  //         cartItems: [
+  //           {
+  //             name: "Item A",
+  //             price: "50",
+  //             quantity: "1",
+  //           },
+  //           {
+  //             name: "Item B",
+  //             price: "50",
+  //             quantity: "1",
+  //           },
+  //         ],
+  //       },
+  //     };
+
+  //     window.fawaterkPlugin("fawaterkDivId", pluginConfig);
+  //   }
+  // }, [openFawaterkDialog]);
+
+  // useEffect(() => {
+  //   if (openFawaterkDialog && window.fawaterkPlugin) {
+  //     setTimeout(() => {
+  //       const targetDiv = document.getElementById("fawaterkDivId");
+  //       if (targetDiv) {
+  //         const pluginConfig = {
+  //           envType: "test",
+  //           hashKey: "2874ed932f0ee85ae69c59fac695c6adbe4836797d6e693ebd",
+  //           style: {
+  //             listing: "horizontal",
+  //           },
+  //           version: "0",
+  //           requestBody: {
+  //             cartTotal: "100",
+  //             currency: "EGP",
+  //             customer: {
+  //               first_name: "Test",
+  //               last_name: "User",
+  //               email: "test@example.com",
+  //               phone: "01000000000",
+  //               address: "Test Street",
+  //             },
+  //             redirectionUrls: {
+  //               successUrl: `${window.location.origin}/order-online/${orderCode}/success`,
+  //               failUrl: `${window.location.origin}/order-online/${orderCode}/fail`,
+  //               pendingUrl: `${window.location.origin}/order-online/${orderCode}/failpending`,
+  //             },
+  //             cartItems: [
+  //               { name: "Item A", price: "50", quantity: "1" },
+  //               { name: "Item B", price: "50", quantity: "1" },
+  //             ],
+  //           },
+  //         };
+
+  //         window.fawaterkPlugin("fawaterkDivId", pluginConfig);
+  //       } else {
+  //         console.error("Div with id 'fawaterkDivId' not found.");
+  //       }
+  //     }, 100); // انتظر 100 ملي ثانية حتى يظهر الديالوج
+  //   }
+  // }, [openFawaterkDialog]);
+  // console.log("domin", window.location.origin);
+
+  //  const formattedCartItems = cartItems.map((item) => {
+  //       const basePrice = item.price || 0;
+  //       const extrasPrice = item.extras?.reduce(
+  //         (total, extra) => total + (extra.price || 0),
+  //         0
+  //       );
+  //       const totalPrice = (basePrice + extrasPrice) * item.quantity;
+
+  //       return {
+  //         name: item.name,
+  //         price: totalPrice.toFixed(2),
+  //         quantity: item.quantity.toString(),
+  //       };
+  //     });
+  //     console.log("formattedCartItems", formattedCartItems);
+
+  //     const cartTotal = formattedCartItems
+  //       .reduce((total, item) => total + parseFloat(item.price), 0)
+  //       .toFixed(2);
+  //     console.log("cartTotal", cartTotal);
+  // useEffect(() => {
+  //   const script = document.createElement("script");
+  //   script.src = "https://app.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js";
+  //   script.async = true;
+
+  //   script.onload = () => {
+  //     console.log("تم تحميل Fawaterk بنجاح:", window.fawaterkPlugin);
+
+  //     // الآن فقط، بعد تحميل السكريبت، نستدعي fawaterkPlugin
+  //     if (openFawaterkDialog && hasedKey && orderCode) {
+  //    var pluginConfig = {
+  //             envType: "test",
+  //             hashKey: hasedKey,
+  //             style:{
+  //               listing:"horizontal"
+  //             },
+  //             version:"0",
+  //             requestBody: {
+  //                 "cartTotal": "50",
+  //                 "currency": "EGP",
+  //                 "customer": {
+  //                     "first_name": "test",
+  //                     "last_name": "fawaterk",
+  //                     "email": "test@fawaterk.com",
+  //                     "phone": "0123456789",
+  //                     "address": "test address"
+  //                 },
+  //                 "redirectionUrls": {
+  //                     "successUrl": "https://dev.fawaterk.com/success",
+  //                     "failUrl": "https://dev.fawaterk.com/fail",
+  //                     "pendingUrl": "https://dev.fawaterk.com/pending"
+  //                 },
+  //                 "cartItems": [{
+  //                         "name": "this is test oop 112252",
+  //                         "price": "25",
+  //                         "quantity": "1"
+  //                     },
+  //                     {
+  //                         "name": "this is test oop 112252",
+  //                         "price": "25",
+  //                         "quantity": "1"
+  //                     }
+  //                 ],
+  //                 "payLoad": {
+  //                   "custom_field1":"xyz",
+  //                   "custom_field2":"xyz2"
+  //                 }
+  //             }
+  //         };
+  //       window.fawaterkPlugin("fawaterkDivId", pluginConfig);
+  //     }
+  //   };
+
+  //   script.onerror = () => {
+  //     console.error("فشل تحميل سكريبت Fawaterk!");
+  //   };
+
+  //   document.body.appendChild(script);
+  // }, [openFawaterkDialog, hasedKey, orderCode]);
+
+  // useEffect(() => {
+  //   if (!window.fawaterkPlugin) {
+  //     const script = document.createElement("script");
+  //     script.src = "https://app.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js";
+  //     script.async = true;
+
+  //     script.onload = () => {
+  //       console.log("تم تحميل Fawaterk بنجاح!");
+  //       if (typeof window.fawaterkPlugin === "function") {
+  //         console.log("Fawaterk Plugin جاهز للاستخدام.");
+  //         if (openFawaterkDialog && hasedKey && orderCode) {
+
+  //           window.fawaterkPlugin("fawaterkDivId", pluginConfig);
+  //         }
+  //       } else {
+  //         console.error("FawaterkPlugin غير متاح كدالة!");
+  //       }
+  //     };
+
+  //     script.onerror = () => {
+  //       console.error("فشل تحميل سكريبت Fawaterk!");
+  //     };
+
+  //     document.body.appendChild(script);
+  //   }
+  // }, [openFawaterkDialog, hasedKey, orderCode]);
+
+  // useEffect(() => {
+  //   if (openFawaterkDialog && hasedKey && orderCode) {
+  //     // دالة لتحميل المكتبة ديناميكيًا
+  //     const loadFawaterkScript = () => {
+  //       return new Promise((resolve, reject) => {
+  //         if (window.fawaterkPlugin) {
+  //           resolve(); // المكتبة موجودة بالفعل
+  //           return;
+  //         }
+  //         const script = document.createElement("script");
+  //         script.src = "https://app.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js";
+  //         script.async = true;
+  //         script.onload = () => resolve();
+  //         script.onerror = () => reject(new Error("Failed to load Fawaterk script"));
+  //         document.body.appendChild(script);
+  //       });
+  //     };
+
+  //     // تحقق من وجود الـ div
+  //     const div = document.getElementById("fawaterkDivId");
+  //     console.log("fawaterkDivId exists?", !!div);
+  //     console.log("hasedKey:", hasedKey, "orderCode:", orderCode);
+
+  //     if (div) {
+  //       loadFawaterkScript()
+  //         .then(() => {
+  //           console.log("Fawaterk Plugin loaded:", window.fawaterkPlugin);
+  //           if (window.fawaterkPlugin) {
+  //             const pluginConfig = {
+  //               envType: "live", // تأكد إن hasedKey صالح لبيئة live
+  //               hashKey: hasedKey,
+  //               style: { listing: "horizontal" },
+  //               version: "0",
+  //               requestBody: {
+  //                 cartTotal: "50",
+  //                 currency: "EGP",
+  //                 customer: {
+  //                   first_name: "test",
+  //                   last_name: "fawaterk",
+  //                   email: "test@fawaterk.com",
+  //                   phone: "0123456789",
+  //                   address: "test address",
+  //                 },
+  //                 redirectionUrls: {
+  //                   successUrl: "https://dev.fawaterk.com/success", // غيّرها لو بيئة live
+  //                   failUrl: "https://dev.fawaterk.com/fail",
+  //                   pendingUrl: "https://dev.fawaterk.com/pending",
+  //                 },
+  //                 cartItems: [
+  //                   { name: "this is test oop 112252", price: "25", quantity: "1" },
+  //                   { name: "this is test oop 112252", price: "25", quantity: "1" },
+  //                 ],
+  //                 payLoad: { custom_field1: "xyz", custom_field2: "xyz2" },
+  //               },
+  //             };
+  //             window.fawaterkPlugin("fawaterkDivId", pluginConfig);
+  //           } else {
+  //             console.error("Fawaterk Plugin not loaded");
+  //           }
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error loading Fawaterk script:", error);
+  //         });
+  //     } else {
+  //       console.error("fawaterkDivId not found in DOM");
+  //     }
+  //   }
+  // }, [openFawaterkDialog, hasedKey, orderCode]);
+
+  // useEffect(() => {
+  //   if (openFawaterkDialog && hasedKey && orderCode && window.fawaterkPlugin) {
+
+  //    var pluginConfig = {
+  //           envType: "test",
+  //           hashKey: hasedKey,
+  //           style:{
+  //             listing:"horizontal"
+  //           },
+  //           version:"0",
+  //           requestBody: {
+  //               "cartTotal": "50",
+  //               "currency": "EGP",
+  //               "customer": {
+  //                   "first_name": "test",
+  //                   "last_name": "fawaterk",
+  //                   "email": "test@fawaterk.com",
+  //                   "phone": "0123456789",
+  //                   "address": "test address"
+  //               },
+  //               "redirectionUrls": {
+  //                   "successUrl": "https://dev.fawaterk.com/success",
+  //                   "failUrl": "https://dev.fawaterk.com/fail",
+  //                   "pendingUrl": "https://dev.fawaterk.com/pending"
+  //               },
+  //               "cartItems": [{
+  //                       "name": "this is test oop 112252",
+  //                       "price": "25",
+  //                       "quantity": "1"
+  //                   },
+  //                   {
+  //                       "name": "this is test oop 112252",
+  //                       "price": "25",
+  //                       "quantity": "1"
+  //                   }
+  //               ],
+  //               "payLoad": {
+  //                 "custom_field1":"xyz",
+  //                 "custom_field2":"xyz2"
+  //               }
+  //           }
+  //       };
+
+  //     window.fawaterkPlugin("fawaterkDivId", pluginConfig);
+  //   }
+  //   console.log("هل تم تحميل Fawaterk؟", window.fawaterkPlugin);
+
+  //   console.log("hasedKeyuseeffect",hasedKey);
+  // }, [openFawaterkDialog, hasedKey, orderCode]);
+
+  // useEffect(() => {
+  //   if (open && hasedKey && orderCode) {
+  //     const loadScript = () => {
+  //       return new Promise((resolve, reject) => {
+  //         if (window.fawaterkPlugin) return resolve(); // لو اتحمل قبل كده
+
+  //         const script = document.createElement("script");
+  //         script.src =
+  //           "https://app.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js";
+  //         script.onload = () => resolve();
+  //         script.onerror = () => reject("فشل تحميل سكربت فواتيرك");
+  //         document.body.appendChild(script);
+  //       });
+  //     };
+
+  //     const formattedCartItems = cartItems.map((item) => {
+  //       const basePrice = item.price || 0;
+  //       const extrasPrice = item.extras?.reduce(
+  //         (total, extra) => total + (extra.price || 0),
+  //         0
+  //       );
+  //       const totalPrice = (basePrice + extrasPrice) * item.quantity;
+
+  //       return {
+  //         name: item.name,
+  //         price: totalPrice.toFixed(2),
+  //         quantity: item.quantity.toString(),
+  //       };
+  //     });
+
+  //     const cartTotal = formattedCartItems
+  //       .reduce((total, item) => total + parseFloat(item.price), 0)
+  //       .toFixed(2);
+
+  //     const pluginConfig = {
+  //       envType: "test",
+  //       hashKey: hasedKey,
+  //       style: { listing: "horizontal" },
+  //       version: "0",
+  //       requestBody: {
+  //          "cartTotal": "50",
+  //         currency: "EGP",
+  //         customer: {
+  //           first_name: "Test",
+  //           last_name: "User",
+  //           email: "test@example.com",
+  //           phone: "01000000000",
+  //           address: "Test Street",
+  //         },
+  //         redirectionUrls: {
+  //           successUrl: `${window.location.origin}/order-online/${orderCode}/success`,
+  //           failUrl: `${window.location.origin}/order-online/${orderCode}/fail`,
+  //           pendingUrl: `${window.location.origin}/order-online/${orderCode}/failpending`,
+  //         },
+  //         cartItems: [
+  //           {
+  //             name: "this is test oop 112252",
+  //             price: "25",
+  //             quantity: "1",
+  //           },
+  //           {
+  //             name: "this is test oop 112252",
+  //             price: "25",
+  //             quantity: "1",
+  //           },
+  //         ],
+  //         payLoad: {
+  //           custom_field1: "xyz",
+  //           custom_field2: "xyz2",
+  //         },
+  //       },
+  //     };
+
+  //     const waitForDivAndInit = () => {
+  //       const fawaterkDiv = document.getElementById("fawaterkDivId");
+  //       if (fawaterkDiv && window.fawaterkPlugin) {
+  //         window.fawaterkPlugin("fawaterkDivId", pluginConfig);
+  //       } else {
+  //         setTimeout(waitForDivAndInit, 100);
+  //       }
+  //     };
+
+  //     loadScript().then(waitForDivAndInit).catch(console.error);
+  //   }
+  //   console.log("hasedKey", hasedKey);
+  //   console.log("orderCode", orderCode);
+  // }, [openFawaterkDialog, hasedKey, orderCode]);
+
+  //   useEffect(() => {
+  //   console.log("openFawaterkDialog:", openFawaterkDialog);
+  //   console.log("hasedKey:", hasedKey, "orderCode:", orderCode);
+
+  //   if (openFawaterkDialog && hasedKey && orderCode) {
+  //     let attempts = 0;
+  //     const maxAttempts = 50;
+  //     const interval = setInterval(() => {
+  //       const div = document.getElementById("fawaterkDivId");
+  //       console.log(`fawaterkDivId exists? (attempt ${attempts + 1})`, !!div);
+
+  //       if (div || attempts >= maxAttempts) {
+  //         clearInterval(interval);
+  //         if (div) {
+  //           const loadFawaterkScript = () => {
+  //             return new Promise((resolve, reject) => {
+  //               if (window.fawaterkCheckout) {
+  //                 console.log("fawaterkCheckout already loaded");
+  //                 resolve();
+  //                 return;
+  //               }
+  //               console.log("Loading Fawaterk script...");
+  //               const script = document.createElement("script");
+  //               script.src = "https://app.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js";
+  //               script.async = true;
+  //               script.onload = () => {
+  //                 console.log("Fawaterk script loaded successfully");
+  //                 resolve();
+  //               };
+  //               script.onerror = () => {
+  //                 console.error("Fawaterk script failed to load");
+  //                 reject(new Error("Failed to load Fawaterk script"));
+  //               };
+  //               document.body.appendChild(script);
+  //             });
+  //           };
+
+  //           loadFawaterkScript()
+  //             .then(() => {
+  //               console.log("Fawaterk Checkout loaded:", window.fawaterkCheckout);
+  //               if (window.fawaterkCheckout) {
+  //                 console.log("Defining pluginConfig...");
+  //                 const pluginConfig = {
+  //                   envType: "test",
+  //                   hashKey: hasedKey,
+  //                   style: { listing: "horizontal" },
+  //                   version: "0",
+  //                   requestBody: {
+  //                     cartTotal: "50",
+  //                     currency: "EGP",
+  //                     customer: {
+  //                       first_name: "test",
+  //                       last_name: "fawaterk",
+  //                       email: "test@fawaterk.com",
+  //                       phone: "0123456789",
+  //                       address: "test address",
+  //                     },
+  //                     redirectionUrls: {
+  //                       successUrl: "https://dev.fawaterk.com/success",
+  //                       failUrl: "https://dev.fawaterk.com/fail",
+  //                       pendingUrl: "https://dev.fawaterk.com/pending",
+  //                     },
+  //                     cartItems: [
+  //                       { name: "this is test oop 112252", price: "25", quantity: "1" },
+  //                       { name: "this is test oop 112252", price: "25", quantity: "1" },
+  //                     ],
+  //                     payLoad: { custom_field1: "xyz", custom_field2: "xyz2" },
+  //                   },
+  //                 };
+  //                 console.log("pluginConfig defined:", pluginConfig);
+  //                 console.log("Calling window.fawaterkCheckout...");
+  //                 // window.fawaterkCheckout(pluginConfig);
+  //                 window.fawaterkCheckout(pluginConfig);
+  //                 console.log("window.fawaterkCheckout called successfully");
+  //               } else {
+  //                 console.error("Fawaterk Checkout not loaded");
+  //               }
+  //             })
+  //             .catch((error) => {
+  //               console.error("Error loading Fawaterk script:", error);
+  //             });
+  //         } else {
+  //           console.error("fawaterkDivId not found in DOM after max attempts");
+  //         }
+  //       }
+  //       attempts++;
+  //     }, 100);
+
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [openFawaterkDialog, hasedKey, orderCode]);
+  useEffect(() => {
+    console.log("openFawaterkDialog:", openFawaterkDialog);
+    console.log("hasedKey:", hasedKey, "orderCode:", orderCode);
+
+    if (openFawaterkDialog && hasedKey && orderCode) {
+      let attempts = 0;
+      const maxAttempts = 50;
+      const interval = setInterval(() => {
+        const div = document.getElementById("fawaterkDivId");
+        console.log(`fawaterkDivId exists? (attempt ${attempts + 1})`, !!div);
+
+        if (div || attempts >= maxAttempts) {
+          clearInterval(interval);
+          if (div) {
+            const loadFawaterkScript = () => {
+              return new Promise((resolve, reject) => {
+                if (window.fawaterkCheckout) {
+                  console.log("fawaterkCheckout already loaded");
+                  resolve();
+                  return;
+                }
+                console.log("Loading Fawaterk script...");
+                const script = document.createElement("script");
+                script.src =
+                  "https://app.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js";
+                script.async = true;
+                script.onload = () => {
+                  console.log("Fawaterk script loaded successfully");
+                  resolve();
+                };
+                script.onerror = () => {
+                  console.error("Fawaterk script failed to load");
+                  reject(new Error("Failed to load Fawaterk script"));
+                };
+                document.body.appendChild(script);
+              });
+            };
+
+            loadFawaterkScript()
+              .then(() => {
+                console.log(
+                  "Fawaterk Checkout loaded:",
+                  window.fawaterkCheckout
+                );
+                if (window.fawaterkCheckout) {
+                  console.log("Defining pluginConfig...");
+                  window.pluginConfig = {
+                    envType: "test",
+                    hashKey: "5aeed37a3af540e81514eb10f471f7bb34aea5430df4ad0fe0da0e9cef782d65",
+                    style: { listing: "horizontal" },
+                    version: "0",
+                    requestBody: {
+                      cartTotal: "50",
+                      currency: "EGP",
+                      customer: {
+                        first_name: "test",
+                        last_name: "fawaterk",
+                        email: "test@fawaterk.com",
+                        phone: "0123456789",
+                        address: "test address",
+                      },
+                      redirectionUrls: {
+                        successUrl: `${window.location.origin}/order-online/${orderCode}/success`,
+                        failUrl: `${window.location.origin}/order-online/${orderCode}/fail`,
+                        pendingUrl: `${window.location.origin}/order-online/${orderCode}/failpending`,
+                      },
+
+                      cartItems: [
+                        {
+                          name: "this is test oop 112252",
+                          price: "25",
+                          quantity: "1",
+                        },
+                        {
+                          name: "this is test oop 112252",
+                          price: "25",
+                          quantity: "1",
+                        },
+                      ],
+                      payLoad: { custom_field1: "xyz", custom_field2: "xyz2" },
+                    },
+                  };
+                  console.log("pluginConfig defined:", window.pluginConfig);
+                  console.log("Calling window.fawaterkCheckout...");
+                  window.fawaterkCheckout(window.pluginConfig);
+                  console.log("window.fawaterkCheckout called successfully");
+                } else {
+                  console.error("Fawaterk Checkout not loaded");
+                }
+              })
+              .catch((error) => {
+                console.error("Error loading Fawaterk script:", error);
+              });
+          } else {
+            console.error("fawaterkDivId not found in DOM after max attempts");
+          }
+        }
+        attempts++;
+      }, 100);
+
+      return () => clearInterval(interval);
+    }
+  }, [openFawaterkDialog, hasedKey, orderCode]);
   const handleCheckout = () => {
     const orders = cartItems
       .map((item) => {
@@ -636,7 +1233,7 @@ useEffect(()=>{
       // console.log("selectedAddress",selectedAddress)
 
       if (!selectedAddress) {
-        toast.error(t("selectValidAddress")); // رسالة خطأ عند عدم اختيار عنوان صحيح
+        toast.error(t("selectValidAddress"));
         return;
       }
 
@@ -676,7 +1273,10 @@ useEffect(()=>{
       return;
     }
     // console.log("address",address?.area);
-
+    // if (paymentMethod === "credit") {
+    //   setOpenFawaterkDialog(true); // افتح ديالوج الدفع
+    //   return;
+    // }
     const dataToSend = {
       delivery_type: delivery_type,
       payment: paymentMethod === "cash" ? 1 : 2,
@@ -696,20 +1296,32 @@ useEffect(()=>{
       coins: "00.00",
     };
 
-    // console.log("Checkout data:", dataToSend);
+    console.log("Checkout data:", dataToSend);
+    console.log("paymentMethod:", paymentMethod);
 
     const params = new URLSearchParams(dataToSend);
     axios
       .post(`${BASE_URL}/orders/create?${params.toString()}`)
       .then((response) => {
         if (response.data.response) {
-          // console.log(response.data);
+          console.log(response.data);
+          console.log(response.data.data.order_code);
+          setOrderCode(response.data.data.order_code);
+          setHasedKey(response.data.data?.SDK_TOKEN);
+          if (paymentMethod === "credit") {
+            setOpenFawaterkDialog(true); // ✅ افتح الديالوج بعد ما جهّزت البيانات
+          } else {
+            localStorage.setItem("orderSuccess", "true");
+            navigate(`/order-online/${response.data.data.order_code}/success`);
+          }
+
           localStorage.setItem("orderSuccess", "true");
+          // navigate(`/order-online/${response.data.data.order_code}/success`);
           localStorage.removeItem("idInfo");
 
-          toast.success(t("orderCreated"));
+          // toast.success(t("orderCreated"));
           dispatch(setSelectedBranch(""));
-          dispatch(clearCart());
+          // dispatch(clearCart());
         } else {
           console.error("Response error data:", response.data);
           toast.error(t("orderCreationError"));
@@ -718,7 +1330,8 @@ useEffect(()=>{
       .catch((error) => {
         console.error("Error details:", error);
         let errorMessage = t("orderCreationError");
-
+        localStorage.setItem("orderFail", "true");
+        navigate("/order-online/fail");
         if (error.response) {
           console.error("Error response data:", error.response.data);
           console.error("Error response status:", error.response.status);
@@ -944,441 +1557,460 @@ useEffect(()=>{
     return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
   };
   return (
-    <Stack
-      className={"orderOnline"}
-      sx={{
-        display: "flex",
-        mx: "6rem",
-        "@media (max-width: 1000px)": {
-          flexDirection: "column !important",
-        },
-        "@media (max-width: 480px)": {
-          mx: "0.5rem",
-        },
-      }}
-      direction={"row"}
-      alignItems={"center"}
-    >
-      {/* <Pickup/> */}
+    <>
+      <Dialog
+        maxWidth="md"
+        open={openFawaterkDialog}
+        onClose={() => setOpenFawaterkDialog(false)}
+        fullWidth
+      >
+        <DialogTitle>إتمام الدفع</DialogTitle>
+        <DialogContent>
+          <div id="fawaterkDivId"></div>
+        </DialogContent>
+      </Dialog>
+      <Stack
+        className={"orderOnline"}
+        sx={{
+          display: "flex",
+          mx: "6rem",
+          "@media (max-width: 1000px)": {
+            flexDirection: "column !important",
+          },
+          "@media (max-width: 480px)": {
+            mx: "0.5rem",
+          },
+        }}
+        direction={"row"}
+        alignItems={"center"}
+      >
+        {/* <Pickup/> */}
 
-      <div>
-        {deliveryType === "pickup" ? (
-          <Pickup onBranchStatusChange={handleBranchStatusChange} />
-        ) : (
-          <Stack spacing={3} sx={{ margin: "1rem" }}>
-            <Stack>
-              <Typography
-                sx={{
-                  fontSize: "18px",
-                  fontWeight: 700,
-                  textAlign: "left",
-                  fontFamily: "tahoma",
-                }}
-              >
-                {t("address.deliveryAddress")}
-              </Typography>
-            </Stack>
-            {currentAddress &&
-            currentAddress.address_name &&
-            currentAddress.isAvailable ? (
-              <Card
-                sx={{
-                  mb: 3,
-                  backgroundColor: "#fff",
-                }}
-              >
-                <Stack
-                  direction={"row"}
-                  alignItems={"center"}
+        <div>
+          {deliveryType === "pickup" ? (
+            <Pickup onBranchStatusChange={handleBranchStatusChange} />
+          ) : (
+            <Stack spacing={3} sx={{ margin: "1rem" }}>
+              <Stack>
+                <Typography
                   sx={{
-                    justifyContent: "space-between",
-                    background: "#f8f9fa!important",
-                    p: 2,
+                    fontSize: "18px",
+                    fontWeight: 700,
+                    textAlign: "left",
+                    fontFamily: "tahoma",
                   }}
                 >
-                  <Typography
+                  {t("address.deliveryAddress")}
+                </Typography>
+              </Stack>
+              {currentAddress &&
+              currentAddress.address_name &&
+              currentAddress.isAvailable ? (
+                <Card
+                  sx={{
+                    mb: 3,
+                    backgroundColor: "#fff",
+                  }}
+                >
+                  <Stack
+                    direction={"row"}
+                    alignItems={"center"}
                     sx={{
-                      fontSize: "1.4rem",
-                      fontWeight: "500",
-                      lineHeight: "1.2",
-                      fontFamily: "tahoma",
+                      justifyContent: "space-between",
+                      background: "#f8f9fa!important",
+                      p: 2,
                     }}
                   >
-                    {currentAddress.address_name}
-                  </Typography>
-                </Stack>
-
-                <Stack
-                  sx={{
-                    display: "flex",
-                    p: ".5rem",
-                    justifyContent: "space-between",
-                  }}
-                  direction={"row"}
-                  alignItems={"center"}
-                >
-                  <Stack sx={{ p: "1.5rem" }}>
                     <Typography
                       sx={{
-                        display: "flex",
-                        color: "#6c757d!important",
                         fontSize: "1.4rem",
                         fontWeight: "500",
                         lineHeight: "1.2",
-                        textTransform: "capitalize",
                         fontFamily: "tahoma",
                       }}
                     >
-                      {/* {currentAddress.building
-                        ? `${currentAddress.building}, `
-                        : ""} */}
-                      {currentAddress.street
-                        ? `${t("address.street")}: ${currentAddress.street}, `
-                        : ""}
-                      {isArabic
-                        ? currentAddress.area?.area_name_ar
-                        : currentAddress.area?.area_name_en}
-                      ,
-                      {isArabic
-                        ? currentAddress.city?.name_ar
-                        : currentAddress.city?.name_en}
-                      ,
-                      {currentAddress.building
-                        ? `${t("address.building")}: ${
-                            currentAddress.building
-                          }, `
-                        : ""}
-                      {currentAddress.floor
-                        ? `${t("address.floor")}: ${currentAddress.floor}`
-                        : ""}
+                      {currentAddress.address_name}
                     </Typography>
                   </Stack>
-                </Stack>
-              </Card>
-            ) : (
-              <Typography sx={{ fontFamily: "tahoma" }}>
-                {t("address.noAddressSelected")}
-              </Typography>
-            )}
 
-            <Button
-              variant="contained"
-              color="error"
-              // sx={{
-              //   fontSize:"1.2rem",
-              //   fontWeight:"600",
-              //   backgroundColor: "#d32f2f",
-              //   "&:hover": { backgroundColor: "#d32f2f" },
-              // }}
-              sx={{
-                // mt: "1.5rem",
-                // p: ".6rem",
+                  <Stack
+                    sx={{
+                      display: "flex",
+                      p: ".5rem",
+                      justifyContent: "space-between",
+                    }}
+                    direction={"row"}
+                    alignItems={"center"}
+                  >
+                    <Stack sx={{ p: "1.5rem" }}>
+                      <Typography
+                        sx={{
+                          display: "flex",
+                          color: "#6c757d!important",
+                          fontSize: "1.4rem",
+                          fontWeight: "500",
+                          lineHeight: "1.2",
+                          textTransform: "capitalize",
+                          fontFamily: "tahoma",
+                        }}
+                      >
+                        {/* {currentAddress.building
+                        ? `${currentAddress.building}, `
+                        : ""} */}
+                        {currentAddress.street
+                          ? `${t("address.street")}: ${currentAddress.street}, `
+                          : ""}
+                        {isArabic
+                          ? currentAddress.area?.area_name_ar
+                          : currentAddress.area?.area_name_en}
+                        ,
+                        {isArabic
+                          ? currentAddress.city?.name_ar
+                          : currentAddress.city?.name_en}
+                        ,
+                        {currentAddress.building
+                          ? `${t("address.building")}: ${
+                              currentAddress.building
+                            }, `
+                          : ""}
+                        {currentAddress.floor
+                          ? `${t("address.floor")}: ${currentAddress.floor}`
+                          : ""}
+                      </Typography>
+                    </Stack>
+                  </Stack>
+                </Card>
+              ) : (
+                <Typography sx={{ fontFamily: "tahoma" }}>
+                  {t("address.noAddressSelected")}
+                </Typography>
+              )}
 
-                fontSize: "1.5rem",
-                fontFamily: "tahoma",
-                textTransform: "capitalize",
-                "&:hover": { backgroundColor: "#d32f2f" },
-              }}
-              onClick={handleOpenDialog}
-            >
-              {t("address.changeDeliveryAddress")}
-            </Button>
-            <Dialog
-              open={openDialog}
-              onClose={handleCloseDialog}
-              fullWidth
-              maxWidth="sm"
-            >
-              <DialogContent>
-                <Stack spacing={2}>
-                  <Address />
-                </Stack>
-              </DialogContent>
-            </Dialog>
-          </Stack>
-        )}
-      </div>
+              <Button
+                variant="contained"
+                color="error"
+                // sx={{
+                //   fontSize:"1.2rem",
+                //   fontWeight:"600",
+                //   backgroundColor: "#d32f2f",
+                //   "&:hover": { backgroundColor: "#d32f2f" },
+                // }}
+                sx={{
+                  // mt: "1.5rem",
+                  // p: ".6rem",
 
-      <Container
-        sx={{
-          maxWidth: "514px !important",
-          background: "#fff !important",
-          position: "sticky",
-          margin: "0 auto",
-          mr: "50px",
-          mt: "15px",
-          p: "0px !important",
-          border: "1px solid #dee2e6!important",
-          borderRadius: ".8rem !important",
-          boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
-          "@media (max-width: 1000px)": {
-            margin: "0 auto",
-            mt: "2rem",
-          },
-        }}
-      >
-        <Box
-          className="headerOrderOnline"
-          direction={"row"}
-          alignItems={"center"}
+                  fontSize: "1.5rem",
+                  fontFamily: "tahoma",
+                  textTransform: "capitalize",
+                  "&:hover": { backgroundColor: "#d32f2f" },
+                }}
+                onClick={handleOpenDialog}
+              >
+                {t("address.changeDeliveryAddress")}
+              </Button>
+              <Dialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                fullWidth
+                maxWidth="sm"
+              >
+                <DialogContent>
+                  <Stack spacing={2}>
+                    <Address />
+                  </Stack>
+                </DialogContent>
+              </Dialog>
+            </Stack>
+          )}
+        </div>
+
+        <Container
           sx={{
-            p: 1,
-            borderBottom: "2px solid #ececec",
+            maxWidth: "514px !important",
+            background: "#fff !important",
+            position: "sticky",
+            margin: "0 auto",
+            mr: "50px",
+            mt: "15px",
+            p: "0px !important",
+            border: "1px solid #dee2e6!important",
+            borderRadius: ".8rem !important",
+            boxShadow: "0 .125rem .25rem rgba(0, 0, 0, .075) !important",
+            "@media (max-width: 1000px)": {
+              margin: "0 auto",
+              mt: "2rem",
+            },
           }}
         >
-          <img
-            className="imgOrder"
-            alt="Image"
-            width="150px"
-            height="150px"
-            src={imgLogo}
-          />
-          <Typography
+          <Box
+            className="headerOrderOnline"
+            direction={"row"}
+            alignItems={"center"}
             sx={{
-              fontSize: "18px",
-              fontWeight: 700,
-              ml: 2,
-              fontFamily: "tahoma",
+              p: 1,
+              borderBottom: "2px solid #ececec",
             }}
           >
-            {t("chilis")}
-          </Typography>
-        </Box>
-        <Container sx={{ margin: "0 auto", borderBottom: "2px solid #ececec" }}>
-          <Box className="orderNow" sx={{ borderRadius: "8px" }}>
-            {cartItems.length === 0 ? (
-              <Typography
-                sx={{
-                  textAlign: "center",
-                  fontSize: "1.8rem",
-                  color: "gray",
-                  fontFamily: "cairo",
-                  my: 4,
-                  fontWeight: "bold",
-                }}
-              >
-                {t("The cart is empty")}
-              </Typography>
-            ) : (
-              cartItems.map((item, index) => (
-                <Card key={uuidv4()} sx={{ p: 2, my: 3 }}>
-                  <Stack sx={{ position: "relative" }}>
-                    <Stack
-                      direction={"row"}
-                      alignItems={"center"}
-                      sx={{ display: "flex" }}
-                    >
-                      <Typography
-                        sx={{
-                          color: "#000",
-                          fontSize: "1.8rem",
-                          fontWeight: "bold",
-                          fontFamily: "cairo",
-                        }}
+            <img
+              className="imgOrder"
+              alt="Image"
+              width="150px"
+              height="150px"
+              src={imgLogo}
+            />
+            <Typography
+              sx={{
+                fontSize: "18px",
+                fontWeight: 700,
+                ml: 2,
+                fontFamily: "tahoma",
+              }}
+            >
+              {t("chilis")}
+            </Typography>
+          </Box>
+          <Container
+            sx={{ margin: "0 auto", borderBottom: "2px solid #ececec" }}
+          >
+            <Box className="orderNow" sx={{ borderRadius: "8px" }}>
+              {cartItems.length === 0 ? (
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                    fontSize: "1.8rem",
+                    color: "gray",
+                    fontFamily: "cairo",
+                    my: 4,
+                    fontWeight: "bold",
+                  }}
+                >
+                  {t("The cart is empty")}
+                </Typography>
+              ) : (
+                cartItems.map((item, index) => (
+                  <Card key={uuidv4()} sx={{ p: 2, my: 3 }}>
+                    <Stack sx={{ position: "relative" }}>
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
+                        sx={{ display: "flex" }}
                       >
-                        {isArabic ? item.name_ar : item.name_en}
-                      </Typography>
-                      <Typography
-                        onClick={() => handleRemoveItem(index)}
-                        sx={{
-                          color: "red",
-                          position: "absolute",
-                          right: "-11px",
-                          top: "-13px",
-                          cursor: "pointer",
-                          fontSize: "1.8rem",
-                          fontWeight: "bold",
-                          fontFamily: "cairo",
-                          "&:hover": { color: "#e31616!important" },
-                        }}
-                      >
-                        X
-                      </Typography>
-                    </Stack>
+                        <Typography
+                          sx={{
+                            color: "#000",
+                            fontSize: "1.8rem",
+                            fontWeight: "bold",
+                            fontFamily: "cairo",
+                          }}
+                        >
+                          {isArabic ? item.name_ar : item.name_en}
+                        </Typography>
+                        <Typography
+                          onClick={() => handleRemoveItem(index)}
+                          sx={{
+                            color: "red",
+                            position: "absolute",
+                            right: "-11px",
+                            top: "-13px",
+                            cursor: "pointer",
+                            fontSize: "1.8rem",
+                            fontWeight: "bold",
+                            fontFamily: "cairo",
+                            "&:hover": { color: "#e31616!important" },
+                          }}
+                        >
+                          X
+                        </Typography>
+                      </Stack>
 
-                    <Stack
-                      direction={"row"}
-                      alignItems={"center"}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        m: "10px 0",
-                      }}
-                    >
-                      <Typography
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
                         sx={{
-                          color: "#17a2b8!important",
-                          fontSize: "1.3rem",
-                          fontWeight: "bold",
-                          fontFamily: "cairo",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          m: "10px 0",
                         }}
                       >
-                        {isArabic ? item.name_ar : item.name_en}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          color: "#17a2b8!important",
-                          fontSize: "1.3rem",
-                          fontWeight: "bold",
-                          fontFamily: "cairo",
-                        }}
-                      >
-                        {/* {item.price} {t("egp")} */}
-                        {isArabic
-                          ? convertNumberToArabic(item.price)
-                          : item.price}{" "}
-                        {t("egp")}
-                      </Typography>
-                      <Counter
-                        basePrice={item.price}
-                        onChange={(newTotalPrice) =>
-                          handleCounterChange(index, newTotalPrice)
-                        }
-                        onQuantityChange={(newQuantity) =>
-                          handleQuantityChange(item.uniqueId, newQuantity)
-                        }
-                        initialQuantity={item.quantity}
-                      />
-                    </Stack>
+                        <Typography
+                          sx={{
+                            color: "#17a2b8!important",
+                            fontSize: "1.3rem",
+                            fontWeight: "bold",
+                            fontFamily: "cairo",
+                          }}
+                        >
+                          {isArabic ? item.name_ar : item.name_en}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            color: "#17a2b8!important",
+                            fontSize: "1.3rem",
+                            fontWeight: "bold",
+                            fontFamily: "cairo",
+                          }}
+                        >
+                          {/* {item.price} {t("egp")} */}
+                          {isArabic
+                            ? convertNumberToArabic(item.price)
+                            : item.price}{" "}
+                          {t("egp")}
+                        </Typography>
+                        <Counter
+                          basePrice={item.price}
+                          onChange={(newTotalPrice) =>
+                            handleCounterChange(index, newTotalPrice)
+                          }
+                          onQuantityChange={(newQuantity) =>
+                            handleQuantityChange(item.uniqueId, newQuantity)
+                          }
+                          initialQuantity={item.quantity}
+                        />
+                      </Stack>
 
-                    <Stack
-                      direction={"row"}
-                      alignItems={"center"}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography
+                      <Stack
+                        direction={"row"}
+                        alignItems={"center"}
                         sx={{
-                          color: "#424242 !important",
-                          fontSize: "1.5rem",
-                          fontWeight: 500,
+                          display: "flex",
+                          justifyContent: "space-between",
                         }}
                       >
-                        {t("Regular")}
-                      </Typography>
-                      <Typography sx={{ fontSize: "1.5rem", fontWeight: 500 }}>
-                        {/* {(
+                        <Typography
+                          sx={{
+                            color: "#424242 !important",
+                            fontSize: "1.5rem",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {t("Regular")}
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: "1.5rem", fontWeight: 500 }}
+                        >
+                          {/* {(
                           totalPrices[index] || item.price * item.quantity
                         ).toFixed(2)}{" "}
                         {t("egp")} */}
-                        {/* {convertNumberToArabic(
+                          {/* {convertNumberToArabic(
                           (
                             totalPrices[index] || item.price * item.quantity
                           ).toFixed(2)
                         )} */}
-                        {isArabic
-                          ? convertNumberToArabic(
-                              (
+                          {isArabic
+                            ? convertNumberToArabic(
+                                (
+                                  totalPrices[index] ||
+                                  item.price * item.quantity
+                                ).toFixed(2)
+                              )
+                            : (
                                 totalPrices[index] || item.price * item.quantity
-                              ).toFixed(2)
-                            )
-                          : (
-                              totalPrices[index] || item.price * item.quantity
-                            ).toFixed(2)}
-                        {t("egp")}
-                      </Typography>
-                    </Stack>
-                    {item.option && (
-                      <Stack
-                        direction={"row"}
-                        alignItems={"center"}
-                        sx={{ justifyContent: "space-between" }}
-                      >
-                        <Typography
-                          variant="body1"
-                          sx={{
-                            color: "#000!important",
-                            fontSize: "1.5rem",
-                            fontFamily: "cairo",
-                            fontWeight: 500,
-                          }}
-                        >
-                          {t("options")}
-                        </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            color: "#000!important",
-                            fontSize: "1.5rem",
-                            fontFamily: "cairo",
-                            fontWeight: 500,
-                          }}
-                        >
-                          {isArabic ? item.option.name_ar : item.option.name_en}
+                              ).toFixed(2)}
+                          {t("egp")}
                         </Typography>
                       </Stack>
-                    )}
-                    {item.extras && item.extras.length > 0 && (
-                      <Stack sx={{}}>
-                        {item.extras.map((extra, i) => (
-                          <Stack
-                            key={i}
-                            direction={"row"}
-                            alignItems={"center"}
+                      {item.option && (
+                        <Stack
+                          direction={"row"}
+                          alignItems={"center"}
+                          sx={{ justifyContent: "space-between" }}
+                        >
+                          <Typography
+                            variant="body1"
                             sx={{
-                              justifyContent: "space-between",
-                              mb: i === item.extras.length - 1 ? ".6rem" : 0,
+                              color: "#000!important",
+                              fontSize: "1.5rem",
+                              fontFamily: "cairo",
+                              fontWeight: 500,
                             }}
                           >
-                            <Typography
+                            {t("options")}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{
+                              color: "#000!important",
+                              fontSize: "1.5rem",
+                              fontFamily: "cairo",
+                              fontWeight: 500,
+                            }}
+                          >
+                            {isArabic
+                              ? item.option.name_ar
+                              : item.option.name_en}
+                          </Typography>
+                        </Stack>
+                      )}
+                      {item.extras && item.extras.length > 0 && (
+                        <Stack sx={{}}>
+                          {item.extras.map((extra, i) => (
+                            <Stack
+                              key={i}
+                              direction={"row"}
+                              alignItems={"center"}
                               sx={{
-                                color: "#000!important",
-                                fontSize: "1.5rem",
-                                fontFamily: "cairo",
-                                fontWeight: 500,
+                                justifyContent: "space-between",
+                                mb: i === item.extras.length - 1 ? ".6rem" : 0,
                               }}
                             >
-                              {isArabic ? extra.name_ar : extra.name_en}
-                            </Typography>
-                            <Typography
-                              sx={{
-                                color: "#000!important",
-                                fontSize: "1.5rem",
-                                fontFamily: "cairo",
-                                fontWeight: 500,
-                              }}
-                            >
-                              {/* {extra.price} {t("egp")} */}
-                              {isArabic
-                                ? convertNumberToArabic(extra.price)
-                                : extra.price}{" "}
-                              {t("egp")}
-                            </Typography>
-                          </Stack>
-                        ))}
-                      </Stack>
-                    )}
+                              <Typography
+                                sx={{
+                                  color: "#000!important",
+                                  fontSize: "1.5rem",
+                                  fontFamily: "cairo",
+                                  fontWeight: 500,
+                                }}
+                              >
+                                {isArabic ? extra.name_ar : extra.name_en}
+                              </Typography>
+                              <Typography
+                                sx={{
+                                  color: "#000!important",
+                                  fontSize: "1.5rem",
+                                  fontFamily: "cairo",
+                                  fontWeight: 500,
+                                }}
+                              >
+                                {/* {extra.price} {t("egp")} */}
+                                {isArabic
+                                  ? convertNumberToArabic(extra.price)
+                                  : extra.price}{" "}
+                                {t("egp")}
+                              </Typography>
+                            </Stack>
+                          ))}
+                        </Stack>
+                      )}
 
-                    <TextField
-                      placeholder={t("Enter any special request note")}
-                      value={specialNotes[item.id] || ""}
-                      onChange={(e) =>
-                        handleSpecialNoteChange(item.id, e.target.value)
-                      }
-                      sx={{
-                        transition: "1s",
-                        "& .MuiInputBase-input": {
-                          fontSize: "1.3rem",
-                          color: "gray",
-                        },
-                        "& .MuiInputBase-input::placeholder": {
-                          color: "#000",
-                          fontSize: "1.3rem",
-                        },
-                      }}
-                    />
-                  </Stack>
-                </Card>
-              ))
-            )}
-          </Box>
-        </Container>
+                      <TextField
+                        placeholder={t("Enter any special request note")}
+                        value={specialNotes[item.id] || ""}
+                        onChange={(e) =>
+                          handleSpecialNoteChange(item.id, e.target.value)
+                        }
+                        sx={{
+                          transition: "1s",
+                          "& .MuiInputBase-input": {
+                            fontSize: "1.3rem",
+                            color: "gray",
+                          },
+                          "& .MuiInputBase-input::placeholder": {
+                            color: "#000",
+                            fontSize: "1.3rem",
+                          },
+                        }}
+                      />
+                    </Stack>
+                  </Card>
+                ))
+              )}
+            </Box>
+          </Container>
 
-        {/* coupon */}
+          {/* coupon */}
 
-        {/* <Coupun
+          {/* <Coupun
   api_token={api_token}
   total={totalWithTax} // القيم المحسوبة بشكل مباشر
   setTotal={setTotalWithTax} // تحديث المجموع بشكل صحيح
@@ -1392,200 +2024,165 @@ useEffect(()=>{
   setDeliveryType={setDeliveryType}
   setTax={setTax}
 /> */}
-        <Stack
-          className="middleOrder"
-          sx={{ p: 2, borderBottom: "2px solid #ececec" }}
-        >
-          <Stack className="middleOrder" sx={{ p: 2 }}>
-            <Stack direction="row" alignItems="center" sx={{ mb: "1rem" }}>
-              <TextField
-                id="coupon-code-input"
-                placeholder={t("Enter coupon code")}
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value)}
-                sx={{
-                  flex: 1,
-                  "& .MuiInputBase-input": {
-                    borderTopRightRadius: 0,
-                    borderBottomRightRadius: 0,
-                    padding: ".9rem 1rem !important",
-                    fontSize: "1.3rem",
-                    color: "gray",
-                  },
-                  "& .MuiInputBase-input::placeholder": {
-                    color: "gray",
-                    fontSize: "1.3rem",
-                  },
-                }}
-              />
-              <Stack>
-                <Button
-                  variant="contained"
-                  color={isCouponApplied ? "primary" : "error"}
+          <Stack
+            className="middleOrder"
+            sx={{ p: 2, borderBottom: "2px solid #ececec" }}
+          >
+            <Stack className="middleOrder" sx={{ p: 2 }}>
+              <Stack direction="row" alignItems="center" sx={{ mb: "1rem" }}>
+                <TextField
+                  id="coupon-code-input"
+                  placeholder={t("Enter coupon code")}
+                  value={couponCode}
+                  onChange={(e) => setCouponCode(e.target.value)}
                   sx={{
-                    // fontSize:"1rem",
-                    p: "10px 16px !important",
-                    height: "100%",
-                    borderTopLeftRadius: 0,
-                    borderBottomLeftRadius: 0,
-                    backgroundColor: isCouponApplied ? "#1976d2" : "#d32f2f",
-                    "&:hover": {
-                      backgroundColor: isCouponApplied ? "#1976d2" : "#d32f2f",
+                    flex: 1,
+                    "& .MuiInputBase-input": {
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                      padding: ".9rem 1rem !important",
+                      fontSize: "1.3rem",
+                      color: "gray",
+                    },
+                    "& .MuiInputBase-input::placeholder": {
+                      color: "gray",
+                      fontSize: "1.3rem",
                     },
                   }}
-                  onClick={handleApplyCoupon}
-                >
-                  {isCouponApplied ? t("Cancel") : t("Apply")}
-                </Button>
+                />
+                <Stack>
+                  <Button
+                    variant="contained"
+                    color={isCouponApplied ? "primary" : "error"}
+                    sx={{
+                      // fontSize:"1rem",
+                      p: "10px 16px !important",
+                      height: "100%",
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                      backgroundColor: isCouponApplied ? "#1976d2" : "#d32f2f",
+                      "&:hover": {
+                        backgroundColor: isCouponApplied
+                          ? "#1976d2"
+                          : "#d32f2f",
+                      },
+                    }}
+                    onClick={handleApplyCoupon}
+                  >
+                    {isCouponApplied ? t("Cancel") : t("Apply")}
+                  </Button>
+                </Stack>
               </Stack>
+              {error && <p style={{ color: "red" }}>{error}</p>}
+              {couponData && (
+                <div>
+                  <p>Coupon Code: {couponData.code}</p>
+                  <p>
+                    Discount:{" "}
+                    {couponData.fixed !== null
+                      ? `${couponData.fixed} fixed`
+                      : `${couponData.percentage}%`}
+                  </p>
+                  {couponData.free_delivery === "1" && <p>Free Delivery</p>}
+                  {couponData.free_on_pay_card === "1" &&
+                    paymentMethod === 2 && <p>Free Delivery on Card Payment</p>}
+                </div>
+              )}
+              <TextField
+                className="formControl"
+                id="outlined-basic"
+                placeholder={t("Any notes? please enter it here")}
+                fullWidth
+                multiline
+                minRows={3}
+                sx={{
+                  width: "100%",
+                  transition: ".5s",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  mt: ".5rem",
+                  "& .MuiInputBase-input": {
+                    fontSize: "1.5rem",
+                    color: "gray",
+                    m: ".2rem",
+                  },
+                  "& .MuiInputBase-input::placeholder": {
+                    color: "#000",
+                    fontSize: "1.3rem",
+                  },
+                }}
+                InputProps={{
+                  style: {
+                    textAlign: "center",
+                  },
+                }}
+              />
             </Stack>
-            {error && <p style={{ color: "red" }}>{error}</p>}
-            {couponData && (
-              <div>
-                <p>Coupon Code: {couponData.code}</p>
-                <p>
-                  Discount:{" "}
-                  {couponData.fixed !== null
-                    ? `${couponData.fixed} fixed`
-                    : `${couponData.percentage}%`}
-                </p>
-                {couponData.free_delivery === "1" && <p>Free Delivery</p>}
-                {couponData.free_on_pay_card === "1" && paymentMethod === 2 && (
-                  <p>Free Delivery on Card Payment</p>
-                )}
-              </div>
-            )}
-            <TextField
-              className="formControl"
-              id="outlined-basic"
-              placeholder={t("Any notes? please enter it here")}
-              fullWidth
-              multiline
-              minRows={3}
-              sx={{
-                width: "100%",
-                transition: ".5s",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                mt: ".5rem",
-                "& .MuiInputBase-input": {
-                  fontSize: "1.5rem",
-                  color: "gray",
-                  m: ".2rem",
-                },
-                "& .MuiInputBase-input::placeholder": {
-                  color: "#000",
-                  fontSize: "1.3rem",
-                },
-              }}
-              InputProps={{
-                style: {
-                  textAlign: "center",
-                },
-              }}
-            />
           </Stack>
-        </Stack>
-        <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
-          <FormControl
-            component="fieldset"
-            sx={{ mt: "2rem", textAlign: "center" }}
-          >
-            <FormLabel
-              component="legend"
-              sx={{
-                fontSize: "1.5rem",
-                fontWeight: "600",
-                textAlign: "center",
-                fontFamily: "tahoma",
-              }}
-            >
-              {t("Select delivery type")}
-            </FormLabel>
-            <RadioGroup
-              aria-label="delivery-type"
-              name="delivery-type"
-              value={deliveryType}
-              onChange={(e) => setDeliveryType(e.target.value)}
-              sx={{
-                justifyContent: "center",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <FormControlLabel
-                value="pickup"
-                control={<Radio />}
-                label={
-                  <Typography
-                    sx={{
-                      fontSize: "1.4rem",
-                      color: "#000",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {t("Pickup")}
-                  </Typography>
-                }
-              />
-              <FormControlLabel
-                value="delivery"
-                control={<Radio />}
-                label={
-                  <Typography
-                    sx={{
-                      fontSize: "1.4rem",
-                      color: "#000",
-                      fontWeight: "600",
-                    }}
-                  >
-                    {t("Delivery")}
-                  </Typography>
-                }
-              />
-            </RadioGroup>
-          </FormControl>
-        </Stack>
-
-        <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
           <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
-            <Stack
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                mb: "5px",
-              }}
-              direction={"row"}
-              alignItems={"center"}
+            <FormControl
+              component="fieldset"
+              sx={{ mt: "2rem", textAlign: "center" }}
             >
-              <Typography
+              <FormLabel
+                component="legend"
                 sx={{
-                  fontSize: "15px",
-                  fontWeight: "bold",
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  textAlign: "center",
                   fontFamily: "tahoma",
-                  letterSpacing: "1px",
                 }}
               >
-                {t("Subtotal")}
-              </Typography>
-              <Typography
+                {t("Select delivery type")}
+              </FormLabel>
+              <RadioGroup
+                aria-label="delivery-type"
+                name="delivery-type"
+                value={deliveryType}
+                onChange={(e) => setDeliveryType(e.target.value)}
                 sx={{
-                  fontSize: "15px",
-                  fontWeight: "bold",
-                  fontFamily: "tahoma",
-                  letterSpacing: "1px",
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                {isArabic
-                  ? convertNumberToArabic(subtotalWithExtras.toFixed(2))
-                  : subtotalWithExtras.toFixed(2)}{" "}
-                {t("egp")}
-                {/* {subtotalWithExtras.toFixed(2)} {t("egp")} */}
-              </Typography>
-            </Stack>
+                <FormControlLabel
+                  value="pickup"
+                  control={<Radio />}
+                  label={
+                    <Typography
+                      sx={{
+                        fontSize: "1.4rem",
+                        color: "#000",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {t("Pickup")}
+                    </Typography>
+                  }
+                />
+                <FormControlLabel
+                  value="delivery"
+                  control={<Radio />}
+                  label={
+                    <Typography
+                      sx={{
+                        fontSize: "1.4rem",
+                        color: "#000",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {t("Delivery")}
+                    </Typography>
+                  }
+                />
+              </RadioGroup>
+            </FormControl>
+          </Stack>
 
-            {deliveryType === "delivery" && (
+          <Stack className="Delivery" sx={{ m: 2, p: 2 }}>
+            <Stack sx={{ borderBottom: "2px solid #ececec", mb: 1 }}>
               <Stack
                 sx={{
                   display: "flex",
@@ -1603,28 +2200,117 @@ useEffect(()=>{
                     letterSpacing: "1px",
                   }}
                 >
-                  {t("Delivery Fee")}
+                  {t("Subtotal")}
                 </Typography>
                 <Typography
                   sx={{
                     fontSize: "15px",
                     fontWeight: "bold",
                     fontFamily: "tahoma",
+                    letterSpacing: "1px",
                   }}
                 >
-                  {/* {deliveryFee.toFixed(2)} {t("egp")} */}
                   {isArabic
-                    ? convertNumberToArabic(deliveryFee.toFixed(2))
-                    : deliveryFee.toFixed(2)}{" "}
+                    ? convertNumberToArabic(subtotalWithExtras.toFixed(2))
+                    : subtotalWithExtras.toFixed(2)}{" "}
+                  {t("egp")}
+                  {/* {subtotalWithExtras.toFixed(2)} {t("egp")} */}
+                </Typography>
+              </Stack>
+
+              {deliveryType === "delivery" && (
+                <Stack
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    mb: "5px",
+                  }}
+                  direction={"row"}
+                  alignItems={"center"}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "15px",
+                      fontWeight: "bold",
+                      fontFamily: "tahoma",
+                      letterSpacing: "1px",
+                    }}
+                  >
+                    {t("Delivery Fee")}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: "15px",
+                      fontWeight: "bold",
+                      fontFamily: "tahoma",
+                    }}
+                  >
+                    {/* {deliveryFee.toFixed(2)} {t("egp")} */}
+                    {isArabic
+                      ? convertNumberToArabic(deliveryFee.toFixed(2))
+                      : deliveryFee.toFixed(2)}{" "}
+                    {t("egp")}
+                  </Typography>
+                </Stack>
+              )}
+              <Stack
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mb: 1,
+                }}
+                direction={"row"}
+                alignItems={"center"}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    fontFamily: "tahoma",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  {/* {t('Tax')}:  {tax} %    */}
+                  {t("Tax")} % {isArabic ? convertNumberToArabic(tax) : tax}
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    fontFamily: "tahoma",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  {/* {(
+                  (subtotalWithExtras -
+                    discount +
+                    (deliveryType === "delivery" ? deliveryFee : 0)) *
+                  (tax / 100)
+                ).toFixed(2)}{" "} */}
+                  {isArabic
+                    ? convertNumberToArabic(
+                        (
+                          (subtotalWithExtras -
+                            discount +
+                            (deliveryType === "delivery" ? deliveryFee : 0)) *
+                          (tax / 100)
+                        ).toFixed(2)
+                      )
+                    : (
+                        (subtotalWithExtras -
+                          discount +
+                          (deliveryType === "delivery" ? deliveryFee : 0)) *
+                        (tax / 100)
+                      ).toFixed(2)}
                   {t("egp")}
                 </Typography>
               </Stack>
-            )}
+            </Stack>
+
             <Stack
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                mb: 1,
               }}
               direction={"row"}
               alignItems={"center"}
@@ -1637,62 +2323,9 @@ useEffect(()=>{
                   letterSpacing: "1px",
                 }}
               >
-                {/* {t('Tax')}:  {tax} %    */}
-                {t("Tax")} % {isArabic ? convertNumberToArabic(tax) : tax}
+                {t("Total")}
               </Typography>
-              <Typography
-                sx={{
-                  fontSize: "15px",
-                  fontWeight: "bold",
-                  fontFamily: "tahoma",
-                  letterSpacing: "1px",
-                }}
-              >
-                {/* {(
-                  (subtotalWithExtras -
-                    discount +
-                    (deliveryType === "delivery" ? deliveryFee : 0)) *
-                  (tax / 100)
-                ).toFixed(2)}{" "} */}
-                {isArabic
-                  ? convertNumberToArabic(
-                      (
-                        (subtotalWithExtras -
-                          discount +
-                          (deliveryType === "delivery" ? deliveryFee : 0)) *
-                        (tax / 100)
-                      ).toFixed(2)
-                    )
-                  : (
-                      (subtotalWithExtras -
-                        discount +
-                        (deliveryType === "delivery" ? deliveryFee : 0)) *
-                      (tax / 100)
-                    ).toFixed(2)}
-                {t("egp")}
-              </Typography>
-            </Stack>
-          </Stack>
-
-          <Stack
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-            direction={"row"}
-            alignItems={"center"}
-          >
-            <Typography
-              sx={{
-                fontSize: "15px",
-                fontWeight: "bold",
-                fontFamily: "tahoma",
-                letterSpacing: "1px",
-              }}
-            >
-              {t("Total")}
-            </Typography>
-            {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
+              {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
               {(
                 subtotalWithExtras -
                 discount + // إضافة الخصم هنا
@@ -1704,17 +2337,27 @@ useEffect(()=>{
               ).toFixed(2)}{" "}
               {t("egp")}
             </Typography> */}
-            <Typography
-              sx={{
-                fontSize: "15px",
-                fontWeight: "bold",
-                fontFamily: "tahoma",
-                letterSpacing: "1px",
-              }}
-            >
-              {isArabic
-                ? convertNumberToArabic(
-                    (
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  fontFamily: "tahoma",
+                  letterSpacing: "1px",
+                }}
+              >
+                {isArabic
+                  ? convertNumberToArabic(
+                      (
+                        subtotalWithExtras -
+                        discount + // إضافة الخصم هنا
+                        (deliveryType === "delivery" ? deliveryFee : 0) +
+                        (subtotalWithExtras -
+                          discount + // إضافة الخصم هنا
+                          (deliveryType === "delivery" ? deliveryFee : 0)) *
+                          (tax / 100)
+                      ).toFixed(2)
+                    )
+                  : (
                       subtotalWithExtras -
                       discount + // إضافة الخصم هنا
                       (deliveryType === "delivery" ? deliveryFee : 0) +
@@ -1722,141 +2365,148 @@ useEffect(()=>{
                         discount + // إضافة الخصم هنا
                         (deliveryType === "delivery" ? deliveryFee : 0)) *
                         (tax / 100)
-                    ).toFixed(2)
-                  )
-                : (
-                    subtotalWithExtras -
-                    discount + // إضافة الخصم هنا
-                    (deliveryType === "delivery" ? deliveryFee : 0) +
-                    (subtotalWithExtras -
-                      discount + // إضافة الخصم هنا
-                      (deliveryType === "delivery" ? deliveryFee : 0)) *
-                      (tax / 100)
-                  ).toFixed(2)}{" "}
-              {t("egp")}
-            </Typography>
-          </Stack>
+                    ).toFixed(2)}{" "}
+                {t("egp")}
+              </Typography>
+            </Stack>
 
-          <FormControl
-            component="fieldset"
-            sx={{ mt: "2rem", textAlign: "center" }}
-          >
-            <FormLabel
-              component="legend"
-              sx={{
-                fontSize: "1.5rem",
-                fontWeight: "600",
-                textAlign: "center",
-                fontFamily: "tahoma",
-                letterSpacing: "1px",
-              }}
-            >
-              {t("SelectPaymentMethod")}
-            </FormLabel>
-            <RadioGroup
-              aria-label="payment-method"
-              name="payment-method"
-              value={paymentMethod}
-              onChange={(e) => setPaymentMethod(e.target.value)}
-              sx={{
-                justifyContent: "center",
-                flexDirection: "row",
-                alignItems: "center",
-                fontFamily: "tahoma",
-                letterSpacing: "1px",
-              }}
-            >
-              <FormControlLabel
-                value="cash"
-                control={<Radio />}
-                label=<Typography
-                  sx={{
-                    fontSize: "1.4rem",
-                    color: "#000",
-                    fontWeight: "600",
-                    fontFamily: "tahoma",
-                    letterSpacing: "1px",
-                  }}
-                >
-                  {t("CashonDelivery")}
-                </Typography>
-              />
-              <FormControlLabel
-                value="credit"
-                control={<Radio />}
-                label=<Typography
-                  sx={{
-                    fontSize: "1.4rem",
-                    color: "#000",
-                    fontWeight: "600",
-                    fontFamily: "tahoma",
-                    letterSpacing: "1px",
-                  }}
-                >
-                  {t("CreditCard")}
-                </Typography>
-              />
-            </RadioGroup>
-          </FormControl>
-
-          <Button
-            variant="contained"
-            color="primary"
+            {/* <Dialog
+        
+            maxWidth="md"
             fullWidth
-            onClick={handleCheckout}
-            disabled={cartItems.length === 0 || branchClosed}
-            sx={{
-              mt: "1.5rem",
-              p: "1rem",
-              fontSize: "1.5rem",
-              fontFamily: "tahoma",
-              fontWeight: "bold",
-              backgroundColor:
-                cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
-              textTransform: "capitalize",
-              "&:hover": {
-                backgroundColor:
-                  cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
-              },
-            }}
           >
-            {t("PlaceOrder")}
-          </Button>
-          <Dialog
-            open={openCreditCardDialog}
-            onClose={handleCloseCreditCardDialog}
-            fullWidth
-            maxWidth="sm"
-          >
-            <DialogTitle
-              sx={{
-                fontSize: "1.8rem",
-                fontWeight: "600",
-                textAlign: "center",
-              }}
-            >
-              Payment Information
-            </DialogTitle>
+            <DialogTitle>Pay with Credit Card</DialogTitle>
             <DialogContent>
-              <PaymentPage />
+              <div id="fawaterkDivId"></div>
             </DialogContent>
             <DialogActions>
-              <Button
-                onClick={handleCloseDialog}
-                color="error"
-                sx={{ fontSize: "1.1rem", fontWeight: "500" }}
-              >
-                Close
+              <Button onClick={() => setOpenFawaterkDialog(false)}>
+                Cancel
               </Button>
             </DialogActions>
-          </Dialog>
-        </Stack>
+          </Dialog> */}
 
-        {/*  */}
-        {/*  */}
-        {/*  */}
-      </Container>
-    </Stack>
+            <FormControl
+              component="fieldset"
+              sx={{ mt: "2rem", textAlign: "center" }}
+            >
+              <FormLabel
+                component="legend"
+                sx={{
+                  fontSize: "1.5rem",
+                  fontWeight: "600",
+                  textAlign: "center",
+                  fontFamily: "tahoma",
+                  letterSpacing: "1px",
+                }}
+              >
+                {t("SelectPaymentMethod")}
+              </FormLabel>
+              <RadioGroup
+                aria-label="payment-method"
+                name="payment-method"
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                sx={{
+                  justifyContent: "center",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  fontFamily: "tahoma",
+                  letterSpacing: "1px",
+                }}
+              >
+                <FormControlLabel
+                  value="cash"
+                  control={<Radio />}
+                  label=<Typography
+                    sx={{
+                      fontSize: "1.4rem",
+                      color: "#000",
+                      fontWeight: "600",
+                      fontFamily: "tahoma",
+                      letterSpacing: "1px",
+                    }}
+                  >
+                    {t("CashonDelivery")}
+                  </Typography>
+                />
+                <FormControlLabel
+                  value="credit"
+                  control={<Radio />}
+                  label=<Typography
+                    sx={{
+                      fontSize: "1.4rem",
+                      color: "#000",
+                      fontWeight: "600",
+                      fontFamily: "tahoma",
+                      letterSpacing: "1px",
+                    }}
+                  >
+                    {t("CreditCard")}
+                  </Typography>
+                />
+              </RadioGroup>
+            </FormControl>
+
+            <Button
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={handleCheckout}
+              disabled={cartItems.length === 0 || branchClosed}
+              sx={{
+                mt: "1.5rem",
+                p: "1rem",
+                fontSize: "1.5rem",
+                fontFamily: "tahoma",
+                fontWeight: "bold",
+                backgroundColor:
+                  cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
+                textTransform: "capitalize",
+                "&:hover": {
+                  backgroundColor:
+                    cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
+                },
+              }}
+            >
+              {t("PlaceOrder")}
+            </Button>
+            <Dialog
+              open={openCreditCardDialog}
+              onClose={handleCloseCreditCardDialog}
+              fullWidth
+              maxWidth="sm"
+            >
+              <DialogTitle
+                sx={{
+                  fontSize: "1.8rem",
+                  fontWeight: "600",
+                  textAlign: "center",
+                }}
+              >
+                Payment Information
+              </DialogTitle>
+              <DialogContent>
+                <PaymentPage />
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  onClick={handleCloseDialog}
+                  color="error"
+                  sx={{ fontSize: "1.1rem", fontWeight: "500" }}
+                >
+                  Close
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </Stack>
+
+          {/*  */}
+          {/*  */}
+          {/*  */}
+        </Container>
+      </Stack>
+    </>
   );
 }
 

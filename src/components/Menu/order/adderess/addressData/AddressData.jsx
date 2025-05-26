@@ -66,12 +66,12 @@ function AddressData({
     const minutes = now.getMinutes();
 
     const currentTimeMinutes = hours * 60 + minutes;
-    console.log("Current Time", { hours, minutes, currentTimeMinutes });
-    console.log("address", address);
+    // console.log("Current Time", { hours, minutes, currentTimeMinutes });
+    // console.log("address", address);
     let isAvailable = false;
-    if (address && Array.isArray(address.area.area_branches)) {
-      address.area.area_branches.forEach((branch) => {
-        const [openHour, openMinute] = branch.branch.open
+    if (address && Array.isArray(address.branches) && address.branches.length > 0) {
+      address.branches.forEach((branch) => {
+        const [openHour, openMinute] = branch.open
           .split(":")
           .map(Number);
         let [deliveryHour, deliveryMinute] = branch.last_delivery
@@ -86,14 +86,14 @@ function AddressData({
 
         const branchOpenMinutes = openHour * 60 + openMinute;
         const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
-        console.log("Branch Times", {
-          openHour,
-          openMinute,
-          deliveryHour,
-          deliveryMinute,
-          branchOpenMinutes,
-          branchLastDeliveryMinutes,
-        });
+        // console.log("Branch Times", {
+        //   openHour,
+        //   openMinute,
+        //   deliveryHour,
+        //   deliveryMinute,
+        //   branchOpenMinutes,
+        //   branchLastDeliveryMinutes,
+        // });
         if (branchLastDeliveryMinutes < branchOpenMinutes) {
           if (
             currentTimeMinutes >= branchOpenMinutes ||

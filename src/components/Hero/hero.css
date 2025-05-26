@@ -47,14 +47,14 @@
   height: 81vh;
   max-width: 100%;
   max-height: 100%;
-  object-fit: cover; /* Ensures the image covers the container without stretching */
+  object-fit: cover; 
 }
 
 .swiper-hero .swiper-slide img {
   display: block;
   object-fit: cover;
   object-fit: contain;
-  margin-bottom: 5px;
+  /* margin-bottom: 20px; */
 }
 
 
@@ -88,10 +88,10 @@
 }
 
 .image1 {
-  width: 100%;
+  /* width: 100%; */
   /* height: auto; */
-  object-fit: contain;
-  margin-top: -28px;
+  /* object-fit: contain; */
+  /* margin-top: -28px; */
 }
 @media (max-width: 700px) {
   .image1 {

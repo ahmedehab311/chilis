@@ -1,5 +1,4 @@
-
-  export const getLocationsData = (t) => [
+export const getLocationsData = (t) => [
   {
     name: t("locationsPage.Hurghuda"),
     value:
@@ -23,34 +22,34 @@
   },
   {
     name: t("locationsPage.porto el sokhna"),
-    
+
     value:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3474.460275902482!2d32.47790947432932!3d29.444567146745545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1456f89b2e969467%3A0x9a6a9f192957d3e2!2sCFVJ%2BR5H%2C%20Suez%20Governorate%208127226!5e0!3m2!1sen!2seg!4v1725886441274!5m2!1sen!2seg",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3474.460275902482!2d32.47790947432932!3d29.444567146745545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1456f89b2e969467%3A0x9a6a9f192957d3e2!2sCFVJ%2BR5H%2C%20Suez%20Governorate%208127226!5e0!3m2!1sen!2seg!4v1725886441274!5m2!1sen!2seg",
   },
   {
     name: t("locationsPage.Dandy Mall"),
     value:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.0680119314475!2d31.024776074357174!3d30.06358491766564!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14585b0554c9b7a3%3A0xdb3b24f330c6ae90!2sDandy%20Mega%20Mall!5e0!3m2!1sen!2seg!4v1725886756745!5m2!1sen!2seg",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3453.0680119314475!2d31.024776074357174!3d30.06358491766564!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14585b0554c9b7a3%3A0xdb3b24f330c6ae90!2sDandy%20Mega%20Mall!5e0!3m2!1sen!2seg!4v1725886756745!5m2!1sen!2seg",
   },
   {
     name: t("locationsPage.Porto Marina"),
     value:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3426.1801792574515!2d29.001596974392307!3d30.825617081139825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145fed76ba7c1805%3A0xff6cf35e084b671e!2sR2G3%2B6MV%2C%20Marsa%20Matrouh%20Governorate%205081001!5e0!3m2!1sen!2seg!4v1725886832620!5m2!1sen!2seg",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3426.1801792574515!2d29.001596974392307!3d30.825617081139825!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145fed76ba7c1805%3A0xff6cf35e084b671e!2sR2G3%2B6MV%2C%20Marsa%20Matrouh%20Governorate%205081001!5e0!3m2!1sen!2seg!4v1725886832620!5m2!1sen!2seg",
   },
   {
     name: t("locationsPage.Gleem"),
     value:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13645.05291352574!2d29.94916213843364!3d31.241135635764802!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f5c526f8375db7%3A0xab53704fcd23647c!2sGlime%20Beach!5e0!3m2!1sen!2seg!4v1725886959903!5m2!1sen!2seg",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13645.05291352574!2d29.94916213843364!3d31.241135635764802!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14f5c526f8375db7%3A0xab53704fcd23647c!2sGlime%20Beach!5e0!3m2!1sen!2seg!4v1725886959903!5m2!1sen!2seg",
   },
   {
     name: t("locationsPage.Mall of Egypt"),
     value:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.243476404483!2d31.01383127435302!3d29.972432021981206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145851ee0be1eec3%3A0xa5b302adfcac13d1!2sMall%20of%20Egypt!5e0!3m2!1sen!2seg!4v1725887077212!5m2!1sen!2seg",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3456.243476404483!2d31.01383127435302!3d29.972432021981206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145851ee0be1eec3%3A0xa5b302adfcac13d1!2sMall%20of%20Egypt!5e0!3m2!1sen!2seg!4v1725887077212!5m2!1sen!2seg",
   },
   {
-    name: t("locationsPage.Al Rehab"),
+    name: t("locationsPage.City Centre Almaza"),
     value:
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27623.642517907167!2d31.471514974349855!3d30.06681532833852!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x145819ede4e47229%3A0xb8475cf1128b0fd2!2sEastern%20market%20food%20court!5e0!3m2!1sen!2seg!4v1725887227101!5m2!1sen!2seg",
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3452.4699312867283!2d31.362413176099587!3d30.080725016849843!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14583df81720ed69%3A0xb597301dcb56aacf!2sCity%20Centre%20Almaza!5e0!3m2!1sen!2seg!4v1744645864513!5m2!1sen!2seg",
   },
   {
     name: t("locationsPage.The Isle"),

@@ -22,7 +22,7 @@
     "Porto Marina": "بورتو مارينا",
     "Gleem": "جليم",
     "Mall of Egypt": "مول مصر",
-    "Al Rehab": "الرحاب",
+    "City Centre Almaza": "سيتي سنتر الماظه",
     "The Isle": "ذا آيل"
   },
   "all rights chilis": "جميع الحقوق محفوظة لشيلز مصر",
@@ -62,7 +62,10 @@
   "orderQuantityInvalid": "يجب أن تكون كميات الطلب أكبر من 0.",
   "orderCreationError": "حدث خطأ أثناء معالجة طلبك. يرجى المحاولة مرة أخرى.",
   "noResponse": "خطأ في تقديم الطلب: لم يتم الحصول على استجابة من الخادم.",
-  "orderCreated": "تم إنشاء الطلب بنجاح",
+  "orderCreated": ".تم إنشاء الطلب بنجاح",
+  "orderCode":"كود الطلب الخاص بك:",
+  "trackCheck":"احتفظ به لمتابعة طلبك.",
+  "goHome" :"العودة للصفحة الرئيسية",
   "loginPage": {
     "welcomeBack": "مرحبًا بعودتك",
     "signInToContinue": "سجل الدخول للمتابعة",
