@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState, useRef } from "react";
 import { Stack } from "@mui/material";
 import { toast } from "react-toastify";
@@ -35,7 +36,7 @@ import {
 } from "../../../../rtk/slices/adderssSlice";
 import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
 import {
-  clearCart,
+ 
   updateItemQuantity,
   updateCartItems,
 } from "../../../../rtk/slices/cartSlice";
@@ -1139,7 +1140,7 @@ function OrderOnline() {
                   console.log("Defining pluginConfig...");
                   window.pluginConfig = {
                     envType: "test",
-                    hashKey: "5aeed37a3af540e81514eb10f471f7bb34aea5430df4ad0fe0da0e9cef782d65",
+                    hashKey: "62c187e0e13f67bf5503b5d501d6c916ffd79b156b5551e6cf009cd714c83757",
                     style: { listing: "horizontal" },
                     version: "0",
                     requestBody: {
@@ -1153,9 +1154,9 @@ function OrderOnline() {
                         address: "test address",
                       },
                       redirectionUrls: {
-                        successUrl: `${window.location.origin}/order-online/${orderCode}/success`,
-                        failUrl: `${window.location.origin}/order-online/${orderCode}/fail`,
-                        pendingUrl: `${window.location.origin}/order-online/${orderCode}/failpending`,
+                        successUrl: `${window.location.origin}/order-online/success/${orderCode}`,
+                        failUrl: `${window.location.origin}/order-online/fail/${orderCode}`,
+                        pendingUrl: `${window.location.origin}/order-online/failpending/${orderCode}`,
                       },
 
                       cartItems: [
@@ -1309,10 +1310,17 @@ function OrderOnline() {
           setOrderCode(response.data.data.order_code);
           setHasedKey(response.data.data?.SDK_TOKEN);
           if (paymentMethod === "credit") {
-            setOpenFawaterkDialog(true); // ✅ افتح الديالوج بعد ما جهّزت البيانات
+ navigate("/order-online/payment", {
+  state: {
+    orderCode: response.data.data.order_code,
+    hasedKey: response.data.data.SDK_TOKEN,
+    openFawaterkDialog: true,
+  },
+});
+  return;
           } else {
             localStorage.setItem("orderSuccess", "true");
-            navigate(`/order-online/${response.data.data.order_code}/success`);
+            navigate(`/order-online/success/${response.data.data.order_code}`);
           }
 
           localStorage.setItem("orderSuccess", "true");
@@ -1564,7 +1572,7 @@ function OrderOnline() {
         onClose={() => setOpenFawaterkDialog(false)}
         fullWidth
       >
-        <DialogTitle>إتمام الدفع</DialogTitle>
+        {/* <DialogTitle>إتمام الدفع</DialogTitle> */}
         <DialogContent>
           <div id="fawaterkDivId"></div>
         </DialogContent>

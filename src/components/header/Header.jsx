@@ -169,7 +169,8 @@ function Header({ token, handleLogout }) {
         )}
       </Stack>
       {/* {showHero && <Hero />} */}
-      <Hero />
+      {/* <Hero /> */}
+      {location.pathname === "/" && <Hero />}
     </Stack>
   );
 }

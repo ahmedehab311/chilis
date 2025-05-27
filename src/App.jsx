@@ -32,6 +32,10 @@ import Locations from "./components/Locations/Locations";
 import AboutUs from "./components/AboutUs/AboutUs";
 import NotFound from "./components/pages/NoFound";
 import { useNavigate } from "react-router-dom";
+import Payment from "./components/Menu/order/OrderOnline/payment";
+import PaymentSuccess from "./components/Menu/order/OrderOnline/payment/PaymentSuccess";
+import PaymentFail from "./components/Menu/order/OrderOnline/payment/PaymentFail";
+import PaymentFailPending from "./components/Menu/order/OrderOnline/payment/PaymentFailPending";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = ["/*"];
@@ -84,12 +88,15 @@ const navigate = useNavigate()
           element={<ChangePasswordFromProfile />}
         />
         <Route path="/order-online" element={<OrderOnline />} />
+        <Route path="/order-online/payment" element={<Payment />} />
         <Route
-          path="/order-online/:orderCode/success"
+          path="/order-online/success/:orderCode"
           element={<OrderSuccessPage />}
         />
         <Route path="/order-online/fail" element={<OrderFailPage />} />
-
+      <Route path="/order-online/payment/success/:orderCode" element={<PaymentSuccess />} />
+      <Route path="/order-online/payment/fail/:orderCode" element={<PaymentFail />} />
+      <Route path="/order-online/payment/failpending/:orderCode" element={<PaymentFailPending />} />
         <Route path="/my_orders" element={<MyOrders />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

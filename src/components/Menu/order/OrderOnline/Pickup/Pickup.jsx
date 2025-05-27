@@ -25,7 +25,7 @@ function Pickup({ onBranchStatusChange }) {
 
   const [branchClosed, setBranchClosed] = useState(false);
 
-  console.log("selectedBranchId", selectedBranchId);
+  // console.log("selectedBranchId", selectedBranchId);
 
   useEffect(() => {
     // console.log("Fetching branches from API...");

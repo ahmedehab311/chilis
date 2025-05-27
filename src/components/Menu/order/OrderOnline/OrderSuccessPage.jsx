@@ -10,19 +10,19 @@ const OrderSuccessPage = () => {
   const { t } = useTranslation();
  const [authorized, setAuthorized] = useState(null); // null = جاري التحقق
 
-  useEffect(() => {
-    const isSuccess = localStorage.getItem("orderSuccess");
+  // useEffect(() => {
+  //   const isSuccess = localStorage.getItem("orderSuccess");
 
-    if (!isSuccess) {
-      navigate("/");
-    } else {
-      localStorage.removeItem("orderSuccess");
-      setAuthorized(true);
-    }
-  }, []);
-  if (authorized === null) {
-    return null; 
-  }
+  //   if (!isSuccess) {
+  //     navigate("/");
+  //   } else {
+  //     localStorage.removeItem("orderSuccess");
+  //     setAuthorized(true);
+  //   }
+  // }, []);
+  // if (authorized === null) {
+  //   return null; 
+  // }
 
   return (
     <Box
