@@ -22,7 +22,7 @@ function LinksIconCircle({
         onClick={handleMenu}
         sx={{ color: "#fff" }}
       >
-        <AccountCircle sx={{ fontSize: "2.8rem" }} />
+        <AccountCircle sx={{ fontSize: "28px !important" }} />
       </IconButton>
 
       <Menu
@@ -42,10 +42,10 @@ function LinksIconCircle({
         sx={{ mt: 1 }}
       >
         <MenuItem onClick={handleClose} component={RouterLink} to="/profile">
-          <Typography sx={{ fontSize: "1.2rem" }}>{t('Profile')}</Typography>
+          <Typography sx={{ fontSize:"12px !important", }}>{t('Profile')}</Typography>
         </MenuItem>
         <MenuItem onClick={handleClose} component={RouterLink} to="/my_orders">
-          <Typography sx={{ fontSize: "1.2rem" }}>{t('MyOrders')}</Typography>
+          <Typography sx={{ fontSize:"12px !important", }}>{t('MyOrders')}</Typography>
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -53,7 +53,7 @@ function LinksIconCircle({
             handleClose();
           }}
         >
-          <Typography sx={{ fontSize: "1.2rem" }}>{t('Logout')}</Typography>
+          <Typography sx={{ fontSize:"12px !important", }}>{t('Logout')}</Typography>
         </MenuItem>
       </Menu>
     </>

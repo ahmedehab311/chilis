@@ -36,7 +36,6 @@ import {
 } from "../../../../rtk/slices/adderssSlice";
 import { removeItemFromCart } from "../../../../rtk/slices/orderSlice";
 import {
- 
   updateItemQuantity,
   updateCartItems,
 } from "../../../../rtk/slices/cartSlice";
@@ -1092,109 +1091,109 @@ function OrderOnline() {
   //     return () => clearInterval(interval);
   //   }
   // }, [openFawaterkDialog, hasedKey, orderCode]);
-  useEffect(() => {
-    console.log("openFawaterkDialog:", openFawaterkDialog);
-    console.log("hasedKey:", hasedKey, "orderCode:", orderCode);
+  // useEffect(() => {
 
-    if (openFawaterkDialog && hasedKey && orderCode) {
-      let attempts = 0;
-      const maxAttempts = 50;
-      const interval = setInterval(() => {
-        const div = document.getElementById("fawaterkDivId");
-        console.log(`fawaterkDivId exists? (attempt ${attempts + 1})`, !!div);
+  //   if (openFawaterkDialog && hasedKey && orderCode) {
+  //     let attempts = 0;
+  //     const maxAttempts = 50;
+  //     const interval = setInterval(() => {
+  //       const div = document.getElementById("fawaterkDivId");
+  //       console.log(`fawaterkDivId exists? (attempt ${attempts + 1})`, !!div);
 
-        if (div || attempts >= maxAttempts) {
-          clearInterval(interval);
-          if (div) {
-            const loadFawaterkScript = () => {
-              return new Promise((resolve, reject) => {
-                if (window.fawaterkCheckout) {
-                  console.log("fawaterkCheckout already loaded");
-                  resolve();
-                  return;
-                }
-                console.log("Loading Fawaterk script...");
-                const script = document.createElement("script");
-                script.src =
-                  "https://app.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js";
-                script.async = true;
-                script.onload = () => {
-                  console.log("Fawaterk script loaded successfully");
-                  resolve();
-                };
-                script.onerror = () => {
-                  console.error("Fawaterk script failed to load");
-                  reject(new Error("Failed to load Fawaterk script"));
-                };
-                document.body.appendChild(script);
-              });
-            };
+  //       if (div || attempts >= maxAttempts) {
+  //         clearInterval(interval);
+  //         if (div) {
+  //           const loadFawaterkScript = () => {
+  //             return new Promise((resolve, reject) => {
+  //               if (window.fawaterkCheckout) {
+  //                 console.log("fawaterkCheckout already loaded");
+  //                 resolve();
+  //                 return;
+  //               }
+  //               console.log("Loading Fawaterk script...");
+  //               const script = document.createElement("script");
+  //               script.src =
+  //                 "https://app.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js";
+  //               script.async = true;
+  //               script.onload = () => {
+  //                 console.log("Fawaterk script loaded successfully");
+  //                 resolve();
+  //               };
+  //               script.onerror = () => {
+  //                 console.error("Fawaterk script failed to load");
+  //                 reject(new Error("Failed to load Fawaterk script"));
+  //               };
+  //               document.body.appendChild(script);
+  //             });
+  //           };
 
-            loadFawaterkScript()
-              .then(() => {
-                console.log(
-                  "Fawaterk Checkout loaded:",
-                  window.fawaterkCheckout
-                );
-                if (window.fawaterkCheckout) {
-                  console.log("Defining pluginConfig...");
-                  window.pluginConfig = {
-                    envType: "test",
-                    hashKey: "62c187e0e13f67bf5503b5d501d6c916ffd79b156b5551e6cf009cd714c83757",
-                    style: { listing: "horizontal" },
-                    version: "0",
-                    requestBody: {
-                      cartTotal: "50",
-                      currency: "EGP",
-                      customer: {
-                        first_name: "test",
-                        last_name: "fawaterk",
-                        email: "test@fawaterk.com",
-                        phone: "0123456789",
-                        address: "test address",
-                      },
-                      redirectionUrls: {
-                        successUrl: `${window.location.origin}/order-online/success/${orderCode}`,
-                        failUrl: `${window.location.origin}/order-online/fail/${orderCode}`,
-                        pendingUrl: `${window.location.origin}/order-online/failpending/${orderCode}`,
-                      },
+  //           loadFawaterkScript()
+  //             .then(() => {
+  //               console.log(
+  //                 "Fawaterk Checkout loaded:",
+  //                 window.fawaterkCheckout
+  //               );
+  //               if (window.fawaterkCheckout) {
+  //                 console.log("Defining pluginConfig...");
+  //                 window.pluginConfig = {
+  //                   envType: "test",
+  //                   hashKey: "62c187e0e13f67bf5503b5d501d6c916ffd79b156b5551e6cf009cd714c83757",
+  //                   style: { listing: "horizontal" },
+  //                   version: "0",
+  //                   requestBody: {
+  //                     cartTotal: "50",
+  //                     currency: "EGP",
+  //                     customer: {
+  //                       first_name: "test",
+  //                       last_name: "fawaterk",
+  //                       email: "test@fawaterk.com",
+  //                       phone: "0123456789",
+  //                       address: "test address",
+  //                     },
+  //                     redirectionUrls: {
+  //                       successUrl: `${window.location.origin}/order-online/success/${orderCode}`,
+  //                       failUrl: `${window.location.origin}/order-online/fail/${orderCode}`,
+  //                       pendingUrl: `${window.location.origin}/order-online/failpending/${orderCode}`,
+  //                     },
 
-                      cartItems: [
-                        {
-                          name: "this is test oop 112252",
-                          price: "25",
-                          quantity: "1",
-                        },
-                        {
-                          name: "this is test oop 112252",
-                          price: "25",
-                          quantity: "1",
-                        },
-                      ],
-                      payLoad: { custom_field1: "xyz", custom_field2: "xyz2" },
-                    },
-                  };
-                  console.log("pluginConfig defined:", window.pluginConfig);
-                  console.log("Calling window.fawaterkCheckout...");
-                  window.fawaterkCheckout(window.pluginConfig);
-                  console.log("window.fawaterkCheckout called successfully");
-                } else {
-                  console.error("Fawaterk Checkout not loaded");
-                }
-              })
-              .catch((error) => {
-                console.error("Error loading Fawaterk script:", error);
-              });
-          } else {
-            console.error("fawaterkDivId not found in DOM after max attempts");
-          }
-        }
-        attempts++;
-      }, 100);
+  //                     cartItems: [
+  //                       {
+  //                         name: "this is test oop 112252",
+  //                         price: "25",
+  //                         quantity: "1",
+  //                       },
+  //                       {
+  //                         name: "this is test oop 112252",
+  //                         price: "25",
+  //                         quantity: "1",
+  //                       },
+  //                     ],
+  //                     payLoad: { custom_field1: "xyz", custom_field2: "xyz2" },
+  //                   },
+  //                 };
+  //                 console.log("pluginConfig defined:", window.pluginConfig);
+  //                 console.log("Calling window.fawaterkCheckout...");
+  //                 window.fawaterkCheckout(window.pluginConfig);
+  //                 console.log("window.fawaterkCheckout called successfully");
+  //               } else {
+  //                 console.error("Fawaterk Checkout not loaded");
+  //               }
+  //             })
+  //             .catch((error) => {
+  //               console.error("Error loading Fawaterk script:", error);
+  //             });
+  //         } else {
+  //           console.error("fawaterkDivId not found in DOM after max attempts");
+  //         }
+  //       }
+  //       attempts++;
+  //     }, 100);
 
-      return () => clearInterval(interval);
-    }
-  }, [openFawaterkDialog, hasedKey, orderCode]);
+  //     return () => clearInterval(interval);
+  //   }
+  // }, [openFawaterkDialog, hasedKey, orderCode]);
+  // console.log("cartItems", cartItems);
+
   const handleCheckout = () => {
     const orders = cartItems
       .map((item) => {
@@ -1273,11 +1272,7 @@ function OrderOnline() {
     if (orders.length === 0) {
       return;
     }
-    // console.log("address",address?.area);
-    // if (paymentMethod === "credit") {
-    //   setOpenFawaterkDialog(true); // افتح ديالوج الدفع
-    //   return;
-    // }
+
     const dataToSend = {
       delivery_type: delivery_type,
       payment: paymentMethod === "cash" ? 1 : 2,
@@ -1310,14 +1305,15 @@ function OrderOnline() {
           setOrderCode(response.data.data.order_code);
           setHasedKey(response.data.data?.SDK_TOKEN);
           if (paymentMethod === "credit") {
- navigate("/order-online/payment", {
-  state: {
-    orderCode: response.data.data.order_code,
-    hasedKey: response.data.data.SDK_TOKEN,
-    openFawaterkDialog: true,
-  },
-});
-  return;
+            navigate("/order-online/payment", {
+              state: {
+                orderCode: response.data.data.order_code,
+                hasedKey: response.data.data.SDK_TOKEN,
+                openFawaterkDialog: true,
+                cartItems: cartItems,
+              },
+            });
+            return;
           } else {
             localStorage.setItem("orderSuccess", "true");
             navigate(`/order-online/success/${response.data.data.order_code}`);
@@ -1566,17 +1562,6 @@ function OrderOnline() {
   };
   return (
     <>
-      <Dialog
-        maxWidth="md"
-        open={openFawaterkDialog}
-        onClose={() => setOpenFawaterkDialog(false)}
-        fullWidth
-      >
-        {/* <DialogTitle>إتمام الدفع</DialogTitle> */}
-        <DialogContent>
-          <div id="fawaterkDivId"></div>
-        </DialogContent>
-      </Dialog>
       <Stack
         className={"orderOnline"}
         sx={{

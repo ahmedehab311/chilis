@@ -1,42 +1,39 @@
-import { useLocation } from "react-router-dom";
+// src/hooks/useFawaterkLoader.js
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-const Payment = () => {
+import { useLocation } from "react-router-dom";
+
+const useFawaterkLoader = ({ openFawaterkDialog, hasedKey, orderCode }) => {
   const location = useLocation();
-  // eslint-disable-next-line no-unused-vars
-  const navigate = useNavigate();
-  const { orderCode, hasedKey, openFawaterkDialog,cartItems } = location.state || {};
-console.log("cartItems",cartItems);
+  const isPaymentPage = location.pathname === "/order-online/payment";
 
   useEffect(() => {
+    if (!isPaymentPage) return; // ✅ حمّله بس لو في صفحة الدفع
+
     if (openFawaterkDialog && hasedKey && orderCode) {
       let attempts = 0;
       const maxAttempts = 50;
+
       const interval = setInterval(() => {
         const div = document.getElementById("fawaterkDivId");
 
         if (div || attempts >= maxAttempts) {
           clearInterval(interval);
+
           if (div) {
             const loadFawaterkScript = () => {
               return new Promise((resolve, reject) => {
                 if (window.fawaterkCheckout) {
-                 
                   resolve();
                   return;
                 }
+
                 const script = document.createElement("script");
                 script.src =
                   "https://app.fawaterk.com/fawaterkPlugin/fawaterkPlugin.min.js";
                 script.async = true;
-                script.onload = () => {
-                 
-                  resolve();
-                };
-                script.onerror = () => {
-                  console.error("Fawaterk script failed to load");
+                script.onload = () => resolve();
+                script.onerror = () =>
                   reject(new Error("Failed to load Fawaterk script"));
-                };
                 document.body.appendChild(script);
               });
             };
@@ -46,8 +43,7 @@ console.log("cartItems",cartItems);
                 if (window.fawaterkCheckout) {
                   window.pluginConfig = {
                     envType: "test",
-                    hashKey:
-                      "81aa60fe261ced7171c356a9c16fa7a3c6f18016a91f53e2a18391ac4d3c2f87",
+                    hashKey: hasedKey,
                     style: { listing: "horizontal" },
                     version: "0",
                     requestBody: {
@@ -65,49 +61,43 @@ console.log("cartItems",cartItems);
                         failUrl: `https://chilis-egypt.com/order-online/payment/fail/${orderCode}`,
                         pendingUrl: `https://chilis-egypt.com/order-online/payment/failpending/${orderCode}`,
                       },
-
                       cartItems: [
-                        {
-                          name: "this is test oop 112252",
-                          price: "25",
-                          quantity: "1",
-                        },
-                        {
-                          name: "this is test oop 112252",
-                          price: "25",
-                          quantity: "1",
-                        },
+                        { name: "this is test oop 112252", price: "25", quantity: "1" },
+                        { name: "this is test oop 112252", price: "25", quantity: "1" },
                       ],
                       payLoad: { custom_field1: "xyz", custom_field2: "xyz2" },
                     },
                   };
 
                   window.fawaterkCheckout(window.pluginConfig);
-                } else {
-                  console.error("Fawaterk Checkout not loaded");
                 }
               })
               .catch((error) => {
                 console.error("Error loading Fawaterk script:", error);
               });
-          } else {
-            console.error("fawaterkDivId not found in DOM after max attempts");
           }
         }
+
         attempts++;
       }, 100);
 
-      return () => clearInterval(interval);
-      
-    }
-  }, [openFawaterkDialog, hasedKey, orderCode]);
+      return () => {
+        clearInterval(interval);
 
-  return <div id="fawaterkDivId"></div>;
+        const div = document.getElementById("fawaterkDivId");
+        if (div) {
+          div.innerHTML = "";
+        }
+
+        const script = document.querySelector(
+          'script[src*="fawaterkPlugin.min.js"]'
+        );
+        if (script) {
+          script.remove();
+        }
+      };
+    }
+  }, [isPaymentPage, openFawaterkDialog, hasedKey, orderCode]);
 };
 
-export default Payment;
-    // redirectionUrls: {
-    //                     successUrl: `https://www.google.com`,
-    //                     failUrl: `https://www.youtube.com`,
-    //                     pendingUrl: `http://ordrz.me:3000`,
-    //                   },
+export default useFawaterkLoader;

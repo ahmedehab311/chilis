@@ -15,7 +15,7 @@ export const fetchOrderHistory = createAsyncThunk(
         throw new Error("No token found. Please log in again.");
       }
       const response = await axios.get(`${API_HISTORY}?api_token=${apiToken}`);
-      console.log("API Response:", response.data);
+      // console.log("API Response:", response.data);
       if (response.data.data.details) {
         return response.data.data.details;
       } else {

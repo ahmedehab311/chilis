@@ -53,7 +53,7 @@ function DialogItem({
   const handleQuantityChange = (newQuantity) => {
     setQuantity(newQuantity);
   };
-  console.log("itemDetails", itemDetails);
+  // console.log("itemDetails", itemDetails);
 
   const handleAddToCart = () => {
     handleCloseDialog();

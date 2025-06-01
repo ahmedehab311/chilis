@@ -36,10 +36,15 @@ import Payment from "./components/Menu/order/OrderOnline/payment";
 import PaymentSuccess from "./components/Menu/order/OrderOnline/payment/PaymentSuccess";
 import PaymentFail from "./components/Menu/order/OrderOnline/payment/PaymentFail";
 import PaymentFailPending from "./components/Menu/order/OrderOnline/payment/PaymentFailPending";
+import useCleanFawaterkStyles from "./components/hooks/useCleanFawaterkStyles";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const excludedPaths = ["/*"];
-const navigate = useNavigate()
+  const isExcluded = excludedPaths.some((path) =>
+    location.pathname.startsWith(path)
+  );
+  useCleanFawaterkStyles();
+  const navigate = useNavigate();
   const handleLogout = () => {
     setToken(null);
     localStorage.removeItem("token");
@@ -58,6 +63,7 @@ const navigate = useNavigate()
           <Header token={token} handleLogout={handleLogout} />
         </>
       )}
+      {/* {!isExcluded && <Header token={token} handleLogout={handleLogout} />} */}
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route
@@ -94,9 +100,18 @@ const navigate = useNavigate()
           element={<OrderSuccessPage />}
         />
         <Route path="/order-online/fail" element={<OrderFailPage />} />
-      <Route path="/order-online/payment/success/:orderCode" element={<PaymentSuccess />} />
-      <Route path="/order-online/payment/fail/:orderCode" element={<PaymentFail />} />
-      <Route path="/order-online/payment/failpending/:orderCode" element={<PaymentFailPending />} />
+        <Route
+          path="/order-online/payment/success/:orderCode"
+          element={<PaymentSuccess />}
+        />
+        <Route
+          path="/order-online/payment/fail/:orderCode"
+          element={<PaymentFail />}
+        />
+        <Route
+          path="/order-online/payment/failpending/:orderCode"
+          element={<PaymentFailPending />}
+        />
         <Route path="/my_orders" element={<MyOrders />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -8,8 +8,7 @@ const OrderSuccessPage = () => {
   const { orderCode } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
- const [authorized, setAuthorized] = useState(null); // null = جاري التحقق
-
+ const [authorized, setAuthorized] = useState(null); 
   // useEffect(() => {
   //   const isSuccess = localStorage.getItem("orderSuccess");
 
@@ -23,6 +22,7 @@ const OrderSuccessPage = () => {
   // if (authorized === null) {
   //   return null; 
   // }
+
 
   return (
     <Box

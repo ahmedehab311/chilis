@@ -39,11 +39,16 @@
   padding: 0;
   /* color: #000; */
   font-family: "Cairo", sans-serif ;
+  
   /* font-family: 'BlackFont' */
 }
+
 body {
-  font-size: 1.6rem;
-  line-height: 1.7;
+  font-size: 1.62rem !important;
+  line-height: 1.7 !important;
+   all: initial;
+   /* font-family: 'Cairo', sans-serif !important; */
+  /* font-size: 1rem !important; */
 }
 
 .border {

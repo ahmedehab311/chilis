@@ -88,7 +88,7 @@ function Header({ token, handleLogout }) {
   };
 
   return (
-    <Stack className="hero">
+    <Stack className="hero ">
       <Stack sx={{ bgcolor: "#22235b", position: "relative" }}>
         {isLargeScreen && (
           <>
@@ -103,60 +103,61 @@ function Header({ token, handleLogout }) {
 
               <LinksHeader handleNavigation={handleNavigation} />
 
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                <IconButton
-                  aria-label="cart"
-                  sx={{ ml: "auto" }}
-                  onClick={handleCartClick}
-                >
-                  <Badge
-                    badgeContent={
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <IconButton
+                    aria-label="cart"
+                    sx={{ ml: "auto !important" }}
+                    onClick={handleCartClick}
+                  >
+                    <Badge
+                      badgeContent={
+                        <Typography
+                          sx={{
+                            fontSize: "9px !important",
+                            color: "#fff !important",
+                            fontWeight: "bold !important",
+                          }}
+                        >
+                          {i18n.language === "ar"
+                            ? convertNumberToArabic(totalItems)
+                            : totalItems}
+                        </Typography>
+                      }
+                      color="error"
+                      invisible={totalItems === 0}
+                    >
+                      <ShoppingCartOutlinedIcon
+                        sx={{ fontSize: "30px !important", color: "#fff !important" }}
+                      />
+                    </Badge>
+                  </IconButton>
+                  {token ? (
+                    <LinksIconCircle
+                      handleLogout={handleLogout}
+                      anchorEl={anchorEl}
+                      handleMenu={handleMenu}
+                      onClose={handleClose}
+                      handleClose={handleClose}
+                    />
+                  ) : (
+                    <Link component={RouterLink} to="/login">
                       <Typography
                         sx={{
-                          fontSize: ".9rem",
                           color: "#fff",
-                          fontWeight: "bold",
+                          fontSize: isArabic === "ar" ? "2.2rem !important" : "1.9rem !important",
+                          fontFamily: "cairo !important",
+                          fontWeight: "bold !important",
+                          // all: "unset",
                         }}
                       >
-                        {i18n.language === "ar"
-                          ? convertNumberToArabic(totalItems)
-                          : totalItems}
+                        {t("login")}
                       </Typography>
-                    }
-                    color="error"
-                    invisible={totalItems === 0}
-                  >
-                    <ShoppingCartOutlinedIcon
-                      sx={{ fontSize: "3rem", color: "#fff" }}
-                    />
-                  </Badge>
-                </IconButton>
-                {token ? (
-                  <LinksIconCircle
-                    handleLogout={handleLogout}
-                    anchorEl={anchorEl}
-                    handleMenu={handleMenu}
-                    onClose={handleClose}
-                    handleClose={handleClose}
-                  />
-                ) : (
-                  <Link component={RouterLink} to="/login">
-                    <Typography
-                      sx={{
-                        color: "#fff",
-                        fontSize: isArabic === "ar" ? "2.2rem" : "1.9rem",
-                        fontFamily: "cairo",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {t("login")}
-                    </Typography>
-                  </Link>
-                )}
-              </Box>
+                    </Link>
+                  )}
+                </Box>
             </Stack>
           </>
-        )}
+        )}  
         {!isLargeScreen && (
           <SmallMediaQuary
             toggleDrawer={toggleDrawer}
@@ -168,7 +169,7 @@ function Header({ token, handleLogout }) {
           />
         )}
       </Stack>
-      {/* {showHero && <Hero />} */}
+   
       {/* <Hero /> */}
       {location.pathname === "/" && <Hero />}
     </Stack>

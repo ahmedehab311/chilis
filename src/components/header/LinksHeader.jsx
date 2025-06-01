@@ -58,14 +58,14 @@ function LinksHeader({ handleNavigation }) {
         }}
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        sx={{ mt: 1, top: "1.3rem !important" }}
+        sx={{ mt: 1, top: "13px !important" }}
       >
         <Typography
           onClick={() => changeLanguage("en")}
           sx={{
-            fontSize: "1.2rem",
+            fontSize: "12px !important",
             fontWeight: activeLanguage === "en" ? "bold" : "normal",
-            p: "1.8rem",
+            p: "18px !important",
             color: activeLanguage === "en" ? "primary.main" : "text.primary",
             cursor: "pointer",
             "&:hover": {
@@ -80,16 +80,16 @@ function LinksHeader({ handleNavigation }) {
         <Typography
           onClick={() => changeLanguage("ar")}
           sx={{
-            fontSize: "1.2rem",
+            fontSize: "12px !important",
             // fontWeight: activeLanguage === "ar" ? "bold" : "normal",
-            p: "1.8rem",
+            p: "18px !important",
             cursor: "pointer",
-            color: activeLanguage === "ar" ? "primary.main" : "text.primary", 
+            color: activeLanguage === "ar" ? "primary.main" : "text.primary",
             "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-                borderRadius: "4px",
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              borderRadius: "4px",
             },
-            borderRadius: ".3rem",
+            borderRadius: "3px",
           }}
         >
           العربية
@@ -99,7 +99,7 @@ function LinksHeader({ handleNavigation }) {
         <Typography
           sx={{
             color: "#fff",
-            fontSize: "2.2rem",
+            fontSize: "22px !important",
             fontFamily: "cairo",
             fontWeight: "bold",
           }}
@@ -112,7 +112,7 @@ function LinksHeader({ handleNavigation }) {
         <Typography
           sx={{
             color: "#fff",
-            fontSize: "2.2rem",
+            fontSize: "22px !important",
             fontFamily: "cairo",
             fontWeight: "bold",
           }}
@@ -125,7 +125,7 @@ function LinksHeader({ handleNavigation }) {
         <Typography
           sx={{
             color: "#fff",
-            fontSize: "2.2rem",
+            fontSize: "22px !important",
             fontFamily: "cairo",
             fontWeight: "bold",
           }}
@@ -137,7 +137,7 @@ function LinksHeader({ handleNavigation }) {
         <Typography
           sx={{
             color: "#fff",
-            fontSize: "2.2rem",
+            fontSize: "22px !important",
             fontFamily: "cairo",
             fontWeight: "bold",
           }}

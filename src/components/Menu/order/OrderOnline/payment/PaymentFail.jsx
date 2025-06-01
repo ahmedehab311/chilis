@@ -4,24 +4,19 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 const PaymentFail = () => {
-//   const { orderCode } = useParams();
+  const { orderCode } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [authorized, setAuthorized] = useState(null);
+  const [isInIframe, setIsInIframe] = useState(false);
+  useEffect(() => {
+    localStorage.setItem("orderSuccessPayment", "false");
 
-//   useEffect(() => {
-//     const fail = localStorage.getItem("orderFail");
-//     if (!fail) {
-//       navigate("/");
-//     } else {
-//       localStorage.removeItem("orderFail");
-//       setAuthorized(true);
-//     }
-//   }, []);
-
-//   if (authorized === null) {
-//     return null;
-//   }
+    if (window.top !== window.self) {
+      setIsInIframe(true);
+      window.top.location.href = `/order-online/payment/fail/${orderCode}`;
+    }
+  }, [orderCode]);
+  if (isInIframe) return null;
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
       <Typography variant="h4" color="red">
