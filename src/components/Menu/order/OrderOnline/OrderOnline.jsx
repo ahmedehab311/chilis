@@ -1304,6 +1304,7 @@ function OrderOnline() {
           console.log(response.data.data.order_code);
           setOrderCode(response.data.data.order_code);
           setHasedKey(response.data.data?.SDK_TOKEN);
+          sessionStorage.setItem("fromCheckout", "true");
           if (paymentMethod === "credit") {
             navigate("/order-online/payment", {
               state: {
@@ -1316,7 +1317,7 @@ function OrderOnline() {
             return;
           } else {
             localStorage.setItem("orderSuccess", "true");
-            navigate(`/order-online/success/${response.data.data.order_code}`);
+          navigate(`/order-online/success/${response.data.data.order_code}`, { replace: true });
           }
 
           localStorage.setItem("orderSuccess", "true");

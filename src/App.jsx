@@ -55,6 +55,48 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     localStorage.removeItem("activeIndex");
     window.location.href = "/";
   };
+  // useEffect(() => {
+  //   // نظف بيانات الدفع
+  //   sessionStorage.removeItem("fromPayment");
+  //   sessionStorage.removeItem("fromCheckout");
+
+  //   // منع الرجوع إلى صفحة الدفع
+  //   window.history.pushState(null, "", window.location.href);
+
+  //   const onPopState = (event) => {
+  //     // إذا حاول المستخدم الضغط رجوع (back)
+  //     // ابقيه في الهوم بدون رجوع
+  //     window.history.pushState(null, "", window.location.href);
+  //   };
+
+  //   window.addEventListener("popstate", onPopState);
+
+  //   return () => {
+  //     window.removeEventListener("popstate", onPopState);
+  //   };
+  // }, [navigate]);
+  useEffect(() => {
+  const isHome = window.location.pathname === "/";
+
+  if (isHome) {
+    // نظف بيانات الدفع
+    sessionStorage.removeItem("fromPayment");
+    sessionStorage.removeItem("fromCheckout");
+
+    // منع الرجوع لصفحة الدفع
+    window.history.pushState(null, "", window.location.href);
+
+    const onPopState = () => {
+      window.history.pushState(null, "", window.location.href);
+    };
+
+    window.addEventListener("popstate", onPopState);
+
+    return () => {
+      window.removeEventListener("popstate", onPopState);
+    };
+  }
+}, []);
 
   return (
     <>

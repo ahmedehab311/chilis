@@ -16,6 +16,12 @@ const PaymentFail = () => {
       window.top.location.href = `/order-online/payment/fail/${orderCode}`;
     }
   }, [orderCode]);
+    useEffect(() => {
+    // لو مفيش بيانات جاية من navigate
+    if (!location.state) {
+      navigate("/", { replace: true });
+    }
+  }, [location, navigate]);
   if (isInIframe) return null;
   return (
     <div style={{ padding: "2rem", textAlign: "center" }}>
