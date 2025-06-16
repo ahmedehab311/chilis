@@ -58,7 +58,7 @@ const useFawaterkLoader = ({ openFawaterkDialog, hasedKey, orderCode }) => {
                       },
                       redirectionUrls: {
                         successUrl: `https://chilis-egypt.com/order-online/payment/success/${orderCode}`,
-                        failUrl: `https://chilis-egypt.com/order-online/payment/fail/${orderCode}`,
+                        failUrl: `https://chilis-egypt.com/order-online/payment/fail`,
                         pendingUrl: `https://chilis-egypt.com/order-online/payment/failpending/${orderCode}`,
                       },
                       cartItems: [

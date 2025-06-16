@@ -192,23 +192,36 @@ const addresses = useSelector((state) => state.addresses.items);
     }
   }, [dispatch, selectedAddress]);
 
-  const handleAddressSelect = (address) => {
-    if (typeof address === "object" && address.id) {
-      if (address.isAvailable) {
-        // Assuming there's a property that indicates availability
-        dispatch(setSelectedAddress(address));
-        localStorage.setItem("selectedAddress", JSON.stringify(address));
-      } else {
-        // console.warn("Selected address is not available.");
-      }
-    } else {
-      console.error(
-        "Address is not an object or is missing required properties."
-      );
-    }
-  };
+  // const handleAddressSelect = (address) => {
+  //  if (address !== null && typeof address === "object" && address?.id) {
+  //     if (address.isAvailable) {
+  //       // Assuming there's a property that indicates availability
+  //       dispatch(setSelectedAddress(address));
+  //       localStorage.setItem("selectedAddress", JSON.stringify(address));
+  //     } else {
+  //       // console.warn("Selected address is not available.");
+  //     }
+  //   } else {
+  //     console.error(
+  //       "Address is not an object or is missing required properties."
+  //     );
+  //   }
+  // };
   // console.log("addressData",addressData); 
-  return (
+  
+  const handleAddressSelect = (address) => {
+  if (!address) return; // لو null أو undefined اخرج بهدوء
+
+  if (typeof address === "object" && address.id) {
+    if (address.isAvailable) {
+      dispatch(setSelectedAddress(address));
+      localStorage.setItem("selectedAddress", JSON.stringify(address));
+    }
+  } else {
+    console.error("Address is not an object or is missing required properties.");
+  }
+};
+return (
     <Stack spacing={3} sx={{ margin: "1rem" }}>
       <Stack>
         <Typography

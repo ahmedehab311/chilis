@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Button, Card, Stack, Typography } from "@mui/material";
+import { Card, Stack, Typography } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -57,6 +57,8 @@ function AddressData({
     } else {
       setActiveIndex(null);
       localStorage.removeItem("activeIndex");
+      localStorage.removeItem("selectedAddress");
+        onAddressSelect(null);
     }
   }, [addressData, activeIndex, onAddressSelect]);
 
@@ -66,8 +68,7 @@ function AddressData({
     const minutes = now.getMinutes();
 
     const currentTimeMinutes = hours * 60 + minutes;
-    // console.log("Current Time", { hours, minutes, currentTimeMinutes });
-    // console.log("address", address);
+
     let isAvailable = false;
     if (address && Array.isArray(address.branches) && address.branches.length > 0) {
       address.branches.forEach((branch) => {
@@ -86,14 +87,7 @@ function AddressData({
 
         const branchOpenMinutes = openHour * 60 + openMinute;
         const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
-        // console.log("Branch Times", {
-        //   openHour,
-        //   openMinute,
-        //   deliveryHour,
-        //   deliveryMinute,
-        //   branchOpenMinutes,
-        //   branchLastDeliveryMinutes,
-        // });
+ 
         if (branchLastDeliveryMinutes < branchOpenMinutes) {
           if (
             currentTimeMinutes >= branchOpenMinutes ||

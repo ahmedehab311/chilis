@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Typography, Box } from "@mui/material";
-import ErrorIcon from "@mui/icons-material/Error";
+
 // const PaymentFailPending = () => {
 //   const { orderCode } = useParams();
 //     const { t } = useTranslation();
@@ -57,7 +57,45 @@ const PaymentFailPending = () => {
   const { orderCode } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  // const [isValid, setIsValid] = useState(false);
+  const [countdown, setCountdown] = useState(5);
+  const [allowed, setAllowed] = useState(false);
 
+  useEffect(() => {
+    const fromPayment = sessionStorage.getItem("fromPayment");
+
+    if (fromPayment !== "true") {
+      // لو مش جاي من الدفع، رجعه للـ Home فوراً
+      navigate("/", { replace: true });
+    } else {
+      // الشرط اتحقق، نسمح بعرض الصفحة
+      setAllowed(true);
+      // مسح العلامة عشان لو عمل ري-فريش ما يرجعش هنا تاني
+      sessionStorage.removeItem("fromPayment");
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    if (allowed) {
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev === 1) {
+            clearInterval(timer);
+            navigate("/", { replace: true });
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [allowed, navigate]);
+
+  if (!allowed) {
+    // ممكن ترجع null أو شاشة تحميل بسيطة
+    return null;
+  }
 
   return (
     <Box
@@ -70,14 +108,14 @@ const PaymentFailPending = () => {
       bgcolor="#f5f5f5"
       px={2}
     >
-      <ErrorIcon style={{ fontSize: 100, color: "#f44336" }} />
+      {/* <ErrorIcon style={{ fontSize: 100, color: "#f44336" }} /> */}
       <Typography
         variant="h4"
         fontWeight="bold"
         mt={2}
         style={{ fontSize: "19px", color: "#000" }}
       >
-        {t("paymentPendingFailed")}
+        {t("paymentPending")}
       </Typography>
       <Typography variant="h6" color="textSecondary" mt={1}>
         {t("orderCode")} <strong>{orderCode}</strong>
@@ -85,10 +123,15 @@ const PaymentFailPending = () => {
       <Typography variant="h6" color="textSecondary" mt={1}>
         {t("tryAgain")}
       </Typography>
+      {/* <Typography variant="h6" mt={3}>
+        {t("redirectHomeIn")} {countdown} {t("seconds")}
+      </Typography> */}
       <Button
         variant="contained"
         color="primary"
-        onClick={handleGoHome}
+        onClick={() => {
+          navigate("/", { replace: true });
+        }}
         sx={{ mt: 4, fontSize: "15px" }}
       >
         {t("goHome")}

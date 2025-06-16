@@ -39,12 +39,12 @@ import PaymentFailPending from "./components/Menu/order/OrderOnline/payment/Paym
 import useCleanFawaterkStyles from "./components/hooks/useCleanFawaterkStyles";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const excludedPaths = ["/*"];
   const isExcluded = excludedPaths.some((path) =>
     location.pathname.startsWith(path)
   );
   useCleanFawaterkStyles();
-  const navigate = useNavigate();
   const handleLogout = () => {
     setToken(null);
     localStorage.removeItem("token");
@@ -55,48 +55,22 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
     localStorage.removeItem("activeIndex");
     window.location.href = "/";
   };
-  // useEffect(() => {
-  //   // نظف بيانات الدفع
-  //   sessionStorage.removeItem("fromPayment");
-  //   sessionStorage.removeItem("fromCheckout");
-
-  //   // منع الرجوع إلى صفحة الدفع
-  //   window.history.pushState(null, "", window.location.href);
-
-  //   const onPopState = (event) => {
-  //     // إذا حاول المستخدم الضغط رجوع (back)
-  //     // ابقيه في الهوم بدون رجوع
-  //     window.history.pushState(null, "", window.location.href);
-  //   };
-
-  //   window.addEventListener("popstate", onPopState);
-
-  //   return () => {
-  //     window.removeEventListener("popstate", onPopState);
-  //   };
-  // }, [navigate]);
   useEffect(() => {
-  const isHome = window.location.pathname === "/";
-
-  if (isHome) {
-    // نظف بيانات الدفع
-    sessionStorage.removeItem("fromPayment");
-    sessionStorage.removeItem("fromCheckout");
-
-    // منع الرجوع لصفحة الدفع
-    window.history.pushState(null, "", window.location.href);
-
-    const onPopState = () => {
-      window.history.pushState(null, "", window.location.href);
+    localStorage.removeItem("orderCode");
+    if (location.pathname === "/order-online/payment") {
+      navigate("/", { replace: true });
+    }
+  }, []);
+  useEffect(() => {
+    window.history.replaceState(null, "", window.location.href);
+    const blockBack = () => {
+      window.history.replaceState(null, "", window.location.href);
     };
-
-    window.addEventListener("popstate", onPopState);
-
+    window.addEventListener("popstate", blockBack);
     return () => {
-      window.removeEventListener("popstate", onPopState);
+      window.removeEventListener("popstate", blockBack);
     };
-  }
-}, []);
+  }, []);
 
   return (
     <>
@@ -146,10 +120,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
           path="/order-online/payment/success/:orderCode"
           element={<PaymentSuccess />}
         />
-        <Route
-          path="/order-online/payment/fail/:orderCode"
-          element={<PaymentFail />}
-        />
+        <Route path="/order-online/payment/fail" element={<PaymentFail />} />
         <Route
           path="/order-online/payment/failpending/:orderCode"
           element={<PaymentFailPending />}
@@ -165,6 +136,8 @@ function App() {
   const [token, setToken] = useState(null);
   const [userData, setUserData] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const location = useLocation();
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

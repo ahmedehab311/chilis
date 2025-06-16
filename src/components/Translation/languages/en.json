@@ -12,6 +12,8 @@
   "aboutUsText": "We are Chili’s. We are THE undisputed Champions of Living Deliciously. We invented casual dining 50 years ago in Dallas, Texas.  Since then, we have become a cultural phenomenon with over 1,500 restaurants around the world.  We believe in making the most of every day, with great vibes, great company, great drinks, and great food infused with our Texas roots and Southwest American style. So, order the crispers, dip it in our house-made ranch, grab an Oldtimer with cheese, and if you crave attention, we recommend our sizzling fajitas and a hand-shaken margarita. Our flavorful list is long, and life is short. Go on and Live Deliciously.",
   "locationsTitle": "Our Locations",
   "selectLocation": "Select Location",
+  "paymentFailed":"payment Failed",
+  "paymentPendingFailed":"payment Pending Failed",
   "locationsPage": {
     "Hurghuda": "Hurghada",
     "Cairo Festival City Mall": "Cairo Festival City Mall",
