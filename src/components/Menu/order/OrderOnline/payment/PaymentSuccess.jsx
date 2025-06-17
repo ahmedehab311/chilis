@@ -37,7 +37,7 @@ const PaymentSuccess = () => {
           const response = await axios.get(
             `${BASE_URL}/payment/success/${orderCode}?api_token=${getApiToken()}`
           );
-console.log("FULL RESPONSE", response);
+// console.log("FULL RESPONSE", response);
           if (response.data?.data?.order_id) {
             console.log("FULL RESPONSE", response);
             console.log(
@@ -138,7 +138,6 @@ useEffect(() => {
 
       <Typography variant="h6" color="textSecondary" mt={1}>
         {t("orderCode")} <strong>{orderCode}</strong>{" "}
-        <strong>with payment ✅</strong>
       </Typography>
 
       <Typography variant="h6" color="textSecondary" mt={1}>

@@ -336,11 +336,13 @@ function OrderOnline() {
 
   const rawTotal = subtotalWithExtras - discount + deliveryAmount;
 
-  // const totalWithTax = rawTotal + rawTotal * (tax / 100);
+  const totalWithTaxFinal = rawTotal + rawTotal * (tax / 100);
   // console.log("totalWithTax",totalWithTax);
 
-  const finalTotal = parseFloat(totalWithTax.toFixed(2));
-  // console.log("finalTotal",finalTotal);
+  const finalTotal = parseFloat(totalWithTaxFinal.toFixed(2));
+  console.log("deliveryAmount",deliveryAmount);
+  console.log("deliveryType",deliveryType);
+  console.log("finalTotal",finalTotal);
   // const handleCheckout = () => {
   //   const token = localStorage.getItem("token");
 
