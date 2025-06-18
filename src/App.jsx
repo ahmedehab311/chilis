@@ -125,7 +125,7 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
           path="/order-online/payment/failpending/:orderCode"
           element={<PaymentFailPending />}
         />
-        <Route path="/my_orders" element={<MyOrders />} />
+        <Route path="/my-orders" element={<MyOrders />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

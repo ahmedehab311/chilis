@@ -186,7 +186,7 @@ function SmallMediaQuery({
                 </Link>
                 <Link
                   component={RouterLink}
-                  to="/my_orders"
+                  to="/my-orders"
                   onClick={closeDrawer}
                 >
                   <Typography

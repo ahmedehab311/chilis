@@ -743,7 +743,7 @@ function OrderCard({ order, onViewDetailsClick }) {
                     color: "#17a2b8!important",
                   }}
                 >
-                  {order.order_id}
+                  {order?.order_id}
                 </Typography>
                 {/* <Typography
                   sx={{
@@ -797,7 +797,7 @@ function OrderCard({ order, onViewDetailsClick }) {
                 mb: ".9rem",
               }}
             >
-              {order.status}
+              {order?.status}
             </Typography>
             <Stack alignItems={"center"} direction={"row"}>
               <AccessTimeOutlinedIcon sx={{ mr: ".4rem" }} />
@@ -808,7 +808,7 @@ function OrderCard({ order, onViewDetailsClick }) {
                   fontWeight: "bold",
                 }}
               >
-                {order.created_at}
+                {order?.created_at}
               </Typography>
             </Stack>
             <Stack>
@@ -830,8 +830,8 @@ function OrderCard({ order, onViewDetailsClick }) {
               >
 
                 {isArabic
-                  ? convertNumberToArabic(order.total)
-                  : order.total}{" "}
+                  ? convertNumberToArabic(order?.total)
+                  : order?.total}{" "}
                 {t("egp")}
               </Typography>
             </Stack>

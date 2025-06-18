@@ -41,10 +41,10 @@ const PaymentFail = () => {
 
           if (response.data?.data?.order_id) {
             setSuccessConfirmed(true);
-            console.log(
-              "response.data?.data?.orderId cancel",
-              response.data?.data?.order_id
-            );
+            // console.log(
+            //   "response.data?.data?.orderId cancel",
+            //   response.data?.data?.order_id
+            // );
           } else {
             setError("Order not found.");
           }

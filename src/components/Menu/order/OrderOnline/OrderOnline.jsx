@@ -64,7 +64,7 @@ function OrderOnline() {
   const [specialNotes, setSpecialNotes] = useState({});
   const [totalWithTax, setTotalWithTax] = useState(0);
   const [paymentMethod, setPaymentMethod] = useState("cash");
-
+  const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
   const [openDialog, setOpenDialog] = useState(false);
   const [subtotalWithExtras, setSubtotalWithExtras] = useState(0);
   const [totalPrices, setTotalPrices] = useState([]);
@@ -75,7 +75,7 @@ function OrderOnline() {
     deliveryCity: "",
     deliveryArea: "",
   });
-    const [deliveryType, setDeliveryType] = useState("delivery");
+  const [deliveryType, setDeliveryType] = useState("delivery");
   const [total, setTotal] = useState(0);
   const [discount, setDiscount] = useState(0);
   // console.log("cartItems",cartItems);
@@ -85,7 +85,14 @@ function OrderOnline() {
     0
   );
   const [deliveryFee, setDeliveryFee] = useState(50);
-  const totalToPay = subtotal + deliveryFee;
+  const selectedOption = useSelector((state) => state.info.selectedOption);
+  const idInfo = useSelector((state) => state.info.idInfo);
+    const selectedBranchId = useSelector(
+    (state) => state.branches.selectedBranchId
+  );
+  const selectedAddress = useSelector(
+    (state) => state.addresses.selectedAddress
+  );
 
   useEffect(() => {
     const updatedPrices = {};
@@ -254,8 +261,7 @@ function OrderOnline() {
   }, [subtotalWithExtras, deliveryFee]);
   // checkout
 
-  const selectedOption = useSelector((state) => state.info.selectedOption);
-  const idInfo = useSelector((state) => state.info.idInfo);
+
   useEffect(() => {
     if (idInfo) {
       // تخزين idInfo في localStorage
@@ -263,9 +269,6 @@ function OrderOnline() {
     }
   }, [idInfo]);
 
-  const selectedBranchId = useSelector(
-    (state) => state.branches.selectedBranchId
-  );
 
   const handleSpecialNoteChange = (itemId, note) => {
     setSpecialNotes((prevNotes) => ({
@@ -289,7 +292,7 @@ function OrderOnline() {
     if (addressData.length === 0) {
       dispatch(fetchAddresses());
     }
-  }, [addressData, dispatch]);
+  }, [addressData.length, dispatch]);
 
   const isAddressAvailable = (address) => {
     const now = new Date();
@@ -299,30 +302,40 @@ function OrderOnline() {
     const currentTimeMinutes = hours * 60 + minutes;
 
     let isAvailable = false;
-    if (address && Array.isArray(address.branches)) {
-      address.branches.forEach((branch) => {
-        const [openHour, openMinute] = branch.open.split(":").map(Number);
-        const [deliveryHour, deliveryMinute] = branch.last_delivery
-          .split(":")
-          .map(Number);
+    if (
+      address &&
+      Array.isArray(address?.area?.area_branches) &&
+      address?.area?.area_branches?.length > 0
+    ) {
+      address?.area?.area_branches.forEach((branch) => {
+        if (branch?.branch?.open && branch?.last_delivery) {
+          const [openHour, openMinute] = branch.branch.open
+            .split(":")
+            .map(Number);
+          const [deliveryHour, deliveryMinute] = branch.last_delivery
+            .split(":")
+            .map(Number);
 
-        const branchOpenMinutes = openHour * 60 + openMinute;
-        const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
+          const branchOpenMinutes = openHour * 60 + openMinute;
+          const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
 
-        if (branchLastDeliveryMinutes < branchOpenMinutes) {
-          if (
-            currentTimeMinutes >= branchOpenMinutes ||
-            currentTimeMinutes <= branchLastDeliveryMinutes
-          ) {
-            isAvailable = true;
+          if (branchLastDeliveryMinutes < branchOpenMinutes) {
+            if (
+              currentTimeMinutes >= branchOpenMinutes ||
+              currentTimeMinutes <= branchLastDeliveryMinutes
+            ) {
+              isAvailable = true;
+            }
+          } else {
+            if (
+              currentTimeMinutes >= branchOpenMinutes &&
+              currentTimeMinutes <= branchLastDeliveryMinutes
+            ) {
+              isAvailable = true;
+            }
           }
         } else {
-          if (
-            currentTimeMinutes >= branchOpenMinutes &&
-            currentTimeMinutes <= branchLastDeliveryMinutes
-          ) {
-            isAvailable = true;
-          }
+          console.warn("Branche data is missing", branch);
         }
       });
     } else {
@@ -340,279 +353,7 @@ function OrderOnline() {
   // console.log("totalWithTax",totalWithTax);
 
   const finalTotal = parseFloat(totalWithTaxFinal.toFixed(2));
-  console.log("deliveryAmount",deliveryAmount);
-  console.log("deliveryType",deliveryType);
-  console.log("finalTotal",finalTotal);
-  // const handleCheckout = () => {
-  //   const token = localStorage.getItem("token");
-
-  //   if (!token) {
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   // التحقق من اختيار العنوان فقط في حالة الدليفري
-  //   if (deliveryType === "delivery") {
-  //     const selectedAddress = addressData.find(
-  //       (addr) => addr.id === address?.id
-  //     );
-
-  //     if (!selectedAddress) {
-  //       toast.error(
-  //         "Please select a valid delivery address before proceeding."
-  //       );
-  //       return;
-  //     }
-
-  //     if (!isAddressAvailable(selectedAddress)) {
-  //       toast.error(
-  //         "The selected address is no longer available for delivery."
-  //       );
-  //       return;
-  //     }
-  //   }
-
-  //   // التحقق من اختيار الفرع في حالة البيك آب
-  //   if (deliveryType === "pickup") {
-  //     if (!selectedBranchId) {
-  //       toast.error("Please select a branch for pickup.");
-  //       return;
-  //     }
-  //   }
-
-  //   // إعداد قيم area و branch بناءً على نوع الطلب
-  //   let areaId, branchId;
-  //   const delivery_type = deliveryType === "pickup" ? 2 : 1;
-
-  //   if (delivery_type === 1) {
-  //     // دليفري
-  //     areaId = address.area?.id;
-  //     branchId = address.branches?.[0]?.id;
-
-  //     if (!areaId || !branchId) {
-  //       toast.error("Please select a valid area and branch.");
-  //       return;
-  //     }
-  //   } else if (delivery_type === 2) {
-  //     // بيك آب
-  //     branchId = selectedBranchId;
-  //     areaId = null;
-  //   }
-
-  //   const orders = cartItems
-  //     .map((item) => {
-  //       if (item.quantity <= 0) {
-  //         console.error(
-  //           `Item ${item.id} quantity is invalid: ${item.quantity}`
-  //         );
-  //         console.error("Order quantities must be greater than 0.");
-  //         return null;
-  //       }
-  //       return {
-  //         id: item.id,
-  //         special: specialNotes[item.id] || "",
-  //         extras: Array.isArray(item.extras)
-  //           ? item.extras.map((extra) => extra.id)
-  //           : [],
-  //         count: item.quantity,
-  //         choices: [],
-  //         options: item.option ? [item.option.id] : [],
-  //       };
-  //     })
-  //     .filter((order) => order !== null);
-
-  //   if (orders.length === 0) {
-  //     return;
-  //   }
-
-  //   const dataToSend = {
-  //     delivery_type: delivery_type,
-  //     payment: paymentMethod === "cash" ? 1 : 2,
-  //     lat: delivery_type === 1 ? address.lat : 0,
-  //     lng: delivery_type === 1 ? address.lng : 0,
-  //     address: delivery_type === 1 ? currentAddress.id : null,
-  //     area: delivery_type === 1 ? address.area?.id : areaId,
-  //     // area: address.area?.id,
-  //     branch: branchId,
-  //     api_token: api_token,
-  //     items: JSON.stringify({ items: orders }),
-  //     device_id: "",
-  //     notes: "",
-  //     car_model: "",
-  //     car_color: "",
-  //     gift_cards: "",
-  //     coins: "00.00",
-  //   };
-
-  //   console.log("Checkout data:", dataToSend);
-
-  //   const params = new URLSearchParams(dataToSend);
-  //   axios
-  //     .post(`${BASE_URL}/orders/create?${params.toString()}`)
-  //     .then((response) => {
-  //       if (response.data.response) {
-  //         console.log(response.data);
-  //         localStorage.setItem("orderSuccess", "true");
-  //         localStorage.removeItem("idInfo");
-
-  //         toast.success("Order created successfully.");
-
-  //         dispatch(clearCart());
-  //       } else {
-  //         console.error("Response error data:", response.data);
-  //         toast.error(
-  //           "An error occurred while processing your order. Please try again."
-  //         );
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error details:", error);
-  //       let errorMessage =
-  //         "An error occurred while processing your order. Please try again.";
-
-  //       if (error.response) {
-  //         console.error("Error response data:", error.response.data);
-  //         console.error("Error response status:", error.response.status);
-  //         console.error("Error response headers:", error.response.headers);
-  //         errorMessage = error.response.data.message || errorMessage;
-  //       } else if (error.request) {
-  //         console.error("Error request:", error.request);
-  //         errorMessage = "Error placing order: No response from server.";
-  //       } else {
-  //         console.error("Error message:", error.message);
-  //       }
-
-  //       toast.error(errorMessage);
-  //     });
-  // };
-
-  // const handleCheckout = () => {
-  //   console.log("Cart Items:", cartItems);
-
-  //   const token = localStorage.getItem("token");
-
-  //   if (!token) {
-  //     navigate("/login");
-  //     return;
-  //   }
-
-  //   // التحقق من اختيار العنوان فقط في حالة الدليفري
-  //   if (deliveryType === "delivery") {
-  //     const selectedAddress = addressData.find(
-  //       (addr) => addr.id === address?.id
-  //     );
-
-  //     if (!selectedAddress) {
-  //       toast.error(t("selectValidAddress"));
-  //       return;
-  //     }
-
-  //     if (!isAddressAvailable(selectedAddress)) {
-  //       toast.error(t("addressNotAvailable"));
-  //       return;
-  //     }
-  //   }
-
-  //   // التحقق من اختيار الفرع في حالة البيك آب
-  //   if (deliveryType === "pickup") {
-  //     if (!selectedBranchId) {
-  //       toast.error(t("selectBranch"));
-  //       return;
-  //     }
-  //   }
-
-  //   // إعداد قيم area و branch بناءً على نوع الطلب
-  //   let areaId, branchId;
-  //   const delivery_type = deliveryType === "pickup" ? 2 : 1;
-
-  //   if (delivery_type === 1) {
-  //     // دليفري
-  //     areaId = address.area?.id;
-  //     branchId = address.branches?.[0]?.id;
-
-  //     if (!areaId || !branchId) {
-  //       toast.error(t("invalidAreaBranch"));
-  //       return;
-  //     }
-  //   } else if (delivery_type === 2) {
-  //     // بيك آب
-  //     branchId = selectedBranchId;
-  //     areaId = null;
-  //   }
-  //   const orders = cartItems
-  //   .filter((item) => item.quantity > 0)  // تأكد من أن الكمية أكبر من 0
-  //   .map((item) => ({
-  //     id: item.id,
-  //     special: specialNotes[item.id] || "",
-  //     extras: Array.isArray(item.extras) ? item.extras.map((extra) => extra.id) : [],
-  //     count: item.quantity,
-  //     choices: [],
-  //     options: item.option ? [item.option.id] : [],
-  //   }));
-
-  // console.log("Filtered Orders:", orders); // إضافة سجلات هنا
-
-  // if (orders.length === 0) {
-  //   toast.error(t("noItemsInCart")); // رسالة للمستخدم إذا لم يكن هناك عناصر
-  //   return;
-  // }
-  //   const dataToSend = {
-  //     delivery_type: delivery_type,
-  //     payment: paymentMethod === "cash" ? 1 : 2,
-  //     lat: delivery_type === 1 ? address.lat : 0,
-  //     lng: delivery_type === 1 ? address.lng : 0,
-  //     address: delivery_type === 1 ? currentAddress.id : null,
-  //     area: delivery_type === 1 ? address.area?.id : areaId,
-  //     branch: branchId,
-  //     api_token: api_token,
-  //     items: JSON.stringify({ items: orders }),
-  //     device_id: "",
-  //     notes: "",
-  //     car_model: "",
-  //     car_color: "",
-  //     gift_cards: "",
-  //     coins: "00.00",
-  //   };
-
-  //   console.log("Checkout data:", dataToSend);
-  //   console.log("Checkout data:", JSON.stringify(dataToSend, null, 2));
-
-  //   const params = new URLSearchParams(dataToSend);
-  //   axios
-  //     .post(`${BASE_URL}/orders/create?${params.toString()}`)
-  //     .then((response) => {
-  //       if (response.data.response) {
-  //         console.log(response.data);
-  //         localStorage.setItem("orderSuccess", "true");
-  //         localStorage.removeItem("idInfo");
-
-  //         toast.success(t("orderCreated"));
-
-  //         dispatch(clearCart());
-  //       } else {
-  //         console.error("Response error data:", response.data);
-  //         toast.error(t("orderCreationError"));
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error details:", error);
-  //       let errorMessage = t("orderCreationError");
-
-  //       if (error.response) {
-  //         console.error("Error response data:", error.response.data);
-  //         console.error("Error response status:", error.response.status);
-  //         console.error("Error response headers:", error.response.headers);
-  //         errorMessage = error.response.data.message || errorMessage;
-  //       } else if (error.request) {
-  //         console.error("Error request:", error.request);
-  //         errorMessage = t("noResponse");
-  //       } else {
-  //         console.error("Error message:", error.message);
-  //       }
-
-  //       toast.error(errorMessage);
-  //     });
-  // };
+  
   useEffect(() => {
     dispatch(setSelectedBranch(""));
   }, []);
@@ -720,21 +461,21 @@ function OrderOnline() {
       coins: "00.00",
     };
 
-    console.log("Checkout data:", dataToSend);
+    // console.log("Checkout data:", dataToSend);
 
     const params = new URLSearchParams(dataToSend);
     axios
       .post(`${BASE_URL}/orders/create?${params.toString()}`)
       .then((response) => {
         if (response.data.response) {
-          console.log(response.data);
-          console.log(response.data.data.order_code);
-          setOrderCode(response.data.data.order_code);
+          // console.log(response.data);
+          // console.log(response.data.data.order_code);
+          // setOrderCode(response.data.data.order_code);
           setHasedKey(response.data.data?.SDK_TOKEN);
           sessionStorage.setItem("fromCheckout", "true");
           sessionStorage.setItem("fromPayment", "true");
           localStorage.setItem("fromPayment", "true");
-            localStorage.setItem("orderCode", orderCode);
+          localStorage.setItem("orderCode", orderCode);
           if (paymentMethod === "credit") {
             navigate("/order-online/payment", {
               state: {
@@ -788,7 +529,7 @@ function OrderOnline() {
       });
   };
 
-  const [openCreditCardDialog, setOpenCreditCardDialog] = useState(false);
+
 
   const addressCleared = useRef(false);
 
@@ -799,9 +540,7 @@ function OrderOnline() {
   };
   //  address
 
-  const selectedAddress = useSelector(
-    (state) => state.addresses.selectedAddress
-  );
+
   // console.log("selectedAddress", selectedAddress);
 
   useEffect(() => {
@@ -861,9 +600,9 @@ function OrderOnline() {
     }
   }, [address, dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchAddresses());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchAddresses());
+  // }, [dispatch]);
 
   useEffect(() => {
     const storedAddress = localStorage.getItem("selectedAddress");

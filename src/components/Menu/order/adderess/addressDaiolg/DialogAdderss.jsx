@@ -97,7 +97,7 @@ function AddressDialog({ open, onClose }) {
 
   const handleSelectLabel = (label) => {
     const translatedLabel = t(`${label.toLowerCase()}`);
-    console.log("Translated Label: ", translatedLabel);
+    // console.log("Translated Label: ", translatedLabel);
     setCurrentAddress((prev) => ({ ...prev, label: translatedLabel }));
   };
 

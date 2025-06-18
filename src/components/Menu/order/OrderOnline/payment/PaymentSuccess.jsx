@@ -39,18 +39,18 @@ const PaymentSuccess = () => {
           );
 // console.log("FULL RESPONSE", response);
           if (response.data?.data?.order_id) {
-            console.log("FULL RESPONSE", response);
-            console.log(
-              "response.data?.data?.order_id",
-              response.data?.data?.order_id
-            );
+            // console.log("FULL RESPONSE", response);
+            // console.log(
+            //   "response.data?.data?.order_id",
+            //   response.data?.data?.order_id
+            // );
 
             setSuccessConfirmed(true);
             dispatch(clearCart());
-            console.log(
-              "response.data?.data?.order_id aferr clearCart",
-              response.data?.data?.order_id
-            );
+            // console.log(
+            //   "response.data?.data?.order_id aferr clearCart",
+            //   response.data?.data?.order_id
+            // );
           } else {
             setError("Order not found.");
             navigate("/order-online/payment/fail", { replace: true });

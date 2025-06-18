@@ -70,40 +70,36 @@ function AddressData({
     const currentTimeMinutes = hours * 60 + minutes;
 
     let isAvailable = false;
-    if (address && Array.isArray(address.branches) && address.branches.length > 0) {
-      address.branches.forEach((branch) => {
-        const [openHour, openMinute] = branch.open
-          .split(":")
-          .map(Number);
-        let [deliveryHour, deliveryMinute] = branch.last_delivery
-          .split(":")
-          .map(Number);
+    if (address && Array.isArray(address?.area?.area_branches) && address?.area?.area_branches?.length > 0) {
+      address?.area?.area_branches.forEach((branch) => {
+     if(branch?.branch?.open && branch?.last_delivery){
+           const [openHour, openMinute] = branch.branch.open.split(":").map(Number);
+          const [deliveryHour, deliveryMinute] = branch.last_delivery
+            .split(":")
+            .map(Number);
 
-        // If last_delivery is "00:00:00", set it to a default value (e.g., 23:59)
-        if (deliveryHour === 0 && deliveryMinute === 0) {
-          deliveryHour = 23;
-          deliveryMinute = 59;
-        }
+          const branchOpenMinutes = openHour * 60 + openMinute;
+          const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
 
-        const branchOpenMinutes = openHour * 60 + openMinute;
-        const branchLastDeliveryMinutes = deliveryHour * 60 + deliveryMinute;
- 
-        if (branchLastDeliveryMinutes < branchOpenMinutes) {
-          if (
-            currentTimeMinutes >= branchOpenMinutes ||
-            currentTimeMinutes <= branchLastDeliveryMinutes
-          ) {
-            isAvailable = true;
+          if (branchLastDeliveryMinutes < branchOpenMinutes) {
+            if (
+              currentTimeMinutes >= branchOpenMinutes ||
+              currentTimeMinutes <= branchLastDeliveryMinutes
+            ) {
+              isAvailable = true;
+            }
+          } else {
+            if (
+              currentTimeMinutes >= branchOpenMinutes &&
+              currentTimeMinutes <= branchLastDeliveryMinutes
+            ) {
+              isAvailable = true;
+            }
           }
-        } else {
-          if (
-            currentTimeMinutes >= branchOpenMinutes &&
-            currentTimeMinutes <= branchLastDeliveryMinutes
-          ) {
-            isAvailable = true;
-          }
-        }
-      });
+     }else {
+  console.warn("Branches data is missing or invalid.");
+}
+        });
     } else {
       console.error("Branches data is missing or invalid.");
     }
