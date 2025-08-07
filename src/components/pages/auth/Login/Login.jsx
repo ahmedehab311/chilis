@@ -9,24 +9,24 @@ import LoginContent from "./LoginContent";
 // import { fetchAddresses } from "../../../../rtk/slices/adderssSlice";
 import { BASE_URL } from "../../../setting";
 import { useTranslation } from "react-i18next";
-const LoginPage = ({ setToken  }) => {
+const LoginPage = ({ setToken }) => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   // const [userAddress, setUserAddress] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
   const token = localStorage.getItem("token");
 
-  // ✅ من البداية: لو في توكن، نروح للهوم ومنعرضش الصفحة
+  //  من البداية: لو في توكن، نروح للهوم ومنعرضش الصفحة
   useEffect(() => {
     if (token) {
       navigate("/");
     }
   }, [token, navigate]);
 
-  // ✅ لو في توكن حالياً، مانعرضش صفحة اللوجين خالص
+  //  لو في توكن حالياً، مانعرضش صفحة اللوجين خالص
   if (token) return null;
 
   const login = async (e) => {
@@ -35,7 +35,7 @@ const LoginPage = ({ setToken  }) => {
     const APIURL = `/login?phone=${phone}&password=${password}&email=${phone}`;
     try {
       const response = await axios.post(`${BASE_URL}${APIURL}`);
-      // console.log("Response Data:", response.data); 
+      // console.log("Response Data:", response.data);
 
       if (response.data && response.data.data) {
         const token = response.data.data.token;
@@ -44,8 +44,8 @@ const LoginPage = ({ setToken  }) => {
         if (token && userData) {
           setToken(token);
           localStorage.setItem("token", token);
-          localStorage.setItem("user", JSON.stringify(userData)); 
-          dispatch(setUser(userData)); 
+          localStorage.setItem("user", JSON.stringify(userData));
+          dispatch(setUser(userData));
 
           toast.success(t("loginPage.loginSuccess"));
           navigate("/");
@@ -56,53 +56,53 @@ const LoginPage = ({ setToken  }) => {
         throw new Error(t("loginPage.loginFailed"));
       }
     } catch (error) {
-      const errorMessage = error.response?.data?.messages || t("loginPage.invalidCredentials");
+      const errorMessage =
+        error.response?.data?.messages || t("loginPage.invalidCredentials");
       toast.error(errorMessage);
       console.error("Error logging in: ", errorMessage);
     }
   };
 
-  const getAddressForUser = (userId) => {
-    const addresses = JSON.parse(localStorage.getItem("addresses")) || [];
-    console.log("Addresses from localStorage:", addresses);
-    
-    // إضافة التحقق من نوع بيانات userId والعناوين
-    console.log("User ID:", userId);
-    
-    // البحث عن العنوان بناءً على ID
-    const foundAddress = addresses.find(address => address.userId === userId);
-    console.log("Found Address:", foundAddress);
-    return foundAddress;
-  };
-  
-  
+  // const getAddressForUser = (userId) => {
+  //   const addresses = JSON.parse(localStorage.getItem("addresses")) || [];
+  //   console.log("Addresses from localStorage:", addresses);
+
+  //   // إضافة التحقق من نوع بيانات userId والعناوين
+  //   console.log("User ID:", userId);
+
+  //   // البحث عن العنوان بناءً على ID
+  //   const foundAddress = addresses.find((address) => address.userId === userId);
+  //   console.log("Found Address:", foundAddress);
+  //   return foundAddress;
+  // };
+
   // const login = async (e) => {
   //   e.preventDefault();
-  
+
   //   const APIURL = `/login?phone=${phone}&password=${password}&email=${phone}`;
   //   try {
   //     const response = await axios.post(`${BASE_URL}${APIURL}`);
   //     console.log("Response Data:", response.data); // تحقق من استجابة API
-  
+
   //     if (response.data?.response === true) {
   //       const token = response.data?.data?.token;
   //       const userData = response.data?.data?.user;
-  
+
   //       if (token && userData) {
   //         setToken(token);
   //         localStorage.setItem("token", token);
   //         localStorage.setItem("user", JSON.stringify(userData)); // تخزين بيانات المستخدم
-  
+
   //         dispatch(setUser(userData)); // تخزين بيانات المستخدم في Redux
-  
+
   //         // جرب إضافة طباعات للتحقق من البيانات
   //         console.log("User Data:", userData);
-  
+
   //         // استرجاع العنوان للمستخدم بناءً على ID الخاص به
   //         try {
   //           const storedAddress = getAddressForUser(userData.id);
   //           console.log("Stored Address:", storedAddress); // تحقق من العنوان المسترجع
-  
+
   //           if (storedAddress) {
   //             setUserAddress(storedAddress); // تعيين العنوان في state إذا كان موجودًا
   //           } else {
@@ -112,7 +112,7 @@ const LoginPage = ({ setToken  }) => {
   //           console.error("Error fetching address:", addressError);
   //           setUserAddress(null); // في حال وجود خطأ في العناوين، تعيين null
   //         }
-  
+
   //         toast.success("Login successful!");
   //         navigate("/");
   //       } else {
@@ -128,10 +128,7 @@ const LoginPage = ({ setToken  }) => {
   //     console.error("Error logging in: ", errorMessage);
   //   }
   // };
-  
-  
-  
-  
+
   return (
     <LoginContent
       password={password}

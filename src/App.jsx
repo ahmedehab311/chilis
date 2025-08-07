@@ -37,6 +37,7 @@ import PaymentSuccess from "./components/Menu/order/OrderOnline/payment/PaymentS
 import PaymentFail from "./components/Menu/order/OrderOnline/payment/PaymentFail";
 import PaymentFailPending from "./components/Menu/order/OrderOnline/payment/PaymentFailPending";
 import useCleanFawaterkStyles from "./components/hooks/useCleanFawaterkStyles";
+import GoHome from "./components/pages/GoHome";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -102,7 +103,14 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
           path="/forgot-password"
           element={<ForgetPass setToken={setToken} />}
         />
-        <Route path="/profile" element={<Profile userData={userData} />} />
+        <Route
+          path="/profile"
+          element={
+            <GoHome token={token}>
+              <Profile userData={userData} />
+            </GoHome>
+          }
+        />
         <Route path="/locations" element={<Locations userData={userData} />} />
         <Route path="/about-us" element={<AboutUs userData={userData} />} />
         <Route
@@ -110,22 +118,62 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
           element={<ChangePasswordFromProfile />}
         />
         <Route path="/order-online" element={<OrderOnline />} />
-        <Route path="/order-online/payment" element={<Payment />} />
+        <Route
+          path="/order-online/payment"
+          element={
+            <GoHome token={token}>
+              <Payment />
+            </GoHome>
+          }
+        />
         <Route
           path="/order-online/success/:orderCode"
-          element={<OrderSuccessPage />}
+          element={
+            <GoHome token={token}>
+              <OrderSuccessPage />
+            </GoHome>
+          }
         />
-        <Route path="/order-online/fail" element={<OrderFailPage />} />
+        <Route
+          path="/order-online/fail"
+          element={
+            <GoHome token={token}>
+              <OrderFailPage />
+            </GoHome>
+          }
+        />
         <Route
           path="/order-online/payment/success/:orderCode"
-          element={<PaymentSuccess />}
+          element={
+            <GoHome token={token}>
+              <PaymentSuccess />
+            </GoHome>
+          }
         />
-        <Route path="/order-online/payment/fail" element={<PaymentFail />} />
+        <Route
+          path="/order-online/payment/fail"
+          element={
+            <GoHome token={token}>
+              <PaymentFail />
+            </GoHome>
+          }
+        />
         <Route
           path="/order-online/payment/failpending/:orderCode"
-          element={<PaymentFailPending />}
+          element={
+            <GoHome token={token}>
+              <PaymentFailPending />
+            </GoHome>
+          }
         />
-        <Route path="/my-orders" element={<MyOrders />} />
+        <Route
+          path="/my-orders"
+          element={
+            <GoHome token={token}>
+              <MyOrders />
+            </GoHome>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
@@ -138,12 +186,13 @@ function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const location = useLocation();
-
+  const [isTokenLoaded, setIsTokenLoaded] = useState(false);
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (storedToken) {
       setToken(storedToken);
     }
+    setIsTokenLoaded(true);
   }, []);
 
   useEffect(() => {
@@ -162,7 +211,7 @@ function App() {
         ?.scrollIntoView({ behavior: "smooth" });
     }
   }, [location]);
-
+  if (!isTokenLoaded) return null;
   return (
     <>
       <CartProvider>
