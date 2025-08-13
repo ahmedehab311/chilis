@@ -156,8 +156,11 @@
     "confirmSave": "هل أنت متأكد أنك تريد حفظ هذه التغييرات؟",
     "updateFailed": "فشل في تحديث الملف الشخصي",
     "updateSuccess": "تم تحديث الملف الشخصي بنجاح",
+    "updatePassword": "تم تحديث كلمة السر بنجاح",
     "saveChanges": "حفظ التغييرات",
-    "changePassword": "تغيير كلمة المرور"
+    "changePassword": "تغيير كلمة المرور",
+     "cancel": "إلغاء",
+    "ok": "موافق"
   },
   "myOrders": {
     "Loading...": "...جاري التحميل ",

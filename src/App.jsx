@@ -101,7 +101,11 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
         <Route path="/register" element={<Register setToken={setToken} />} />
         <Route
           path="/forgot-password"
-          element={<ForgetPass setToken={setToken} />}
+          element={
+            <GoHome token={token}>
+              <ForgetPass setToken={setToken} />
+            </GoHome>
+          }
         />
         <Route
           path="/profile"
@@ -115,7 +119,12 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
         <Route path="/about-us" element={<AboutUs userData={userData} />} />
         <Route
           path="/change-password"
-          element={<ChangePasswordFromProfile />}
+          element={
+            <GoHome token={token}>
+              <ChangePasswordFromProfile />
+            </GoHome>
+
+          }
         />
         <Route path="/order-online" element={<OrderOnline />} />
         <Route

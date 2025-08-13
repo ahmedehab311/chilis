@@ -6,6 +6,7 @@ import UserInfo from "./userInfo";
 import UserCard from "./InfoUserCard/UserCard.jsx";
 import { HandleSave } from "./HandleSaveProfile.jsx";
 import { useTranslation } from "react-i18next";
+import { Modal } from "antd";
 const Profile = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Profile = () => {
     email: "",
     phone: "",
   });
+  const [openDialog1, setOpenDialog1] = useState(false);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -52,22 +54,37 @@ const Profile = () => {
       [name]: value,
     }));
   };
-
-  const onSave = () => {
-    HandleSave(user, t);
+  const showConfirm = () => {
+    Modal.confirm({
+      title: t("profile.confirmSave"),
+      okText: t("profile.ok"),
+      cancelText: t("profile.cancel"),
+      centered: true,
+      okButtonProps: {
+        style: { backgroundColor: "#d32f2f" }
+      },  maskClosable: true,
+      // cancelButtonProps: {
+      //   style: { border: "none" }
+      // },
+      onOk() {
+        HandleSave(user, t);
+      }
+    })
   };
-  useEffect(() => {
-    if (localStorage.getItem("profileUpdateSuccess") === "true") {
-      toast.success(t("profile.updateSuccess"));
+  // const onSave = () => {
+  //   HandleSave(user, t);
+  // };
+  // useEffect(() => {
+  //   if (localStorage.getItem("profileUpdateSuccess") === "true") {
+  //     toast.success(t("profile.updateSuccess"));
 
-      localStorage.removeItem("profileUpdateSuccess");
-    }
-  }, []);
+  //     localStorage.removeItem("profileUpdateSuccess");
+  //   }
+  // }, []);
 
   const handleChangePassword = () => {
     navigate("/change-password");
   };
-  const [openDialog1, setOpenDialog1] = useState(false);
 
   const handleClickOpen1 = () => {
     setOpenDialog1(true);
@@ -102,7 +119,7 @@ const Profile = () => {
         <UserInfo
           handleInputChange={handleInputChange}
           handleChangePassword={handleChangePassword}
-          handleSave={onSave}
+          handleSave={showConfirm}
           user={user}
         />
       </Stack>
