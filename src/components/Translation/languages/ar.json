@@ -120,6 +120,8 @@
   "branchClosed": "عذراً، هذا الفرع مغلق حالياً",
   "noBranchesAvailable": "لا توجد فروع متاحة",
   "Your Delivery Address List": "قائمة عناوين التوصيل الخاصة بك",
+  "NoAddressesAvailable": "لا يوجد عنواين متاحة",
+  "deletedAddress": "هل تريد مسح هذا العنوان؟",
   "This address is currently unavailable for delivery": "هذا العنوان غير متاح حاليًا للتوصيل",
   "address": {
     "Addresses": "العناوين",

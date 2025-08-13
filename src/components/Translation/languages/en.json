@@ -118,6 +118,8 @@
   "branchClosed": "Sorry, this branch is currently closed",
   "noBranchesAvailable": "No branches available",
   "Your Delivery Address List": "Your Delivery Address List",
+  "NoAddressesAvailable": "No addresses available",
+  "deletedAddress": "Are you sure you want to delete this address?",
   "This address is currently unavailable for delivery": "This address is currently unavailable for delivery",
   "address": {
     "Addresses": "Addresses",

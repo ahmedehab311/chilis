@@ -55,6 +55,14 @@ const Profile = () => {
     }));
   };
   const showConfirm = () => {
+    const hasChanges =
+      user.user_name !== displayedUser.user_name ||
+      user.email !== displayedUser.email ||
+      user.phone !== displayedUser.phone;
+
+    if (!hasChanges) {
+      return;
+    }
     Modal.confirm({
       title: t("profile.confirmSave"),
       okText: t("profile.ok"),
@@ -62,7 +70,7 @@ const Profile = () => {
       centered: true,
       okButtonProps: {
         style: { backgroundColor: "#d32f2f" }
-      },  maskClosable: true,
+      }, maskClosable: true,
       // cancelButtonProps: {
       //   style: { border: "none" }
       // },

@@ -12,6 +12,7 @@ import {
 import DialogAdderss from "./addressDaiolg/DialogAdderss";
 import AddNewAddressButton from "../buttons/AddNewAddressButton";
 import { useTranslation } from "react-i18next";
+import { Modal } from "antd";
 function Address() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -25,13 +26,13 @@ function Address() {
   const unavailableAddresses = useSelector(
     (state) => state.addresses.unavailableAddresses
   );
-// console.log("unavailableAddresses",unavailableAddresses)
-const addresses = useSelector((state) => state.addresses.items);
-// console.log("addresses",addresses)
+  // console.log("unavailableAddresses",unavailableAddresses)
+  const addresses = useSelector((state) => state.addresses.items);
+  // console.log("addresses",addresses)
 
-// useEffect(() => {
-//   // console.log("Unavailable Addresses from Redux:", unavailableAddresses); 
-// }, [unavailableAddresses]);
+  // useEffect(() => {
+  //   // console.log("Unavailable Addresses from Redux:", unavailableAddresses); 
+  // }, [unavailableAddresses]);
   const selectedAddressId = useSelector(
     (state) => state.addresses.selectedAddress?.id
   );
@@ -40,8 +41,8 @@ const addresses = useSelector((state) => state.addresses.items);
     (state) => state.addresses.selectedAddress
   );
   // console.log("selectedAddress",selectedAddress);
-  
-  useEffect(() => { 
+
+  useEffect(() => {
     if (addresses.length > 0) {
       const savedAddress = JSON.parse(localStorage.getItem("selectedAddress"));
 
@@ -123,40 +124,80 @@ const addresses = useSelector((state) => state.addresses.items);
       setUser(storedUser);
     }
   }, []);
+  const showConfirm = (id) => {
+    Modal.confirm({
+      title: t("deletedAddress"),
+      okText: t("profile.ok"),
+      cancelText: t("profile.cancel"),
+      centered: true,
+      okButtonProps: {
+        style: { backgroundColor: "#d32f2f" }
+      }, maskClosable: true,
+      // cancelButtonProps: {
+      //   style: { border: "none" }
+      // },
+      async onOk() {
+        try {
+          await dispatch(deleteAddress(id));
 
-  const handleDeleteAddress = async (id) => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this address?"
-    );
-
-    if (isConfirmed) {
-      try {
-        await dispatch(deleteAddress(id));
-
-        // بعد الحذف، تحديث قائمة العناوين وعنوان الـ Checkout
-        const remainingAddresses = addresses.filter(
-          (address) => address.id !== id
-        );
-        if (remainingAddresses.length > 0) {
-          // تعيين أول عنوان متاح كعنوان محدد جديد
-          dispatch(setSelectedAddress(remainingAddresses[0]));
-          localStorage.setItem(
-            "selectedAddress",
-            JSON.stringify(remainingAddresses[0])
+          // بعد الحذف، تحديث قائمة العناوين وعنوان الـ Checkout
+          const remainingAddresses = addresses.filter(
+            (address) => address.id !== id
           );
-        } else {
-          // لا يوجد عناوين، يجب تعيين selectedAddress إلى null
-          dispatch(setSelectedAddress(null));
-          localStorage.removeItem("selectedAddress");
-        }
+          if (remainingAddresses.length > 0) {
+            // تعيين أول عنوان متاح كعنوان محدد جديد
+            dispatch(setSelectedAddress(remainingAddresses[0]));
+            localStorage.setItem(
+              "selectedAddress",
+              JSON.stringify(remainingAddresses[0])
+            );
+          } else {
+            // لا يوجد عناوين، يجب تعيين selectedAddress إلى null
+            dispatch(setSelectedAddress(null));
+            localStorage.removeItem("selectedAddress");
+          }
 
-        // تحديث العناوين
-        dispatch(fetchAddresses());
-      } catch (error) {
-        console.error("Error deleting address:", error);
+          // تحديث العناوين
+          dispatch(fetchAddresses());
+        } catch (error) {
+          console.error("Error deleting address:", error);
+        }
       }
-    }
+    })
   };
+  // const handleDeleteAddress = async (id) => {
+  //   const isConfirmed = window.confirm(
+  //     "Are you sure you want to delete this address?"
+  //   );
+
+  //   if (isConfirmed) {
+  //     try {
+  //       await dispatch(deleteAddress(id));
+
+  //       // بعد الحذف، تحديث قائمة العناوين وعنوان الـ Checkout
+  //       const remainingAddresses = addresses.filter(
+  //         (address) => address.id !== id
+  //       );
+  //       if (remainingAddresses.length > 0) {
+  //         // تعيين أول عنوان متاح كعنوان محدد جديد
+  //         dispatch(setSelectedAddress(remainingAddresses[0]));
+  //         localStorage.setItem(
+  //           "selectedAddress",
+  //           JSON.stringify(remainingAddresses[0])
+  //         );
+  //       } else {
+  //         // لا يوجد عناوين، يجب تعيين selectedAddress إلى null
+  //         dispatch(setSelectedAddress(null));
+  //         localStorage.removeItem("selectedAddress");
+  //       }
+
+  //       // تحديث العناوين
+  //       dispatch(fetchAddresses());
+  //     } catch (error) {
+  //       console.error("Error deleting address:", error);
+  //     }
+  //   }
+  // };
 
   const [openDialog2, setOpenDialog2] = useState(false);
 
@@ -208,20 +249,20 @@ const addresses = useSelector((state) => state.addresses.items);
   //   }
   // };
   // console.log("addressData",addressData); 
-  
-  const handleAddressSelect = (address) => {
-  if (!address) return; // لو null أو undefined اخرج بهدوء
 
-  if (typeof address === "object" && address.id) {
-    if (address.isAvailable) {
-      dispatch(setSelectedAddress(address));
-      localStorage.setItem("selectedAddress", JSON.stringify(address));
+  const handleAddressSelect = (address) => {
+    if (!address) return; // لو null أو undefined اخرج بهدوء
+
+    if (typeof address === "object" && address.id) {
+      if (address.isAvailable) {
+        dispatch(setSelectedAddress(address));
+        localStorage.setItem("selectedAddress", JSON.stringify(address));
+      }
+    } else {
+      console.error("Address is not an object or is missing required properties.");
     }
-  } else {
-    console.error("Address is not an object or is missing required properties.");
-  }
-};
-return (
+  };
+  return (
     <Stack spacing={3} sx={{ margin: "1rem" }}>
       <Stack>
         <Typography
@@ -236,7 +277,7 @@ return (
         </Typography>
       </Stack>
       <AddressData
-        handleDeleteAddress={handleDeleteAddress}
+        handleDeleteAddress={showConfirm}
         addressData={addressData}
         onAddressSelect={handleAddressSelect}
         unavailableAddresses={unavailableAddresses}

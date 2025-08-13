@@ -58,7 +58,7 @@ function AddressData({
       setActiveIndex(null);
       localStorage.removeItem("activeIndex");
       localStorage.removeItem("selectedAddress");
-        onAddressSelect(null);
+      onAddressSelect(null);
     }
   }, [addressData, activeIndex, onAddressSelect]);
 
@@ -72,8 +72,8 @@ function AddressData({
     let isAvailable = false;
     if (address && Array.isArray(address?.area?.area_branches) && address?.area?.area_branches?.length > 0) {
       address?.area?.area_branches.forEach((branch) => {
-     if(branch?.branch?.open && branch?.last_delivery){
-           const [openHour, openMinute] = branch.branch.open.split(":").map(Number);
+        if (branch?.branch?.open && branch?.last_delivery) {
+          const [openHour, openMinute] = branch.branch.open.split(":").map(Number);
           const [deliveryHour, deliveryMinute] = branch.last_delivery
             .split(":")
             .map(Number);
@@ -96,10 +96,10 @@ function AddressData({
               isAvailable = true;
             }
           }
-     }else {
-  console.warn("Branches data is missing or invalid.");
-}
-        });
+        } else {
+          console.warn("Branches data is missing or invalid.");
+        }
+      });
     } else {
       console.error("Branches data is missing or invalid.");
     }
@@ -250,10 +250,14 @@ function AddressData({
       ) : (
         <Typography
           sx={{
+            fontSize: "17px",
+            fontWeight: 500,
+            textAlign: "center",
             fontFamily: "tahoma",
+
           }}
         >
-          No addresses available
+          {t("NoAddressesAvailable")}
         </Typography>
       )}
     </>

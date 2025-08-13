@@ -7,8 +7,8 @@ export const HandleSave = async (user, t) => {
     const APIURL = `/profile/update?name=${user.user_name}&phone=${user.phone}&email=${user.email}&api_token=${api_token}`;
     const response = await axios.post(`${BASE_URL}${APIURL}`);
     if (response?.data) {
+      window.location.reload();
       localStorage.setItem("user", JSON.stringify(user));
-      // window.location.reload();
       localStorage.removeItem("profileUpdateSuccess");
       localStorage.setItem("token", response?.data?.data?.token);
       toast.success(t("profile.updateSuccess"));
