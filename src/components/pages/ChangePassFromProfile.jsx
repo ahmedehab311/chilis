@@ -18,6 +18,7 @@ const ChangePassword = () => {
     old_password: "",
     new_password: "",
   });
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -53,6 +54,7 @@ const ChangePassword = () => {
 
   const handleChangePassword = async (e) => {
     e.preventDefault(); // Prevents default form submission
+    setLoading(true)
     try {
       const api_token = localStorage.getItem("token");
       if (!api_token) {
@@ -79,6 +81,8 @@ const ChangePassword = () => {
     } catch (error) {
       toast.error("Failed to change password.");
       console.error("Error changing password: ", error);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -202,9 +206,11 @@ const ChangePassword = () => {
           variant="contained"
           color="error"
           sx={{ mt: "1rem", fontSize: "1.1rem", fontWeight: "600" }}
+          disabled={loading}
         >
-          {t("profile.saveChanges")}
+          {loading ? t("loginPage.loading") : t("profile.saveChanges")}
         </Button>
+
       </Box>
     </Stack>
   );
