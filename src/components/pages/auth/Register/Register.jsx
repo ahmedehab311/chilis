@@ -11,15 +11,16 @@ import { useTranslation } from "react-i18next";
 
 const Register = ({ setToken }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [first_name, setFirst_name] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const navigate = useNavigate();
+  const [phone, setPhone] = useState(""); 
+  const [loading, setLoading] = useState(false)
 
   const registerUser = async (e) => {
     e.preventDefault();
-
+setLoading(true)
     const APIURL = `/register?first_name=${first_name}&email=${email}&password=${password}&phone=${phone}`;
 
     try {
@@ -39,6 +40,8 @@ const Register = ({ setToken }) => {
     } catch (error) {
       toast.error("The email or phone has already been taken.");
       console.error("Error registering: ", error);
+    }finally{
+      setLoading(false)
     }
   };
   const {
@@ -81,6 +84,7 @@ const Register = ({ setToken }) => {
       setFirst_name={setFirst_name}
       setPassword={setPassword}
       setPhone={setPhone}
+      loading={loading}
     />
   );
 };

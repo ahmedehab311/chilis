@@ -67,6 +67,7 @@
   "orderCode": "Your order code:",
   "trackCheck": "Please keep it to track your order.",
   "loginPage": {
+    "loading":"loading...",
     "welcomeBack": "Welcome Back",
     "signInToContinue": "Sign in to continue",
     "email": "Email",

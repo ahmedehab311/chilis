@@ -4,7 +4,7 @@
 import { Box, Button, TextField, Typography, Stack } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-function LoginContent({ login, phone, password, setPassword, setPhone }) {
+function LoginContent({ login, phone, password, setPassword, setPhone,loading }) {
   const { t } = useTranslation();
   return (
     <Box
@@ -101,8 +101,10 @@ function LoginContent({ login, phone, password, setPassword, setPhone }) {
             variant="contained"
             color="error"
             sx={{ fontSize: "1.2rem", fontWeight: "600" }}
+             disabled={loading}
           >
-            {t("loginPage.loginButton")}
+            {/* {t("loginPage.loginButton")} */}
+              {loading ? t("loginPage.loading") : t("loginPage.loginButton")}
           </Button>
           <Typography variant="body2" align="center" sx={{ mt: 1 }}>
             <RouterLink to="/forgot-password">

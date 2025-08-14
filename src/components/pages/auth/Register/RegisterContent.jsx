@@ -15,6 +15,7 @@ function RegisterContent({
   setPhone,
   handleEmailBlur,
   onChangeEmail,
+  loading
 }) {
   const { t } = useTranslation();
   return (
@@ -109,27 +110,6 @@ function RegisterContent({
                   fontSize: "1.2rem",
                 },
               }}
-              // placeholder="Enter Your Email Address"
-              // {...register("email")}
-              // onBlur={handleEmailBlur}
-              // onChange={onChangeEmail}
-              // variant="outlined"
-              // fullWidth
-              // required
-
-              // sx={{
-              //   "& .MuiInputBase-input": {
-              //     fontSize: "1.3rem",
-              //     color: "gray",
-              //   },
-              //   "& .MuiInputLabel-root": {
-              //     fontSize: "1.2rem",
-              //   },
-              //   "& .MuiFormHelperText-root": {
-              //     fontSize: "1.1rem",
-              //     color: "red",
-              //   },
-              // }}
             />
           </Stack>
           <Stack>
@@ -190,13 +170,13 @@ function RegisterContent({
           </Stack>
           <Button
             type="submit"
-            disabled={emailAvailabilityStatus === "checking"}
+            disabled={loading || emailAvailabilityStatus === "checking"}
             variant="contained"
             color="error"
             sx={{ fontSize: "1.2rem", fontWeight: "bold" }}
+
           >
-            {/* Sign Up */}
-            {t("regsterPage.signUp")}
+            {loading ? t("loginPage.loading") : t("regsterPage.signUp")}
           </Button>
           <Typography
             variant="body2"

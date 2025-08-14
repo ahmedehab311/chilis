@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { BASE_URL } from "../setting";
 import { useTranslation } from "react-i18next";
-
+import { useNavigate } from "react-router-dom";
 const ChangePassword = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: "",
     old_password: "",
@@ -17,6 +18,7 @@ const ChangePassword = () => {
     old_password: "",
     new_password: "",
   });
+
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
 
@@ -64,7 +66,11 @@ const ChangePassword = () => {
       console.log(response.data);
 
       if (response.data && response.data.response) {
-        // toast.success("Password changed successfully!");
+        setForm((prevForm) => ({
+          ...prevForm,
+          old_password: "",
+          new_password: ""
+        }));
         localStorage.setItem("token", response?.data?.data?.token);
         toast.success(t("profile.updatePassword"));
       } else {
