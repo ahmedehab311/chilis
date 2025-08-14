@@ -65,7 +65,6 @@ const ChangePassword = () => {
       const APIURL = `/profile/update/password?email=${form.email}&password=${form.old_password}&new_password=${form.new_password}&api_token=${api_token}`;
 
       const response = await axios.post(`${BASE_URL}${APIURL}`);
-      console.log(response.data);
 
       if (response.data && response.data.response) {
         setForm((prevForm) => ({
