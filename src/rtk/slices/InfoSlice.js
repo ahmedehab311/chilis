@@ -7,6 +7,8 @@ export const fetchItemDetails = createAsyncThunk(
     const response = await axios.get(
       `${BASE_URL}/item/${itemId}/1`
     );
+    console.log("fetchData",response.data);
+    
     return response.data;
   }
 );

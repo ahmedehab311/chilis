@@ -9,3 +9,4 @@ const API_ITEMS = `${BASE_URL}/item/1/1`;
 
 const API_TAX = `${BASE_URL}/settings`;
 export { APIURL, BASE_URL, API_ITEMS, API_TAX,BASE_URL_images };
+   
