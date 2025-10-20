@@ -22,7 +22,12 @@ function MyOrders({ currentStatus }) {
   const { t, i18n } = useTranslation();
   const [showCard, setShowCard] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
-  const [activeSection, setActiveSection] = useState("Pending");
+  const [activeSection, setActiveSection] = useState([
+    "New",
+    "Pending",
+    "Processing",
+    "In-way",
+  ]);
   const dispatch = useDispatch();
   const orderDetails = useSelector((state) => state.orderDetails.orderDetails);
   // console.log("Order Details from Redux:", orderDetails);
@@ -40,7 +45,9 @@ function MyOrders({ currentStatus }) {
       );
     }
   }, [dispatch, selectedOrderId]);
-
+  useEffect(() => {
+    dispatch(fetchOrderHistory(api_token));
+  }, [dispatch]);
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchOrderHistory());
@@ -48,18 +55,29 @@ function MyOrders({ currentStatus }) {
   }, [status, dispatch]);
 
   const handleSectionClick = (sections) => {
-    setActiveSection(sections[0]);
+    setActiveSection(sections);
     setSelectedOrderId(null);
     setShowCard(false);
   };
 
-  const filterOrdersByStatus = (status) => {
-    // console.log("Filtering by status:", status);
-    return orders.filter((order) => {
-      // console.log("Order Status:", order.status);
-      return order.status.toLowerCase() === status.toLowerCase();
-    });
+  // const filterOrdersByStatus = (status) => {
+  //   // console.log("Filtering by status:", status);
+  //   return orders.filter((order) => {
+  //     // console.log("Order Status:", order.status);
+  //     return order.status.toLowerCase() === status.toLowerCase();
+  //   });
+  // };
+  const filterOrdersByStatus = (statuses) => {
+    // لو المستخدم مرر حالة واحدة فقط (string)، نحولها لمصفوفة فيها عنصر واحد
+    const statusArray = Array.isArray(statuses) ? statuses : [statuses];
+
+    return orders.filter((order) =>
+      statusArray.some(
+        (status) => order.status.toLowerCase() === status.toLowerCase()
+      )
+    );
   };
+
 
   const handleViewDetailsClick = (order) => {
     setSelectedOrderId(order.order_id);
@@ -116,21 +134,48 @@ function MyOrders({ currentStatus }) {
   return (
     <Stack
       direction={"row"}
-      alignItems={"center"}
+      // alignItems={"center"}
+      alignItems="flex-start"
+      // sx={{
+      //   display: "flex",
+      //   mt: "6rem",
+      //   "@media (max-width: 1000px)": { flexDirection: "column !important" },
+      // }}
+
       sx={{
         display: "flex",
         mt: "6rem",
-        "@media (max-width: 1000px)": { flexDirection: "column !important" },
+        gap: 2,
+        "@media (max-width: 1000px)": {
+          flexDirection: "column",
+        },
       }}
+
     >
       <Stack
         className="leftSection"
+        // sx={{
+        //   width: "50%",
+        //   padding: 2,
+        //   border: "1px solid #ddd",
+        //   boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)!important",
+        //   "@media (max-width: 500px)": { width: "auto" },
+        // }}
         sx={{
-          width: "50%",
+          width: "30%", // خليه أصغر من اليمين
+          flexShrink: 0, // ✅ ميتمدش ولا يصغر
+          position: "sticky", // ✅ يفضل ثابت
+          top: "6rem", // المسافة من فوق
+          alignSelf: "flex-start", // ✅ يخلي العمود يثبت مكانه
           padding: 2,
           border: "1px solid #ddd",
-          boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)!important",
-          "@media (max-width: 500px)": { width: "auto" },
+          borderRadius: 2,
+          background: "#fff",
+          boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)",
+          "@media (max-width: 1000px)": {
+            width: "100%",
+            position: "relative",
+          },
         }}
       >
         <SectionButton
@@ -148,9 +193,21 @@ function MyOrders({ currentStatus }) {
               }}
             />
           }
-          active={activeSection === "Pending"}
+          // active={activeSection === "Pending"}
+          // active={
+          //   Array.isArray(activeSection)
+          //     ? activeSection.includes("Pending")
+          //     : activeSection === "Pending"
+          // }
+          active={
+            Array.isArray(activeSection)
+              ? activeSection.some((status) =>
+                ["New", "Pending", "Processing", "In-way"].includes(status)
+              )
+              : ["New", "Pending", "Processing", "In-way"].includes(activeSection)
+          }
           onClick={() =>
-            handleSectionClick(["Pending", "Processing", "In-way", "new"])
+            handleSectionClick(["Pending", "Processing", "In-way", "New"])
           }
           labelStyle={{
             fontSize: "1.2rem",
@@ -175,10 +232,15 @@ function MyOrders({ currentStatus }) {
                 fontSize: "1.2rem",
                 marginLeft: ".5rem",
                 fontWeight: "600",
+
               }}
             />
           }
-          active={activeSection === "Delivered"}
+          active={
+            Array.isArray(activeSection)
+              ? activeSection.includes("Delivered")
+              : activeSection === "Delivered"
+          }
           onClick={() => handleSectionClick(["Delivered"])}
         />
         <SectionButton
@@ -201,7 +263,14 @@ function MyOrders({ currentStatus }) {
               }}
             />
           }
-          active={activeSection === "canceled"}
+          // active={activeSection === "canceled"}
+          active={
+            Array.isArray(activeSection)
+              ? activeSection.some(status =>
+                ["Canceled", "Rejected"].includes(status)
+              )
+              : ["Canceled", "Rejected"].includes(activeSection)
+          }
           onClick={() => handleSectionClick(["canceled", "Rejected"])}
         />
       </Stack>
@@ -217,17 +286,17 @@ function MyOrders({ currentStatus }) {
             </CardContent>
           </Card>
         )} */}
-        <Stack className="rightSection" sx={{ width: "70%", padding: 2 }}>
-  {filterOrdersByStatus(activeSection).length === 0 && !showCard && (
-    <Card sx={{ backgroundColor: "white" }}>
-      <CardContent>
-        <Typography sx={{ textAlign: "center" }}>
-          {t("myOrders.noOrdersFound")}{" "}
-          {t(`myOrders.${activeSection}`)} {/* هنا دمجنا الحالة مع النص */}
-        </Typography>
-      </CardContent>
-    </Card>
-  )}
+      <Stack className="rightSection" sx={{ width: "70%",  flexGrow: 1, padding: 2 }}>
+        {filterOrdersByStatus(activeSection).length === 0 && !showCard && (
+          <Card sx={{ backgroundColor: "white" }}>
+            <CardContent>
+              <Typography sx={{ textAlign: "center" }}>
+                {t("myOrders.noOrdersFound")}{" "}
+                {t(`myOrders.${activeSection}`)}
+              </Typography>
+            </CardContent>
+          </Card>
+        )}
         {filterOrdersByStatus(activeSection).map(
           (order) =>
             !showCard && (
@@ -263,7 +332,7 @@ function MyOrders({ currentStatus }) {
               <Stack
                 sx={{ borderBottom: "1px solid #dee2e6!important", p: "1rem" }}
               >
-                {["Pending", "Processing", "In Way", "new"].includes(
+                {["Pending", "Processing", "In Way"].includes(
                   orderDetails.status
                 ) && (
                     <Stack>
@@ -420,11 +489,11 @@ function MyOrders({ currentStatus }) {
                     textAlign: "left",
                   }}
                 >
-                  {orderDetails.address[0].address1}
+                  {orderDetails?.address?.[0]?.address1 || 'Pickup'}
                 </Typography>
               </Stack>
               <div>
-                {orderDetails.items.map((item, index) => (
+                {orderDetails?.items.map((item, index) => (
                   <Stack
                     key={index}
                     sx={{
@@ -671,16 +740,27 @@ function SectionButton({ label, icon, active, onClick }) {
     <Stack
       sx={{
         padding: "1rem",
-        backgroundColor: active ? "#f0f0f0" : "white",
+        backgroundColor: active ? "#17a2b820" : "#fff",
         cursor: "pointer",
         mb: 1,
-        borderRadius: 1,
+        borderRadius: 2,
+        border: active ? "2px solid #17a2b8" : "1px solid #ddd",
+        boxShadow: active
+          ? "0 2px 6px rgba(23, 162, 184, 0.3)"
+          : "0 .125rem .25rem rgba(0,0,0,.075)",
+        transition: "all 0.3s ease",
+        "&:hover": {
+          backgroundColor: active ? "#17a2b840" : "#f8f9fa",
+        },
       }}
       onClick={onClick}
     >
       <Stack direction={"row"} alignItems={"center"}>
         {icon}
-        <Typography sx={{ fontSize: "1.2rem", ml: ".5rem", fontWeight: "600" }}>
+        <Typography sx={{
+          fontSize: "1.2rem", ml: ".5rem", fontWeight: "600", color: active ? "#17a2b8" : "#000",
+          transition: "color 0.3s ease",
+        }}>
           {label}
         </Typography>
       </Stack>
@@ -688,10 +768,10 @@ function SectionButton({ label, icon, active, onClick }) {
   );
 }
 
-// import { useTranslation } from "react-i18next";
+
 function OrderCard({ order, onViewDetailsClick }) {
 
-  const { t,i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
   const convertNumberToArabic = (number) => {
     const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];

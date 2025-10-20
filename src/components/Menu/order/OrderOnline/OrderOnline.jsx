@@ -49,6 +49,8 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 function OrderOnline() {
+  // console.log("BASE_URL",BASE_URL);
+
   const { t, i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
   const dispatch = useDispatch();
@@ -87,7 +89,7 @@ function OrderOnline() {
   const [deliveryFee, setDeliveryFee] = useState(50);
   const selectedOption = useSelector((state) => state.info.selectedOption);
   const idInfo = useSelector((state) => state.info.idInfo);
-    const selectedBranchId = useSelector(
+  const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
   );
   const selectedAddress = useSelector(
@@ -124,35 +126,6 @@ function OrderOnline() {
       [index]: newTotalPrice,
     }));
   };
-
-  // const handleRemoveItem = (index) => {
-  //   // حذف العنصر من Redux store
-  //   dispatch(removeItemFromCart(index));
-
-  //   // قراءة السلة من localStorage
-  //   const cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-  //   if (index >= 0 && index < cart.length) {
-  //     // حذف العنصر من localStorage
-  //     cart.splice(index, 1);
-  //     localStorage.setItem("cart", JSON.stringify(cart));
-
-  //     // تحديث الكونترات بعد الحذف
-  //     cart.forEach((item, idx) => {
-  //       const updatedQuantity = item.quantity;
-  //       // استخدم هذه الكمية لتحديث الكونترات في واجهة المستخدم
-  //       // يمكنك تحديث الكونترات باستخدام setQuantity هنا أو من خلال Redux
-  //     });
-  //   }
-
-  //   // إعادة حساب الأسعار بعد الحذف
-  //   const updatedPrices = {};
-  //   cart.forEach((item, idx) => {
-  //     updatedPrices[idx] = item.price * item.quantity;
-  //   });
-
-  //   setTotalPrices(updatedPrices);
-  // };
 
   // تخزين activeIndex
 
@@ -196,22 +169,42 @@ function OrderOnline() {
     const initialPrices = cartItems.map((item) => item.price * item.quantity);
     setTotalPrices(initialPrices);
   }, [cartItems]);
-
   const handleQuantityChange = (itemId, newQuantity) => {
-    // تحديث الكمية في Redux
     dispatch(updateItemQuantity({ uniqueId: itemId, quantity: newQuantity }));
 
-    // تحديث الأسعار بناءً على الكمية الجديدة
     setTotalPrices((prevPrices) => {
       const updatedPrices = { ...prevPrices };
-      const itemIndex = cartItems.findIndex((item) => item.id === itemId);
+      const itemIndex = cartItems.findIndex((item) => item.uniqueId === itemId);
+
       if (itemIndex > -1) {
         const item = cartItems[itemIndex];
-        updatedPrices[itemIndex] = item.price * newQuantity;
+        const extrasTotal = item.extras
+          ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
+          : 0;
+
+        updatedPrices[itemIndex] =
+          (item.price + extrasTotal) * newQuantity;
       }
+
       return updatedPrices;
     });
   };
+
+  // const handleQuantityChange = (itemId, newQuantity) => {
+  //   // تحديث الكمية في Redux
+  //   dispatch(updateItemQuantity({ uniqueId: itemId, quantity: newQuantity }));
+
+  //   // تحديث الأسعار بناءً على الكمية الجديدة
+  //   setTotalPrices((prevPrices) => {
+  //     const updatedPrices = { ...prevPrices };
+  //     const itemIndex = cartItems.findIndex((item) => item.id === itemId);
+  //     if (itemIndex > -1) {
+  //       const item = cartItems[itemIndex];
+  //       updatedPrices[itemIndex] = item.price * newQuantity;
+  //     }
+  //     return updatedPrices;
+  //   });
+  // };
 
   const handleCloseCreditCardDialog = () => {
     setOpenCreditCardDialog(false);
@@ -226,7 +219,12 @@ function OrderOnline() {
         ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
         : 0;
 
-      return accumulator + itemTotal + extrasTotal;
+      // return accumulator + itemTotal + extrasTotal;
+      return (
+        accumulator +
+        (parseFloat(item.price) + extrasTotal) * (item.quantity || 1)
+      );
+
     }, 0);
   };
 
@@ -353,7 +351,7 @@ function OrderOnline() {
   // console.log("totalWithTax",totalWithTax);
 
   const finalTotal = parseFloat(totalWithTaxFinal.toFixed(2));
-  
+
   useEffect(() => {
     dispatch(setSelectedBranch(""));
   }, []);
@@ -470,7 +468,7 @@ function OrderOnline() {
         if (response.data.response) {
           // console.log(response.data);
           // console.log(response.data.data.order_code);
-          // setOrderCode(response.data.data.order_code);
+          setOrderCode(response.data.data.order_code);
           setHasedKey(response.data.data?.SDK_TOKEN);
           sessionStorage.setItem("fromCheckout", "true");
           sessionStorage.setItem("fromPayment", "true");
@@ -770,8 +768,8 @@ function OrderOnline() {
                 </Typography>
               </Stack>
               {currentAddress &&
-              currentAddress.address_name &&
-              currentAddress.isAvailable ? (
+                currentAddress.address_name &&
+                currentAddress.isAvailable ? (
                 <Card
                   sx={{
                     mb: 3,
@@ -835,9 +833,8 @@ function OrderOnline() {
                           : currentAddress.city?.name_en}
                         ,
                         {currentAddress.building
-                          ? `${t("address.building")}: ${
-                              currentAddress.building
-                            }, `
+                          ? `${t("address.building")}: ${currentAddress.building
+                          }, `
                           : ""}
                         {currentAddress.floor
                           ? `${t("address.floor")}: ${currentAddress.floor}`
@@ -954,7 +951,7 @@ function OrderOnline() {
                 </Typography>
               ) : (
                 cartItems.map((item, index) => (
-                  <Card key={uuidv4()} sx={{ p: 2, my: 3 }}>
+                  <Card key={item.uniqueId} sx={{ p: 2, my: 3 }}>
                     <Stack sx={{ position: "relative" }}>
                       <Stack
                         direction={"row"}
@@ -1065,14 +1062,14 @@ function OrderOnline() {
                         )} */}
                           {isArabic
                             ? convertNumberToArabic(
-                                (
-                                  totalPrices[index] ||
-                                  item.price * item.quantity
-                                ).toFixed(2)
-                              )
+                              (
+                                totalPrices[index] ||
+                                item.price * item.quantity
+                              ).toFixed(2)
+                            )
                             : (
-                                totalPrices[index] || item.price * item.quantity
-                              ).toFixed(2)}
+                              totalPrices[index] || item.price * item.quantity
+                            ).toFixed(2)}
                           {t("egp")}
                         </Typography>
                       </Stack>
@@ -1140,8 +1137,8 @@ function OrderOnline() {
                               >
                                 {/* {extra.price} {t("egp")} */}
                                 {isArabic
-                                  ? convertNumberToArabic(extra.price)
-                                  : extra.price}{" "}
+                                  ? convertNumberToArabic((extra.price * item.quantity).toFixed(2))
+                                  : (extra.price * item.quantity).toFixed(2)}{" "}
                                 {t("egp")}
                               </Typography>
                             </Stack>
@@ -1455,19 +1452,19 @@ function OrderOnline() {
                 ).toFixed(2)}{" "} */}
                   {isArabic
                     ? convertNumberToArabic(
-                        (
-                          (subtotalWithExtras -
-                            discount +
-                            (deliveryType === "delivery" ? deliveryFee : 0)) *
-                          (tax / 100)
-                        ).toFixed(2)
-                      )
-                    : (
+                      (
                         (subtotalWithExtras -
                           discount +
                           (deliveryType === "delivery" ? deliveryFee : 0)) *
                         (tax / 100)
-                      ).toFixed(2)}
+                      ).toFixed(2)
+                    )
+                    : (
+                      (subtotalWithExtras -
+                        discount +
+                        (deliveryType === "delivery" ? deliveryFee : 0)) *
+                      (tax / 100)
+                    ).toFixed(2)}
                   {t("egp")}
                 </Typography>
               </Stack>
@@ -1513,25 +1510,25 @@ function OrderOnline() {
               >
                 {isArabic
                   ? convertNumberToArabic(
-                      (
-                        subtotalWithExtras -
-                        discount +
-                        (deliveryType === "delivery" ? deliveryFee : 0) +
-                        (subtotalWithExtras -
-                          discount +
-                          (deliveryType === "delivery" ? deliveryFee : 0)) *
-                          (tax / 100)
-                      ).toFixed(2)
-                    )
-                  : (
+                    (
                       subtotalWithExtras -
-                      discount + // إضافة الخصم هنا
+                      discount +
                       (deliveryType === "delivery" ? deliveryFee : 0) +
                       (subtotalWithExtras -
-                        discount + // إضافة الخصم هنا
+                        discount +
                         (deliveryType === "delivery" ? deliveryFee : 0)) *
-                        (tax / 100)
-                    ).toFixed(2)}{" "}
+                      (tax / 100)
+                    ).toFixed(2)
+                  )
+                  : (
+                    subtotalWithExtras -
+                    discount + // إضافة الخصم هنا
+                    (deliveryType === "delivery" ? deliveryFee : 0) +
+                    (subtotalWithExtras -
+                      discount + // إضافة الخصم هنا
+                      (deliveryType === "delivery" ? deliveryFee : 0)) *
+                    (tax / 100)
+                  ).toFixed(2)}{" "}
                 {t("egp")}
               </Typography>
             </Stack>

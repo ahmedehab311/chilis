@@ -16,8 +16,8 @@ export const fetchOrderHistory = createAsyncThunk(
       }
       const response = await axios.get(`${API_HISTORY}?api_token=${apiToken}`);
       // console.log("API Response:", response.data);
-      if (response.data.data.details) {
-        return response.data.data.details;
+      if (response?.data?.data?.details) {
+        return response?.data?.data?.details;
       } else {
         throw new Error("Invalid response structure");
       }
