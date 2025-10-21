@@ -23,7 +23,6 @@ function MyOrders({ currentStatus }) {
   const [showCard, setShowCard] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [activeSection, setActiveSection] = useState([
-    "New",
     "Pending",
     "Processing",
     "In-way",
@@ -202,12 +201,12 @@ function MyOrders({ currentStatus }) {
           active={
             Array.isArray(activeSection)
               ? activeSection.some((status) =>
-                ["New", "Pending", "Processing", "In-way"].includes(status)
+                ["Pending", "Processing", "In-way"].includes(status)
               )
-              : ["New", "Pending", "Processing", "In-way"].includes(activeSection)
+              : ["Pending", "Processing", "In-way"].includes(activeSection)
           }
           onClick={() =>
-            handleSectionClick(["Pending", "Processing", "In-way", "New"])
+            handleSectionClick(["Pending", "Processing", "In-way"])
           }
           labelStyle={{
             fontSize: "1.2rem",
@@ -286,13 +285,13 @@ function MyOrders({ currentStatus }) {
             </CardContent>
           </Card>
         )} */}
-      <Stack className="rightSection" sx={{ width: "70%",  flexGrow: 1, padding: 2 }}>
+      <Stack className="rightSection" sx={{ width: "70%", flexGrow: 1, padding: 2 }}>
         {filterOrdersByStatus(activeSection).length === 0 && !showCard && (
           <Card sx={{ backgroundColor: "white" }}>
             <CardContent>
               <Typography sx={{ textAlign: "center" }}>
                 {t("myOrders.noOrdersFound")}{" "}
-                {t(`myOrders.${activeSection}`)}
+                {t(`myOrders.progress`)}
               </Typography>
             </CardContent>
           </Card>
