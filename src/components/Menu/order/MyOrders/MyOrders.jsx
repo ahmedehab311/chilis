@@ -58,14 +58,6 @@ function MyOrders({ currentStatus }) {
     setSelectedOrderId(null);
     setShowCard(false);
   };
-
-  // const filterOrdersByStatus = (status) => {
-  //   // console.log("Filtering by status:", status);
-  //   return orders.filter((order) => {
-  //     // console.log("Order Status:", order.status);
-  //     return order.status.toLowerCase() === status.toLowerCase();
-  //   });
-  // };
   const filterOrdersByStatus = (statuses) => {
     // لو المستخدم مرر حالة واحدة فقط (string)، نحولها لمصفوفة فيها عنصر واحد
     const statusArray = Array.isArray(statuses) ? statuses : [statuses];
@@ -153,19 +145,13 @@ function MyOrders({ currentStatus }) {
     >
       <Stack
         className="leftSection"
-        // sx={{
-        //   width: "50%",
-        //   padding: 2,
-        //   border: "1px solid #ddd",
-        //   boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)!important",
-        //   "@media (max-width: 500px)": { width: "auto" },
-        // }}
+  
         sx={{
-          width: "30%", // خليه أصغر من اليمين
-          flexShrink: 0, // ✅ ميتمدش ولا يصغر
-          position: "sticky", // ✅ يفضل ثابت
-          top: "6rem", // المسافة من فوق
-          alignSelf: "flex-start", // ✅ يخلي العمود يثبت مكانه
+          width: "30%", 
+          flexShrink: 0, 
+          position: "sticky", 
+          top: "6rem", 
+          alignSelf: "flex-start", 
           padding: 2,
           border: "1px solid #ddd",
           borderRadius: 2,
@@ -192,12 +178,7 @@ function MyOrders({ currentStatus }) {
               }}
             />
           }
-          // active={activeSection === "Pending"}
-          // active={
-          //   Array.isArray(activeSection)
-          //     ? activeSection.includes("Pending")
-          //     : activeSection === "Pending"
-          // }
+       
           active={
             Array.isArray(activeSection)
               ? activeSection.some((status) =>
@@ -274,17 +255,7 @@ function MyOrders({ currentStatus }) {
         />
       </Stack>
 
-      {/* <Stack className="rightSection" sx={{ width: "70%", padding: 2 }}>
-        {filterOrdersByStatus(activeSection).length === 0 && !showCard && (
-          <Card sx={{ backgroundColor: "white" }}>
-            <CardContent>
-              <Typography sx={{ textAlign: "center" }}>
-                {t("myOrders.noOrdersFound")}
-                {activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
-              </Typography>
-            </CardContent>
-          </Card>
-        )} */}
+    
       <Stack className="rightSection" sx={{ width: "70%", flexGrow: 1, padding: 2 }}>
         {filterOrdersByStatus(activeSection).length === 0 && !showCard && (
           <Card sx={{ backgroundColor: "white" }}>
