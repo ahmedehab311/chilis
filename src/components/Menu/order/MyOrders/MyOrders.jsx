@@ -58,6 +58,14 @@ function MyOrders({ currentStatus }) {
     setSelectedOrderId(null);
     setShowCard(false);
   };
+
+  // const filterOrdersByStatus = (status) => {
+  //   // console.log("Filtering by status:", status);
+  //   return orders.filter((order) => {
+  //     // console.log("Order Status:", order.status);
+  //     return order.status.toLowerCase() === status.toLowerCase();
+  //   });
+  // };
   const filterOrdersByStatus = (statuses) => {
     // لو المستخدم مرر حالة واحدة فقط (string)، نحولها لمصفوفة فيها عنصر واحد
     const statusArray = Array.isArray(statuses) ? statuses : [statuses];
