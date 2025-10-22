@@ -297,9 +297,7 @@ function MyOrders({ currentStatus }) {
           <Card sx={{ mt: "2rem" }}>
             <CardContent sx={{ p: 0 }}>
               <Stack
-                // direction={"row"}
-                // alignItems={"center"}
-                // sx={{ borderBottom: "1px solid #dee2e6!important", p: "1rem" }}
+
                 direction={"row"}
                 alignItems={"center"}
                 sx={{
@@ -490,68 +488,62 @@ function MyOrders({ currentStatus }) {
                 </Typography>
               </Stack>
               <div>
-                {orderDetails?.items.map((item, index) => (
-                  <Stack
-                    key={index}
-                    sx={{
-                      borderBottom: "1px solid #dee2e6!important",
-                      p: "1rem",
-                    }}
-                  >
-                    <Stack direction={"row"} alignItems={"center"}>
-                      <img
-                        src={`${BASE_URL_images}${item.info[0].image}`}
-                        alt="item image"
-                        style={{ width: "100px", height: "auto", m: "1rem" }}
-                      />
-                      <Typography
-                        sx={{
-                          fontSize: "1.5rem",
-                          fontWeight: "500",
-                          color: "#424242",
-                          textAlign: "top",
-                          ml: ".8rem",
-                        }}
-                      >
-                        {i18n.language === "ar"
-                          ? item.info[0].size_ar
-                          : item.info[0].size_en}
-                      </Typography>
-                    </Stack>
-                    <Stack
-                      direction={"row"}
-                      alignItems={"center"}
-                      sx={{ justifyContent: "space-between", mb: ".5rem" }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: "1.6rem",
-                          fontWeight: "600",
-                          color: "#17a2b8!important",
-                          mt: ".8rem",
-                        }}
-                      >
-                        {i18n.language === "ar"
-                          ? item.info[0].size_ar
-                          : item.info[0].size_en}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: "1.6rem",
-                          fontWeight: "600",
-                          color: "#17a2b8!important",
-                          textAlign: "top",
-                        }}
-                      >
-                        {isArabic
-                          ? convertNumberToArabic(item.total_price)
-                          : item.total_price}{" "}
-                        {t("egp")}
-                        {/* {item.total_price} {t("egp")} */}
-                      </Typography>
-                    </Stack>
-                  </Stack>
-                ))}
+            {orderDetails?.items.map((item, index) => (
+  <Stack
+    key={index}
+    direction={{ xs: "column", sm: "row" }}
+    alignItems={{ xs: "flex-start", sm: "center" }}
+    justifyContent="space-between"
+    sx={{
+      borderBottom: "1px solid #dee2e6!important",
+      p: "1rem",
+      gap: "1rem",
+    }}
+  >
+    {/* الصورة + الاسم */}
+    <Stack direction="row" alignItems="center" gap={2}>
+      <Box
+        component="img"
+        src={`${BASE_URL_images}${item.info[0].image}`}
+        alt="item image"
+        sx={{
+          width: 70,
+          height: 70,
+          borderRadius: ".5rem",
+          objectFit: "cover",
+        }}
+      />
+      <Box>
+        <Typography sx={{ fontSize: "1.5rem", fontWeight: "600",display:"flex" }}>
+        {i18n.language === "ar"
+            ? item.info[0].name_ar
+            : item.info[0].name_en} 
+        </Typography>
+        <Typography sx={{ fontSize: "1.5rem", color: "#6c757d" ,color:"#000"}}>
+          {item.count}× {i18n.language === "ar"
+            ? item.info[0].size_ar
+            : item.info[0].size_en}
+        </Typography>
+      </Box>
+    </Stack>
+
+    {/* السعر */}
+    <Typography
+      sx={{
+        fontSize: "1.5rem",
+        fontWeight: "600",
+        color: "#17a2b8",
+        mt: { xs: "0.5rem", sm: 0 },
+      }}
+    >
+      {isArabic
+        ? convertNumberToArabic(item.total_price)
+        : item.total_price}{" "}
+      {t("egp")}
+    </Typography>
+  </Stack>
+))}
+
               </div>
               <Stack
                 sx={{ borderBottom: "1px solid #dee2e6!important", p: "1rem" }}
