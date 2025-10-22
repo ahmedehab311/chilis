@@ -26,7 +26,6 @@ function MyOrders({ currentStatus }) {
     "Pending",
     "Processing",
     "In-way",
-    "New"
   ]);
   const dispatch = useDispatch();
   const orderDetails = useSelector((state) => state.orderDetails.orderDetails);
@@ -303,7 +302,7 @@ function MyOrders({ currentStatus }) {
                 sx={{
                   borderBottom: "1px solid #dee2e6!important",
                   p: "1rem",
-                  flexWrap: "wrap", // ✅ يخلي المحتوى ينزل تحت بعض لما المساحة تقل
+                  flexWrap: "wrap", 
                   "@media (max-width: 768px)": {
                     flexDirection: "column",
                     alignItems: "flex-start",
