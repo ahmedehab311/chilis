@@ -26,6 +26,7 @@ function MyOrders({ currentStatus }) {
     "Pending",
     "Processing",
     "In-way",
+    "New"
   ]);
   const dispatch = useDispatch();
   const orderDetails = useSelector((state) => state.orderDetails.orderDetails);
@@ -133,41 +134,41 @@ function MyOrders({ currentStatus }) {
   return (
     <Stack
       direction={"row"}
-      // alignItems={"center"}
-      alignItems="flex-start"
-      // sx={{
-      //   display: "flex",
-      //   mt: "6rem",
-      //   "@media (max-width: 1000px)": { flexDirection: "column !important" },
-      // }}
-
+      alignItems={"center"}
       sx={{
         display: "flex",
         mt: "6rem",
         gap: 2,
         "@media (max-width: 1000px)": {
-          flexDirection: "column",
+          flexDirection: "column !important",
         },
+        px: { xs: 1, sm: 2, md: 3 },
+
       }}
 
     >
       <Stack
         className="leftSection"
-  
+
         sx={{
-          width: "30%", 
-          flexShrink: 0, 
-          position: "sticky", 
-          top: "6rem", 
-          alignSelf: "flex-start", 
+          // width: "40%",
+          width: { xs: "100%", sm: "80%", md: "35%", lg: "30%" },
+          flexShrink: 0,
+          position: "sticky",
+          // position: { xs: "static", md: "sticky" },
+          top: "6rem",
+          alignSelf: "flex-start" ,
+          // alignSelf: { xs: "center", md: "flex-start" },
           padding: 2,
           border: "1px solid #ddd",
           borderRadius: 2,
           background: "#fff",
           boxShadow: "0 .125rem .25rem rgba(0,0,0,.075)",
           "@media (max-width: 1000px)": {
-            width: "100%",
-            position: "relative",
+            width: "50%",
+            position: "static",
+            alignSelf: "center" ,
+            // position: "relative",
           },
         }}
       >
@@ -186,7 +187,7 @@ function MyOrders({ currentStatus }) {
               }}
             />
           }
-       
+
           active={
             Array.isArray(activeSection)
               ? activeSection.some((status) =>
@@ -263,8 +264,15 @@ function MyOrders({ currentStatus }) {
         />
       </Stack>
 
-    
-      <Stack className="rightSection" sx={{ width: "70%", flexGrow: 1, padding: 2 }}>
+
+      <Stack className="rightSection" sx={{
+        width: {
+          xs: "100%", // موبايل
+          sm: "100%", // شاشات صغيرة
+          md: "70%",  // لابتوب ومتوسط
+          lg: "70%",  // شاشات كبيرة
+        }, flexGrow: 1,
+      }}>
         {filterOrdersByStatus(activeSection).length === 0 && !showCard && (
           <Card sx={{ backgroundColor: "white" }}>
             <CardContent>
@@ -289,9 +297,20 @@ function MyOrders({ currentStatus }) {
           <Card sx={{ mt: "2rem" }}>
             <CardContent sx={{ p: 0 }}>
               <Stack
+                // direction={"row"}
+                // alignItems={"center"}
+                // sx={{ borderBottom: "1px solid #dee2e6!important", p: "1rem" }}
                 direction={"row"}
                 alignItems={"center"}
-                sx={{ borderBottom: "1px solid #dee2e6!important", p: "1rem" }}
+                sx={{
+                  borderBottom: "1px solid #dee2e6!important",
+                  p: "1rem",
+                  flexWrap: "wrap", // ✅ يخلي المحتوى ينزل تحت بعض لما المساحة تقل
+                  "@media (max-width: 768px)": {
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                  },
+                }}
               >
                 <CalendarTodayOutlinedIcon
                   sx={{ fontSize: "1.2rem", mr: ".4rem" }}
@@ -758,14 +777,25 @@ function OrderCard({ order, onViewDetailsClick }) {
   return (
     <Card sx={{ marginBottom: 2 }}>
       <CardContent>
-        <Stack direction={"row"} alignItems={"center"}>
+        <Stack direction={"row"} alignItems={"center"} sx={{
+          display: "flex",
+          justifyContent:"space-between",
+          flexWrap: { xs: "wrap", sm: "wrap", md: "nowrap" },    
+          alignItems: "center",
+          gap: 2,
+          "@media (max-width: 500px)": {
+            justifyContent:"center",
+          },
+        }}>
           <Stack direction={"row"} alignItems={"center"}>
             <Stack
               sx={{
+                display: { xs: "none", md: "flex" },
                 width: "180px",
                 height: "90px",
                 padding: "8px",
                 borderRadius: ".5rem",
+                flexWrap: "wrap",
                 border: "1px solid #f8f9fa",
                 transition: "background-color 0.9s ease",
                 cursor: "pointer",
@@ -803,16 +833,7 @@ function OrderCard({ order, onViewDetailsClick }) {
                 >
                   {order?.order_id}
                 </Typography>
-                {/* <Typography
-                  sx={{
-                    fontSize: "2rem",
-                    fontWeight: "600",
-                    ml: ".5rem",
-                    color: "#17a2b8!important",
-                  }}
-                >
-                  {order.status}
-                </Typography> */}
+
               </Stack>
               <Typography
                 onClick={() => onViewDetailsClick(order)}
@@ -839,7 +860,7 @@ function OrderCard({ order, onViewDetailsClick }) {
               </Typography>
             </Stack>
           </Stack>
-          <Stack sx={{ ml: "auto" }}>
+          <Stack >
             <Typography
               variant="h6"
               sx={{
