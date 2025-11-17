@@ -23,6 +23,7 @@ function MyOrders({ currentStatus }) {
   const [showCard, setShowCard] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [activeSection, setActiveSection] = useState([
+    'new',
     "Pending",
     "Processing",
     "In-way",

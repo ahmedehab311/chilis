@@ -702,11 +702,9 @@ function OrderOnline() {
       if (response.data.response) {
         const coupon = response.data.coupon;
         setCouponData(coupon);
-        // حفظ القيم الأصلية
         setOriginalTotal(total);
         setOriginalDeliveryFee(deliveryFee);
 
-        // تطبيق الكوبون
         if (coupon.fixed !== null) {
           setTotal((prevTotal) => prevTotal - coupon.fixed);
         } else if (coupon.percentage !== null) {
@@ -1408,7 +1406,6 @@ function OrderOnline() {
                       fontFamily: "tahoma",
                     }}
                   >
-                    {/* {deliveryFee.toFixed(2)} {t("egp")} */}
                     {isArabic
                       ? convertNumberToArabic(deliveryFee.toFixed(2))
                       : deliveryFee.toFixed(2)}{" "}
@@ -1433,7 +1430,6 @@ function OrderOnline() {
                     letterSpacing: "1px",
                   }}
                 >
-                  {/* {t('Tax')}:  {tax} %    */}
                   {t("Tax")} % {isArabic ? convertNumberToArabic(tax) : tax}
                 </Typography>
                 <Typography
