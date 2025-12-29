@@ -19,13 +19,15 @@ import {
 import OrderOnline from "./order/OrderOnline/OrderOnline";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchItemDetails } from "../../rtk/slices/InfoSlice";
+import { useQuery } from "@tanstack/react-query";
+
 function CardContent() {
   const dispatch = useDispatch();
   const location = useLocation();
   const [showCards, setShowCards] = useState(true);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [menuItems, setMenuItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [menuItems, setMenuItems] = useState([]);
+  // const [loading, setLoading] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
   const [showOrderNow, setShowOrderNow] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
@@ -39,20 +41,17 @@ function CardContent() {
 
   const [idInfo, setIdInfo] = useState([]);
   const [quantity, setQuantity] = useState(1);
-  useEffect(() => {
-    const fetchDataAsync = async () => {
-      try {
-        const data = await fetchData();
-        setMenuItems(data);
-        // console.log(data);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDataAsync();
-  }, []);
+
+  const {
+  data: menuItems = [],
+  isLoading: loading,
+  error,
+} = useQuery({
+  queryKey: ["menuItems"],
+  queryFn: fetchData,
+  refetchOnWindowFocus: false,
+});
+
 
   useEffect(() => {
     if (itemDetails) {
@@ -74,23 +73,6 @@ function CardContent() {
     setSelectedItem(null);
     setOpenDialog(false);
   };
-
-  // const handleAddToCart = () => {
-  //   if (itemDetails) {
-  //     onAddToCart({
-  //       name_en: itemDetails.name_en,
-  //       price: price,
-  //       extras: dataExtra,
-  //     });
-  //     setOrderDetails({
-  //       name: itemDetails.name_en,
-  //       price: price,
-  //       extras: dataExtra,
-  //     });
-  //     setShowOrderNow(true);
-  //     setOpenDialog(false);
-  //   }
-  // };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);

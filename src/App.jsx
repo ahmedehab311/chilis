@@ -38,6 +38,8 @@ import PaymentFail from "./components/Menu/order/OrderOnline/payment/PaymentFail
 import PaymentFailPending from "./components/Menu/order/OrderOnline/payment/PaymentFailPending";
 import useCleanFawaterkStyles from "./components/hooks/useCleanFawaterkStyles";
 import GoHome from "./components/pages/GoHome";
+
+import Test from "./components/test/test";
 const AppContent = ({ token, setToken, userData, setUserData }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -94,6 +96,10 @@ const AppContent = ({ token, setToken, userData, setUserData }) => {
             }
           />
         </Route>
+        <Route
+          path="/test"
+          element={<Test />}
+        />
         <Route
           path="/login"
           element={<LoginPage setToken={setToken} setUserData={setUserData} />}
