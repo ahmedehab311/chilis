@@ -117,7 +117,6 @@ function CheckOut({
       coins: "00.00",
     };
 
-    console.log("Checkout data:", dataToSend);
 
     axios
       .post(`${BASE_URL}/orders/create`, dataToSend)

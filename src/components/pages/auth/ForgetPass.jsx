@@ -27,7 +27,6 @@ function ForgetPass() {
       const APIURL = `/forgot-password?phone=${form.email}&api_token=${api_token}`;
 
       const response = await axios.get(`${BASE_URL}${APIURL}`);
-      console.log(response.data);
 
       if (response.data && response.data.response) {
         // toast.success(

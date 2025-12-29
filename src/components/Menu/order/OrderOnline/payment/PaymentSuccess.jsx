@@ -27,8 +27,6 @@ const PaymentSuccess = () => {
       setAllowed(true);
     }
   }, [navigate]);
-  console.log("allowed",allowed);
-  console.log("orderCode",orderCode);
   
   useEffect(() => {
     if (allowed && orderCode) {

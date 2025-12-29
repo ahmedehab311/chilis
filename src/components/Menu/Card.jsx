@@ -37,7 +37,6 @@ function CardContent() {
   const [selectedOptionName, setSelectedOptionName] = useState("");
   const [selectedExtras, setSelectedExtras] = useState([]);
   const itemDetails = useSelector((state) => state.info.itemDetails);
-  console.log("itemDetails", itemDetails);
 
   const [idInfo, setIdInfo] = useState([]);
   const [quantity, setQuantity] = useState(1);

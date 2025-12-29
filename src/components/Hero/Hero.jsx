@@ -20,7 +20,7 @@ function Hero() {
       <Stack
         sx={{
           display: "flex",
-          width: "100vw",
+          // width: "100vw",
           height: "70vh",
           alignItems: "center",
           position: "relative",
