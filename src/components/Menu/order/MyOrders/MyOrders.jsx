@@ -109,23 +109,23 @@ function MyOrders({ currentStatus }) {
       </Box>
     );
   }
-  if (status === "failed") {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <Typography sx={{
-          fontSize: "2rem",
-          color: "#666"
-        }}>{t("myOrders.Please Try Again")}</Typography>
-      </Box>
-    );
-  }
+  // if (status === "failed") {
+  //   return (
+  //     <Box
+  //       sx={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         height: "100vh",
+  //       }}
+  //     >
+  //       <Typography sx={{
+  //         fontSize: "2rem",
+  //         color: "#666"
+  //       }}>{t("myOrders.Please Try Again")}</Typography>
+  //     </Box>
+  //   );
+  // }
   const convertNumberToArabic = (number) => {
     const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
     return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);

@@ -73,10 +73,10 @@ function DialogItem({
       })),
       option: selectedOption
         ? {
-            id: selectedOption.id,
-            name_en: selectedOption.name_en,
-            name_ar: selectedOption.name_ar,
-          }
+          id: selectedOption.id,
+          name_en: selectedOption.name_en,
+          name_ar: selectedOption.name_ar,
+        }
         : null,
       totalPrice:
         (parseFloat(price) || 0) +
@@ -135,24 +135,44 @@ function DialogItem({
     >
       {itemDetails && (
         <DialogContent
+          // sx={{
+          //   display: "flex",
+          //   justifyContent: "center",
+          //   mb: 2,
+          // }}
           sx={{
             display: "flex",
+            flexDirection: { xs: "column", md: "row" }, // عمودي في الموبايل، أفقي في الشاشات الكبيرة
+            alignItems: { xs: "center", md: "flex-start" },
             justifyContent: "center",
-            mb: 2,
+            gap: 2, // بديل للـ margins اليدوية
+            p: { xs: 2, md: 4 }, // padding مريح للعين
           }}
         >
-          <Box>
+          <Box sx={{
+            width: { xs: "100%", md: "auto" }, textAlign: "center",  display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}>
             <img
               src={`${BASE_URL_images}${itemDetails.image}`}
               alt={itemDetails.name_en}
-              width={300}
-              height={200}
+              // width={300}
+              // height={200}
               className="imgDialog"
+              style={{
+                // maxWidth: "100%", // تضمن إن الصورة ما تطلعش بره الحاوية
+                // width: "300px",   // الحجم الأقصى
+                // height: "auto",   // تحافظ على الأبعاد
+
+                borderRadius: "8px"
+              }}
             />
           </Box>
           <DialogContentText id="item-dialog-description" sx={{ mx: 3 }}>
             <Stack
-              direction={"row"}
+              // direction={"row"}
+              direction={{ xs: "column", sm: "row" }}
               alignItems={"center"}
               justifyContent={"space-between"}
             >
@@ -296,26 +316,25 @@ function DialogItem({
                             fontWeight: "500",
                           }}
                         >
-                          {`${isArabic ? extra.name_ar : extra.name_en} - ${
-                            extra[isArabic ? "price_ar" : "price_en"]
-                          } ${t("egp")}`}
+                          {`${isArabic ? extra.name_ar : extra.name_en} - ${extra[isArabic ? "price_ar" : "price_en"]
+                            } ${t("egp")}`}
                         </Typography>
                       }
-                      // label={
-                      //   <Typography
-                      //     sx={{
-                      //       fontSize: "1.3rem",
-                      //       color: "#000",
-                      //       fontWeight: "500",
-                      //     }}
-                      //   >
-                      //     {`${isArabic ? extra.name_ar : extra.name_en} - ${
-                      //       isArabic
-                      //         ? convertNumberToArabic(extra.price_ar)
-                      //         : extra.price_en
-                      //     } ${t("egp")}`}
-                      //   </Typography>
-                      // }
+                    // label={
+                    //   <Typography
+                    //     sx={{
+                    //       fontSize: "1.3rem",
+                    //       color: "#000",
+                    //       fontWeight: "500",
+                    //     }}
+                    //   >
+                    //     {`${isArabic ? extra.name_ar : extra.name_en} - ${
+                    //       isArabic
+                    //         ? convertNumberToArabic(extra.price_ar)
+                    //         : extra.price_en
+                    //     } ${t("egp")}`}
+                    //   </Typography>
+                    // }
                     />
                   ))}
                 </RadioGroup>
@@ -325,8 +344,9 @@ function DialogItem({
             <AddToCardButton onClick={handleAddToCart} />
           </DialogContentText>
         </DialogContent>
-      )}
-    </Dialog>
+      )
+      }
+    </Dialog >
   );
 }
 
