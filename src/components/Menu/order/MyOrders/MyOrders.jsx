@@ -23,7 +23,6 @@ function MyOrders({ currentStatus }) {
   const [showCard, setShowCard] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [activeSection, setActiveSection] = useState([
-    'new',
     "Pending",
     "Processing",
     "In-way",
@@ -157,7 +156,7 @@ function MyOrders({ currentStatus }) {
           position: "sticky",
           // position: { xs: "static", md: "sticky" },
           top: "6rem",
-          alignSelf: "flex-start" ,
+          alignSelf: "flex-start",
           // alignSelf: { xs: "center", md: "flex-start" },
           padding: 2,
           border: "1px solid #ddd",
@@ -167,7 +166,7 @@ function MyOrders({ currentStatus }) {
           "@media (max-width: 1000px)": {
             width: "50%",
             position: "static",
-            alignSelf: "center" ,
+            alignSelf: "center",
             // position: "relative",
           },
         }}
@@ -303,7 +302,7 @@ function MyOrders({ currentStatus }) {
                 sx={{
                   borderBottom: "1px solid #dee2e6!important",
                   p: "1rem",
-                  flexWrap: "wrap", 
+                  flexWrap: "wrap",
                   "@media (max-width: 768px)": {
                     flexDirection: "column",
                     alignItems: "flex-start",
@@ -488,61 +487,61 @@ function MyOrders({ currentStatus }) {
                 </Typography>
               </Stack>
               <div>
-            {orderDetails?.items.map((item, index) => (
-  <Stack
-    key={index}
-    direction={{ xs: "column", sm: "row" }}
-    alignItems={{ xs: "flex-start", sm: "center" }}
-    justifyContent="space-between"
-    sx={{
-      borderBottom: "1px solid #dee2e6!important",
-      p: "1rem",
-      gap: "1rem",
-    }}
-  >
-    {/* الصورة + الاسم */}
-    <Stack direction="row" alignItems="center" gap={2}>
-      <Box
-        component="img"
-        src={`${BASE_URL_images}${item.info[0].image}`}
-        alt="item image"
-        sx={{
-          width: 70,
-          height: 70,
-          borderRadius: ".5rem",
-          objectFit: "cover",
-        }}
-      />
-      <Box>
-        <Typography sx={{ fontSize: "1.5rem", fontWeight: "600",display:"flex" }}>
-        {i18n.language === "ar"
-            ? item.info[0].name_ar
-            : item.info[0].name_en} 
-        </Typography>
-        <Typography sx={{ fontSize: "1.5rem", color: "#6c757d" ,color:"#000"}}>
-          {item.count}× {i18n.language === "ar"
-            ? item.info[0].size_ar
-            : item.info[0].size_en}
-        </Typography>
-      </Box>
-    </Stack>
+                {orderDetails?.items.map((item, index) => (
+                  <Stack
+                    key={index}
+                    direction={{ xs: "column", sm: "row" }}
+                    alignItems={{ xs: "flex-start", sm: "center" }}
+                    justifyContent="space-between"
+                    sx={{
+                      borderBottom: "1px solid #dee2e6!important",
+                      p: "1rem",
+                      gap: "1rem",
+                    }}
+                  >
+                    {/* الصورة + الاسم */}
+                    <Stack direction="row" alignItems="center" gap={2}>
+                      <Box
+                        component="img"
+                        src={`${BASE_URL_images}${item.info[0].image}`}
+                        alt="item image"
+                        sx={{
+                          width: 70,
+                          height: 70,
+                          borderRadius: ".5rem",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <Box>
+                        <Typography sx={{ fontSize: "1.5rem", fontWeight: "600", display: "flex" }}>
+                          {i18n.language === "ar"
+                            ? item.info[0].name_ar
+                            : item.info[0].name_en}
+                        </Typography>
+                        <Typography sx={{ fontSize: "1.5rem", color: "#6c757d", color: "#000" }}>
+                          {item.count}× {i18n.language === "ar"
+                            ? item.info[0].size_ar
+                            : item.info[0].size_en}
+                        </Typography>
+                      </Box>
+                    </Stack>
 
-    {/* السعر */}
-    <Typography
-      sx={{
-        fontSize: "1.5rem",
-        fontWeight: "600",
-        color: "#17a2b8",
-        mt: { xs: "0.5rem", sm: 0 },
-      }}
-    >
-      {isArabic
-        ? convertNumberToArabic(item.total_price)
-        : item.total_price}{" "}
-      {t("egp")}
-    </Typography>
-  </Stack>
-))}
+                    {/* السعر */}
+                    <Typography
+                      sx={{
+                        fontSize: "1.5rem",
+                        fontWeight: "600",
+                        color: "#17a2b8",
+                        mt: { xs: "0.5rem", sm: 0 },
+                      }}
+                    >
+                      {isArabic
+                        ? convertNumberToArabic(item.total_price)
+                        : item.total_price}{" "}
+                      {t("egp")}
+                    </Typography>
+                  </Stack>
+                ))}
 
               </div>
               <Stack
@@ -622,7 +621,7 @@ function MyOrders({ currentStatus }) {
                       fontFamily: "tahoma",
                     }}
                   >
-                    {t("myOrders.vat")}
+                    {t("Tax")}
                   </Typography>
                   <Typography
                     sx={{
@@ -771,12 +770,12 @@ function OrderCard({ order, onViewDetailsClick }) {
       <CardContent>
         <Stack direction={"row"} alignItems={"center"} sx={{
           display: "flex",
-          justifyContent:"space-between",
-          flexWrap: { xs: "wrap", sm: "wrap", md: "nowrap" },    
+          justifyContent: "space-between",
+          flexWrap: { xs: "wrap", sm: "wrap", md: "nowrap" },
           alignItems: "center",
           gap: 2,
           "@media (max-width: 500px)": {
-            justifyContent:"center",
+            justifyContent: "center",
           },
         }}>
           <Stack direction={"row"} alignItems={"center"}>

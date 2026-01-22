@@ -25,26 +25,12 @@ function Counter({
     onChange(basePrice * newQuantity);
   };
 
-  // const handleDecrease = () => {
-
-  //   if (quantity > 1) {
-  //     const newQuantity = quantity - 1;
-  //     setQuantity(newQuantity);
-  //     onQuantityChange(newQuantity, itemId);
-  //     onChange(basePrice * newQuantity);
-  //   }
-  // };
   const handleDecrease = () => {
-    const newQuantity = quantity - 1; // ممكن تبقى 0
+    const newQuantity = quantity - 1;
 
-    // ✅ لو كانت 1 → newQuantity = 0 → ابعت 0 للأب
     if (newQuantity >= 0) {
-      // ما تغيّرش UI للكونتر لـ 0 (اختياري)
-      // لو عايزه يظهر 0 مؤقتاً قبل التأكيد: حط setQuantity(newQuantity)
-      // لكن الأفضل ما نغيرش الكمّية لحد ما اليوزر يconfirm
+      onQuantityChange(newQuantity, itemId);
 
-      onQuantityChange(newQuantity, itemId); // هتوصل 0 لـ OrderOnline
-      // onChange(basePrice * Math.max(newQuantity, 1)); // مش محتاجها هنا
     }
   };
 

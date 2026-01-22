@@ -118,6 +118,19 @@ function AddressData({
       };
     });
   }, [addressData, unavailableAddresses]);
+  useEffect(() => {
+    if (activeIndex === null) return;
+
+    const selected = addressAvailability.find((a) => a.id === activeIndex);
+
+    // لو العنوان المختار اختفى من الليست أو بقى unavailable
+    if (!selected || !selected.isAvailable) {
+      setActiveIndex(null);
+      localStorage.removeItem("activeIndex");
+      localStorage.removeItem("selectedAddress");
+      onAddressSelect(null);
+    }
+  }, [activeIndex, addressAvailability, onAddressSelect]);
 
   const handleCardClick = (address) => {
     if (address) {

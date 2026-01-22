@@ -138,6 +138,8 @@
     "deliveryInstructions": "تعليمات التوصيل",
     "noAddressAvailable": "لا توجد عناوين متاحة. انقر لإضافة عنوان",
     "addOrRemoveAddress": "إضافة أو إزالة عنوان توصيل",
+    "addAddress": "أضف عنوان جديد",
+    "selectAddress": "اختار عنوان",
     "labels": {
       "home": "منزل",
       "work": "عمل",

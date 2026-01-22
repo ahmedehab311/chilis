@@ -411,16 +411,29 @@ function OrderOnline() {
       return;
     }
 
-    if (deliveryType === "delivery") {
-      const selectedAddress = addressData.find(
-        (addr) => addr.id === address?.id
-      );
+    // if (deliveryType === "delivery") {
+    //   const selectedAddress = addressData.find(
+    //     (addr) => addr.id === address?.id
+    //   );
 
-      if (!selectedAddress) {
+    //   if (!selectedAddress) {
+    //     toast.error(t("selectValidAddress"));
+    //     return;
+    //   }
+
+    // }
+    if (deliveryType === "delivery") {
+      const selectedAddressObj = addressData.find((addr) => addr.id === address?.id);
+
+      if (!selectedAddressObj) {
         toast.error(t("selectValidAddress"));
         return;
       }
 
+      if (!isAddressAvailable(selectedAddressObj)) {
+        toast.error(t("addressNotAvailable"));
+        return;
+      }
     }
     if (deliveryType === "pickup") {
       if (!selectedBranchId) {
@@ -539,7 +552,8 @@ function OrderOnline() {
   const addressCleared = useRef(false);
 
   const address = useSelector((state) => state.addresses.selectedAddress);
-
+  const isSelectedAddressAvailable =
+    deliveryType !== "delivery" ? true : (address ? isAddressAvailable(address) : false);
   const handleCloseDialog = () => {
     setOpenDialog(false);
   };
@@ -717,11 +731,25 @@ function OrderOnline() {
       setCouponLoading(false);
     }
   };
-  // console.log("cartItems",cartItems)
+
   const convertNumberToArabic = (number) => {
     const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];
     return String(number).replace(/[0-9]/g, (digit) => arabicNumbers[digit]);
   };
+  const getAddressButtonLabel = () => {
+    if (!addressData || addressData.length === 0) {
+      return t("address.addAddress");
+    }
+
+    if (!currentAddress || currentAddress?.isAvailable === false) {
+      return t("address.selectAddress");
+    }
+
+    return t("address.changeDeliveryAddress");
+  };
+
+
+
   return (
     <>
       <Stack
@@ -745,7 +773,7 @@ function OrderOnline() {
           {deliveryType === "pickup" ? (
             <Pickup onBranchStatusChange={handleBranchStatusChange} />
           ) : (
-            <Stack spacing={3} sx={{ margin: "1rem" }}>
+            <Stack spacing={1} sx={{ mt: "1rem" }}>
               <Stack>
                 <Typography
                   sx={{
@@ -835,7 +863,13 @@ function OrderOnline() {
                   </Stack>
                 </Card>
               ) : (
-                <Typography sx={{ fontFamily: "tahoma" }}>
+                <Typography sx={{
+                  color: "#6c757d!important",
+                  fontSize: "1.6rem",
+                  // fontWeight: "500",
+                  textTransform: "capitalize",
+                  fontFamily: "tahoma",
+                }}>
                   {t("address.noAddressSelected")}
                 </Typography>
               )}
@@ -852,7 +886,8 @@ function OrderOnline() {
                 }}
                 onClick={handleOpenDialog}
               >
-                {t("address.changeDeliveryAddress")}
+                {/* {t("address.changeDeliveryAddress")} */}
+                {getAddressButtonLabel()}
               </Button>
               <Dialog
                 open={openDialog}
@@ -1320,21 +1355,6 @@ function OrderOnline() {
                 }}
               >
                 <FormControlLabel
-                  value="pickup"
-                  control={<Radio />}
-                  label={
-                    <Typography
-                      sx={{
-                        fontSize: "1.4rem",
-                        color: "#000",
-                        fontWeight: "600",
-                      }}
-                    >
-                      {t("Pickup")}
-                    </Typography>
-                  }
-                />
-                <FormControlLabel
                   value="delivery"
                   control={<Radio />}
                   label={
@@ -1349,6 +1369,22 @@ function OrderOnline() {
                     </Typography>
                   }
                 />
+                <FormControlLabel
+                  value="pickup"
+                  control={<Radio />}
+                  label={
+                    <Typography
+                      sx={{
+                        fontSize: "1.4rem",
+                        color: "#000",
+                        fontWeight: "600",
+                      }}
+                    >
+                      {t("Pickup")}
+                    </Typography>
+                  }
+                />
+
               </RadioGroup>
             </FormControl>
           </Stack>
@@ -1634,6 +1670,7 @@ function OrderOnline() {
                     cartItems.length === 0 || branchClosed ? "#ccc" : "#d32f2f",
                 },
               }}
+
             >
               {t("PlaceOrder")}
             </Button>
