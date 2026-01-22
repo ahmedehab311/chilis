@@ -40,7 +40,6 @@
   "egp": "ج.م",
   "extras": "الاضافات",
   "options": "الاختيارات",
-  "The cart is empty": "السلة فارغة",
   "Enter any special request note": "أدخل أي ملاحظة خاصة",
   "Regular": "السعر الأساسي",
   "Enter coupon code": "أدخل رمز القسيمة",
@@ -153,7 +152,18 @@
   "coupon": {
     "enterCoupon": "يرجى إدخال رمز القسيمة",
     "invalidCoupon": "رمز القسيمة غير صالح",
-    "failedApplyCoupon": "فشل في تطبيق القسيمة. حاول مرة أخرى"
+    "failedApplyCoupon": "فشل في تطبيق القسيمة. حاول مرة أخرى",
+    "code": "كود الكوبون",
+    "discount": "الخصم",
+    "fixed": "خصم ثابت",
+    "freeDelivery": "توصيل مجاني",
+    "freeDeliveryOnCard": "توصيل مجاني عند الدفع بالبطاقة"
+  },
+  "cart": {
+    "removeTitle": "حذف المنتج",
+    "removeMessage": "هل أنت متأكد أنك تريد حذف هذا المنتج من السلة؟",
+    "empty": "السلة فارغة",
+    "orderNow": "اطلب الآن"
   },
   "profile": {
     "confirmSave": "هل أنت متأكد أنك تريد حفظ هذه التغييرات؟",

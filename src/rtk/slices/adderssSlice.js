@@ -77,7 +77,7 @@
 //     setSelectedAddress: (state, action) => {
 //       const payload = action.payload;
 //       console.log("Payload being set in Redux:", payload);
-    
+
 //       // تحقق من أن الكائن يحتوي على id وباقي الخصائص المطلوبة
 //       if (payload && typeof payload === "object" && payload.id) {
 //         state.selectedAddress = payload;
@@ -89,7 +89,7 @@
 //         );
 //       }
 //     },
-    
+
 
 //     setUnavailableAddresses: (state, action) => {
 //       state.unavailableAddresses = action.payload;
@@ -131,6 +131,8 @@ export const fetchAddresses = createAsyncThunk(
     try {
       const response = await axios.get(API_ADDRESS());
       if (response.data.data.address) {
+        console.log("response.data.data.address", response.data.data.address);
+
         return response.data.data.address;
       } else {
         throw new Error("Address data is missing in the API response");
@@ -147,7 +149,7 @@ export const addAddress = createAsyncThunk(
   async (newAddress) => {
     const queryParams = new URLSearchParams(newAddress);
     const response = await axios.post(`${API_ADD_ADDRESS}?${queryParams.toString()}`);
-    console.log("response",response)
+    console.log("response", response)
     if (response.data.response) {
       return response.data.data;
     }
@@ -185,7 +187,7 @@ const addressSlice = createSlice({
     },
     clearSelectedAddress: (state) => {
       state.selectedAddress = null;
-      localStorage.removeItem("selectedAddress"); 
+      localStorage.removeItem("selectedAddress");
     },
     setUnavailableAddresses: (state, action) => {
       state.unavailableAddresses = action.payload;
@@ -210,6 +212,6 @@ const addressSlice = createSlice({
   },
 });
 
-export const { setSelectedAddress, setUnavailableAddresses,clearSelectedAddress } = addressSlice.actions;
+export const { setSelectedAddress, setUnavailableAddresses, clearSelectedAddress } = addressSlice.actions;
 
 export default addressSlice.reducer;

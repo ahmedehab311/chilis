@@ -19,7 +19,7 @@ const PaymentSuccess = () => {
   const [loading, setLoading] = useState(true);
   const [successConfirmed, setSuccessConfirmed] = useState(false);
   const [error, setError] = useState(null);
-    useEffect(() => {
+  useEffect(() => {
     const cameFromPayment = sessionStorage.getItem("fromPayment");
     if (!cameFromPayment) {
       navigate("/", { replace: true });
@@ -27,7 +27,7 @@ const PaymentSuccess = () => {
       setAllowed(true);
     }
   }, [navigate]);
-  
+
   useEffect(() => {
     if (allowed && orderCode) {
       const confirmPayment = async () => {
@@ -35,20 +35,9 @@ const PaymentSuccess = () => {
           const response = await axios.get(
             `${BASE_URL}/payment/success/${orderCode}?api_token=${getApiToken()}`
           );
-// console.log("FULL RESPONSE", response);
           if (response.data?.data?.order_id) {
-            // console.log("FULL RESPONSE", response);
-            // console.log(
-            //   "response.data?.data?.order_id",
-            //   response.data?.data?.order_id
-            // );
-
             setSuccessConfirmed(true);
             dispatch(clearCart());
-            // console.log(
-            //   "response.data?.data?.order_id aferr clearCart",
-            //   response.data?.data?.order_id
-            // );
           } else {
             setError("Order not found.");
             navigate("/order-online/payment/fail", { replace: true });
@@ -65,35 +54,30 @@ const PaymentSuccess = () => {
     }
   }, [allowed, orderCode, dispatch]);
 
-useEffect(() => {
-  if (successConfirmed && allowed && !loading) {
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer); // Clear the timer
-          handleGoHome(); // Redirect to homepage
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000); // Decrease every 1 second
+  useEffect(() => {
+    if (successConfirmed && allowed && !loading) {
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer); // Clear the timer
+            handleGoHome(); // Redirect to homepage
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000); // Decrease every 1 second
 
-    // Cleanup the timer when the component unmounts or dependencies change
-    return () => clearInterval(timer);
-  }
-}, [successConfirmed, allowed, loading, navigate]);
+      // Cleanup the timer when the component unmounts or dependencies change
+      return () => clearInterval(timer);
+    }
+  }, [successConfirmed, allowed, loading, navigate]);
 
   const handleGoHome = () => {
     sessionStorage.removeItem("fromPayment");
     navigate("/", { replace: true });
     localStorage.removeItem("fromPayment");
   };
-//   useEffect(() => {
-//   if (error && !loading) {
-//     console.error(error);
-//     navigate("/order-online/payment/fail", { replace: true });
-//   }
-// }, [error, loading, navigate]);
+
   if (!allowed || loading) {
     return (
       <Box
@@ -106,11 +90,6 @@ useEffect(() => {
       </Box>
     );
   }
-
-  // if (error &&  !loading) {
-  //   console.error(error);
-  //   navigate("/order-online/payment/fail", { replace: true });
-  // }
 
   return (
     <Box

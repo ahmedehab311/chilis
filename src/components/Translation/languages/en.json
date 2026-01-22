@@ -39,7 +39,6 @@
   "egp": "EGP",
   "extras": "Extras",
   "options": "Options",
-  "The cart is empty": "The cart is empty",
   "Enter any special request note": "Enter any special request note",
   "Regular": "Regular",
   "Enter coupon code": "Enter coupon code",
@@ -67,7 +66,7 @@
   "orderCode": "Your order code:",
   "trackCheck": "Please keep it to track your order.",
   "loginPage": {
-    "loading":"loading...",
+    "loading": "loading...",
     "welcomeBack": "Welcome Back",
     "signInToContinue": "Sign in to continue",
     "email": "Email",
@@ -151,7 +150,18 @@
   "coupon": {
     "enterCoupon": "Please enter a coupon code",
     "invalidCoupon": "Invalid coupon code",
-    "failedApplyCoupon": "Failed to apply coupon. Please try again"
+    "failedApplyCoupon": "Failed to apply coupon. Please try again",
+    "code": "Coupon Code",
+    "discount": "Discount",
+    "fixed": "fixed",
+    "freeDelivery": "Free Delivery",
+    "freeDeliveryOnCard": "Free Delivery on Card Payment"
+  },
+  "cart": {
+    "removeTitle": "Remove item",
+    "removeMessage": "Are you sure you want to remove this item from your cart?",
+     "empty": "Your cart is empty",
+    "orderNow": "Order now"
   },
   "profile": {
     "confirmSave": "Are you sure you want to save these changes?",

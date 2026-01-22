@@ -28,7 +28,6 @@ import { API_TAX } from "../../apis&fetchData/ApiLinks";
 import PaymentPage from "../OrderOnline/checkOut/PaymentPage";
 import { setSelectedBranch } from "../../../../rtk/slices/BranchesSlice.js";
 import axios from "axios";
-// import Coupun from "./checkOut/Coupon/Coupun";
 import {
   setSelectedAddress,
   fetchAddresses,
@@ -45,8 +44,11 @@ import {
 import Pickup from "./Pickup/Pickup";
 import { BASE_URL } from "../../apis&fetchData/ApiLinks";
 import { v4 as uuidv4 } from "uuid";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import CircularProgress from "@mui/material/CircularProgress";
 
 function OrderOnline() {
   // console.log("BASE_URL",BASE_URL);
@@ -55,12 +57,14 @@ function OrderOnline() {
   const isArabic = i18n.language === "ar";
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const api_token = localStorage.getItem("token");
   const API_CITIES = `${BASE_URL}/cities`;
   const API_ARIA = (cityId) => `${BASE_URL}/areas/?city=${cityId}`;
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
   const [loadingCities, setLoadingCities] = useState(false);
+  const [couponLoading, setCouponLoading] = useState(false);
   const [loadingAreas, setLoadingAreas] = useState(false);
   const [tax, setTax] = useState(0);
   const [specialNotes, setSpecialNotes] = useState({});
@@ -78,16 +82,27 @@ function OrderOnline() {
     deliveryArea: "",
   });
   const [deliveryType, setDeliveryType] = useState("delivery");
-  const [total, setTotal] = useState(0);
   const [discount, setDiscount] = useState(0);
-  // console.log("cartItems",cartItems);
-
-  const subtotal = Object.values(totalPrices).reduce(
-    (acc, price) => acc + price,
-    0
+  const [couponCode, setCouponCode] = useState("");
+  const [error, setError] = useState("");
+  const [couponData, setCouponData] = useState(null);
+  const [deliveryFee, setDeliveryFee] = useState(0);
+  const [originalDeliveryFee, setOriginalDeliveryFee] = useState(deliveryFee);
+  const [isCouponApplied, setIsCouponApplied] = useState(false);
+  const [user, setUser] = useState(null);
+  const [openRemoveDialog, setOpenRemoveDialog] = useState(false);
+  const [itemToRemoveIndex, setItemToRemoveIndex] = useState(null);
+  const deliveryAmount = deliveryType === "delivery" ? deliveryFee : 0;
+  const rawTotalBeforeDiscount = subtotalWithExtras + deliveryAmount;
+  const totalBeforeTaxBeforeDiscount =
+    rawTotalBeforeDiscount + rawTotalBeforeDiscount * (tax / 100);
+  const finalTotalBeforeDiscount = parseFloat(
+    totalBeforeTaxBeforeDiscount.toFixed(2)
   );
-  const [deliveryFee, setDeliveryFee] = useState(50);
-  const selectedOption = useSelector((state) => state.info.selectedOption);
+  const rawTotal = subtotalWithExtras - discount + deliveryAmount;
+  const totalWithTaxFinal = rawTotal + rawTotal * (tax / 100);
+  const finalTotal = parseFloat(totalWithTaxFinal.toFixed(2));
+
   const idInfo = useSelector((state) => state.info.idInfo);
   const selectedBranchId = useSelector(
     (state) => state.branches.selectedBranchId
@@ -95,6 +110,21 @@ function OrderOnline() {
   const selectedAddress = useSelector(
     (state) => state.addresses.selectedAddress
   );
+
+  useEffect(() => {
+    if (!currentAddress) {
+      setDeliveryFee(0);
+      return;
+    }
+    if (isCouponApplied && couponData?.free_delivery === "1") {
+      setDeliveryFee(0);
+      return;
+    }
+    const feeStr = currentAddress?.area?.area_branches?.[0]?.delivery_fees;
+    const fee = parseFloat(feeStr);
+
+    setDeliveryFee(Number.isFinite(fee) ? fee : 0);
+  }, [currentAddress, isCouponApplied, couponData]);
 
   useEffect(() => {
     const updatedPrices = {};
@@ -154,7 +184,6 @@ function OrderOnline() {
     }
   }, [activeIndex]);
 
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -164,47 +193,47 @@ function OrderOnline() {
   }, []);
 
   // في OrderOnline
+  const openRemoveConfirm = (index) => {
+    setItemToRemoveIndex(index);
+    setOpenRemoveDialog(true);
+  };
 
   useEffect(() => {
     const initialPrices = cartItems.map((item) => item.price * item.quantity);
     setTotalPrices(initialPrices);
   }, [cartItems]);
-  const handleQuantityChange = (itemId, newQuantity) => {
+
+
+  const goToMenu = () => {
+    if (location.pathname !== "/") {
+      navigate("/", { state: { scrollTo: "menu" } });
+    } else {
+      document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+  const handleQuantityChange = (itemId, newQuantity, index) => {
+    if (newQuantity <= 0) {
+      openRemoveConfirm(index); // ✅ افتح نفس Dialog بتاع X
+      return;
+    }
+
     dispatch(updateItemQuantity({ uniqueId: itemId, quantity: newQuantity }));
 
     setTotalPrices((prevPrices) => {
       const updatedPrices = { ...prevPrices };
-      const itemIndex = cartItems.findIndex((item) => item.uniqueId === itemId);
 
-      if (itemIndex > -1) {
-        const item = cartItems[itemIndex];
-        const extrasTotal = item.extras
-          ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
-          : 0;
+      const item = cartItems[index];
+      if (!item) return updatedPrices;
 
-        updatedPrices[itemIndex] =
-          (item.price + extrasTotal) * newQuantity;
-      }
+      const extrasTotal = item.extras
+        ? item.extras.reduce((sum, extra) => sum + parseFloat(extra.price), 0)
+        : 0;
+
+      updatedPrices[index] = (item.price + extrasTotal) * newQuantity;
 
       return updatedPrices;
     });
   };
-
-  // const handleQuantityChange = (itemId, newQuantity) => {
-  //   // تحديث الكمية في Redux
-  //   dispatch(updateItemQuantity({ uniqueId: itemId, quantity: newQuantity }));
-
-  //   // تحديث الأسعار بناءً على الكمية الجديدة
-  //   setTotalPrices((prevPrices) => {
-  //     const updatedPrices = { ...prevPrices };
-  //     const itemIndex = cartItems.findIndex((item) => item.id === itemId);
-  //     if (itemIndex > -1) {
-  //       const item = cartItems[itemIndex];
-  //       updatedPrices[itemIndex] = item.price * newQuantity;
-  //     }
-  //     return updatedPrices;
-  //   });
-  // };
 
   const handleCloseCreditCardDialog = () => {
     setOpenCreditCardDialog(false);
@@ -343,14 +372,6 @@ function OrderOnline() {
     return isAvailable;
   };
 
-  const deliveryAmount = deliveryType === "delivery" ? deliveryFee : 0;
-
-  const rawTotal = subtotalWithExtras - discount + deliveryAmount;
-
-  const totalWithTaxFinal = rawTotal + rawTotal * (tax / 100);
-  // console.log("totalWithTax",totalWithTax);
-
-  const finalTotal = parseFloat(totalWithTaxFinal.toFixed(2));
 
   useEffect(() => {
     dispatch(setSelectedBranch(""));
@@ -383,7 +404,6 @@ function OrderOnline() {
       })
       .filter((order) => order !== null);
 
-    // console.log("Orders before sending:", orders);
     const token = localStorage.getItem("token");
 
     if (!token) {
@@ -391,38 +411,29 @@ function OrderOnline() {
       return;
     }
 
-    // التحقق من اختيار العنوان فقط في حالة الدليفري
     if (deliveryType === "delivery") {
       const selectedAddress = addressData.find(
         (addr) => addr.id === address?.id
       );
-      // console.log("selectedAddress", selectedAddress);
-      // console.log("addressData", addressData);
 
       if (!selectedAddress) {
         toast.error(t("selectValidAddress"));
         return;
       }
 
-      // if (!isAddressAvailable(selectedAddress)) {
-      //   toast.error(t("addressNotAvailable")); // رسالة خطأ عند عدم توفر العنوان
-      //   return;
-      // }
     }
-    // console.log("selectedAddress",selectedAddress)
     if (deliveryType === "pickup") {
       if (!selectedBranchId) {
-        toast.error(t("selectBranch")); // رسالة خطأ عند عدم اختيار فرع
+        toast.error(t("selectBranch"));
         return;
       }
     }
 
-    // إعداد قيم area و branch بناءً على نوع الطلب
+
     let areaId, branchId;
     const delivery_type = deliveryType === "pickup" ? 2 : 1;
 
     if (delivery_type === 1) {
-      // دليفري
       areaId = address.area?.id;
       branchId = address.branches?.[0]?.id;
 
@@ -466,8 +477,6 @@ function OrderOnline() {
       .post(`${BASE_URL}/orders/create?${params.toString()}`)
       .then((response) => {
         if (response.data.response) {
-          // console.log(response.data);
-          // console.log(response.data.data.order_code);
           setOrderCode(response.data.data.order_code);
           setHasedKey(response.data.data?.SDK_TOKEN);
           sessionStorage.setItem("fromCheckout", "true");
@@ -527,8 +536,6 @@ function OrderOnline() {
       });
   };
 
-
-
   const addressCleared = useRef(false);
 
   const address = useSelector((state) => state.addresses.selectedAddress);
@@ -537,9 +544,6 @@ function OrderOnline() {
     setOpenDialog(false);
   };
   //  address
-
-
-  // console.log("selectedAddress", selectedAddress);
 
   useEffect(() => {
     const fetchCities = async () => {
@@ -585,12 +589,9 @@ function OrderOnline() {
   }, [addressData]);
 
   useEffect(() => {
-    // تحقق إذا كان العنوان موجودًا وغير متاح
     if (address && !isAddressAvailable(address)) {
       if (!addressCleared.current) {
-        // إذا كان العنوان غير متاح، قم بإلغاء اختياره مرة واحدة فقط
         dispatch(clearSelectedAddress());
-        // toast.error("The selected address is no longer available for delivery.");
         addressCleared.current = true;
       }
     } else if (address && isAddressAvailable(address)) {
@@ -598,9 +599,6 @@ function OrderOnline() {
     }
   }, [address, dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(fetchAddresses());
-  // }, [dispatch]);
 
   useEffect(() => {
     const storedAddress = localStorage.getItem("selectedAddress");
@@ -640,46 +638,29 @@ function OrderOnline() {
     const storedAddress = localStorage.getItem("selectedAddress");
 
     if (address) {
-      // إذا كان هناك عنوان في Redux، استخدمه
       setCurrentAddress(address);
     } else if (storedAddress) {
-      // إذا لم يكن في Redux، تحقق من localStorage
       const parsedAddress = JSON.parse(storedAddress);
       setCurrentAddress(parsedAddress);
-      dispatch(setSelectedAddress(parsedAddress)); // تحديث Redux
+      dispatch(setSelectedAddress(parsedAddress));
     }
   }, [address, dispatch]);
 
   const isLoggedIn = Boolean(localStorage.getItem("token"));
   const handleOpenDialog = () => {
     if (!isLoggedIn) {
-      // إذا كان غير مسجل دخول، توجهه إلى صفحة تسجيل الدخول
       navigate("/login");
     } else {
-      // إذا كان مسجل دخول، يتم فتح الديالوج بشكل طبيعي
       setOpenDialog(true);
     }
   };
 
-  // coupun code
-
-  // const total = () => {
-  //   const subtotal = subtotalWithExtras + (deliveryType === "delivery" ? deliveryFee : 0);
-  //   const taxAmount = (subtotal * tax) / 100;
-  //   return subtotal + taxAmount - discount; // خصم
-  // };
-
-  const [couponCode, setCouponCode] = useState("");
-  const [error, setError] = useState("");
-  const [couponData, setCouponData] = useState(null);
-  const [originalTotal, setOriginalTotal] = useState(total);
-  const [originalDeliveryFee, setOriginalDeliveryFee] = useState(deliveryFee);
-  const [isCouponApplied, setIsCouponApplied] = useState(false);
 
   const handleApplyCoupon = async () => {
+    if (couponLoading) return;
     if (isCouponApplied) {
-      setTotal(originalTotal);
       setDeliveryFee(originalDeliveryFee);
+      setDiscount(0);
       setIsCouponApplied(false);
       setCouponCode("");
       setCouponData(null);
@@ -693,35 +674,47 @@ function OrderOnline() {
     }
 
     setError("");
-
+    setCouponLoading(true);
     try {
       const response = await axios.get(
         `${BASE_URL}/coupon/validation?coupon=${couponCode}&api_token=${api_token}`
       );
 
-      if (response.data.response) {
-        const coupon = response.data.coupon;
-        setCouponData(coupon);
-        setOriginalTotal(total);
-        setOriginalDeliveryFee(deliveryFee);
-
-        if (coupon.fixed !== null) {
-          setTotal((prevTotal) => prevTotal - coupon.fixed);
-        } else if (coupon.percentage !== null) {
-          const discount = (total * coupon.percentage) / 100;
-          setTotal((prevTotal) => prevTotal - discount);
-        }
-
-        if (coupon.free_delivery === "1") {
-          setDeliveryFee(0);
-        }
-
-        setIsCouponApplied(true);
-      } else {
+      if (!response.data.response) {
         setError(t("coupon.invalidCoupon"));
+        return;
       }
+
+      const coupon = response.data.coupon;
+      setCouponData(coupon);
+
+      setOriginalDeliveryFee(deliveryFee);
+
+      const baseBeforeTax =
+        subtotalWithExtras + (deliveryType === "delivery" ? deliveryFee : 0);
+
+      let discountValue = 0;
+
+      if (coupon.fixed !== null) {
+        discountValue = Number(coupon.fixed) || 0;
+      } else if (coupon.percentage !== null) {
+        discountValue = (baseBeforeTax * Number(coupon.percentage || 0)) / 100;
+      }
+
+      // حماية: متخليش الخصم أكبر من الإجمالي قبل الضريبة
+      discountValue = Math.min(discountValue, baseBeforeTax);
+
+      setDiscount(discountValue);
+
+      if (coupon.free_delivery === "1" && deliveryType === "delivery") {
+        setDeliveryFee(0);
+      }
+
+      setIsCouponApplied(true);
     } catch (error) {
       setError(t("coupon.failedApplyCoupon"));
+    } finally {
+      setCouponLoading(false);
     }
   };
   // console.log("cartItems",cartItems)
@@ -850,16 +843,8 @@ function OrderOnline() {
               <Button
                 variant="contained"
                 color="error"
-                // sx={{
-                //   fontSize:"1.2rem",
-                //   fontWeight:"600",
-                //   backgroundColor: "#d32f2f",
-                //   "&:hover": { backgroundColor: "#d32f2f" },
-                // }}
-                sx={{
-                  // mt: "1.5rem",
-                  // p: ".6rem",
 
+                sx={{
                   fontSize: "1.5rem",
                   fontFamily: "tahoma",
                   textTransform: "capitalize",
@@ -935,18 +920,42 @@ function OrderOnline() {
           >
             <Box className="orderNow" sx={{ borderRadius: "8px" }}>
               {cartItems.length === 0 ? (
-                <Typography
-                  sx={{
-                    textAlign: "center",
-                    fontSize: "1.8rem",
-                    color: "gray",
-                    fontFamily: "cairo",
-                    my: 4,
-                    fontWeight: "bold",
-                  }}
-                >
-                  {t("The cart is empty")}
-                </Typography>
+                <Stack alignItems="center" spacing={1.5} sx={{ my: 4 }}>
+                  <Typography
+                    sx={{
+                      textAlign: "center",
+                      fontSize: "1.8rem",
+                      color: "#666",
+                      fontFamily: "cairo",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {t("cart.empty")}
+                  </Typography>
+
+                  <Button
+                    onClick={goToMenu}
+                    variant="contained"
+                    startIcon={<RestaurantMenuIcon />}
+                    sx={{
+                      mt: 1,
+                      textTransform: "capitalize",
+                      fontFamily: "cairo",
+                      fontSize: "1.4rem",
+                      borderRadius: "24px",
+                      px: 2,
+                      backgroundColor: "#d32f2f",
+                      "&:hover": {
+                        backgroundColor: "#b71c1c",
+                      },
+                    }}
+                  >
+                    {t("cart.orderNow")}
+                  </Button>
+                </Stack>
+
+
+
               ) : (
                 cartItems.map((item, index) => (
                   <Card key={item.uniqueId} sx={{ p: 2, my: 3 }}>
@@ -967,7 +976,7 @@ function OrderOnline() {
                           {isArabic ? item.name_ar : item.name_en}
                         </Typography>
                         <Typography
-                          onClick={() => handleRemoveItem(index)}
+                          onClick={() => openRemoveConfirm(index)}
                           sx={{
                             color: "red",
                             position: "absolute",
@@ -1011,7 +1020,6 @@ function OrderOnline() {
                             fontFamily: "cairo",
                           }}
                         >
-                          {/* {item.price} {t("egp")} */}
                           {isArabic
                             ? convertNumberToArabic(item.price)
                             : item.price}{" "}
@@ -1023,7 +1031,7 @@ function OrderOnline() {
                             handleCounterChange(index, newTotalPrice)
                           }
                           onQuantityChange={(newQuantity) =>
-                            handleQuantityChange(item.uniqueId, newQuantity)
+                            handleQuantityChange(item.uniqueId, newQuantity, index)
                           }
                           initialQuantity={item.quantity}
                         />
@@ -1049,15 +1057,6 @@ function OrderOnline() {
                         <Typography
                           sx={{ fontSize: "1.5rem", fontWeight: 500 }}
                         >
-                          {/* {(
-                          totalPrices[index] || item.price * item.quantity
-                        ).toFixed(2)}{" "}
-                        {t("egp")} */}
-                          {/* {convertNumberToArabic(
-                          (
-                            totalPrices[index] || item.price * item.quantity
-                          ).toFixed(2)
-                        )} */}
                           {isArabic
                             ? convertNumberToArabic(
                               (
@@ -1171,20 +1170,6 @@ function OrderOnline() {
 
           {/* coupon */}
 
-          {/* <Coupun
-  api_token={api_token}
-  total={totalWithTax} // القيم المحسوبة بشكل مباشر
-  setTotal={setTotalWithTax} // تحديث المجموع بشكل صحيح
-  deliveryFee={deliveryFee}
-  setDeliveryFee={setDeliveryFee}
-  paymentMethod={paymentMethod}
-  subtotalWithExtras={subtotalWithExtras}
-  deliveryType={deliveryType}
-  tax={tax}
-  setSubtotalWithExtras={setSubtotalWithExtras}
-  setDeliveryType={setDeliveryType}
-  setTax={setTax}
-/> */}
           <Stack
             className="middleOrder"
             sx={{ p: 2, borderBottom: "2px solid #ececec" }}
@@ -1196,6 +1181,7 @@ function OrderOnline() {
                   placeholder={t("Enter coupon code")}
                   value={couponCode}
                   onChange={(e) => setCouponCode(e.target.value)}
+                  disabled={couponLoading || isCouponApplied}
                   sx={{
                     flex: 1,
                     "& .MuiInputBase-input": {
@@ -1203,10 +1189,10 @@ function OrderOnline() {
                       borderBottomRightRadius: 0,
                       padding: ".9rem 1rem !important",
                       fontSize: "1.3rem",
-                      color: "gray",
+                      color: "#000",
                     },
                     "& .MuiInputBase-input::placeholder": {
-                      color: "gray",
+                      color: "#000",
                       fontSize: "1.3rem",
                     },
                   }}
@@ -1215,39 +1201,63 @@ function OrderOnline() {
                   <Button
                     variant="contained"
                     color={isCouponApplied ? "primary" : "error"}
+                    disabled={couponLoading}
                     sx={{
-                      // fontSize:"1rem",
                       p: "10px 16px !important",
                       height: "100%",
                       borderTopLeftRadius: 0,
                       borderBottomLeftRadius: 0,
                       backgroundColor: isCouponApplied ? "#1976d2" : "#d32f2f",
                       "&:hover": {
-                        backgroundColor: isCouponApplied
-                          ? "#1976d2"
-                          : "#d32f2f",
+                        backgroundColor: isCouponApplied ? "#1976d2" : "#d32f2f",
                       },
                     }}
                     onClick={handleApplyCoupon}
                   >
-                    {isCouponApplied ? t("Cancel") : t("Apply")}
+                    {couponLoading ? (
+                      <CircularProgress size={18} sx={{ color: "#fff" }} />
+                    ) : (
+                      isCouponApplied ? t("Cancel") : t("Apply")
+                    )}
                   </Button>
+
                 </Stack>
               </Stack>
               {error && <p style={{ color: "red" }}>{error}</p>}
               {couponData && (
                 <div>
-                  <p>Coupon Code: {couponData.code}</p>
-                  <p>
-                    Discount:{" "}
-                    {couponData.fixed !== null
-                      ? `${couponData.fixed} fixed`
-                      : `${couponData.percentage}%`}
-                  </p>
-                  {couponData.free_delivery === "1" && <p>Free Delivery</p>}
-                  {couponData.free_on_pay_card === "1" &&
-                    paymentMethod === 2 && <p>Free Delivery on Card Payment</p>}
+                  {couponData && (
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                      <p style={{ margin: 0 }}>
+                        {t("coupon.code")}: {couponData.code}
+                      </p>
+                      {isCouponApplied && (
+                        <CheckCircleIcon sx={{ color: "green", fontSize: 18 }} />
+                      )}
+                    </div>
+                  )}
+
+                  {couponData && (
+                    <p>
+                      {t("coupon.discount")}:{" "}
+                      <span dir="ltr">
+                        {couponData.fixed !== null
+                          ? couponData.fixed
+                          : `${couponData.percentage}%`}
+                      </span>
+                    </p>
+
+                  )}
+
+                  {couponData?.free_delivery === "1" && (
+                    <p>{t("coupon.freeDelivery")}</p>
+                  )}
+
+                  {couponData?.free_on_pay_card === "1" && paymentMethod === "credit" && (
+                    <p>{t("coupon.freeDeliveryOnCard")}</p>
+                  )}
                 </div>
+
               )}
               <TextField
                 className="formControl"
@@ -1266,11 +1276,12 @@ function OrderOnline() {
                   "& .MuiInputBase-input": {
                     fontSize: "1.5rem",
                     color: "gray",
-                    m: ".2rem",
+                    m: ".7rem",
                   },
                   "& .MuiInputBase-input::placeholder": {
                     color: "#000",
-                    fontSize: "1.3rem",
+                    fontSize: "1.4rem",
+
                   },
                 }}
                 InputProps={{
@@ -1440,12 +1451,6 @@ function OrderOnline() {
                     letterSpacing: "1px",
                   }}
                 >
-                  {/* {(
-                  (subtotalWithExtras -
-                    discount +
-                    (deliveryType === "delivery" ? deliveryFee : 0)) *
-                  (tax / 100)
-                ).toFixed(2)}{" "} */}
                   {isArabic
                     ? convertNumberToArabic(
                       (
@@ -1484,19 +1489,8 @@ function OrderOnline() {
               >
                 {t("Total")}
               </Typography>
-              {/* <Typography sx={{ fontSize: "15px", fontWeight: "bold" }}>
-              {(
-                subtotalWithExtras -
-                discount + // إضافة الخصم هنا
-                (deliveryType === "delivery" ? deliveryFee : 0) +
-                (subtotalWithExtras -
-                  discount + // إضافة الخصم هنا
-                  (deliveryType === "delivery" ? deliveryFee : 0)) *
-                  (tax / 100)
-              ).toFixed(2)}{" "}
-              {t("egp")}
-            </Typography> */}
-              <Typography
+
+              {/* <Typography
                 sx={{
                   fontSize: "15px",
                   fontWeight: "bold",
@@ -1526,24 +1520,37 @@ function OrderOnline() {
                     (tax / 100)
                   ).toFixed(2)}{" "}
                 {t("egp")}
-              </Typography>
-            </Stack>
+              </Typography> */}
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  fontFamily: "tahoma",
+                  letterSpacing: "1px",
+                  display: "flex",
+                  gap: "8px",
+                  alignItems: "center",
+                  justifyContent: "flex-end",
+                }}
+              >
+                {isCouponApplied && discount > 0 && (
+                  <span style={{ textDecoration: "line-through", color: "#888" }}>
+                    {isArabic
+                      ? convertNumberToArabic(finalTotalBeforeDiscount.toFixed(2))
+                      : finalTotalBeforeDiscount.toFixed(2)}{" "}
+                    {t("egp")}
+                  </span>
+                )}
 
-            {/* <Dialog
-        
-            maxWidth="md"
-            fullWidth
-          >
-            <DialogTitle>Pay with Credit Card</DialogTitle>
-            <DialogContent>
-              <div id="fawaterkDivId"></div>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setOpenFawaterkDialog(false)}>
-                Cancel
-              </Button>
-            </DialogActions>
-          </Dialog> */}
+                <span style={{ color: isCouponApplied ? "green" : "#000" }}>
+                  {isArabic
+                    ? convertNumberToArabic(finalTotal.toFixed(2))
+                    : finalTotal.toFixed(2)}{" "}
+                  {t("egp")}
+                </span>
+              </Typography>
+
+            </Stack>
 
             <FormControl
               component="fieldset"
@@ -1660,10 +1667,57 @@ function OrderOnline() {
             </Dialog>
           </Stack>
 
-          {/*  */}
-          {/*  */}
-          {/*  */}
         </Container>
+        <Dialog
+          open={openRemoveDialog}
+          onClose={() => setOpenRemoveDialog(false)}
+          maxWidth="xs"
+          fullWidth
+        >
+          <DialogTitle sx={{ fontSize: "1.6rem", fontWeight: "bold", textAlign: "center" }}>
+            {t("cart.removeTitle")}
+          </DialogTitle>
+
+          <DialogContent sx={{ textAlign: "center", fontSize: "1.4rem" }}>
+            {t("cart.removeMessage")}
+            {itemToRemoveIndex !== null && cartItems[itemToRemoveIndex] && (
+              <>
+                {" "}
+                <strong>
+                  {isArabic
+                    ? cartItems[itemToRemoveIndex].name_ar
+                    : cartItems[itemToRemoveIndex].name_en}
+                </strong>
+              </>
+            )}
+          </DialogContent>
+
+          <DialogActions sx={{ justifyContent: "center", pb: 2 }}>
+            <Button
+              variant="outlined"
+              onClick={() => {
+                setOpenRemoveDialog(false);
+                setItemToRemoveIndex(null);
+              }}
+            >
+              {t("Cancel")}
+            </Button>
+
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                if (itemToRemoveIndex !== null) {
+                  handleRemoveItem(itemToRemoveIndex);
+                }
+                setOpenRemoveDialog(false);
+                setItemToRemoveIndex(null);
+              }}
+            >
+              {t("Confirm")}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Stack>
     </>
   );

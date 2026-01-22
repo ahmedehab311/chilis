@@ -7,7 +7,6 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../../../setting";
 import { getApiToken } from "../../adderess/apiAdderss";
-// import { clearCart } from "../../../../../rtk/slices/orderSlice";
 import ErrorIcon from "@mui/icons-material/Error";
 const PaymentFail = () => {
   const { orderCode } = useParams();
@@ -41,10 +40,6 @@ const PaymentFail = () => {
 
           if (response.data?.data?.order_id) {
             setSuccessConfirmed(true);
-            // console.log(
-            //   "response.data?.data?.orderId cancel",
-            //   response.data?.data?.order_id
-            // );
           } else {
             setError("Order not found.");
           }

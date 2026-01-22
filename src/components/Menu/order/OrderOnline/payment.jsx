@@ -41,17 +41,6 @@ const Payment = () => {
             loadFawaterkScript()
               .then(() => {
                 if (window.fawaterkCheckout) {
-                  // const cartTotal = cartItems?.reduce((sum, item) => {
-                  //   return sum + item.totalPrice;
-                  // }, 0);
-                  // const FormatCartItem = cartItems?.map((item) => ({
-                  //   name: item.name_en || item.name_ar,
-                  //   price: item.price.toFixed(2),
-                  //   quantity: item.quantity.toString(),
-                  // }));
-                  // console.log("cartTotal", cartTotal.toFixed(2));
-                  // console.log("FormatCartItem", FormatCartItem);
-
                   window.pluginConfig = {
                     envType: "live",
                     hashKey:
