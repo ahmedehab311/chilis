@@ -1,4 +1,3 @@
-const BASE_URL = "https://myres.me/chilis-dev/api";
-
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 export { BASE_URL };
