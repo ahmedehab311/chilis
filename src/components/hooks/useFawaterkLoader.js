@@ -7,7 +7,7 @@ const useFawaterkLoader = ({ openFawaterkDialog, hasedKey, orderCode }) => {
   const isPaymentPage = location.pathname === "/order-online/payment";
 
   useEffect(() => {
-    if (!isPaymentPage) return; // ✅ حمّله بس لو في صفحة الدفع
+    if (!isPaymentPage) return; 
 
     if (openFawaterkDialog && hasedKey && orderCode) {
       let attempts = 0;

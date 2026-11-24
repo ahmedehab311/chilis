@@ -65,6 +65,8 @@
   "goHome": "Go Home",
   "orderCode": "Your order code:",
   "trackCheck": "Please keep it to track your order.",
+  "redirectHomeIn": "Redirecting to home in",
+  "seconds": "seconds",
   "loginPage": {
     "loading": "loading...",
     "welcomeBack": "Welcome Back",

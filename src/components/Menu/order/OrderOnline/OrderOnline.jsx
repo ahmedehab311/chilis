@@ -494,6 +494,10 @@ function OrderOnline() {
           setHasedKey(response.data.data?.SDK_TOKEN);
           sessionStorage.setItem("fromCheckout", "true");
           sessionStorage.setItem("fromPayment", "true");
+          sessionStorage.setItem(
+            "fawaterkSdkToken",
+            response.data.data.SDK_TOKEN
+          );
           localStorage.setItem("fromPayment", "true");
           localStorage.setItem("orderCode", orderCode);
           if (paymentMethod === "credit") {
@@ -1632,7 +1636,7 @@ function OrderOnline() {
                     {t("CashonDelivery")}
                   </Typography>
                 />
-                <FormControlLabel
+                {/* <FormControlLabel
                   value="credit"
                   control={<Radio />}
                   label=<Typography
@@ -1646,7 +1650,7 @@ function OrderOnline() {
                   >
                     {t("CreditCard")}
                   </Typography>
-                />
+                /> */}
               </RadioGroup>
             </FormControl>
 

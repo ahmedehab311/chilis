@@ -32,12 +32,16 @@ const PaymentSuccess = () => {
     if (allowed && orderCode) {
       const confirmPayment = async () => {
         try {
+          const sdkToken = sessionStorage.getItem("fawaterkSdkToken");
           const response = await axios.get(
-            `${BASE_URL}/payment/success/${orderCode}?api_token=${getApiToken()}`
+            `${BASE_URL}/payment/success/${orderCode}?api_token=${encodeURIComponent(
+              getApiToken()
+            )}&token=${encodeURIComponent(sdkToken || "")}`
           );
           if (response.data?.data?.order_id) {
             setSuccessConfirmed(true);
             dispatch(clearCart());
+            sessionStorage.removeItem("fawaterkSdkToken");
           } else {
             setError("Order not found.");
             navigate("/order-online/payment/fail", { replace: true });
@@ -74,6 +78,7 @@ const PaymentSuccess = () => {
 
   const handleGoHome = () => {
     sessionStorage.removeItem("fromPayment");
+    sessionStorage.removeItem("fawaterkSdkToken");
     navigate("/", { replace: true });
     localStorage.removeItem("fromPayment");
   };
